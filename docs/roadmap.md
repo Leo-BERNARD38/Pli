@@ -3,7 +3,8 @@
 ## Jalon 0 — Socle
 
 - Vite + TypeScript, deux entrées (`/` et `/atelier/`)
-- Domaine `pli.re`, `CNAME`, déploiement GitHub Pages par Actions
+- Domaine `pli.re`, `CNAME`, `.nojekyll`, `404.html`, déploiement GitHub Pages par Actions
+  ([hebergement.md](hebergement.md#avant-le-premier-déploiement))
 - Routeur par hash
 - `lib/codec.ts` : encode / décode, **isomorphe Node + navigateur**, avec tests
 - Un pli en dur, sans style
@@ -18,16 +19,24 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
   (protocole dans [architecture.md](architecture.md#la-longueur-du-lien))
 - **La survie de `localStorage`** sur son iPhone, avec et sans ajout à l'écran d'accueil
   ([architecture.md](architecture.md#le-journal-peut-être-effacé))
+- **Où s'ouvre un pli**, et dans quel bac de stockage — Safari, navigateur intégré de
+  WhatsApp, app installée ([appareils.md](appareils.md#le-bac-de-stockage--la-mesure-qui-manque))
 - `tokens.css` et `pli.css` repris de `design/`, avec les corrections de
   [integration.md](integration.md#corrections-à-appliquer)
 - Polices locales, sous-ensemblées, préchargées
 - Les cinq textures redimensionnées en 720 × 1560 (~70 ko), plus l'aperçu OG en 1200 × 630
   ([assets/README.md](../design/handoff/assets/README.md#le-poids))
+- Les balises `og:` et l'aperçu vérifié en s'envoyant le lien à soi-même
+  ([partage.md](partage.md))
+- Le budget de chargement rempli avec de vrais chiffres, mesuré sur les deux téléphones
+  ([chargement.md](chargement.md#le-budget-écran-par-écran))
 
 ## Jalon 2 — Le pli et le geste
 
 - A1 l'attente, pour les quatre types
 - Le dépliage : geste, seuil, élan, caoutchouc — et son alternative clavier
+- **Aucune image perdue** : zéro disposition, zéro peinture pendant le geste, vérifié à
+  l'inspecteur sur les deux téléphones ([fluidite.md](fluidite.md#comment-on-mesure))
 - `prefers-reduced-motion`
 - A2 la découverte : invitation, pensée, souvenir
 - C4 lien abîmé
@@ -46,7 +55,8 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
 - C1 le journal, et son état vide
 - C3 refermé, et son chemin vers le journal
 - La marque comme chemin discret
-- `manifest.json` + l'écran `#/installer`
+- `manifest.json` + l'écran `#/installer` — **sa forme dépend de la mesure du jalon 1**
+  ([appareils.md](appareils.md#le-bac-de-stockage--la-mesure-qui-manque))
 - Export du journal
 
 **Fin du jalon :** son journal existe et survit à deux semaines de silence.
@@ -75,6 +85,8 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
 
 ## Plus tard
 
+- Un service worker, seul moyen de dépasser les dix minutes de cache de GitHub Pages
+  ([hebergement.md](hebergement.md#ce-que-max-age600-change))
 - Un carnet d'idées (`data/*.json`) piochable depuis D2 — aucun écran maquetté à ce jour
 - Sons et vibrations à l'ouverture
 - Export du journal en PDF, à imprimer

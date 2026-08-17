@@ -70,7 +70,8 @@ npm test           # codec.ts et dates.ts
 
 Tout est dans [`docs/`](docs/README.md). Avant d'écrire un écran, lire
 [`docs/integration.md`](docs/integration.md) — il dit ce qui fait foi et ce qui a changé
-depuis les maquettes.
+depuis les maquettes. Avant d'écrire du code qui charge ou qui bouge,
+[`docs/chargement.md`](docs/chargement.md) et [`docs/fluidite.md`](docs/fluidite.md).
 
 Le travail de design est archivé dans [`design/`](design/README.md) : ouvrir
 [`design/handoff/index.html`](design/handoff/index.html) suffit, aucun build.
@@ -80,6 +81,7 @@ Le travail de design est archivé dans [`design/`](design/README.md) : ouvrir
 Brainstorm et cahier des charges terminés. Design importé et réconcilié. Code à venir —
 voir [`docs/roadmap.md`](docs/roadmap.md).
 
-Deux mesures à faire avant de s'engager, elles sont détaillées dans
-[`docs/architecture.md`](docs/architecture.md) : la survie de `localStorage` sur son
-iPhone, et le plafond réel de longueur d'un lien.
+Quatre mesures à faire avant de s'engager, listées dans
+[`docs/README.md`](docs/README.md#les-mesures-à-faire-avant-de-sengager) : le plafond réel
+de longueur d'un lien, la survie de `localStorage` sur son iPhone, et les deux questions de
+stockage que pose le navigateur intégré de WhatsApp.

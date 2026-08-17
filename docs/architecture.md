@@ -44,7 +44,8 @@ avec clé publique.
 Corollaire à exploiter : **l'aperçu WhatsApp est entièrement sous notre contrôle.** Les
 balises `og:` sont écrites une fois pour toutes et deviennent le teaser — « Un pli
 t'attend » sur le papier froissé. Le spoil n'est pas un risque à couvrir, c'est une carte
-à jouer.
+à jouer. Les balises, l'image et le comportement réel de WhatsApp sont dans
+[partage.md](partage.md).
 
 ## Le seuil de l'atelier
 
@@ -99,18 +100,26 @@ de « je t'ai envoyé un pli ». C'est ce qui justifie que le poème passe par u
 
 ## Hébergement
 
-GitHub Pages, déploiement par GitHub Actions sur push vers `main`.
-Domaine propre : **`pli.re`**, via un `CNAME` à la racine du build.
+GitHub Pages, déploiement par GitHub Actions sur push vers `main`. Domaine propre :
+**`pli.re`**, via un `CNAME` à la racine du build. `base` de Vite = `/`, `.nojekyll` à la
+racine, aucune variable secrète — tout ce qui est buildé est public.
 
-À ne pas oublier :
+Deux traits de l'hébergeur gouvernent le reste et ne se contournent pas :
 
-- `base` de Vite = `/`, puisqu'on sert un domaine et non un sous-chemin de dépôt.
-- `.nojekyll` à la racine du build.
+- **Aucun en-tête personnalisable.** Tout est servi en `cache-control: max-age=600`, y
+  compris les fichiers au nom empreinté. Dix minutes, pas un an : on compte donc les
+  **allers-retours**, pas seulement les octets.
+- **Aucune réécriture d'URL.** C'est ce qui impose le routage par hash.
+
+Le détail — ce que Pages refuse, la vérification en une commande, les limites, et la liste
+de ce qui ne doit jamais casser dans un lien déjà envoyé — est dans
+[hebergement.md](hebergement.md).
+
+Trois points qui restent ici parce qu'ils touchent au produit :
+
 - Le domaine décorrèle l'URL du nom du dépôt : le dépôt redevient renommable, et chaque
   lien envoyé y gagne 18 caractères.
 - **Ne plus changer de domaine.** Il est dans chaque lien déjà envoyé.
-- Pas de variables d'environnement secrètes : tout ce qui est buildé est public.
-  Le numéro WhatsApp voyage dans le lien, pas dans le dépôt.
 - `public/plis/` est copié tel quel dans la sortie — les poèmes se lisent en **même
   origine**, `pli.re/plis/015-vhtq.txt`. Aucune question de CORS, un cache HTTP normal.
 
@@ -126,27 +135,38 @@ Budget éclaté, à titre indicatif :
 
 | Poste | Cible |
 |---|---|
-| code (HTML + CSS + JS) | < 30 ko gzip |
+| document d'A1 (HTML + CSS + JS inline) | < 14 ko gzip, **une seule requête** |
 | polices sous-ensemblées | ~120 ko, dont 3 familles seulement au premier écran |
 | texture | ~70 ko, **une seule par pli**, jamais avant le texte |
 
 Un pli n'a qu'un type : personne ne télécharge les cinq peintures.
 
+L'ordre de chargement — ce qui part avant le texte, ce qui attend le volet fermé, et
+comment on le mesure sur les vrais téléphones — est dans [chargement.md](chargement.md).
+
 ## Compatibilité
 
 Deux appareils, connus : **elle sur iOS 26** (Safari 26), **moi sur Android 16** (Chrome).
-On cible ces deux-là, pas le web.
+On cible ces deux-là, pas le web. Toutes les API modernes sont donc disponibles :
+`CompressionStream`, `@layer`, `:has()`, `text-wrap: balance`, `View Transitions`,
+`Web Share`, `crypto.subtle` — aucun préfixe, aucun polyfill, aucun fallback.
 
-Toutes les API modernes sont donc disponibles : `CompressionStream`, `@layer`, `:has()`,
-`text-wrap: balance`, `View Transitions`, `Web Share`, `crypto.subtle` — aucun préfixe,
-aucun polyfill, aucun fallback.
+**Un troisième navigateur existe pourtant**, et c'est celui par lequel un pli arrive : le
+navigateur intégré de WhatsApp. Il est cloisonné, son stockage n'est pas celui de Safari, et
+il remet en cause le remède de l'ajout à l'écran d'accueil. C'est devenu la mesure nº 3 du
+produit — [appareils.md](appareils.md#le-bac-de-stockage--la-mesure-qui-manque).
 
-Deux vigilances :
+Deux vigilances de rendu :
 
 - Safari iOS reste plus lent sur les filtres SVG. Le grain se teste sur son téléphone, pas
   sur un émulateur.
-- Le geste doit tenir 60 fps : `touch-action: none`, `will-change: transform`,
-  `translate3d` et rien d'autre.
+- Le geste ne doit perdre **aucune image** : `touch-action: none`, `will-change: transform`
+  posé et retiré, `translate3d` et rien d'autre. Le budget par image, ce qui a le droit de
+  bouger et ce qui ne doit jamais tourner pendant une animation sont dans
+  [fluidite.md](fluidite.md).
+
+Les réglages de page (encoche, `100dvh`, clavier, `theme-color`) et la séance de test
+appareil par appareil sont dans [appareils.md](appareils.md).
 
 Pas de service worker en v1 — le `manifest.json` suffit pour l'ajout à l'écran d'accueil.
 
@@ -164,15 +184,20 @@ src/
     dates.ts               formats français
   styles/
     tokens.css             extrait de design/handoff/pli.css
-    pli.css                le gabarit et les classes
-    <type>.css             composition par type
+    pli.css                le gabarit et les classes — inline dans le document
+    <type>.css             composition par type, chargée en arrière-plan
 public/
   plis/                    les poèmes encodés + l'index
   textures/                les cinq peintures, redimensionnées
+  fonts/                   les woff2 sous-ensemblés
+  og.jpg                   l'aperçu du lien, 1200 × 630
+  manifest.json  icons/    l'ajout à l'écran d'accueil
+  404.html
+  CNAME  .nojekyll
 plis-source/               les poèmes en clair — GITIGNORÉ
 scripts/plier.mjs          la moulinette
 plier.bat · plier.sh       les deux enveloppes
-design/                    l'archive figée du design
+design/                    l'archive figée du design — jamais dans le build
 docs/
 ```
 
