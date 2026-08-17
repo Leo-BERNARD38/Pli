@@ -9,19 +9,27 @@ quel ordre est dans [chargement.md](chargement.md).
 dist/
   index.html              elle
   atelier/index.html      moi
-  assets/                 js, css, polices — noms empreintés par Vite
+  assets/                 js, css, polices, peintures — noms empreintés par Vite
   plis/                   les poèmes encodés + l'index      (copié de public/)
-  textures/               les cinq peintures redimensionnées
   og.jpg                  l'aperçu du lien, 1200 × 630      (→ partage.md)
   manifest.json  icons/   l'ajout à l'écran d'accueil
   404.html  CNAME  .nojekyll
 ```
 
-Déploiement par GitHub Actions sur push vers `main` : build, puis `actions/deploy-pages`.
-Pas de branche `gh-pages` tenue à la main.
+Deux workflows, et pas un de plus :
 
-**`design/` ne part jamais dans le build.** C'est une archive qu'on ouvre en local ; ses
-cinq originaux pèsent 4 Mo à eux seuls. Le build n'emporte que les versions redimensionnées.
+| Workflow | Quand | Ce qu'il fait |
+|---|---|---|
+| `verif` | sur chaque PR | `npm ci`, `npm test` (codec et dates), `npm run build` |
+| `deploiement` | sur push vers `main` | le build, puis `actions/deploy-pages` |
+
+Node en version LTS, épinglée dans le workflow et dans `package.json` (`engines`) — le codec
+tourne des deux côtés, sa version de Node fait partie du contrat
+([donnees.md](donnees.md#2-lencodage)). Pas de branche `gh-pages` tenue à la main.
+
+**`design/` ne part jamais dans le build.** C'est une archive qu'on ouvre en local. Les
+peintures servies vivent dans `src/`, d'où Vite les empreinte
+([ressources.md](ressources.md#où-les-fichiers-vivent)).
 
 ## Ce que Pages ne donne pas
 
@@ -54,7 +62,7 @@ pourraient être gardés un an. Passé ce délai, chaque fichier est **revalidé
 Trois conséquences qui gouvernent tout le reste :
 
 1. **Peu de fichiers vaut mieux que des fichiers bien cachés.** Ce qu'on économise, ce sont
-   des allers-retours, pas seulement des kilo-octets. Cible : **A1 en 4 requêtes ou moins**.
+   des allers-retours, pas seulement des kilo-octets. Cible : **A1 en 5 requêtes** — le document, trois polices, une peinture.
 2. **Chaque visite est presque une visite froide.** Le budget de [chargement.md](chargement.md)
    se mesure cache vide — c'est le cas réaliste, pas le pire cas.
 3. **Le seul vrai remède serait un service worker.** Il n'est pas en v1

@@ -86,8 +86,10 @@ Elles n'entrent jamais dans un pli déplié.
 | `papier-froisse-creme.webp` | l'aperçu OG, le journal vide, l'écran d'installation | `50% 25%` |
 
 Les cinq sont de la même main : peinture à l'huile, abstraite, carmin et rose, **aucune
-figuration**. Le détail de chacune, ses cadrages et le retraitement de poids sont dans
-[`design/handoff/assets/README.md`](../design/handoff/assets/README.md).
+figuration**. Le sens de chacune et ses cadrages sont dans
+[`design/handoff/assets/README.md`](../design/handoff/assets/README.md) ; **les définitions,
+les poids et ce qu'ils coûtent** sont dans [ressources.md](ressources.md) — qui fait foi, le
+retraitement à 720 × 1560 y étant abandonné au profit de la définition native.
 
 ## Les mains
 
@@ -106,7 +108,8 @@ Les étiquettes s'écrivent **en minuscules dans le code** et passent en capital
 ### Ce que ça impose au chargement
 
 A1 n'appelle que **trois familles** — Pinyon, Newsreader, Space Mono. Bodoni ne sert qu'à
-partir d'A2 et ne doit pas retarder l'ouverture.
+partir d'A2 et ne doit pas retarder l'ouverture. C'est désormais vrai sans arrangement : le
+`↑` de la pliure, seul Bodoni du premier écran, est devenu un tracé.
 
 `font-display: swap` est le mauvais réglage : voir « Un pli t'attend » s'afficher en Times
 puis sauter en Newsreader ruine l'instant que tout le produit prépare. Le volet fermé offre
@@ -207,5 +210,10 @@ d'exclamation, pas d'emoji, pas de majuscule d'insistance.
 parle en son nom à elle et non dans la voix de l'interface. C'est le seul endroit — partout
 ailleurs la règle tient.
 
-**Pas d'icônes, pas de SVG.** Les flèches sont des caractères (`↑` `→`) rendus en Bodoni.
-Le seul symbole du produit est le cachet numéroté.
+**Pas d'icônes, pas de SVG** — avec une exception, nommée et fermée : **les deux flèches**.
+`↑` et `→` étaient des caractères Bodoni ; ce sont désormais deux tracés SVG inline, du même
+dessin, pour la seule raison qu'un caractère obligeait à charger une police avant le premier
+écran ([ressources.md](ressources.md#les-deux-flèches)). Le dessin ne change pas, le moyen
+change.
+
+Le seul symbole du produit reste le cachet numéroté.

@@ -1,8 +1,27 @@
 # Roadmap
 
+## Avant la première ligne de code
+
+Ce qui n'est écrit nulle part et qu'il faudrait inventer en codant. Six points, dont trois
+demandent une décision qui n'est pas technique.
+
+| Point | Ce qui manque | Qui tranche |
+|---|---|---|
+| **Le seuil de l'atelier** | *quoi* est haché : le format exact de la date normalisée, la présence ou non d'un sel, et le fait que l'empreinte est une constante du bundle ([architecture.md](architecture.md#le-seuil-de-latelier)) | **toi** |
+| **Le numéro WhatsApp `w`** | d'où il vient dans l'atelier : saisi à chaque invitation, ou retenu une fois sur mon téléphone ? Il ne peut pas être dans le dépôt ([donnees.md](donnees.md#1-le-pli)) | **toi** |
+| **L'export du journal** | son format et son déclenchement — un texte qu'on copie, un fichier qu'on partage ? Et se ré-importe-t-il ? C'est le filet du risque nº 2 | **toi** |
+| **Le numéro `n` des plis courts** | il vient de `pli.v1.compteur`, sur mon téléphone seul. Que se passe-t-il si ce stockage est effacé ? (les poèmes, eux, se recalent sur l'index) | à décider en codant l'atelier |
+| **Hors ligne ≠ introuvable** | pour un poème, C4 confond aujourd'hui un fichier absent et un réseau coupé. Le second mérite « réessayer », pas « lien abîmé » ([parcours.md](parcours.md#les-états)) | à trancher au jalon 6 |
+| **L'icône de l'app** | elle n'est pas dessinée, et c'est le seul dessin qui manque ([installation.md](installation.md#licône)) | **toi**, au jalon 4 |
+
+Les écrans qui ne sont pas encore maquettés sont listés à part, en fin de
+[parcours.md](parcours.md#3-ce-qui-nest-pas-encore-maquetté).
+
 ## Jalon 0 — Socle
 
 - Vite + TypeScript, deux entrées (`/` et `/atelier/`)
+- Les deux workflows : vérification sur PR, déploiement sur `main`
+  ([hebergement.md](hebergement.md#ce-qui-est-déployé))
 - Domaine `pli.re`, `CNAME`, `.nojekyll`, `404.html`, déploiement GitHub Pages par Actions
   ([hebergement.md](hebergement.md#avant-le-premier-déploiement))
 - Routeur par hash
@@ -23,9 +42,11 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
   WhatsApp, app installée ([appareils.md](appareils.md#le-bac-de-stockage--la-mesure-qui-manque))
 - `tokens.css` et `pli.css` repris de `design/`, avec les corrections de
   [integration.md](integration.md#corrections-à-appliquer)
-- Polices locales, sous-ensemblées, préchargées
-- Les cinq textures redimensionnées en 720 × 1560 (~70 ko), plus l'aperçu OG en 1200 × 630
-  ([assets/README.md](../design/handoff/assets/README.md#le-poids))
+- Polices locales, sous-ensemblées, préchargées ([ressources.md](ressources.md#les-polices))
+- Les cinq textures en **définition native**, ré-encodées q80 seulement si un master existe,
+  plus l'aperçu OG en 1200 × 630 — et la décision « natif ou régénérer ≥ 1800 »
+  ([ressources.md](ressources.md#la-règle-de-définition))
+- Les deux flèches tracées, en SVG inline ([ressources.md](ressources.md#les-deux-flèches))
 - Les balises `og:` et l'aperçu vérifié en s'envoyant le lien à soi-même
   ([partage.md](partage.md))
 - Le budget de chargement rempli avec de vrais chiffres, mesuré sur les deux téléphones
@@ -55,8 +76,10 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
 - C1 le journal, et son état vide
 - C3 refermé, et son chemin vers le journal
 - La marque comme chemin discret
-- `manifest.json` + l'écran `#/installer` — **sa forme dépend de la mesure du jalon 1**
-  ([appareils.md](appareils.md#le-bac-de-stockage--la-mesure-qui-manque))
+- `manifest.json`, les icônes et l'écran `#/installer` — **sa forme dépend de la mesure du
+  jalon 1** ([installation.md](installation.md))
+- Le réglage de cadence sur son iPhone, au moment de l'installation
+  ([installation.md](installation.md#le-réglage-de-cadence))
 - Export du journal
 
 **Fin du jalon :** son journal existe et survit à deux semaines de silence.

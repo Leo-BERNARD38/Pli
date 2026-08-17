@@ -136,10 +136,12 @@ Budget éclaté, à titre indicatif :
 | Poste | Cible |
 |---|---|
 | document d'A1 (HTML + CSS + JS inline) | < 14 ko gzip, **une seule requête** |
-| polices sous-ensemblées | ~120 ko, dont 3 familles seulement au premier écran |
-| texture | ~70 ko, **une seule par pli**, jamais avant le texte |
+| polices sous-ensemblées | ~90 ko, **3 familles** au premier écran, Bodoni à partir d'A2 |
+| texture | la **définition native** de la peinture — 600 ko à 1,15 Mo, **une seule par pli**, jamais avant le texte |
 
-Un pli n'a qu'un type : personne ne télécharge les cinq peintures.
+Un pli n'a qu'un type : personne ne télécharge les cinq peintures. C'est ce qui autorise à
+servir les toiles en pleine définition plutôt qu'en vignettes — le choix, ce qu'il coûte en
+mémoire et ce qu'il impose au rendu sont dans [ressources.md](ressources.md).
 
 L'ordre de chargement — ce qui part avant le texte, ce qui attend le volet fermé, et
 comment on le mesure sur les vrais téléphones — est dans [chargement.md](chargement.md).
@@ -168,7 +170,12 @@ Deux vigilances de rendu :
 Les réglages de page (encoche, `100dvh`, clavier, `theme-color`) et la séance de test
 appareil par appareil sont dans [appareils.md](appareils.md).
 
-Pas de service worker en v1 — le `manifest.json` suffit pour l'ajout à l'écran d'accueil.
+Pas de service worker en v1 — le `manifest.json` suffit pour l'ajout à l'écran d'accueil,
+dont la spécification complète est dans [installation.md](installation.md).
+
+Ce qui se passe quand on pousse une nouvelle version — fichiers empreintés, fenêtre de dix
+minutes, index des poèmes, migration des clés de stockage — est dans
+[mises-a-jour.md](mises-a-jour.md).
 
 ## Arborescence cible
 
@@ -186,10 +193,10 @@ src/
     tokens.css             extrait de design/handoff/pli.css
     pli.css                le gabarit et les classes — inline dans le document
     <type>.css             composition par type, chargée en arrière-plan
-public/
+  textures/                les cinq peintures — importées, donc empreintées
+  fonts/                   les woff2 sous-ensemblés — importés par le CSS
+public/                    servi tel quel, noms stables
   plis/                    les poèmes encodés + l'index
-  textures/                les cinq peintures, redimensionnées
-  fonts/                   les woff2 sous-ensemblés
   og.jpg                   l'aperçu du lien, 1200 × 630
   manifest.json  icons/    l'ajout à l'écran d'accueil
   404.html

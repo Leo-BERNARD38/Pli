@@ -98,6 +98,9 @@ Voici tout ce qui s'en déduit.
 | Papiers | « trois, plus un » / « jamais un quatrième » / quatre classes | **trois papiers + un traitement** |
 | Le lieu du dépôt | « studio » / « déposer » | **l'atelier** |
 | Chargement C5 | tous les plis | **le poème uniquement** |
+| Définition des textures | 720 × 1560, ~70 ko | **la définition native de la source** (1536 × 2752, ou 1296 × 2304 pour le drapé), servie telle quelle — [ressources.md](ressources.md) |
+| Les flèches | caractères `↑` `→` en Bodoni | **deux tracés SVG inline** — l'unique exception au « pas de SVG » |
+| Bodoni sur A1 | présent, par la flèche de la pliure | **absent** — trois familles au premier écran, sans arrangement |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
 
 ### Les cinq questions laissées ouvertes par le design

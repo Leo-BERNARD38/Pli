@@ -13,14 +13,18 @@ Les réglages du geste (seuil, élan, caoutchouc, courbe) sont dans
   garde un réglage « Prefer Page Rendering Updates near 60fps » actif, que seul un drapeau
   enfoui désactive. Le défilement natif, lui, reste à 120 : c'est le compositeur, pas la page.
 
-On ne va pas demander à quelqu'un d'aller cocher un drapeau dans les réglages de Safari.
+Le drapeau se décoche, et c'est prévu : une fois, à la main, au moment où l'app est ajoutée
+à l'écran d'accueil ([installation.md](installation.md#le-réglage-de-cadence)). Mais un
+produit ne se construit pas sur une case cochée dans un menu caché — elle peut être remise,
+le téléphone peut changer, et le réglage ne se propage pas forcément à l'app installée.
 Donc la cible n'est pas un chiffre de fréquence :
 
 > **Aucune image perdue, quelle que soit la cadence de l'appareil.**
 
 Le budget de travail reste calé sur 120 Hz — **≤ 4 ms de fil principal par image**, la
-moitié des 8,3 ms — pour que 60 Hz soit atteint sans y penser et que 120 Hz soit tenu
-partout où l'appareil le donne. Un budget serré ne coûte rien ici : le geste ne fait bouger
+moitié des 8,3 ms — pour que 60 Hz soit atteint sans y penser, et que 120 Hz soit tenu
+partout où l'appareil le donne : sur mon Android aujourd'hui, sur son iPhone dès que le
+réglage est fait. Un budget serré ne coûte rien ici : le geste ne fait bouger
 que deux couches.
 
 ## Le seul chemin autorisé pendant le geste
@@ -69,6 +73,12 @@ Une couche de 360 × 780 sur un écran à 3× pèse environ **2,5 Mo de mémoire
 couches, c'est confortable ; dix, c'est un téléphone qui chauffe et une animation qui
 saccade.
 
+La peinture qu'elle contient, elle, est une autre dépense : une image de 1536 × 2752 occupe
+**17 Mo une fois décodée**, quelle que soit la taille à laquelle on l'affiche. D'où la règle
+de [ressources.md](ressources.md#ce-quune-grande-image-coûte) : **deux textures décodées
+vivantes au maximum**, l'`<img>` sort du document quand on quitte l'écran, et la liste du
+journal n'affiche aucune peinture.
+
 - **`will-change: transform` sur exactement deux éléments** : la feuille dessus, la page
   dessous. Posé au `pointerdown`, **retiré au `transitionend`**. Une propriété `will-change`
   laissée en place transforme chaque écran en couche permanente.
@@ -92,7 +102,7 @@ Interdits dans cette fenêtre, chacun pour une raison mesurable :
 | Travail | Coût | Où il va |
 |---|---|---|
 | `localStorage.setItem` | synchrone, 1 à 5 ms, davantage au premier accès | après la transition — voir plus bas |
-| décoder une image | 10 à 30 ms pour une texture 720 × 1560 | vague 3, pendant A1 ([chargement.md](chargement.md)) |
+| décoder une image | **30 à 60 ms** pour une peinture de 4,2 Mpx | vague 3, pendant A1 ([chargement.md](chargement.md)) |
 | `fetch` + décompression | réseau, imprévisible | avant A1, jamais après |
 | charger une police | disposition + peinture de tout ce qu'elle touche | pendant A1 |
 | `import()` dynamique | analyse et exécution du module | pendant A1 |

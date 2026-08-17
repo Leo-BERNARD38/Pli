@@ -40,7 +40,8 @@ conversation n'ouvre jamais une app installée depuis l'écran d'accueil.
    Ouvrir un pli dans Safari, ajouter à l'écran d'accueil, ouvrir l'app, regarder le journal.
 
 Selon la réponse, l'écran `#/installer` change de sens — ou disparaît au profit d'un « ouvrir
-dans Safari » et d'un export plus sérieux ([roadmap.md](roadmap.md)).
+dans Safari » et d'un export plus sérieux. Ce que l'installation apporte par ailleurs
+(cadence, plein écran, écran de lancement) est dans [installation.md](installation.md).
 
 Une atténuation existe déjà, et elle n'est pas rien : **le compteur des sept jours se remet à
 zéro à chaque visite.** Le risque réel n'est pas le silence, c'est une dizaine de jours sans
@@ -110,6 +111,7 @@ Pas de desktop **pour elle** : le pli est pensé pour un écran tenu à la main.
 - [ ] le passage vers WhatsApp, et le retour : A4 est toujours là
    ([partage.md](partage.md#le-retour))
 - [ ] ajout à l'écran d'accueil, puis journal encore visible ?
+      ([installation.md](installation.md#vérifier-une-installation))
 - [ ] navigation privée : le pli s'affiche, il n'est simplement pas archivé
 
 **Sur mon Android** :

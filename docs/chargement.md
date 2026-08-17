@@ -15,11 +15,12 @@ L'objectif chiffré ne bouge pas : **le texte d'A1 lisible en moins d'une second
 | Vague | Quand | Quoi | Budget |
 |---|---|---|---|
 | **1 · critique** | dans le document | HTML d'A1 + CSS inline + le module d'ouverture | **≤ 14 ko gzip, 1 requête** |
-| **2 · immédiate** | `preload` dans le `<head>` | 3 polices sous-ensemblées + les flèches, puis le rideau | ≤ 100 ko, 4 requêtes |
+| **2 · immédiate** | `preload` dans le `<head>` | 3 polices sous-ensemblées, puis le rideau | 3 requêtes + l'image |
 | **3 · arrière-plan** | après le premier rendu, en idle | la texture du type, Bodoni entier, le CSS du type, `journal.ts` | invisible |
 
-Cible d'ensemble : **A1 en 4 requêtes ou moins**, et rien de tiers, jamais — pas de CDN de
-polices, pas de mesure d'audience, pas une seule connexion en dehors de `pli.re`.
+Cible d'ensemble : **A1 en cinq requêtes** — le document, trois polices, une peinture. Et
+rien de tiers, jamais : pas de CDN de polices, pas de mesure d'audience, pas une seule
+connexion en dehors de `pli.re`.
 
 ## Vague 1 — le document se suffit à lui-même
 
@@ -52,8 +53,12 @@ La liste est fermée.
 | Pinyon Script | le mot « Pli », en haut à gauche d'A1 |
 | Newsreader ital. 300 | la voix — « Un pli t'attend. » |
 | Space Mono 700 | les étiquettes, « déposé par a. » |
-| Bodoni · tranche flèches | le `↑` de la pliure, et lui seul — voir plus bas |
 | `rideau-carmin-nuit.webp` | le fond des états fermés, en priorité **basse** |
+
+**Bodoni n'est pas là**, et c'est nouveau : le `↑` de la pliure était son seul emploi sur
+A1. Les deux flèches du produit sont devenues des tracés SVG inline
+([ressources.md](ressources.md#les-deux-flèches)), donc le premier écran n'appelle plus que
+trois familles, sans arrangement.
 
 ```html
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/newsreader-…woff2">
@@ -76,36 +81,25 @@ préchargée et en même origine — puis l'écrit une fois, à sa place.
 Le risque assumé : si une police n'arrive jamais, le texte apparaît en police de secours au
 bout de trois secondes. C'est le bon échec.
 
-### La tranche de flèches — une précision sur le design
-
-Le design dit deux choses vraies qui se contredisent au chargement : **A1 n'appelle que
-trois familles**, et **les flèches sont des caractères Bodoni**. Or la pliure d'A1 porte
-un `↑`.
-
-On tranche par `unicode-range`, sans toucher au dessin :
-
-```css
-@font-face{font-family:'Bodoni Moda';src:url(bodoni-fleches.woff2)format('woff2');
-           unicode-range:U+2191,U+2192}        /* ~2 ko, préchargée avec A1 */
-@font-face{font-family:'Bodoni Moda';src:url(bodoni-titres.woff2)format('woff2');
-           unicode-range:U+0020-024F,U+2018-201D}  /* le reste, vague 3 */
-```
-
-Le navigateur ne télécharge une tranche que si un caractère la réclame. A1 tire deux
-kilo-octets, les titres d'A2 tirent le reste — **pendant** qu'elle regarde A1.
-
 ### Le rideau
 
 C'est une image, elle passe donc après le texte, sans exception. `<img>` et non fond CSS :
 c'est le seul moyen d'avoir `fetchpriority`, `decoding` et `decode()`.
 
 ```html
-<img src="/textures/rideau.webp" decoding="async" fetchpriority="low" alt="">
+<img src="/assets/rideau-…webp" decoding="async" fetchpriority="low" alt="">
 ```
 
-Le cadre est peint en encre pleine dès la première image ; le rideau se fond par-dessus en
-opacité quand il est décodé — une transition composée, gratuite
-([fluidite.md](fluidite.md)).
+Elle est **lourde** — les peintures sont servies en définition native, 600 ko à 1,15 Mo
+([ressources.md](ressources.md#les-cinq-peintures--ce-quon-a-vraiment)). C'est un choix
+assumé : une peinture se charge une fois, sur une bonne connexion, et on la regarde
+longtemps. Ce que ce choix exige en retour est strict :
+
+- le cadre est peint **à plat** dès la première image — un aplat ou un dégradé de deux
+  couleurs prélevées sur la toile, qui ne coûte pas un octet ;
+- la peinture se fond par-dessus en 240 ms d'opacité quand `decode()` a rendu la main ;
+- **le texte d'A1 ne l'attend jamais.** En 5G elle arrive en 100 à 200 ms, en 4G en une
+  seconde, et dans les deux cas l'écran était déjà lisible.
 
 ## Vague 3 — pendant qu'elle regarde le volet
 
@@ -114,8 +108,8 @@ paie tout le reste du parcours.
 
 | Chargé en fond | Pour que… |
 |---|---|
-| la texture du **type** du pli, puis `img.decode()` | A2 n'ait plus rien à décoder au moment du geste |
-| la tranche Bodoni des titres | le titre d'A2 ne saute pas |
+| la texture du **type** du pli, puis `img.decode()` | A2 n'ait plus rien à décoder au moment du geste — 30 à 60 ms qu'on ne peut pas payer pendant l'animation |
+| Bodoni, pour les titres | le titre d'A2 ne saute pas au moment où il s'affiche |
 | `styles/<type>.css` | la composition d'A2 soit prête |
 | `journal.ts` | l'écriture au seuil ne charge rien |
 | le module d'A3 (invitation seulement) | la réponse soit instantanée |
@@ -125,7 +119,9 @@ Le déclenchement : après le premier rendu — `requestIdleCallback` s'il exist
 d'un bloc : une ressource à la fois, la texture en premier.
 
 **Un pli n'a qu'un type.** Personne ne télécharge les cinq peintures — c'est la seule
-raison pour laquelle un budget de 70 ko par texture tient.
+raison pour laquelle on peut servir des peintures d'un mégaoctet. Et **deux textures
+décodées vivantes au maximum** : une image de 4,2 Mpx occupe 17 Mo de mémoire une fois
+décodée ([ressources.md](ressources.md#ce-quune-grande-image-coûte)).
 
 Ce qui n'est **pas** en vague 3 : l'atelier (bundle séparé, jamais servi sur son téléphone),
 les quatre autres textures, la police des titres de documentation, l'aperçu `og.jpg` — il
@@ -143,10 +139,10 @@ s'il dure ([parcours.md](parcours.md#larrivée)).
 | Poste | Cible | Mesuré le |
 |---|---|---|
 | document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 ko** | — |
-| les quatre polices d'A1 | **≤ 100 ko** | — |
-| une texture | **≤ 70 ko** | — |
+| les trois polices d'A1 | **≤ 90 ko** | — |
+| une texture | définition native, **600 ko à 1,15 Mo** | mesuré |
 | requêtes avant le texte d'A1 | **1** | — |
-| requêtes avant A1 complet (rideau compris) | **≤ 4** | — |
+| requêtes avant A1 complet (rideau compris) | **≤ 5** | — |
 | texte d'A1 peint, 4G, cache vide | **< 1 s** | — |
 | A2 après le geste | **0 requête** | — |
 
@@ -178,4 +174,7 @@ d'A1 : Safari ne donne pas de LCP, et le premier rendu peint le plateau avant le
 3. Une image, une police ou un module chargé **pendant** le geste
    ([fluidite.md](fluidite.md#la-file-dattente-principale)).
 4. Un `@import` CSS — il sérialise ce qu'il charge.
-5. Une texture qui dépasse 70 ko, ou deux textures pour un seul pli.
+5. Deux textures pour un seul pli, ou une texture encore décodée alors qu'on a quitté
+   l'écran.
+6. Un fichier empreinté sur le chemin du premier texte — il rendrait une page périmée
+   illisible ([mises-a-jour.md](mises-a-jour.md#1-une-page-périmée-doit-rester-lisible)).
