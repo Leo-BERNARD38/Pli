@@ -50,10 +50,11 @@ https://<user>.github.io/<repo>/#c=<marqueur><base64url>
 1. `JSON.stringify` sans espaces
 2. compression `deflate-raw` via `CompressionStream` (natif, zéro dépendance)
 3. encodage base64url (`+/` → `-_`, sans `=`)
-4. préfixe d'un caractère : `2` si compressé, `1` si brut
+4. préfixe d'un caractère : version de l'encodage, `2` aujourd'hui
 
-Le préfixe permet de se passer de la compression si `CompressionStream` manque
-(Safari < 16.4) sans changer le format du lien.
+`CompressionStream` est disponible sur nos deux appareils (voir
+[architecture.md](architecture.md)), donc pas de chemin sans compression. Le préfixe
+ne sert qu'à pouvoir changer d'encodage un jour sans casser les liens déjà envoyés.
 
 **Ordre de grandeur** : une invitation typique fait ~180 octets de JSON, ~150 après
 compression, ~200 caractères de lien. Un mot d'amour long (1 500 caractères) reste
@@ -68,8 +69,8 @@ de tout serveur et de tout index. Suffisant ici, à ne pas confondre avec du chi
 
 | Clé | Contenu |
 |---|---|
-| `encre.v1.journal` | tableau d'entrées, triées par date d'ouverture décroissante |
-| `encre.v1.seuil` | `true` une fois le mot secret saisi |
+| `pli.v1.journal` | tableau d'entrées, triées par date d'ouverture décroissante |
+| `pli.v1.seuil` | `true` une fois le mot secret saisi |
 
 Entrée du journal :
 

@@ -1,9 +1,16 @@
-# Concept
+# Concept — Pli
 
 ## En une phrase
 
-Un lien = une carte. Je lui envoie un lien par message, il ouvre une page plein écran
+Un lien = un pli. Je lui envoie un lien par message, il ouvre une page plein écran
 faite pour être regardée, pas naviguée.
+
+## Vocabulaire
+
+Dans l'interface qu'elle voit, l'objet s'appelle un **pli** : « un pli pour toi »,
+« tes plis ». Dans le code et dans cette documentation, on dit **carte** — c'est
+neutre et sans ambiguïté (`carte/`, `#c=`, `type de carte`). Deux mots, deux publics,
+on ne les mélange pas.
 
 ## Les deux usages
 

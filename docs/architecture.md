@@ -64,11 +64,19 @@ Contraintes à ne pas oublier :
 
 ## Compatibilité
 
-Cible réelle : son téléphone. À vérifier avant de coder — iOS ou Android, et la version.
+Deux appareils, connus : **elle sur iOS 26** (Safari 26), **moi sur Android 16** (Chrome).
+On cible ces deux-là, pas le web.
 
-- `CompressionStream` : Safari 16.4+, Chrome 80+. Fallback prévu (voir `donnees.md`).
-- Ajout à l'écran d'accueil : un `manifest.json` suffit pour que le journal ait une
-  icône. Pas de service worker en v1.
+Conséquence directe : tout le CSS et toutes les API modernes sont disponibles.
+`CompressionStream`, `@layer`, `:has()`, `text-wrap: balance`, `View Transitions`,
+`Web Share` — aucun préfixe, aucun polyfill, aucun fallback.
+
+Seule vigilance : Safari iOS reste plus lent sur les filtres SVG. Le grain et la
+diffusion d'encre se testent sur son téléphone avant d'être validés, pas sur un
+émulateur.
+
+Ajout à l'écran d'accueil : un `manifest.json` suffit pour que le journal ait une
+icône. Pas de service worker en v1.
 
 ## Ce qu'on ne fait pas
 

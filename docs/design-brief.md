@@ -6,9 +6,13 @@ tranchent en maquettant, pas ici.
 
 ## Contexte
 
-Des cartes envoyées par lien à une seule personne : invitations à sortir, mots d'amour,
-coupons. Le design **est** le produit : l'app ne fait presque rien, elle doit être belle
-à ouvrir.
+Le produit s'appelle **Pli**. Des cartes envoyées par lien à une seule personne :
+invitations à sortir, mots d'amour, coupons. Le design **est** le produit : l'app ne
+fait presque rien, elle doit être belle à ouvrir.
+
+Le nom oriente sans obliger : un pli est un objet plié, envoyé, à ouvrir. La piste
+d'animation du dépliage part avec une longueur d'avance, mais elle doit gagner à
+l'écran, pas par le nom.
 
 ## Contraintes dures
 

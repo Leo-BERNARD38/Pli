@@ -4,7 +4,7 @@
 
 - Vite + TypeScript, déploiement GitHub Pages par Actions
 - Routeur par hash
-- `lib/codec.ts` : encode / décode / fallback sans compression, avec tests
+- `lib/codec.ts` : encode / décode, avec tests
 - Une carte en dur, sans style
 
 Fin du jalon : un lien généré à la main s'ouvre sur son téléphone.
