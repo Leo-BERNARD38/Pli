@@ -44,7 +44,7 @@ Les clés absentes sont omises, jamais mises à `null`.
 ## 2. L'encodage dans le lien
 
 ```
-https://<user>.github.io/<repo>/#c=<marqueur><base64url>
+https://leo-bernard38.github.io/Pli/#c=<marqueur><base64url>
 ```
 
 1. `JSON.stringify` sans espaces

@@ -55,9 +55,13 @@ du code ne touche `localStorage` directement, pour que le mode navigation privé
 
 GitHub Pages, déploiement par GitHub Actions sur push vers `main`.
 
+URL publique : `https://leo-bernard38.github.io/Pli/`
+
 Contraintes à ne pas oublier :
 
-- `base` de Vite = `/<repo>/`, sinon les assets tombent en 404.
+- `base` de Vite = `/Pli/`, sinon les assets tombent en 404.
+- Ne plus renommer le dépôt : le nom est dans l'URL, donc dans chaque lien envoyé.
+  Un renommage casserait tous les plis déjà reçus.
 - `.nojekyll` à la racine du build.
 - Pas de variables d'environnement secrètes : tout ce qui est buildé est public.
   Le numéro WhatsApp voyage dans le lien, pas dans le dépôt.
