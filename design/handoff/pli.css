@@ -1,0 +1,231 @@
+/* ==========================================================================
+   PLI — feuille de référence unique
+   Tous les écrans de Pli se construisent avec ce fichier et rien d'autre.
+   Unités : le pli est TOUJOURS pensé à 360 × 780. Sur grand écran on ne
+   l'élargit pas, on l'entoure.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,800;1,6..96,400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=Space+Mono:wght@400;700&family=Pinyon+Script&display=swap');
+
+:root{
+  /* — encres et papiers ————————————————————————————— */
+  --creme:#F7F2E8;        /* le papier du pli */
+  --sable:#E9E2D2;        /* le plateau, hors du pli */
+  --sable-2:#E4DCC9;      /* plateau du bureau, un ton plus bas */
+  --encre:#14100E;        /* le noir, jamais #000 */
+  --carmin:#C81E33;       /* la seule couleur d'action */
+  --rose:#EFA9A0;         /* carmin éclairci, uniquement sur fond encre */
+
+  --trait:rgba(20,16,14,.16);        /* séparateur discret */
+  --trait-fort:#14100E;              /* séparateur de section, 2px */
+  --carmin-pointille:rgba(200,30,51,.55);
+  --grain:repeating-linear-gradient(0deg,rgba(20,16,14,.022) 0 1px,transparent 1px 4px);
+
+  /* — mains ————————————————————————————————————————— */
+  --main:'Pinyon Script',cursive;    /* le mot « Pli », rien d'autre */
+  --serif:'Bodoni Moda',serif;       /* les titres */
+  --plume:'Newsreader',serif;        /* la voix de celui qui écrit */
+  --mono:'Space Mono',monospace;     /* tout le reste de l'interface */
+
+  /* — géométrie ————————————————————————————————————— */
+  --ecran-l:360px;
+  --ecran-h:780px;
+  --marge:26px;             /* marge intérieure du pli, jamais autre chose */
+  --pliure:34%;             /* hauteur du volet fermé, en bas de l'écran */
+  --rayon:36px;             /* coin du pli */
+  --cachet:38px;            /* pastille du numéro, à cheval sur la pliure */
+  --ombre:0 18px 40px rgba(20,16,14,.18);
+
+  /* — mouvement —————————————————————————————————————— */
+  --sortie:cubic-bezier(.32,.72,0,1);  /* la seule courbe du produit */
+  --ouvre:460ms;                        /* le pli s'ouvre */
+  --referme:340ms;                      /* le pli retombe */
+  --seuil:.32;                          /* course à franchir pour valider */
+  --elan:.55;                           /* px/ms : le coup sec suffit */
+  --caoutchouc:.1;                      /* résistance dans le mauvais sens */
+  --entree:.09;                         /* la page dessous monte de 9 % */
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--sable);-webkit-font-smoothing:antialiased}
+body{font-family:var(--mono);color:var(--encre)}
+a{color:var(--carmin);text-decoration:none}
+a:hover{color:var(--encre)}
+::selection{background:var(--carmin);color:var(--creme)}
+
+/* ==========================================================================
+   1. LE PLI — le contenant. Trois papiers possibles, jamais un quatrième.
+   ========================================================================== */
+.pli{
+  position:relative;width:var(--ecran-l);height:var(--ecran-h);
+  overflow:hidden;border-radius:var(--rayon);
+  background:var(--creme);background-image:var(--grain);
+  box-shadow:var(--ombre);
+  display:flex;flex-direction:column;
+  touch-action:none;user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.pli--encre{background:var(--encre);background-image:none;color:var(--creme)}
+.pli--carmin{background:var(--carmin);background-image:none;color:var(--creme)}
+.pli--plein{background:var(--encre);background-image:none;color:var(--creme)} /* image pleine page */
+
+/* sur fond sombre, le carmin devient rose */
+.pli--encre .carmin,.pli--carmin .carmin,.pli--plein .carmin{color:var(--rose)}
+.pli--carmin .carmin{color:var(--creme)}
+
+/* ==========================================================================
+   2. TÊTE DE PLI — présente sur tous les écrans du lecteur.
+   ========================================================================== */
+.tete{
+  padding:34px var(--marge) 0;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  flex:0 0 auto;
+}
+.marque{font-family:var(--main);font-size:52px;line-height:.86}
+.marque--petite{font-size:44px}
+
+/* ==========================================================================
+   3. TYPOGRAPHIE — quatre voix, aucune autre.
+   ========================================================================== */
+.titre{                     /* Bodoni 800, capitales, très serré */
+  font-family:var(--serif);font-weight:800;text-transform:uppercase;
+  font-size:56px;line-height:.9;letter-spacing:-.035em;color:var(--carmin);
+}
+.titre--geant{font-size:78px;line-height:.92;letter-spacing:-.04em} /* .92 : les capitales accentuées ont besoin d'air */
+.titre--section{               /* titres de documentation, casse normale */
+  font-family:var(--serif);font-weight:700;text-transform:none;
+  font-size:34px;line-height:1.05;letter-spacing:-.01em;color:var(--encre);
+}
+.voix{                      /* ce que la personne a écrit */
+  font-family:var(--plume);font-style:italic;font-weight:300;
+  font-size:31px;line-height:1.28;max-width:15ch;text-wrap:pretty;
+}
+.voix--corps{font-size:23px;line-height:1.32;max-width:18ch}
+.griffe{                    /* la ligne manuscrite, une seule par pli */
+  font-family:var(--main);font-size:48px;line-height:1;
+  transform:rotate(-4deg);white-space:nowrap;
+}
+.etiquette{                 /* toute étiquette d'interface */
+  font-family:var(--mono);font-weight:700;font-size:11.5px;
+  letter-spacing:.28em;text-transform:uppercase;
+}
+.etiquette--fine{font-weight:400;font-size:10.5px;letter-spacing:.24em;opacity:.5}
+.etiquette--forte{font-size:14px;letter-spacing:.3em}
+.carmin{color:var(--carmin)}
+.attenue{opacity:.5}
+
+/* ==========================================================================
+   4. LA PLIURE — le volet fermé, la pastille, le trait d'action.
+   ========================================================================== */
+.volet{                     /* bande carmin, bas de l'écran d'attente */
+  position:absolute;left:0;right:0;bottom:0;height:var(--pliure);
+  background:var(--carmin);color:var(--creme);
+}
+.volet__ombre{              /* le papier qui passe devant projette un fil d'ombre */
+  position:absolute;left:0;right:0;bottom:var(--pliure);height:18px;
+  background:linear-gradient(0deg,rgba(20,16,14,.13),rgba(20,16,14,0));
+  pointer-events:none;
+}
+.cachet{                    /* le numéro, à cheval sur la pliure */
+  position:absolute;left:50%;transform:translateX(-50%);
+  bottom:calc(var(--pliure) - (var(--cachet) / 2));
+  width:var(--cachet);height:var(--cachet);border-radius:50%;
+  background:var(--creme);border:1.5px solid rgba(200,30,51,.6);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.06em;
+  color:var(--carmin);z-index:3;
+}
+.action{                    /* « répondre », « déplier », « déposer » */
+  border-top:2px dashed var(--carmin-pointille);padding-top:18px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;
+}
+.action .fleche{font-family:var(--serif);font-size:22px;line-height:1}
+.pli--encre .action,.pli--carmin .action{border-top-color:rgba(239,169,160,.5)}
+.pli--carmin .action{border-top-color:rgba(247,242,232,.6)}
+
+/* ==========================================================================
+   5. CORPS — la zone de contenu entre tête et pliure.
+   ========================================================================== */
+.corps{
+  position:relative;flex:1;min-height:0;
+  padding:0 var(--marge) 30px;
+  display:flex;flex-direction:column;justify-content:flex-end;gap:18px;
+}
+.corps--haut{justify-content:flex-start;padding-top:22px}
+.corps--reparti{justify-content:space-between}
+
+/* une image dans le pli : jamais nue, toujours un dégradé vers le papier */
+.image{position:relative;overflow:hidden;flex:0 0 auto}
+.image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.image--haute{height:46%}
+.image__fondu{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(14,12,11,.5) 0%,rgba(14,12,11,0) 34%,rgba(247,242,232,.05) 72%,var(--creme) 100%);}
+.image__fondu--encre{
+  background:linear-gradient(180deg,rgba(14,12,11,.62) 0%,rgba(14,12,11,.38) 34%,rgba(14,12,11,.55) 66%,rgba(14,12,11,.85) 100%);}
+
+/* ==========================================================================
+   6. LE DÉPÔT — trois questions : le type, les textes, le lien.
+   Aucun réglage de style, aucune image à déposer : le type fait la mise en page.
+   ========================================================================== */
+
+/* barre de conduite : où j'en suis, comment je reviens */
+.conduite{flex:0 0 auto;padding:22px var(--marge) 14px;border-bottom:1px solid var(--trait);
+  display:flex;align-items:center;justify-content:space-between}
+.conduite__retour{font-family:var(--mono);font-weight:700;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;opacity:.55;cursor:pointer}
+.conduite__pas{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;opacity:.45}
+
+/* la question de l'écran, en français, une par écran */
+.question{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.06;letter-spacing:-.01em}
+.aide{font-family:var(--plume);font-style:italic;font-weight:300;font-size:17px;line-height:1.4;opacity:.6}
+
+/* le choix du type : grande cible (min 70px), nom + glose + le layout en petit */
+.type{all:unset;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:16px var(--marge);border-top:1px solid var(--trait);cursor:pointer;min-height:76px;text-align:left}
+.type:last-of-type{border-bottom:1px solid var(--trait)}
+.type[aria-selected="true"]{background:rgba(200,30,51,.05)}
+.type[aria-selected="true"] .type__nom{color:var(--carmin)}
+.type__nom{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+.type__glose{display:block;margin-top:5px;font-family:var(--plume);font-style:italic;font-weight:300;
+  font-size:16px;line-height:1.3;opacity:.55}
+
+/* le layout vu en petit : un vrai pli 360×780 réduit par transform, jamais un dessin à part */
+.apercu{position:relative;flex:0 0 auto;overflow:hidden}
+.apercu--vignette{width:62px;height:134px}    /* échelle .1722 */
+.apercu--tete{width:96px;height:208px;border-radius:10px;box-shadow:0 6px 14px rgba(20,16,14,.16)} /* .2667 */
+.mini{position:absolute;top:0;left:0;width:var(--ecran-l);height:var(--ecran-h);transform-origin:top left;
+  background:var(--creme);background-image:var(--grain);display:flex;flex-direction:column;pointer-events:none}
+.apercu--vignette .mini{transform:scale(.1722)}
+.apercu--tete .mini{transform:scale(.2667)}
+.mini__volet{position:absolute;left:0;right:0;bottom:0;height:var(--pliure);background:var(--carmin)}
+
+/* remplir : des lignes nommées, pas un pli à deviner */
+.champ{padding:15px var(--marge);border-top:1px solid var(--trait);display:flex;flex-direction:column;gap:6px}
+.champ__nom{font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.24em;text-transform:uppercase;opacity:.5}
+.champ:focus-within{background:rgba(200,30,51,.05)}
+.champ:focus-within .champ__nom{opacity:1;color:var(--carmin)}
+.champ input,.champ textarea{all:unset;width:100%;font-family:var(--plume);font-weight:300;font-size:20px;
+  line-height:1.35;color:var(--encre);caret-color:var(--carmin)}
+.champ textarea{font-style:italic;resize:none;min-height:64px}
+.champ input::placeholder,.champ textarea::placeholder{color:rgba(20,16,14,.32)}
+.champ--titre input{font-family:var(--serif);font-style:normal;font-weight:700;font-size:26px;letter-spacing:-.01em}
+.facultatif{font-weight:400;letter-spacing:.16em;opacity:.6}
+.reste{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.4}
+.reste[data-trop="1"]{color:var(--carmin);opacity:1}
+
+/* une seule action, pleine largeur, toujours en bas */
+.bouton{all:unset;flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:12px;
+  background:var(--carmin);color:var(--creme);padding:22px;cursor:pointer;
+  font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.28em;text-transform:uppercase}
+.bouton[disabled]{background:rgba(20,16,14,.12);color:rgba(20,16,14,.4);cursor:default}
+
+/* ==========================================================================
+   7. LE PLATEAU — tout ce qui est hors du pli (documentation, bureau).
+   ========================================================================== */
+.plateau{padding:70px;display:flex;flex-direction:column;gap:74px;background:var(--sable)}
+.section{display:flex;flex-direction:column;gap:24px}
+.section__tete{display:flex;align-items:baseline;gap:16px;border-top:2px solid var(--trait-fort);padding-top:14px;flex-wrap:wrap}
+.note{font-size:12.5px;line-height:1.78;max-width:900px;border-left:2px solid var(--carmin);padding-left:14px}
+.rang{display:flex;gap:52px;align-items:flex-start;flex-wrap:wrap}
+.legende{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--carmin)}

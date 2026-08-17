@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pli — parcours du lecteur (A1 → A4)</title>
+<link rel="stylesheet" href="pli.css">
+<style>
+  body{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:22px;padding:24px 16px 60px}
+  .cartouche{width:var(--ecran-l);display:flex;flex-direction:column;gap:8px}
+  .scene{position:relative;width:var(--ecran-l);height:var(--ecran-h);border-radius:var(--rayon);overflow:hidden;box-shadow:var(--ombre);background:var(--creme)}
+  .couche{position:absolute;inset:0;display:flex;flex-direction:column}
+  #dessous{z-index:1;will-change:transform}
+  #dessus{z-index:2;will-change:transform}
+  #reponse,#relais{z-index:4;transform:translateY(100%);transition:transform var(--ouvre) var(--sortie)}
+  .scene>.couche{border-radius:0}
+  @keyframes nudge{0%,62%,100%{transform:translateY(0)}76%{transform:translateY(-9px)}}
+  .invite{animation:nudge 2.6s var(--sortie) infinite}
+  .rembobine{position:absolute;bottom:16px;right:16px;z-index:9;background:rgba(20,16,14,.72);color:var(--creme);
+    font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    padding:11px 14px;border-radius:999px;border:0;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s}
+  .rembobine[data-vu="1"]{opacity:1;pointer-events:auto}
+  .oui{display:flex;flex-direction:column;gap:0;margin:0 var(--marge)}
+  .oui button{all:unset;padding:18px 0;border-top:1px solid var(--trait);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+  .pli--encre .oui button{border-top-color:rgba(247,242,232,.22)}
+  .mesure{width:var(--ecran-l);font-size:11.5px;line-height:1.72;display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--trait-fort);padding-top:14px}
+  code{font-size:11px;background:rgba(200,30,51,.1);padding:1px 4px}
+</style>
+</head>
+<body>
+
+<div class="cartouche">
+  <div class="etiquette carmin">Pli · parcours du lecteur</div>
+  <div class="titre" style="font-size:40px">A1 → A4</div>
+  <div style="font-size:12px;line-height:1.7">Glisse la feuille vers le haut avec le doigt (ou la souris). Elle suit la main image par image ; relâche avant 32 % et elle retombe, au-delà elle part.</div>
+</div>
+
+<div class="scene" id="scene">
+
+  <!-- A2 · la découverte — attendait derrière, monte de 9 % -->
+  <div class="couche" id="dessous">
+    <div class="image image--haute">
+      <img src="assets/drape-carmin-rose.webp" alt="drapé à l'huile, carmin et rose" style="object-position:50% 46%">
+      <div class="image__fondu"></div>
+      <div class="tete" style="position:absolute;inset:28px 26px auto;padding:0;color:var(--creme)">
+        <div class="marque">Pli</div>
+        <div class="etiquette" style="font-size:10px;padding-top:14px">la découverte</div>
+      </div>
+    </div>
+    <div class="corps corps--reparti">
+      <div>
+        <div class="titre" style="font-size:64px">Tu es<br>invitée</div>
+        <div class="griffe" style="margin:-12px 0 0 74px">rien qu'à toi</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div class="etiquette carmin" style="letter-spacing:.24em">samedi</div>
+        <div class="etiquette" style="font-size:14px;letter-spacing:.14em">22 août — 20h00</div>
+        <div class="etiquette" style="font-size:14px;letter-spacing:.06em">Le Petit Comptoir</div>
+      </div>
+      <div class="action" id="versReponse">
+        <div class="etiquette carmin" style="font-size:12.5px">répondre</div>
+        <div class="fleche carmin">↑</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- A1 · l'attente — la feuille que l'on tire -->
+  <div class="couche" id="dessus">
+    <div style="position:absolute;inset:0;background:var(--creme);background-image:var(--grain)">
+      <div class="tete" style="position:absolute;inset:30px 26px auto;padding:0">
+        <div class="marque">Pli</div>
+        <div class="etiquette carmin" style="font-size:10px;padding-top:16px">une invitation</div>
+      </div>
+      <div style="position:absolute;left:26px;right:26px;bottom:38%;display:flex;flex-direction:column;gap:14px">
+        <div class="etiquette carmin" style="font-size:10px">nº 014 — pour toi seule</div>
+        <div class="voix" style="font-size:29px;max-width:14ch">Un pli t'attend. Il ne se lira qu'une fois.</div>
+        <div class="etiquette--fine">déposé par a.</div>
+      </div>
+    </div>
+    <div class="volet">
+      <div class="cachet" style="bottom:auto;top:calc(var(--cachet) / -2)">014</div>
+      <div class="invite" id="invite" style="position:absolute;top:50px;left:26px;right:26px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div class="etiquette" style="font-size:13px;letter-spacing:.28em">déplier</div>
+          <div class="fleche">↑</div>
+        </div>
+        <div class="etiquette--fine" style="opacity:.7">glisser vers le haut</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- A3 · la réponse -->
+  <div class="couche pli--encre" id="reponse" style="background:var(--encre);color:var(--creme)">
+    <div class="tete">
+      <div class="marque">Pli</div>
+      <div class="etiquette" style="font-size:10px;color:var(--rose);padding-top:18px">la réponse</div>
+    </div>
+    <div class="corps corps--reparti">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="titre" style="color:var(--creme);font-size:52px">Tu<br>réponds</div>
+        <div class="voix voix--corps" style="opacity:.75">Elle le saura tout de suite, sans notification et sans compte.</div>
+      </div>
+      <div class="oui" style="margin:0">
+        <button data-mot="Oui"><span class="etiquette" style="font-size:14px">oui, j'y serai</span><span class="fleche" style="color:var(--rose)">↑</span></button>
+        <button data-mot="Peut-être"><span class="etiquette" style="font-size:14px;opacity:.7">peut-être</span><span class="fleche" style="opacity:.5">↑</span></button>
+        <button data-mot="Non"><span class="etiquette" style="font-size:14px;opacity:.7">je ne peux pas</span><span class="fleche" style="opacity:.5">↑</span></button>
+      </div>
+      <div class="etiquette--fine">un seul mot suffit · tu peux ajouter une ligne après</div>
+    </div>
+  </div>
+
+  <!-- A4 · le relais -->
+  <div class="couche pli--carmin" id="relais" style="background:var(--carmin);color:var(--creme)">
+    <div class="tete">
+      <div class="marque">Pli</div>
+      <div class="etiquette" style="font-size:10px;padding-top:18px;opacity:.8">envoyé</div>
+    </div>
+    <div class="corps corps--reparti">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="titre titre--geant" id="motRepondu" style="color:var(--creme)">Oui</div>
+        <div class="voix voix--corps" style="opacity:.9">C'est parti chez a. Le pli se referme derrière toi.</div>
+      </div>
+      <div class="action" style="cursor:default">
+        <div class="etiquette--forte">écrire à ton tour</div>
+        <div class="fleche">↑</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="rembobine" id="rembobine">refermer</button>
+</div>
+
+<div class="mesure">
+  <div class="etiquette carmin" style="font-size:10px">Les cinq mesures du geste</div>
+  <div><b>Suivi au doigt.</b> Aucune animation pendant le glissement : la feuille est à la position du doigt.</div>
+  <div><b>Deux validations.</b> <code>32 %</code> de course franchie, ou une vitesse de relâchement de <code>0,55 px/ms</code>.</div>
+  <div><b>Caoutchouc.</b> Tirer vers le bas ne rend que <code>0,1</code> du mouvement, puis revient.</div>
+  <div><b>Courbe unique.</b> <code>cubic-bezier(.32,.72,0,1)</code> — <code>460 ms</code> à l'ouverture, <code>340 ms</code> au retour.</div>
+  <div><b>Deux couches, deux <code>translate3d</code>.</b> Pas de flou, pas d'ombre animée.</div>
+</div>
+
+<script>
+(function(){
+  const scene = document.getElementById('scene');
+  const dessus = document.getElementById('dessus');
+  const dessous = document.getElementById('dessous');
+  const invite = document.getElementById('invite');
+  const rembobine = document.getElementById('rembobine');
+  const reponse = document.getElementById('reponse');
+  const relais = document.getElementById('relais');
+  const S = getComputedStyle(document.documentElement);
+  const SEUIL = parseFloat(S.getPropertyValue('--seuil')) || .32;
+  const ELAN = parseFloat(S.getPropertyValue('--elan')) || .55;
+  const RESIST = parseFloat(S.getPropertyValue('--caoutchouc')) || .1;
+  const ENTREE = parseFloat(S.getPropertyValue('--entree')) || .09;
+  const SORTIE = 'cubic-bezier(.32,.72,0,1)';
+  let ouvert = false, id = null, y0 = 0, p0 = 0, lastY = 0, lastT = 0, v = 0;
+
+  function peindre(p, anime){
+    const h = scene.clientHeight;
+    const d = anime ? (p > .5 ? 460 : 340) : 0;
+    const tr = d ? 'transform ' + d + 'ms ' + SORTIE : 'none';
+    dessus.style.transition = tr;
+    dessous.style.transition = tr;
+    dessus.style.transform = 'translate3d(0,' + (-p * h) + 'px,0)';
+    dessous.style.transform = 'translate3d(0,' + ((1 - p) * ENTREE * h) + 'px,0)';
+  }
+  function etat(v_){
+    ouvert = v_;
+    invite.style.animationPlayState = v_ ? 'paused' : 'running';
+    rembobine.dataset.vu = v_ ? '1' : '0';
+    peindre(v_ ? 1 : 0, true);
+  }
+
+  scene.addEventListener('pointerdown', e => {
+    if(id !== null || e.target.closest('button') || e.target.closest('.action')) return;
+    id = e.pointerId; y0 = lastY = e.clientY; lastT = e.timeStamp; v = 0;
+    p0 = ouvert ? 1 : 0;
+    scene.setPointerCapture(id);
+    invite.style.animationPlayState = 'paused';
+  });
+  scene.addEventListener('pointermove', e => {
+    if(id !== e.pointerId) return;
+    const dt = e.timeStamp - lastT;
+    if(dt > 0) v = (e.clientY - lastY) / dt;
+    lastY = e.clientY; lastT = e.timeStamp;
+    let p = p0 + (y0 - e.clientY) / scene.clientHeight;
+    if(p < 0) p *= RESIST;
+    if(p > 1) p = 1 + (p - 1) * RESIST;
+    peindre(p, false);
+    e.preventDefault();
+  }, {passive:false});
+  function relache(e){
+    if(id !== e.pointerId) return;
+    const p = p0 + (y0 - e.clientY) / scene.clientHeight;
+    const valide = v > ELAN ? false : (v < -ELAN || p > SEUIL);
+    scene.releasePointerCapture(id); id = null;
+    etat(valide);
+  }
+  scene.addEventListener('pointerup', relache);
+  scene.addEventListener('pointercancel', relache);
+  window.addEventListener('resize', () => { if(id === null) peindre(ouvert ? 1 : 0, false); });
+
+  document.getElementById('versReponse').addEventListener('click', () => {
+    reponse.style.transform = 'translateY(0)';
+  });
+  document.querySelectorAll('#reponse [data-mot]').forEach(b => b.addEventListener('click', () => {
+    document.getElementById('motRepondu').textContent = b.dataset.mot;
+    relais.style.transform = 'translateY(0)';
+  }));
+  rembobine.addEventListener('click', () => {
+    relais.style.transform = 'translateY(100%)';
+    reponse.style.transform = 'translateY(100%)';
+    etat(false);
+  });
+
+  peindre(0, false);
+})();
+</script>
+</body>
+</html>

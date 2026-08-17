@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pli — planche de référence</title>
+<link rel="stylesheet" href="pli.css">
+<style>
+  .plateau{padding:56px 40px 120px;gap:60px}
+  .grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .encart{border-top:2px solid var(--trait-fort);padding-top:14px;display:flex;flex-direction:column;gap:10px;font-size:11.5px;line-height:1.75}
+  .encre-bloc{height:96px;display:flex;align-items:flex-end;padding:10px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase}
+  table{border-collapse:collapse;font-size:11.5px;width:100%;max-width:900px}
+  td,th{text-align:left;padding:9px 14px 9px 0;border-bottom:1px solid var(--trait);vertical-align:top}
+  th{font-weight:700;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--carmin)}
+  code{font-size:11px;background:rgba(200,30,51,.1);padding:1px 4px}
+  .liens{display:flex;gap:14px;flex-wrap:wrap}
+  .liens a{border:1.5px solid var(--encre);padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+  .liens a:hover{background:var(--carmin);border-color:var(--carmin);color:var(--creme)}
+  .demo{background:var(--creme);padding:22px;display:flex;flex-direction:column;gap:14px}
+</style>
+</head>
+<body>
+<main class="plateau">
+
+  <header style="display:flex;gap:56px;flex-wrap:wrap;align-items:flex-start">
+    <div style="max-width:720px;display:flex;flex-direction:column;gap:16px">
+      <div class="etiquette carmin" style="letter-spacing:.34em">Pli · système de design · planche de référence</div>
+      <div class="titre" style="font-size:78px;line-height:.86">Un objet,<br>pas une page.</div>
+      <div style="font-size:13px;line-height:1.78">Pli est un pli de papier qu'on tire du doigt. Tout le système tient dans quatre encres, quatre mains, une pliure à 34 % et une seule courbe de mouvement. Cette planche est la source : <code>pli.css</code> contient l'intégralité des valeurs, les trois pages voisines sont des prototypes qui tournent sans build.</div>
+      <div class="liens">
+        <a href="lecteur.html">Parcours du lecteur</a>
+        <a href="createur.html">Déposer · mobile (3 écrans)</a>
+        <a href="createur-bureau.html">Déposer · ordinateur</a>
+        <a href="../PLI.md">Spécification (.md)</a>
+      </div>
+    </div>
+    <div class="encart" style="width:280px">
+      <div class="etiquette--fine" style="opacity:1">Les cinq règles</div>
+      <div><b>Un pli = un écran.</b> Jamais de défilement dans un pli, jamais de flux de six pages.</div>
+      <div><b>Le carmin est l'action.</b> Une seule couleur agit ; tout le reste est papier et encre.</div>
+      <div><b>La pliure est physique.</b> Elle se tire, elle résiste, elle retombe.</div>
+      <div><b>Quatre partitions, attachées au type.</b> Le papier change le fond et l'encre, jamais la composition — et ce n'est pas un choix offert au créateur.</div>
+      <div><b>Rien à signer.</b> Pas de compte, pas de notification, pas de brouillon nommé.</div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section__tete">
+      <div class="titre--section">Encres et papiers</div>
+      <div class="etiquette--fine">quatre valeurs · le carmin devient rose sur fond encre</div>
+    </div>
+    <div class="grille">
+      <div><div class="encre-bloc" style="background:var(--creme);border:1px solid var(--trait)">crème · #F7F2E8 — le papier du pli</div></div>
+      <div><div class="encre-bloc" style="background:var(--sable);border:1px solid var(--trait)">sable · #E9E2D2 — le plateau</div></div>
+      <div><div class="encre-bloc" style="background:var(--encre);color:var(--creme)">encre · #14100E — jamais #000</div></div>
+      <div><div class="encre-bloc" style="background:var(--carmin);color:var(--creme)">carmin · #C81E33 — l'action</div></div>
+      <div><div class="encre-bloc" style="background:var(--encre);color:var(--rose)">rose · #EFA9A0 — carmin sur fond sombre</div></div>
+      <div><div class="encre-bloc" style="background:var(--creme);border:1px solid var(--trait);background-image:var(--grain)">grain · 1px / 4px à 2,2 %</div></div>
+    </div>
+    <div class="note">Aucune autre couleur n'entre dans le produit. Les images apportent leurs propres teintes : elles sont toujours recouvertes d'un dégradé qui les ramène au papier ou à l'encre, jamais posées nues.</div>
+  </section>
+
+  <section class="section">
+    <div class="section__tete">
+      <div class="titre--section">Quatre mains</div>
+      <div class="etiquette--fine">chacune a un seul emploi · aucune n'empiète sur l'autre</div>
+    </div>
+    <div class="demo">
+      <div style="display:flex;flex-wrap:wrap;gap:44px;align-items:flex-end">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="marque">Pli</div>
+          <div class="etiquette--fine">Pinyon Script · le mot « Pli », rien d'autre</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="titre">Tu es<br>invitée</div>
+          <div class="etiquette--fine">Bodoni Moda 800 · capitales · -.035em · 1/.9</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:44px;align-items:flex-end;border-top:1px solid var(--trait);padding-top:18px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="voix">Un pli t'attend. Il ne se lira qu'une fois.</div>
+          <div class="etiquette--fine">Newsreader italique 300 · la voix de celui qui écrit</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="etiquette">répondre</div>
+          <div class="etiquette--forte carmin">déplier</div>
+          <div class="etiquette--fine" style="opacity:1">Space Mono 700 · capitales · .24 à .30em</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="griffe">rien qu'à toi</div>
+          <div class="etiquette--fine">Pinyon Script · une seule griffe par pli, -4°</div>
+        </div>
+      </div>
+    </div>
+    <table>
+      <tr><th>rôle</th><th>main</th><th>taille</th><th>où</th></tr>
+      <tr><td>marque</td><td>Pinyon Script</td><td>52 / 44 / 38</td><td>coin haut gauche de chaque pli</td></tr>
+      <tr><td>titre</td><td>Bodoni Moda 800 caps</td><td>78 · 64 · 56 · 52</td><td>un seul par pli</td></tr>
+      <tr><td>titre de doc</td><td>Bodoni Moda 700</td><td>34 · 30</td><td>documentation uniquement</td></tr>
+      <tr><td>voix</td><td>Newsreader it. 300</td><td>31 · 29 · 23</td><td>le texte écrit par la personne, max 15–18 ch</td></tr>
+      <tr><td>interface</td><td>Space Mono 700</td><td>14 · 12,5 · 11,5 · 10,5 · 10</td><td>étiquettes, actions, états</td></tr>
+      <tr><td>griffe</td><td>Pinyon Script</td><td>48</td><td>une par pli au maximum</td></tr>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section__tete">
+      <div class="titre--section">Le gabarit du pli</div>
+      <div class="etiquette--fine">360 × 780 · marge 26 · pliure 34 % · rayon 36</div>
+    </div>
+    <div class="rang" style="gap:40px;align-items:flex-start">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="legende">gabarit nu · les quatre zones</div>
+        <div class="pli" style="height:600px">
+          <div class="volet"></div>
+          <div class="volet__ombre"></div>
+          <div class="cachet">014</div>
+          <div class="tete" style="border-bottom:1px dashed rgba(200,30,51,.4);padding-bottom:10px">
+            <div class="etiquette--fine" style="opacity:1">tête · marque + type</div>
+          </div>
+          <div class="corps" style="justify-content:center;align-items:flex-start;border-bottom:1px dashed rgba(200,30,51,.4);margin:0 var(--marge);padding:0 0 12px">
+            <div class="etiquette--fine" style="opacity:1">corps · titre, voix, faits</div>
+            <div class="etiquette--fine">aligné en bas, jamais centré</div>
+          </div>
+          <div style="position:relative;height:var(--pliure);flex:0 0 auto;color:var(--creme);padding:0 var(--marge) 26px;
+            display:flex;flex-direction:column;justify-content:flex-end;gap:10px;z-index:2">
+            <div class="etiquette--fine" style="opacity:.85">volet · l'action, 34 % de la hauteur</div>
+          </div>
+        </div>
+      </div>
+      <div class="encart" style="width:340px">
+        <div class="etiquette--fine" style="opacity:1">Ce que le gabarit impose</div>
+        <div><b>Marge unique : 26px.</b> Aucun autre retrait horizontal n'existe dans un pli.</div>
+        <div><b>Le contenu s'aligne en bas.</b> Le corps pousse vers la pliure ; on ne centre jamais verticalement.</div>
+        <div><b>La pliure vaut 34 %</b> de la hauteur, et le cachet est toujours à cheval dessus, centré.</div>
+        <div><b>Un titre, une voix, trois faits.</b> Au-delà, c'est un autre type de pli.</div>
+        <div><b>Les images font 42 à 46 %</b> de la hauteur, ou la page entière, jamais entre les deux.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__tete">
+      <div class="titre--section">Le mouvement</div>
+      <div class="etiquette--fine">une seule courbe dans tout le produit</div>
+    </div>
+    <table>
+      <tr><th>valeur</th><th>réglage</th><th>pourquoi</th></tr>
+      <tr><td>courbe</td><td><code>cubic-bezier(.32,.72,0,1)</code></td><td>départ vif, arrivée posée, aucun rebond</td></tr>
+      <tr><td>ouverture</td><td><code>460 ms</code></td><td>le pli part</td></tr>
+      <tr><td>retour</td><td><code>340 ms</code></td><td>plus court : l'échec doit être rapide</td></tr>
+      <tr><td>seuil</td><td><code>32 %</code> de la hauteur</td><td>franchi = validé</td></tr>
+      <tr><td>élan</td><td><code>0,55 px/ms</code></td><td>le coup sec valide même à 10 % de course</td></tr>
+      <tr><td>caoutchouc</td><td><code>0,1</code></td><td>le mauvais sens ne rend qu'un dixième</td></tr>
+      <tr><td>entrée</td><td><code>9 %</code></td><td>la page dessous monte pour rejoindre sa place</td></tr>
+      <tr><td>ce qui bouge</td><td>deux <code>translate3d</code></td><td>pas de flou, pas d'ombre animée, rien à repeindre</td></tr>
+    </table>
+    <div class="note">Pendant le geste, aucune transition n'est active : la feuille est à la position du doigt. La courbe ne s'applique qu'au relâchement. C'est la seule façon d'autoriser l'hésitation — s'arrêter, revenir, repartir.</div>
+  </section>
+
+  <section class="section">
+    <div class="section__tete">
+      <div class="titre--section">Les écrans</div>
+      <div class="etiquette--fine">inventaire complet · lecteur, types, états, dépôt</div>
+    </div>
+    <table>
+      <tr><th>code</th><th>écran</th><th>papier</th><th>note</th></tr>
+      <tr><td>A1</td><td>l'attente</td><td>crème + volet</td><td>commune à tous les types · la feuille qu'on tire</td></tr>
+      <tr><td>A2</td><td>la découverte</td><td>crème + image 46 %</td><td>titre, griffe, trois faits, action</td></tr>
+      <tr><td>A3</td><td>la réponse</td><td>encre</td><td>trois mots au choix, une ligne facultative</td></tr>
+      <tr><td>A4</td><td>le relais</td><td>carmin</td><td>le mot répondu en 78px · invite à écrire à son tour</td></tr>
+      <tr><td>B0a-c</td><td>attentes des autres types</td><td>crème + volet</td><td>même gabarit, autre promesse</td></tr>
+      <tr><td>B1</td><td>une pensée</td><td>image pleine</td><td>rien à répondre, pas de pliure d'action</td></tr>
+      <tr><td>B2 · B3</td><td>un poème</td><td>encre</td><td>entrée puis lecture, strophe par strophe</td></tr>
+      <tr><td>B4</td><td>un souvenir</td><td>image pleine</td><td>une image, une ligne</td></tr>
+      <tr><td>C1</td><td>sans lien · l'historique</td><td>crème</td><td>tes plis, sans compte</td></tr>
+      <tr><td>C2</td><td>déjà répondu</td><td>crème</td><td>rappel du mot envoyé</td></tr>
+      <tr><td>C3</td><td>refermé · usage unique</td><td>encre</td><td>le pli ne se relit pas</td></tr>
+      <tr><td>C4</td><td>lien mort</td><td>crème</td><td>expiré ou inconnu</td></tr>
+      <tr><td>C5</td><td>le pli arrive</td><td>crème</td><td>attente de chargement, marque qui respire</td></tr>
+      <tr><td>D1</td><td>déposer · le type</td><td>crème</td><td>quatre types, chacun avec son layout vu en petit</td></tr>
+      <tr><td>D2</td><td>déposer · les textes</td><td>crème</td><td>le layout en petit se remplit · lignes nommées, rien à composer</td></tr>
+      <tr><td>D3</td><td>déposer · le lien</td><td>carmin</td><td>nº prêt, envoyer ou copier</td></tr>
+      <tr><td>E1</td><td>déposer · ordinateur</td><td>sable</td><td>type et textes à gauche, pli fermé puis ouvert au centre</td></tr>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="section__tete">
+      <div class="titre--section">Ton et vocabulaire</div>
+      <div class="etiquette--fine">le produit parle français, en minuscules, sans exclamation</div>
+    </div>
+    <div class="rang" style="gap:40px">
+      <div class="encart" style="width:380px">
+        <div class="etiquette--fine" style="opacity:1">On dit</div>
+        <div>déplier · déposer · répondre · refermer · un pli · le volet · la pliure · nº 014</div>
+        <div>« Un pli t'attend. » · « pour toi seule » · « déposé par a. »</div>
+      </div>
+      <div class="encart" style="width:380px">
+        <div class="etiquette--fine" style="opacity:1">On ne dit pas</div>
+        <div>ouvrir · envoyer un message · créer · valider · champ · formulaire · compte · notification</div>
+        <div>Aucun point d'exclamation, aucun emoji, aucune majuscule d'insistance.</div>
+      </div>
+    </div>
+    <div class="note">Les étiquettes d'interface sont en minuscules dans le code et mises en capitales par la CSS (<code>text-transform</code>) : le texte reste lisible dans les fichiers et le rendu garde l'espacement de .24 à .30em qui fait la voix du produit.</div>
+  </section>
+
+  <section class="section">
+    <div class="section__tete">
+      <div class="titre--section">Assets</div>
+      <div class="etiquette--fine">une seule image dans le système</div>
+    </div>
+    <div class="rang" style="gap:28px;align-items:flex-start">
+      <div style="display:flex;flex-direction:column;gap:10px;width:300px">
+        <div class="image" style="height:200px;border:1px solid var(--trait)">
+          <img src="assets/drape-carmin-rose.webp" alt="drapé à l'huile, carmin et rose">
+        </div>
+        <div class="etiquette--fine" style="opacity:1">assets/drape-carmin-rose.webp</div>
+        <div style="font-size:11.5px;line-height:1.7">Drapé peint à l'huile, carmin et rose. Sert de partition « drapé », d'image de découverte (A2, cadrage <code>50% 46%</code>), de fond de pensée (<code>50% 76%</code>) et de souvenir (<code>50% 30%</code>).</div>
+      </div>
+      <div class="encart" style="width:340px">
+        <div class="etiquette--fine" style="opacity:1">Règles d'image</div>
+        <div><b>Jamais nue.</b> Toujours un dégradé qui ramène au papier (<code>.image__fondu</code>) ou à l'encre (<code>--encre</code>).</div>
+        <div><b>Deux formats seulement.</b> Bandeau 42–46 % ou page entière.</div>
+        <div><b>Le cadrage est un réglage</b>, pas un recadrage : on déplace <code>object-position</code>, on ne coupe pas le fichier.</div>
+        <div><b>Pas d'icônes.</b> Les flèches sont des caractères Bodoni (↑ →), le seul « symbole » du produit est le cachet numéroté.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

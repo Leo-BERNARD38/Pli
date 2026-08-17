@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pli — déposer un pli · ordinateur (E1)</title>
+<link rel="stylesheet" href="pli.css">
+<style>
+  body{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:20px;padding:24px 16px 60px;overflow-x:hidden}
+  .cartouche{width:min(1440px,100%);display:flex;flex-direction:column;gap:8px}
+  .cadre{width:1440px;height:900px;transform-origin:top left}
+  .fenetre{width:1440px;height:900px;overflow:hidden;border-radius:12px;background:var(--sable-2);box-shadow:var(--ombre);display:flex;flex-direction:column}
+  .chrome{flex:0 0 auto;height:46px;background:var(--encre);color:var(--creme);display:flex;align-items:center;padding:0 20px;gap:14px;
+    font-family:var(--mono);font-weight:700;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase}
+  .pastille{width:10px;height:10px;border-radius:50%;background:rgba(247,242,232,.3)}
+
+  .colonne{flex:0 0 320px;background:var(--creme);border-right:1px solid var(--trait);display:flex;flex-direction:column}
+  .plan{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:70px;padding:0 50px;position:relative}
+
+  .question{font-family:var(--serif);font-weight:700;font-size:28px;line-height:1.08;letter-spacing:-.01em}
+  .aide{font-family:var(--plume);font-style:italic;font-weight:300;font-size:16px;line-height:1.4;opacity:.6}
+
+  /* le type, en colonne : nom + aperçu du layout */
+  .type{all:unset;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 26px;
+    border-top:1px solid var(--trait);cursor:pointer;min-height:70px}
+  .type:last-of-type{border-bottom:1px solid var(--trait)}
+  .type[aria-selected="true"]{background:rgba(200,30,51,.06)}
+  .type[aria-selected="true"] .type__nom{color:var(--carmin)}
+  .type__nom{font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+  .type__glose{font-family:var(--plume);font-style:italic;font-weight:300;font-size:15px;line-height:1.3;opacity:.55;margin-top:4px;display:block;max-width:20ch}
+  .vignette{position:relative;width:52px;height:112px;overflow:hidden;flex:0 0 auto}
+  .vignette .mini{position:absolute;top:0;left:0;width:360px;height:780px;transform:scale(.1444);transform-origin:top left;
+    background:var(--creme);display:flex;flex-direction:column}
+  .mini__volet{position:absolute;left:0;right:0;bottom:0;height:var(--pliure);background:var(--carmin)}
+
+  /* les champs, en clair, pas dans le pli */
+  .champ{padding:14px 26px;border-top:1px solid var(--trait);display:flex;flex-direction:column;gap:6px}
+  .champ__nom{font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.24em;text-transform:uppercase;opacity:.5}
+  .champ:focus-within{background:rgba(200,30,51,.05)}
+  .champ:focus-within .champ__nom{opacity:1;color:var(--carmin)}
+  .champ input,.champ textarea{all:unset;width:100%;font-family:var(--plume);font-weight:300;font-size:19px;line-height:1.35;
+    color:var(--encre);caret-color:var(--carmin)}
+  .champ textarea{font-style:italic;resize:none;min-height:58px}
+  .champ input::placeholder,.champ textarea::placeholder{color:rgba(20,16,14,.32)}
+  .champ--titre input{font-family:var(--serif);font-style:normal;font-weight:700;font-size:24px;letter-spacing:-.01em}
+  .facultatif{font-weight:400;letter-spacing:.16em;opacity:.6}
+  .reste{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.4}
+  .reste[data-trop="1"]{color:var(--carmin);opacity:1}
+  .bouton{all:unset;flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:12px;
+    background:var(--carmin);color:var(--creme);padding:20px;cursor:pointer;
+    font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.28em;text-transform:uppercase}
+
+  /* le pli, à sa taille de téléphone, jamais élargi */
+  .recu{position:relative;width:360px;height:720px;overflow:hidden;border-radius:32px;
+    background:var(--creme);background-image:var(--grain);box-shadow:0 16px 34px rgba(20,16,14,.2);display:flex;flex-direction:column}
+  .ferme{position:relative;width:270px;height:540px;overflow:hidden;border-radius:24px;background:var(--creme);
+    background-image:var(--grain);box-shadow:0 12px 26px rgba(20,16,14,.16);display:flex;flex-direction:column}
+  .mesure{width:min(1440px,100%);font-size:11.5px;line-height:1.72;display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--trait-fort);padding-top:14px}
+  code{font-size:11px;background:rgba(200,30,51,.1);padding:1px 4px}
+</style>
+</head>
+<body>
+
+<div class="cartouche">
+  <div class="etiquette carmin">Pli · côté créateur · ordinateur</div>
+  <div class="titre" style="font-size:40px">E1 — 1440 × 900</div>
+  <div style="font-size:12px;line-height:1.7">Les mêmes trois questions que sur mobile, mais tenant sur un seul écran : le type et les textes à gauche, la page telle qu'elle sera reçue au centre, fermée puis ouverte.</div>
+</div>
+
+<div class="cadre" id="cadre">
+<div class="fenetre">
+  <div class="chrome">
+    <span style="display:flex;gap:7px"><span class="pastille" style="background:var(--carmin)"></span><span class="pastille"></span><span class="pastille"></span></span>
+    <span style="opacity:.55;margin-left:16px">pli.re/deposer</span>
+    <span style="margin-left:auto;color:var(--rose)">nº 015 · rien n'est envoyé pour l'instant</span>
+  </div>
+  <div style="flex:1;display:flex;min-height:0">
+
+    <div class="colonne">
+      <div style="padding:24px 26px 16px;display:flex;flex-direction:column;gap:9px">
+        <div class="marque marque--petite">Pli</div>
+        <div class="question">Qu'est-ce que tu envoies ?</div>
+        <div class="aide">Le type choisit la mise en page. Ensuite, il n'y a que les textes.</div>
+      </div>
+      <div style="flex:1;min-height:0;overflow-y:auto">
+        <button class="type" data-type="invitation" aria-selected="true">
+          <span><span class="type__nom">une invitation</span><span class="type__glose">titre, mot, date et lieu — elle répond</span></span>
+          <span class="vignette"><span class="mini">
+            <span class="mini__volet"></span>
+            <span style="padding:34px 26px 0;display:block"><span style="display:block;width:60px;height:26px;background:var(--encre);opacity:.5"></span></span>
+            <span style="flex:1;padding:0 26px 30px;display:flex;flex-direction:column;justify-content:flex-end;gap:16px">
+              <span style="height:104px;background:var(--carmin)"></span>
+              <span style="height:12px;width:150px;background:var(--encre);opacity:.32"></span>
+              <span style="height:12px;width:190px;background:var(--encre);opacity:.32"></span>
+            </span>
+          </span></span>
+        </button>
+        <button class="type" data-type="pensee">
+          <span><span class="type__nom">une pensée</span><span class="type__glose">deux lignes seules — rien à répondre</span></span>
+          <span class="vignette"><span class="mini" style="background:var(--encre)">
+            <span style="padding:34px 26px 0;display:block"><span style="display:block;width:60px;height:26px;background:var(--creme);opacity:.5"></span></span>
+            <span style="flex:1;padding:0 26px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+              <span style="height:22px;background:var(--creme);opacity:.72"></span>
+              <span style="height:22px;width:70%;background:var(--creme);opacity:.72"></span>
+            </span>
+          </span></span>
+        </button>
+        <button class="type" data-type="poeme">
+          <span><span class="type__nom">un poème</span><span class="type__glose">plusieurs strophes, fond encre</span></span>
+          <span class="vignette"><span class="mini" style="background:var(--encre)">
+            <span style="padding:34px 26px 0;display:block"><span style="display:block;width:60px;height:26px;background:var(--creme);opacity:.5"></span></span>
+            <span style="flex:1;padding:26px 26px 40px;display:flex;flex-direction:column;gap:10px">
+              <span style="height:14px;width:80%;background:var(--creme);opacity:.58"></span>
+              <span style="height:14px;width:62%;background:var(--creme);opacity:.58"></span>
+              <span style="height:14px;width:74%;background:var(--creme);opacity:.58"></span>
+              <span style="height:14px;width:48%;background:var(--creme);opacity:.58;margin-top:16px"></span>
+            </span>
+          </span></span>
+        </button>
+        <button class="type" data-type="souvenir">
+          <span><span class="type__nom">un souvenir</span><span class="type__glose">un titre haut, une ligne en bas</span></span>
+          <span class="vignette"><span class="mini">
+            <span style="padding:34px 26px 0;display:block"><span style="display:block;width:60px;height:26px;background:var(--encre);opacity:.5"></span></span>
+            <span style="flex:1;padding:40px 26px;display:flex;flex-direction:column;justify-content:space-between">
+              <span style="height:76px;background:var(--carmin)"></span>
+              <span style="height:18px;width:60%;background:var(--encre);opacity:.32"></span>
+            </span>
+          </span></span>
+        </button>
+
+        <div style="padding:20px 26px 10px"><div class="question" id="questionTextes" style="font-size:24px">Écris ton invitation.</div></div>
+        <label class="champ champ--titre">
+          <span class="champ__nom">Le titre <span class="reste" id="resteTitre">22 signes</span></span>
+          <input id="cTitre" value="Tu es invitée" maxlength="30" placeholder="Tu es invitée">
+        </label>
+        <label class="champ">
+          <span class="champ__nom">Ton mot</span>
+          <textarea id="cVoix" rows="2" placeholder="Une ou deux lignes, comme tu le dirais à voix haute.">Mets la robe verte, celle du printemps. Je réserve la table du fond.</textarea>
+        </label>
+        <label class="champ" data-si="invitation">
+          <span class="champ__nom">Quand</span>
+          <input id="cQuand" value="samedi 22 août · 20h00" placeholder="samedi 22 août · 20h00">
+        </label>
+        <label class="champ" data-si="invitation">
+          <span class="champ__nom">Où <span class="facultatif">— facultatif</span></span>
+          <input id="cOu" value="Le Petit Comptoir" placeholder="Le Petit Comptoir">
+        </label>
+        <label class="champ">
+          <span class="champ__nom">Signé</span>
+          <input id="cSigne" value="a." placeholder="a.">
+        </label>
+        <div style="padding:14px 26px 22px;border-top:1px solid var(--trait)">
+          <div class="etiquette--fine">le pli s'ouvre une fois, puis se referme · lien valable 30 jours</div>
+        </div>
+      </div>
+      <button class="bouton">déposer le pli ↑</button>
+    </div>
+
+    <div class="plan">
+      <div style="display:flex;flex-direction:column;gap:14px;align-items:center">
+        <div class="etiquette--fine" style="opacity:1">ce qu'elle trouve</div>
+        <div class="ferme">
+          <div class="volet"></div>
+          <div class="volet__ombre"></div>
+          <div class="cachet" style="width:30px;height:30px;bottom:calc(var(--pliure) - 15px);font-size:8.5px">015</div>
+          <div class="tete" style="padding:24px 20px 0">
+            <div class="marque" style="font-size:38px">Pli</div>
+            <div class="etiquette carmin" style="font-size:9px;letter-spacing:.26em;padding-top:12px" id="fermeType">une invitation</div>
+          </div>
+          <div style="position:relative;flex:1;padding:0 20px 20px;display:flex;flex-direction:column;justify-content:flex-end;gap:12px">
+            <div class="etiquette carmin" style="font-size:9.5px">nº 015 — pour toi seule</div>
+            <div class="voix" style="font-size:22px">Un pli t'attend. Il ne se lira qu'une fois.</div>
+            <div class="etiquette--fine" style="font-size:9px">déposé par <span id="fermeSigne">a.</span></div>
+          </div>
+          <div style="position:relative;height:var(--pliure);flex:0 0 auto;color:var(--creme);padding:0 20px 20px;
+            display:flex;flex-direction:column;justify-content:flex-end;gap:10px;z-index:2">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div class="etiquette" style="font-size:11px;letter-spacing:.3em">déplier</div>
+              <div class="fleche" style="font-family:var(--serif);font-size:19px">↑</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;align-items:center">
+        <div class="etiquette--fine" style="opacity:1;color:var(--carmin)">ce qu'elle lit</div>
+        <div class="recu" id="recu">
+          <div class="tete" style="padding:30px var(--marge) 0">
+            <div class="marque">Pli</div>
+            <div class="etiquette carmin" style="font-size:10.5px;letter-spacing:.26em;padding-top:16px" id="recuType">une invitation</div>
+          </div>
+          <div class="corps" style="gap:18px">
+            <div class="titre" style="font-size:56px" id="recuTitre">Tu es invitée</div>
+            <div class="voix" id="recuVoix">Mets la robe verte, celle du printemps. Je réserve la table du fond.</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div class="etiquette carmin" style="font-size:13px;letter-spacing:.22em" id="recuQuand">samedi 22 août · 20h00</div>
+              <div class="etiquette" style="font-size:13px;letter-spacing:.08em;opacity:.55" id="recuOu">Le Petit Comptoir</div>
+            </div>
+            <div class="action" style="cursor:default;margin-top:6px">
+              <div class="etiquette carmin" style="font-size:12.5px;letter-spacing:.3em">répondre</div>
+              <div class="fleche carmin">↑</div>
+            </div>
+          </div>
+        </div>
+        <div class="etiquette--fine" style="font-size:9.5px">se remplit pendant que tu écris</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="mesure">
+  <div class="etiquette carmin" style="font-size:10px">La différence avec le mobile</div>
+  <div><b>Un seul écran</b> au lieu de trois : le type, les textes et les deux états du pli sont visibles ensemble.</div>
+  <div><b>Le pli ne s'élargit pas.</b> 360 de large, parce que c'est la seule forme dans laquelle il sera lu.</div>
+  <div><b>Rien à manipuler dans le pli.</b> Il est montré, il se remplit ; on écrit toujours dans les lignes nommées à gauche.</div>
+</div>
+
+<script>
+(function(){
+  const noms = {invitation:'une invitation', pensee:'une pensée', poeme:'un poème', souvenir:'un souvenir'};
+  const questions = {invitation:'Écris ton invitation.', pensee:'Écris ta pensée.', poeme:'Écris ton poème.', souvenir:'Écris ton souvenir.'};
+  let type = 'invitation';
+
+  document.querySelectorAll('.type').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.type').forEach(o => o.setAttribute('aria-selected', o === t ? 'true' : 'false'));
+    type = t.dataset.type;
+    document.getElementById('questionTextes').textContent = questions[type];
+    document.getElementById('recuType').textContent = noms[type];
+    document.getElementById('fermeType').textContent = noms[type];
+    document.querySelectorAll('[data-si]').forEach(c => c.style.display = c.dataset.si === type ? '' : 'none');
+    peindre();
+  }));
+
+  const paires = [['cTitre','recuTitre'],['cVoix','recuVoix'],['cQuand','recuQuand'],['cOu','recuOu'],['cSigne','fermeSigne']];
+  function peindre(){
+    paires.forEach(([src, cible]) => {
+      const champ = document.getElementById(src), el = document.getElementById(cible);
+      const v = champ.value.trim();
+      el.textContent = v || champ.placeholder;
+      el.style.opacity = v ? '' : '.3';
+    });
+    const n = document.getElementById('cTitre').value.trim().length;
+    const r = document.getElementById('resteTitre');
+    r.textContent = Math.max(0, 22 - n) + ' signes';
+    r.dataset.trop = n > 22 ? '1' : '0';
+  }
+  paires.forEach(([src]) => document.getElementById(src).addEventListener('input', peindre));
+  peindre();
+
+  const cadre = document.getElementById('cadre');
+  function ajuste(){
+    const dispo = Math.min(document.documentElement.clientWidth - 32, 1440);
+    const k = dispo / 1440;
+    cadre.style.transform = 'scale(' + k + ')';
+    cadre.style.height = (900 * k) + 'px';
+    cadre.style.width = dispo + 'px';
+  }
+  window.addEventListener('resize', ajuste); ajuste();
+})();
+</script>
+</body>
+</html>

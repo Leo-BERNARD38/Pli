@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pli — déposer un pli (D1 → D3) · mobile</title>
+<link rel="stylesheet" href="pli.css">
+<style>
+  body{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:22px;padding:24px 16px 60px}
+  .cartouche{width:var(--ecran-l);display:flex;flex-direction:column;gap:8px}
+  .scene{position:relative;width:var(--ecran-l);height:var(--ecran-h);border-radius:var(--rayon);overflow:hidden;box-shadow:var(--ombre)}
+  .ecran{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--creme);background-image:var(--grain);
+    transition:transform var(--ouvre) var(--sortie);transform:translateY(100%)}
+  .ecran[data-vu="1"]{transform:translateY(0)}
+
+  /* barre de conduite : où j'en suis, comment je reviens, ce qui suit */
+  .conduite{flex:0 0 auto;padding:22px var(--marge) 14px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--trait)}
+  .conduite__retour{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-weight:700;font-size:11px;
+    letter-spacing:.2em;text-transform:uppercase;cursor:pointer;opacity:.55}
+  .conduite__pas{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;opacity:.45}
+
+  /* une question à la fois, posée en français */
+  .question{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.06;letter-spacing:-.01em}
+  .aide{font-family:var(--plume);font-style:italic;font-weight:300;font-size:17px;line-height:1.4;opacity:.6}
+
+  /* les choix de type : grande cible, aperçu du layout à droite */
+  .type{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:16px var(--marge);border-top:1px solid var(--trait);cursor:pointer;min-height:76px;text-align:left}
+  .type:last-of-type{border-bottom:1px solid var(--trait)}
+  .type[aria-selected="true"]{background:rgba(200,30,51,.05)}
+  .type[aria-selected="true"] .type__nom{color:var(--carmin)}
+  .type__nom{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+  .type__glose{font-family:var(--plume);font-style:italic;font-weight:300;font-size:16px;line-height:1.3;opacity:.55;margin-top:5px}
+
+  /* le layout vu en petit : un vrai pli à l'échelle 1/3 */
+  .apercu{position:relative;flex:0 0 auto;overflow:hidden}
+  .apercu--vignette{width:62px;height:134px}
+  .apercu--tete{width:96px;height:208px;border-radius:10px;box-shadow:0 6px 14px rgba(20,16,14,.16)}
+  .mini{position:absolute;top:0;left:0;width:360px;height:780px;transform-origin:top left;
+    background:var(--creme);background-image:var(--grain);display:flex;flex-direction:column;pointer-events:none}
+  .apercu--vignette .mini{transform:scale(.1722)}
+  .apercu--tete .mini{transform:scale(.2667)}
+  .mini__volet{position:absolute;left:0;right:0;bottom:0;height:var(--pliure);background:var(--carmin)}
+  .mini__bloc{background:currentColor;opacity:.85}
+
+  /* remplir : des lignes nommées, pas un pli à deviner */
+  .champs{flex:1;min-height:0;overflow-y:auto}
+  .champ{padding:15px var(--marge);border-top:1px solid var(--trait);display:flex;flex-direction:column;gap:6px}
+  .champ__nom{font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.24em;text-transform:uppercase;opacity:.5}
+  .champ:focus-within{background:rgba(200,30,51,.05)}
+  .champ:focus-within .champ__nom{opacity:1;color:var(--carmin)}
+  .champ input,.champ textarea{all:unset;width:100%;font-family:var(--plume);font-weight:300;font-size:20px;line-height:1.35;
+    color:var(--encre);caret-color:var(--carmin)}
+  .champ textarea{font-style:italic;resize:none;min-height:64px}
+  .champ input::placeholder,.champ textarea::placeholder{color:rgba(20,16,14,.32)}
+  .champ--titre input{font-family:var(--serif);font-style:normal;font-weight:700;font-size:26px;letter-spacing:-.01em}
+  .facultatif{font-weight:400;letter-spacing:.16em;opacity:.6}
+  .reste{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.4}
+  .reste[data-trop="1"]{color:var(--carmin);opacity:1}
+
+  /* une seule action pleine largeur, toujours au même endroit */
+  .bouton{all:unset;flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:12px;
+    background:var(--carmin);color:var(--creme);padding:22px;cursor:pointer;
+    font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.28em;text-transform:uppercase}
+  .bouton[disabled]{background:rgba(20,16,14,.12);color:rgba(20,16,14,.4);cursor:default}
+  .bouton--creux{background:transparent;color:var(--encre);border-top:1px solid var(--trait);padding:18px;
+    font-size:11px;letter-spacing:.22em;opacity:.6}
+
+  .mesure{width:var(--ecran-l);font-size:11.5px;line-height:1.72;display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--trait-fort);padding-top:14px}
+  .pas{display:flex;gap:8px;width:var(--ecran-l);flex-wrap:wrap}
+  .pas button{all:unset;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    border:1.5px solid var(--encre);padding:8px 11px;cursor:pointer}
+  .pas button[aria-selected="true"]{background:var(--carmin);border-color:var(--carmin);color:var(--creme)}
+  code{font-size:11px;background:rgba(200,30,51,.1);padding:1px 4px}
+</style>
+</head>
+<body>
+
+<div class="cartouche">
+  <div class="etiquette carmin">Pli · côté créateur · mobile</div>
+  <div class="titre" style="font-size:40px">D1 → D3</div>
+  <div style="font-size:12px;line-height:1.7">Trois écrans, rien d'autre. On choisit le type, on voit en petit la mise en page qui va avec, on remplit les textes. Aucune image à déposer, aucun style à régler.</div>
+</div>
+
+<div class="pas" id="pas">
+  <button data-va="d1" aria-selected="true">D1 le type</button>
+  <button data-va="d2">D2 les textes</button>
+  <button data-va="d3">D3 le lien</button>
+</div>
+
+<div class="scene" id="scene">
+
+  <!-- D1 · le type, et le layout qui vient avec -->
+  <section class="ecran" id="d1" data-vu="1">
+    <div class="conduite">
+      <div class="conduite__retour" style="opacity:0;pointer-events:none">← retour</div>
+      <div class="conduite__pas">1 sur 3</div>
+    </div>
+    <div style="padding:22px var(--marge) 18px;display:flex;flex-direction:column;gap:9px">
+      <div class="marque marque--petite">Pli</div>
+      <div class="question">Qu'est-ce que tu envoies ?</div>
+      <div class="aide">Le type choisit la mise en page. Tu n'auras plus que les textes à écrire.</div>
+    </div>
+    <div style="flex:1;min-height:0;overflow-y:auto" id="types">
+
+      <button class="type" data-type="invitation" aria-selected="true">
+        <span>
+          <span class="type__nom">une invitation</span>
+          <span class="type__glose" style="display:block">un titre, un mot, la date et le lieu — elle répond oui ou non</span>
+        </span>
+        <span class="apercu apercu--vignette">
+          <span class="mini">
+            <span class="mini__volet"></span>
+            <span style="padding:34px 26px 0;display:block"><span class="mini__bloc" style="display:block;width:60px;height:26px;background:var(--encre);opacity:.55"></span></span>
+            <span style="flex:1;padding:0 26px 30px;display:flex;flex-direction:column;justify-content:flex-end;gap:16px">
+              <span class="mini__bloc" style="height:104px;background:var(--carmin)"></span>
+              <span class="mini__bloc" style="height:12px;width:150px;background:var(--encre);opacity:.35"></span>
+              <span class="mini__bloc" style="height:12px;width:190px;background:var(--encre);opacity:.35"></span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+      <button class="type" data-type="pensee">
+        <span>
+          <span class="type__nom">une pensée</span>
+          <span class="type__glose" style="display:block">deux lignes seules au milieu de la page — rien à répondre</span>
+        </span>
+        <span class="apercu apercu--vignette">
+          <span class="mini" style="background:var(--encre)">
+            <span style="padding:34px 26px 0;display:block"><span class="mini__bloc" style="display:block;width:60px;height:26px;background:var(--creme);opacity:.5"></span></span>
+            <span style="flex:1;padding:0 26px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+              <span class="mini__bloc" style="height:22px;background:var(--creme);opacity:.75"></span>
+              <span class="mini__bloc" style="height:22px;width:70%;background:var(--creme);opacity:.75"></span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+      <button class="type" data-type="poeme">
+        <span>
+          <span class="type__nom">un poème</span>
+          <span class="type__glose" style="display:block">plusieurs strophes, une à la fois, sur fond encre</span>
+        </span>
+        <span class="apercu apercu--vignette">
+          <span class="mini" style="background:var(--encre)">
+            <span style="padding:34px 26px 0;display:block"><span class="mini__bloc" style="display:block;width:60px;height:26px;background:var(--creme);opacity:.5"></span></span>
+            <span style="flex:1;padding:26px 26px 40px;display:flex;flex-direction:column;justify-content:flex-start;gap:10px">
+              <span class="mini__bloc" style="height:14px;width:80%;background:var(--creme);opacity:.6"></span>
+              <span class="mini__bloc" style="height:14px;width:62%;background:var(--creme);opacity:.6"></span>
+              <span class="mini__bloc" style="height:14px;width:74%;background:var(--creme);opacity:.6"></span>
+              <span class="mini__bloc" style="height:14px;width:48%;background:var(--creme);opacity:.6;margin-top:16px"></span>
+              <span class="mini__bloc" style="height:14px;width:68%;background:var(--creme);opacity:.6"></span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+      <button class="type" data-type="souvenir">
+        <span>
+          <span class="type__nom">un souvenir</span>
+          <span class="type__glose" style="display:block">un titre haut, une ligne en bas, beaucoup de vide</span>
+        </span>
+        <span class="apercu apercu--vignette">
+          <span class="mini">
+            <span style="padding:34px 26px 0;display:block"><span class="mini__bloc" style="display:block;width:60px;height:26px;background:var(--encre);opacity:.55"></span></span>
+            <span style="flex:1;padding:40px 26px 40px;display:flex;flex-direction:column;justify-content:space-between">
+              <span class="mini__bloc" style="height:76px;background:var(--carmin)"></span>
+              <span class="mini__bloc" style="height:18px;width:60%;background:var(--encre);opacity:.35"></span>
+            </span>
+          </span>
+        </span>
+      </button>
+
+    </div>
+    <button class="bouton" data-va="d2">continuer →</button>
+  </section>
+
+  <!-- D2 · les textes, avec le layout vu en petit -->
+  <section class="ecran" id="d2">
+    <div class="conduite">
+      <div class="conduite__retour" data-va="d1">← le type</div>
+      <div class="conduite__pas">2 sur 3</div>
+    </div>
+    <div style="padding:20px var(--marge) 16px;display:flex;gap:18px;align-items:flex-start">
+      <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+        <div class="question" id="questionD2">Écris ton invitation.</div>
+        <div class="aide">Voici la page telle qu'elle la recevra. Tu remplis, elle se remplit.</div>
+      </div>
+      <div class="apercu apercu--tete">
+        <div class="mini" id="miniVive">
+          <div class="mini__volet"></div>
+          <div style="padding:34px 26px 0;display:flex;justify-content:space-between">
+            <div class="marque">Pli</div>
+            <div class="etiquette carmin" style="font-size:10px;padding-top:16px" id="miniType">une invitation</div>
+          </div>
+          <div style="flex:1;min-height:0;padding:0 26px 30px;display:flex;flex-direction:column;justify-content:flex-end;gap:16px;overflow:hidden">
+            <div class="titre" style="font-size:56px" id="miniTitre">Tu es invitée</div>
+            <div class="voix" id="miniVoix">Mets la robe verte, celle du printemps.</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div class="etiquette carmin" style="font-size:13px;letter-spacing:.2em" id="miniQuand">samedi 22 août · 20h00</div>
+              <div class="etiquette" style="font-size:13px;letter-spacing:.1em;opacity:.55" id="miniOu">Le Petit Comptoir</div>
+            </div>
+          </div>
+          <div style="position:absolute;left:26px;right:26px;bottom:30px;color:var(--creme);display:flex;
+            justify-content:space-between;align-items:center;z-index:2">
+            <div class="etiquette" style="font-size:13px;letter-spacing:.3em">répondre</div>
+            <div class="fleche" style="font-family:var(--serif);font-size:22px">↑</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="champs">
+      <label class="champ champ--titre">
+        <span class="champ__nom">Le titre <span class="reste" id="resteTitre">22 signes</span></span>
+        <input id="cTitre" value="Tu es invitée" maxlength="30" placeholder="Tu es invitée">
+      </label>
+      <label class="champ">
+        <span class="champ__nom">Ton mot</span>
+        <textarea id="cVoix" rows="2" placeholder="Une ou deux lignes, comme tu le dirais à voix haute.">Mets la robe verte, celle du printemps.</textarea>
+      </label>
+      <label class="champ" data-si="invitation">
+        <span class="champ__nom">Quand</span>
+        <input id="cQuand" value="samedi 22 août · 20h00" placeholder="samedi 22 août · 20h00">
+      </label>
+      <label class="champ" data-si="invitation">
+        <span class="champ__nom">Où <span class="facultatif">— facultatif</span></span>
+        <input id="cOu" value="Le Petit Comptoir" placeholder="Le Petit Comptoir">
+      </label>
+      <label class="champ">
+        <span class="champ__nom">Signé</span>
+        <input id="cSigne" value="a." placeholder="a.">
+      </label>
+      <div style="padding:16px var(--marge) 24px;border-top:1px solid var(--trait)">
+        <div class="etiquette--fine">le pli s'ouvre une fois, puis se referme</div>
+      </div>
+    </div>
+    <button class="bouton" id="btnDeposer" data-va="d3">déposer le pli ↑</button>
+  </section>
+
+  <!-- D3 · le lien -->
+  <section class="ecran" id="d3" style="background:var(--carmin);background-image:none;color:var(--creme)">
+    <div class="conduite" style="border-bottom-color:rgba(247,242,232,.3)">
+      <div class="conduite__retour" data-va="d2" style="opacity:.7">← modifier</div>
+      <div class="conduite__pas" style="opacity:.7">3 sur 3</div>
+    </div>
+    <div class="corps corps--reparti" style="padding-top:26px">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div class="marque marque--petite">Pli</div>
+        <div class="titre titre--geant" style="color:var(--creme)">Nº 015<br>est prêt</div>
+        <div class="voix voix--corps" style="opacity:.9">Envoie ce lien à la personne. Il s'ouvrira une fois, chez elle, et se refermera.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="etiquette" style="font-size:13px;letter-spacing:.16em;border-top:1px solid rgba(247,242,232,.45);padding-top:16px">pli.re/015-vhtq</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="action" style="border-top-color:rgba(247,242,232,.6)">
+            <div class="etiquette--forte">envoyer</div>
+            <div class="fleche" style="font-family:var(--serif);font-size:24px">↑</div>
+          </div>
+          <div class="etiquette--fine" style="opacity:.75">copier le lien</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="mesure">
+  <div class="etiquette carmin" style="font-size:10px">Les règles du dépôt</div>
+  <div><b>Trois écrans, trois questions.</b> Quel type · quels textes · à qui l'envoyer. Rien d'autre à décider.</div>
+  <div><b>Le type fait la mise en page.</b> Pas d'image à déposer, pas de style à choisir, pas de police.</div>
+  <div><b>Le layout est montré, pas manipulé.</b> Un pli à l'échelle <code>1/3,75</code> en haut de D2, qui se remplit pendant qu'on tape.</div>
+  <div><b>Des lignes nommées.</b> « Le titre », « Ton mot », « Quand » — on sait toujours ce qu'on écrit et ce qui est facultatif.</div>
+  <div><b>Une seule action, en bas, toujours au même endroit.</b> Le retour est en haut à gauche, l'étape est écrite « 2 sur 3 ».</div>
+  <div><b>Les champs suivent le type :</b> « Quand » et « Où » n'existent que pour l'invitation.</div>
+</div>
+
+<script>
+(function(){
+  const ecrans = ['d1','d2','d3'];
+  const pas = document.getElementById('pas');
+  const questions = {
+    invitation:'Écris ton invitation.',
+    pensee:'Écris ta pensée.',
+    poeme:'Écris ton poème.',
+    souvenir:'Écris ton souvenir.'
+  };
+  const noms = {invitation:'une invitation', pensee:'une pensée', poeme:'un poème', souvenir:'un souvenir'};
+  let type = 'invitation';
+
+  function va(cible){
+    ecrans.forEach(id => document.getElementById(id).dataset.vu = (id === cible) ? '1' : '0');
+    [...pas.children].forEach(b => b.setAttribute('aria-selected', b.dataset.va === cible ? 'true' : 'false'));
+  }
+  document.querySelectorAll('[data-va]').forEach(el => el.addEventListener('click', () => va(el.dataset.va)));
+
+  document.querySelectorAll('.type').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.type').forEach(o => o.setAttribute('aria-selected', o === t ? 'true' : 'false'));
+    type = t.dataset.type;
+    document.getElementById('questionD2').textContent = questions[type];
+    document.getElementById('miniType').textContent = noms[type];
+    document.querySelectorAll('[data-si]').forEach(c => c.style.display = c.dataset.si === type ? '' : 'none');
+    peindre();
+  }));
+
+  const paires = [['cTitre','miniTitre'],['cVoix','miniVoix'],['cQuand','miniQuand'],['cOu','miniOu']];
+  function peindre(){
+    paires.forEach(([src, cible]) => {
+      const v = document.getElementById(src).value.trim();
+      const el = document.getElementById(cible);
+      el.textContent = v || document.getElementById(src).placeholder;
+      el.style.opacity = v ? '' : '.3';
+    });
+    const n = document.getElementById('cTitre').value.trim().length;
+    const r = document.getElementById('resteTitre');
+    r.textContent = Math.max(0, 22 - n) + ' signes';
+    r.dataset.trop = n > 22 ? '1' : '0';
+    document.getElementById('btnDeposer').disabled = !document.getElementById('cVoix').value.trim();
+  }
+  paires.forEach(([src]) => document.getElementById(src).addEventListener('input', peindre));
+  document.getElementById('cVoix').addEventListener('input', peindre);
+  peindre();
+})();
+</script>
+</body>
+</html>

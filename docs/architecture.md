@@ -4,85 +4,186 @@
 
 - **TypeScript + Vite**, sans framework.
 - **CSS natif** : variables, `@layer`, animations. Pas de librairie d'animation.
-- **SVG inline** pour le grain, les taches d'encre, les filets.
-- Cible : ~15 ko gzip. Le premier écran doit s'afficher avant qu'elle ait rangé son téléphone.
+- **Zéro dépendance npm au runtime.** Le codec, le routeur et la moulinette tiennent en
+  quelques dizaines de lignes chacun.
 
-Pourquoi pas React : trois écrans, aucun état partagé complexe, et des animations
-sur mesure. Le framework coûterait plus qu'il ne rapporte.
+Pourquoi pas React : quelques écrans, aucun état partagé complexe, et un geste sur mesure.
+Le framework coûterait plus qu'il ne rapporte.
+
+## Deux entrées
+
+```
+pli.re/           elle   → index.html
+pli.re/atelier/   moi    → atelier/index.html
+```
+
+Deux entrées Vite, donc **deux bundles réellement distincts**. Le formulaire, les aperçus
+et l'index des poèmes ne se chargent jamais sur son téléphone. Ils ne partagent que
+`lib/` et `styles/`.
 
 ## Routage
 
-Routage par **hash**, obligatoire sur GitHub Pages (pas de réécriture serveur, donc
-toute URL profonde en 404).
+Routage par **hash**, obligatoire sur GitHub Pages : pas de réécriture serveur, donc toute
+URL profonde tomberait en 404.
 
 ```
-#/            → dernière carte du journal, sinon accueil
-#c=<payload>  → carte
-#/journal     → journal (mot secret)
-#/studio      → studio
+pli.re/#/            ses plis (vide tant qu'elle n'a rien reçu)
+pli.re/#c=<payload>  un pli porté par le lien
+pli.re/#p=<nom>      un poème, porté par un fichier
+pli.re/#/installer   la marche à suivre pour l'ajout à l'écran d'accueil
+pli.re/atelier/      D0 → D1 → D2 → D3
 ```
 
 Le routeur est une fonction sur `hashchange`. Pas de librairie.
 
-## Arborescence cible
+**Le fragment ne quitte jamais l'appareil** — par spécification HTTP, tout ce qui suit
+le `#` n'est pas envoyé au serveur. Ni GitHub, ni un CDN, ni WhatsApp en récupérant
+l'aperçu ne voient le contenu d'un pli. C'est une garantie plus forte que le chiffrement
+avec clé publique.
 
-```
-index.html
-src/
-  main.ts            routeur
-  carte/             rendu d'une carte, par type
-  journal/           archive, coupons utilisés
-  studio/            formulaire, aperçu, génération du lien
-  lib/
-    codec.ts         encode / décode le payload
-    stockage.ts      accès localStorage
-    dates.ts         formats français, scellé, compte à rebours
-  styles/
-    tokens.css       couleurs, typo, espacements
-    papier.css       textures, grain
-    <type>.css       mise en page par type de carte
-data/                le carnet d'idées
-docs/
-```
+Corollaire à exploiter : **l'aperçu WhatsApp est entièrement sous notre contrôle.** Les
+balises `og:` sont écrites une fois pour toutes et deviennent le teaser — « Un pli
+t'attend » sur le papier froissé. Le spoil n'est pas un risque à couvrir, c'est une carte
+à jouer.
 
-## Stockage
+## Le seuil de l'atelier
 
-Voir [donnees.md](donnees.md). Tout est dans `lib/stockage.ts` : aucune autre partie
-du code ne touche `localStorage` directement, pour que le mode navigation privée
-(où l'écriture échoue) dégrade proprement — la carte s'affiche, elle n'est juste pas archivée.
+Avant le premier usage, l'atelier demande notre date d'officialisation. La comparaison se
+fait sur `sha-256` (via `crypto.subtle`), **jamais sur la date en clair** : sinon quelqu'un
+qui ouvre les sources tombe sur une date d'anniversaire lisible.
+
+C'est un paillasson, pas une serrure — le contrôle est côté client, et il n'existe que
+quelques dizaines de milliers de dates plausibles. L'objectif est d'écarter le passant,
+et c'est exactement calibré pour ça.
+
+Une fois franchi, `pli.v1.seuil` est posé et l'écran ne revient plus.
+
+## Le journal peut être effacé
+
+**C'est le risque le plus sérieux du produit, et il est structurel.**
+
+Depuis Safari 13.1, WebKit applique un **plafond de sept jours sur tout le stockage écrit
+par script** — `localStorage`, IndexedDB, Cache API, tout. Le compteur se déclenche après
+sept jours d'utilisation de Safari sans interaction avec le site. Passer à IndexedDB
+n'aide en rien : c'est la même règle.
+
+Autrement dit : si elle ne reçoit pas de pli pendant une dizaine de jours, **son journal
+peut disparaître** — l'objet décrit dans [concept.md](concept.md) comme celui qui a de la
+valeur au bout de six mois.
+
+L'exemption est nette : **les sites ajoutés à l'écran d'accueil y échappent.** Le
+`manifest.json` n'est donc pas une coquetterie, il est porteur. Trois conséquences :
+
+1. **L'ajout à l'écran d'accueil est une étape du parcours**, pas un bonus. Un écran
+   `#/installer` montre le geste, proposé une fois, après son deuxième ou troisième pli.
+   Aucun lien ne peut déclencher l'installation sur iOS — Safari n'expose pas
+   `beforeinstallprompt`, c'est Partager → Sur l'écran d'accueil, à la main. Détecter
+   `display-mode: standalone` pour ne jamais le proposer si c'est déjà fait.
+2. **À vérifier sur son iPhone** avant de considérer le journal comme fiable.
+3. **Prévoir un export**, ne serait-ce qu'en copie de texte, comme filet.
+
+## La longueur du lien
+
+Le plafond ne se devine pas, il se mesure. Le vieux seuil de 2 083 caractères était une
+limite d'Internet Explorer, morte depuis longtemps ; Safari 26 et Chrome encaissent des
+URLs très longues. Le maillon faible est la chaîne WhatsApp → iOS → Safari, et elle ne se
+documente pas.
+
+**Protocole** — envoyer depuis mon Android vers son iPhone des liens de 500, 1 000, 2 000
+et 4 000 caractères. Vérifier pour chacun qu'il arrive entier, qu'il reste cliquable, et
+qu'il s'ouvre. **Fixer le plafond de l'atelier à la moitié de ce qui passe.**
+
+Le vrai problème n'est d'ailleurs pas la limite technique mais l'allure : un lien de 1 900
+caractères est un mur de charabia sur quinze lignes dans la conversation, juste au-dessus
+de « je t'ai envoyé un pli ». C'est ce qui justifie que le poème passe par un fichier.
 
 ## Hébergement
 
 GitHub Pages, déploiement par GitHub Actions sur push vers `main`.
+Domaine propre : **`pli.re`**, via un `CNAME` à la racine du build.
 
-URL publique : `https://leo-bernard38.github.io/Pli/`
+À ne pas oublier :
 
-Contraintes à ne pas oublier :
-
-- `base` de Vite = `/Pli/`, sinon les assets tombent en 404.
-- Ne plus renommer le dépôt : le nom est dans l'URL, donc dans chaque lien envoyé.
-  Un renommage casserait tous les plis déjà reçus.
+- `base` de Vite = `/`, puisqu'on sert un domaine et non un sous-chemin de dépôt.
 - `.nojekyll` à la racine du build.
+- Le domaine décorrèle l'URL du nom du dépôt : le dépôt redevient renommable, et chaque
+  lien envoyé y gagne 18 caractères.
+- **Ne plus changer de domaine.** Il est dans chaque lien déjà envoyé.
 - Pas de variables d'environnement secrètes : tout ce qui est buildé est public.
   Le numéro WhatsApp voyage dans le lien, pas dans le dépôt.
+- `public/plis/` est copié tel quel dans la sortie — les poèmes se lisent en **même
+  origine**, `pli.re/plis/015-vhtq.txt`. Aucune question de CORS, un cache HTTP normal.
+
+## Poids
+
+L'ancienne cible de 15 ko gzip est intenable — quatre familles de polices et une peinture
+la dépassent d'un ordre de grandeur. Mais l'intention derrière ce chiffre est juste, donc on
+mesure ce qui compte :
+
+> **Le texte d'A1 lisible en moins d'une seconde en 4G.**
+
+Budget éclaté, à titre indicatif :
+
+| Poste | Cible |
+|---|---|
+| code (HTML + CSS + JS) | < 30 ko gzip |
+| polices sous-ensemblées | ~120 ko, dont 3 familles seulement au premier écran |
+| texture | ~70 ko, **une seule par pli**, jamais avant le texte |
+
+Un pli n'a qu'un type : personne ne télécharge les cinq peintures.
 
 ## Compatibilité
 
 Deux appareils, connus : **elle sur iOS 26** (Safari 26), **moi sur Android 16** (Chrome).
 On cible ces deux-là, pas le web.
 
-Conséquence directe : tout le CSS et toutes les API modernes sont disponibles.
-`CompressionStream`, `@layer`, `:has()`, `text-wrap: balance`, `View Transitions`,
-`Web Share` — aucun préfixe, aucun polyfill, aucun fallback.
+Toutes les API modernes sont donc disponibles : `CompressionStream`, `@layer`, `:has()`,
+`text-wrap: balance`, `View Transitions`, `Web Share`, `crypto.subtle` — aucun préfixe,
+aucun polyfill, aucun fallback.
 
-Seule vigilance : Safari iOS reste plus lent sur les filtres SVG. Le grain et la
-diffusion d'encre se testent sur son téléphone avant d'être validés, pas sur un
-émulateur.
+Deux vigilances :
 
-Ajout à l'écran d'accueil : un `manifest.json` suffit pour que le journal ait une
-icône. Pas de service worker en v1.
+- Safari iOS reste plus lent sur les filtres SVG. Le grain se teste sur son téléphone, pas
+  sur un émulateur.
+- Le geste doit tenir 60 fps : `touch-action: none`, `will-change: transform`,
+  `translate3d` et rien d'autre.
 
-## Ce qu'on ne fait pas
+Pas de service worker en v1 — le `manifest.json` suffit pour l'ajout à l'écran d'accueil.
 
-Pas de tests unitaires généralisés. Deux exceptions qui les méritent : `codec.ts`
-(un lien cassé = une carte perdue) et `dates.ts` (les fuseaux et le scellé).
+## Arborescence cible
+
+```
+index.html                 elle
+atelier/index.html         moi
+src/
+  lecteur/                 A1 → A4, les types, les états C
+  atelier/                 D0 → D3, E1
+  lib/
+    codec.ts               encode / décode — isomorphe Node + navigateur
+    journal.ts             seul accès à localStorage
+    dates.ts               formats français
+  styles/
+    tokens.css             extrait de design/handoff/pli.css
+    pli.css                le gabarit et les classes
+    <type>.css             composition par type
+public/
+  plis/                    les poèmes encodés + l'index
+  textures/                les cinq peintures, redimensionnées
+plis-source/               les poèmes en clair — GITIGNORÉ
+scripts/plier.mjs          la moulinette
+plier.bat · plier.sh       les deux enveloppes
+design/                    l'archive figée du design
+docs/
+```
+
+Tout accès à `localStorage` passe par `journal.ts` : le mode navigation privée, où
+l'écriture échoue, doit dégrader proprement — le pli s'affiche, il n'est simplement pas
+archivé.
+
+## Tests
+
+Pas de tests unitaires généralisés. Deux modules les méritent :
+
+- **`codec.ts`** — un lien cassé est un pli perdu, et il tourne des deux côtés.
+  Tester l'aller-retour sur les quatre types, les accents, un poème long, un payload tronqué.
+- **`dates.ts`** — les formats français.

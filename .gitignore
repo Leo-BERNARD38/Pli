@@ -3,3 +3,7 @@ dist/
 .vite/
 *.local
 .DS_Store
+
+# Les poèmes en clair. Ne JAMAIS les commiter : l'historique git est définitif.
+# Seule leur version encodée (public/plis/*.txt) entre dans le dépôt.
+plis-source/
