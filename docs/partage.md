@@ -18,7 +18,7 @@ produit — le papier froissé, et deux phrases qui n'en disent pas plus qu'A1.
 ```html
 <meta property="og:title"       content="Un pli t'attend.">
 <meta property="og:description" content="Il ne s'ouvre qu'une fois.">
-<meta property="og:image"       content="https://pli.re/og.jpg">
+<meta property="og:image"       content="https://pli.re/icones/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url"         content="https://pli.re/">
@@ -45,20 +45,33 @@ contenu.
 
 ## L'image d'aperçu
 
+Elle est dessinée, et elle est bien meilleure que le recadrage de peinture prévu au départ :
+le papier crème et son grain, la marque carmin, « Un pli t'attend. » en Bodoni, la pliure en
+pointillé carmin. **Le produit se présente lui-même, dans sa propre voix.**
+
 | Réglage | Valeur |
 |---|---|
-| Source | `papier-froisse-creme.webp`, recadré `50% 25%` |
-| Format | **1200 × 630**, ratio 1,91:1 |
-| Fichier | **JPEG**, qualité ~78 — le webp reste capricieux selon les clients |
-| Poids | **≤ 300 ko** — au-delà, certains clients renoncent à la vignette |
-| Nom | `/og.jpg`, à la racine, jamais empreinté |
+| Fichier | [`design/handoff/icones/og.png`](../design/handoff/icones/README.md) |
+| Format | **1200 × 630**, PNG |
+| Poids | **53 ko** — très loin du plafond des messageries |
+| Servi depuis | `/icones/og.png`, nom stable, jamais empreinté |
 
-Le papier froissé ne sert aucun type de pli, et c'est délibéré : il parle du produit, pas
-d'un message ([assets/README.md](../design/handoff/assets/README.md)). Il est le seul fichier
-image que le build sert sans que le produit ne l'affiche jamais lui-même.
+PNG et non JPEG, et c'est le bon choix ici : des aplats et de la typographie, pas une
+photographie. Le JPEG salirait les bords des lettres pour le même poids.
 
-Le nom ne porte pas d'empreinte : un aperçu déjà envoyé pointe vers une adresse qui doit
-rester valable pour toujours.
+**Une correction avant de la servir.** Le bas de l'image porte
+« PLI.RE · UNE SEULE LECTURE · PAS DE COMPTE ». « Une seule lecture » est exactement la
+promesse que le produit ne tient pas : le refermement est une convention locale, et le pli
+reste lisible dans son journal
+([integration.md](integration.md#corrections-de-contenu-dans-les-maquettes)). À réexporter
+avec **« PLI.RE · POUR TOI SEULE »**, qui est du lexique et qui est vrai.
+
+La même phrase est à corriger dans `og:description` : les balises livrées dans
+[`tete.html`](../design/handoff/icones/tete.html) portent « Une seule lecture, pas de
+compte. » — c'est « Il ne s'ouvre qu'une fois. » qui fait foi.
+
+`twitter:card` est écarté : personne ne partage un pli ailleurs que dans une conversation, et
+une balise de plus est une balise de plus à maintenir juste.
 
 ## Ce que WhatsApp fait vraiment
 

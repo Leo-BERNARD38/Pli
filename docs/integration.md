@@ -101,6 +101,11 @@ Voici tout ce qui s'en déduit.
 | Définition des textures | 720 × 1560, ~70 ko | **la définition native de la source** (1536 × 2752, ou 1296 × 2304 pour le drapé), servie telle quelle — [ressources.md](ressources.md) |
 | Les flèches | caractères `↑` `→` en Bodoni | **deux tracés SVG inline** — l'unique exception au « pas de SVG » |
 | Bodoni sur A1 | présent, par la flèche de la pliure | **absent** — trois familles au premier écran, sans arrangement |
+| L'aperçu du lien | un recadrage du papier froissé | **`og.png`**, dessiné : marque, phrase, pliure — 53 ko ([partage.md](partage.md#limage-daperçu)) |
+| `og:description` | « Une seule lecture, pas de compte. » | **« Il ne s'ouvre qu'une fois. »** — la première promesse n'est pas tenable |
+| Le bas de `og.png` | « UNE SEULE LECTURE · PAS DE COMPTE » | **« POUR TOI SEULE »** — à réexporter |
+| `icon-512` en `maskable` | annoncé masquable | **`purpose: any`** tant qu'une variante à 66 % n'existe pas — mesuré à 70 % de large, 10 % de marge à droite |
+| `twitter:card` | présent dans `tete.html` | **retiré** — un pli ne se partage pas ailleurs qu'en conversation |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
 
 ### Les cinq questions laissées ouvertes par le design

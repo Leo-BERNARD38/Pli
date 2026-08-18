@@ -9,7 +9,7 @@ d'ancien et de neuf.
 | Famille | Fichiers | Nom | Périmable ? |
 |---|---|---|---|
 | **empreintés** | js, css, polices, textures | `pli-a3f9c1.js` | non — un contenu neuf a un nom neuf |
-| **stables** | `index.html`, `atelier/index.html`, `plis/*.txt`, `plis/index`, `og.jpg`, `manifest.json`, les icônes | leur nom | **oui, dix minutes** |
+| **stables** | `index.html`, `atelier/index.html`, `plis/*.txt`, `plis/index`, tout `icones/` | leur nom | **oui, dix minutes** |
 
 L'empreinte règle le problème que tu décris — **jamais un ancien CSS avec un nouveau code**.
 Deux versions d'un même fichier ne portent pas le même nom, elles ne peuvent pas se
@@ -105,7 +105,7 @@ fetch(`/plis/index?t=${Date.now()}`)
 C'est mon téléphone à moi, une requête par ouverture de l'atelier, le coût est nul. C'est la
 seule ressource du produit qu'on force à être fraîche.
 
-### `og.jpg`, `manifest.json`, les icônes
+### `icones/` — l'aperçu, le manifeste, les icônes
 
 Noms stables, adresses publiques. Changer l'aperçu ne rafraîchit pas les vignettes déjà
 envoyées — le remède est dans [partage.md](partage.md#ce-que-whatsapp-fait-vraiment).

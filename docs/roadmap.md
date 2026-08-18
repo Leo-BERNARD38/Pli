@@ -2,17 +2,21 @@
 
 ## Avant la première ligne de code
 
-Ce qui n'est écrit nulle part et qu'il faudrait inventer en codant. Six points, dont trois
-demandent une décision qui n'est pas technique.
+### Tranché
 
-| Point | Ce qui manque | Qui tranche |
+| Point | La décision |
+|---|---|
+| **Le seuil de l'atelier** | chiffres seuls, préfixe `pli.seuil.`, sha-256, l'empreinte fabriquée en local et seule à entrer dans le dépôt ([architecture.md](architecture.md#le-seuil-de-latelier)) |
+| **Le numéro de réponse** | un écran de l'atelier, **D4 · le tiroir**, qui garde `w` et la signature sur mon téléphone ([parcours.md](parcours.md#d4--le-tiroir)) |
+| **L'export du journal** | **pas en v1.** Le seul filet devient l'ajout à l'écran d'accueil — si la mesure du bac de stockage tourne mal, l'export repasse en tête |
+| **L'icône** | livrée : le P de Pinyon en crème sur carmin, plus l'aperçu du lien ([installation.md](installation.md#le-manifest-et-les-icônes)) |
+
+### Ce qui reste
+
+| Point | Ce qui manque | Quand |
 |---|---|---|
-| **Le seuil de l'atelier** | *quoi* est haché : le format exact de la date normalisée, la présence ou non d'un sel, et le fait que l'empreinte est une constante du bundle ([architecture.md](architecture.md#le-seuil-de-latelier)) | **toi** |
-| **Le numéro WhatsApp `w`** | d'où il vient dans l'atelier : saisi à chaque invitation, ou retenu une fois sur mon téléphone ? Il ne peut pas être dans le dépôt ([donnees.md](donnees.md#1-le-pli)) | **toi** |
-| **L'export du journal** | son format et son déclenchement — un texte qu'on copie, un fichier qu'on partage ? Et se ré-importe-t-il ? C'est le filet du risque nº 2 | **toi** |
-| **Le numéro `n` des plis courts** | il vient de `pli.v1.compteur`, sur mon téléphone seul. Que se passe-t-il si ce stockage est effacé ? (les poèmes, eux, se recalent sur l'index) | à décider en codant l'atelier |
-| **Hors ligne ≠ introuvable** | pour un poème, C4 confond aujourd'hui un fichier absent et un réseau coupé. Le second mérite « réessayer », pas « lien abîmé » ([parcours.md](parcours.md#les-états)) | à trancher au jalon 6 |
-| **L'icône de l'app** | elle n'est pas dessinée, et c'est le seul dessin qui manque ([installation.md](installation.md#licône)) | **toi**, au jalon 4 |
+| **Le numéro `n` des plis courts** | il vient de `pli.v1.compteur`, sur mon téléphone seul. Le tiroir l'affiche et permet de le corriger — reste à décider ce qui se passe si je ne m'en aperçois pas | jalon 5 |
+| **Hors ligne ≠ introuvable** | pour un poème, C4 confond un fichier absent et un réseau coupé. Le second mérite « réessayer », pas « lien abîmé » ([parcours.md](parcours.md#les-états)) | jalon 6 |
 
 Les écrans qui ne sont pas encore maquettés sont listés à part, en fin de
 [parcours.md](parcours.md#3-ce-qui-nest-pas-encore-maquetté).
@@ -47,8 +51,8 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
   plus l'aperçu OG en 1200 × 630 — et la décision « natif ou régénérer ≥ 1800 »
   ([ressources.md](ressources.md#la-règle-de-définition))
 - Les deux flèches tracées, en SVG inline ([ressources.md](ressources.md#les-deux-flèches))
-- Les balises `og:` et l'aperçu vérifié en s'envoyant le lien à soi-même
-  ([partage.md](partage.md))
+- Les balises `og:` et l'aperçu vérifié en s'envoyant le lien à soi-même, `og.png` réexporté
+  sans « une seule lecture » ([partage.md](partage.md#limage-daperçu))
 - Le budget de chargement rempli avec de vrais chiffres, mesuré sur les deux téléphones
   ([chargement.md](chargement.md#le-budget-écran-par-écran))
 
@@ -76,8 +80,9 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
 - C1 le journal, et son état vide
 - C3 refermé, et son chemin vers le journal
 - La marque comme chemin discret
-- `manifest.json`, les icônes et l'écran `#/installer` — **sa forme dépend de la mesure du
-  jalon 1** ([installation.md](installation.md))
+- Le manifeste et les icônes, avec les **trois corrections** mesurées
+  ([installation.md](installation.md#trois-corrections-avant-de-servir-ces-fichiers))
+- L'écran `#/installer` — **sa forme dépend de la mesure du jalon 1**
 - Le réglage de cadence sur son iPhone, au moment de l'installation
   ([installation.md](installation.md#le-réglage-de-cadence))
 - Export du journal
@@ -87,6 +92,7 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
 ## Jalon 5 — L'atelier
 
 - D0 le seuil
+- D4 le tiroir : le numéro de réponse et la signature, gardés sur mon téléphone
 - D1 le type, D2 les textes, D3 le lien
 - Compteur de signes calé sur le plafond mesuré
 - Partage natif et copie du lien
@@ -112,6 +118,7 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
   ([hebergement.md](hebergement.md#ce-que-max-age600-change))
 - Un carnet d'idées (`data/*.json`) piochable depuis D2 — aucun écran maquetté à ce jour
 - Sons et vibrations à l'ouverture
-- Export du journal en PDF, à imprimer
+- **L'export du journal** — écarté de la v1, à reprendre si le stockage se révèle fragile ;
+  en texte d'abord, en PDF à imprimer ensuite
 - Source des poèmes privée, sortie encodée au build — rendrait l'écriture en clair et
   l'illisibilité du dépôt compatibles, au prix d'un déploiement par poème

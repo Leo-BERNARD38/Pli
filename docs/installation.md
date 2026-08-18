@@ -23,25 +23,35 @@ C'est la mesure à faire avant de construire cet écran —
 `#/installer` est soit le chemin principal, soit remplacé par « ouvrir dans Safari » et un
 export sérieux du journal.
 
-## Le manifest
+## Le manifest et les icônes
+
+Livrés, dessinés, mesurés : [`design/handoff/icones/`](../design/handoff/icones/README.md).
+Le dessin retenu est **le P de Pinyon en crème sur carmin plein** — pas d'icône inventée, la
+main du produit.
+
+| Fichier | Emploi | Poids |
+|---|---|---|
+| `favicon.ico` (16 · 32 · 48) | l'onglet | 3,8 ko |
+| `favicon.svg`, `favicon-petite.svg` | l'onglet, en vectoriel | 0,3 ko |
+| `apple-touch-icon.png` 180 | l'écran d'accueil iOS | 7,7 ko |
+| `icon-192.png`, `icon-512.png` | le manifeste | 8,5 et 17 ko |
+| `icon-1024.png` | la réserve | 45 ko |
+| `og.png` 1200 × 630 | l'aperçu du lien ([partage.md](partage.md)) | 53 ko |
+| `marque-encre.svg` | encre sur crème — onglet épinglé, impression | 0,3 ko |
+
+Servis depuis **`public/icones/`**, noms stables, jamais empreintés
+([mises-a-jour.md](mises-a-jour.md#les-fichiers-stables-un-par-un)) : une icône posée sur son
+écran d'accueil pointe vers une adresse qui doit rester valable.
 
 ```json
 {
-  "name": "Pli",
-  "short_name": "Pli",
-  "lang": "fr",
-  "start_url": "/",
-  "scope": "/",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#E9E2D2",
-  "theme_color": "#E9E2D2",
-  "icons": [
-    { "src": "/icons/pli-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icons/pli-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/icons/pli-512-masque.png", "sizes": "512x512", "type": "image/png",
-      "purpose": "maskable" }
-  ]
+  "name": "Pli",  "short_name": "Pli",  "description": "Un message qui arrive plié.",
+  "lang": "fr",   "dir": "ltr",
+  "start_url": "/",  "scope": "/",
+  "display": "standalone",  "orientation": "portrait",
+  "background_color": "#F7F2E8",
+  "theme_color": "#C81E33",
+  "icons": [ … ]
 }
 ```
 
@@ -50,32 +60,29 @@ export sérieux du journal.
 | `start_url: "/"` | l'app s'ouvre sur son journal, jamais sur un pli |
 | `display: "standalone"` | pas de barre d'URL — c'est aussi ce qui stabilise la hauteur |
 | `orientation: "portrait"` | le pli est un objet tenu à la main, il n'a pas de paysage |
-| `background_color` | le **sable** du plateau : l'écran de lancement doit être le plateau, pas un rectangle blanc |
-| `theme_color` | même sable, pour la barre système d'Android |
+| `background_color` | le **crème** du papier : l'écran de lancement est une feuille, pas un rectangle blanc |
+| `theme_color` | le **carmin**, la seule couleur d'action, pour la barre système d'Android |
 
-Et dans le `<head>`, parce qu'iOS reste plus sûr avec :
+Les balises du `<head>` sont écrites dans
+[`tete.html`](../design/handoff/icones/tete.html) — à reprendre telles quelles, avec les
+deux corrections ci-dessous.
 
-```html
-<link rel="apple-touch-icon" href="/icons/pli-180.png">
-<link rel="manifest" href="/manifest.json">
-```
+### Trois corrections avant de servir ces fichiers
 
-Noms **stables**, jamais empreintés ([mises-a-jour.md](mises-a-jour.md#les-fichiers-stables-un-par-un)) :
-une icône installée sur son écran d'accueil pointe vers une adresse qui doit rester valable.
+**1. Le `maskable` ne l'est pas encore.** Mesuré sur les fichiers livrés : la lettre occupe
+**70 % de la largeur**, avec seulement **10 % de marge à droite** contre 19,7 % à gauche. Le
+masque d'Android recadre en cercle — un disque de 80 % du côté — et la boucle haute de la
+lettre en sort. Déclarer les fichiers actuels en `purpose: "any"`, et **exporter une variante
+masquable** où la lettre tient dans les 66 % centraux, marges égales.
 
-## L'icône
+**2. Le SVG appelle une police qu'il n'embarque pas.** `favicon.svg` contient
+`font-family: Pinyon Script` : partout où la police n'est pas installée — c'est-à-dire
+partout — le navigateur dessine un `P` en cursive de secours. **Vectoriser la lettre** avant
+de servir le fichier ; les PNG, eux, sont définitifs. Le README des icônes le note déjà.
 
-**Elle n'est pas encore dessinée.** C'est le seul dessin qui manque au produit, et il n'a
-pas de maquette.
-
-Ce qu'on sait déjà : pas d'icône au sens habituel, pas de symbole inventé. Le vocabulaire
-disponible est celui du produit — le mot « Pli » en Pinyon sur crème, ou le cachet numéroté,
-qui est le seul symbole que le design se soit autorisé
-([design-system.md](design-system.md#ton-et-vocabulaire)). La version `maskable` a besoin de
-**20 % de marge** sur tout le tour : Android recadre en cercle, en carré ou en goutte selon
-le lanceur.
-
-Trois tailles à produire : 180 (iOS), 192 et 512 (manifest), plus la 512 masquable.
+**3. `mask-icon` attend une image monochrome à fond transparent.** `marque-encre.svg` porte
+un aplat crème : l'onglet épinglé de Safari afficherait un carré plein. Soit on retire le
+fond, soit on retire la balise — elle ne sert plus qu'à d'anciennes versions de Safari.
 
 ## L'écran `#/installer`
 
@@ -108,8 +115,8 @@ dépend d'une case cochée dans un menu caché.
 
 ## Vérifier une installation
 
-- [ ] l'icône est nette sur l'écran d'accueil, et masquable sur Android
-- [ ] le lancement montre le plateau sable, pas un écran blanc
+- [ ] l'icône est nette sur l'écran d'accueil, et **rien n'est rogné** par le masque Android
+- [ ] le lancement montre le crème du papier, pas un écran blanc
 - [ ] l'app s'ouvre sur le journal
 - [ ] pas de barre d'URL, hauteur stable pendant le geste
 - [ ] **le journal contient bien les plis ouverts avant l'installation** — la vraie question

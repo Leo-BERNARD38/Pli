@@ -53,6 +53,31 @@ Avant le premier usage, l'atelier demande notre date d'officialisation. La compa
 fait sur `sha-256` (via `crypto.subtle`), **jamais sur la date en clair** : sinon quelqu'un
 qui ouvre les sources tombe sur une date d'anniversaire lisible.
 
+Ce qui est haché, précisément :
+
+```
+saisie      « 17/08/2026 »
+normaliser   les chiffres seuls, dans l'ordre tapé   → « 17082026 »
+préfixer     une constante du produit, « pli.seuil. » → « pli.seuil.17082026 »
+sha-256      → hexadécimal
+comparer     à la constante inscrite dans le bundle
+```
+
+Deux précisions, parce qu'elles évitent deux erreurs :
+
+- **La normalisation est la seule tolérance offerte.** `17/08/2026`, `17-08-2026` et
+  `17082026` donnent la même empreinte ; une date écrite à l'envers, non. La ligne se vide
+  sans rien reprocher ([parcours.md](parcours.md#d0--le-seuil)).
+- **Le préfixe n'est pas un secret.** Il est dans le bundle comme le reste ; il n'empêche
+  rien d'autre qu'une table d'empreintes de dates toute faite. Ça reste un paillasson.
+
+L'empreinte se fabrique une fois, en local, et c'est elle seule qui entre dans le dépôt :
+
+```sh
+node -e 'crypto.subtle.digest("SHA-256", new TextEncoder().encode("pli.seuil."+process.argv[1]))
+  .then(b=>console.log(Buffer.from(b).toString("hex")))' 17082026
+```
+
 C'est un paillasson, pas une serrure — le contrôle est côté client, et il n'existe que
 quelques dizaines de milliers de dates plausibles. L'objectif est d'écarter le passant,
 et c'est exactement calibré pour ça.
@@ -73,7 +98,7 @@ peut disparaître** — l'objet décrit dans [concept.md](concept.md) comme celu
 valeur au bout de six mois.
 
 L'exemption est nette : **les sites ajoutés à l'écran d'accueil y échappent.** Le
-`manifest.json` n'est donc pas une coquetterie, il est porteur. Trois conséquences :
+Le manifeste n'est donc pas une coquetterie, il est porteur. Trois conséquences :
 
 1. **L'ajout à l'écran d'accueil est une étape du parcours**, pas un bonus. Un écran
    `#/installer` montre le geste, proposé une fois, après son deuxième ou troisième pli.
@@ -81,7 +106,9 @@ L'exemption est nette : **les sites ajoutés à l'écran d'accueil y échappent.
    `beforeinstallprompt`, c'est Partager → Sur l'écran d'accueil, à la main. Détecter
    `display-mode: standalone` pour ne jamais le proposer si c'est déjà fait.
 2. **À vérifier sur son iPhone** avant de considérer le journal comme fiable.
-3. **Prévoir un export**, ne serait-ce qu'en copie de texte, comme filet.
+3. **Pas d'export en v1** — décidé, pas oublié ([roadmap.md](roadmap.md#plus-tard)). Le
+   journal n'a donc qu'un filet : l'ajout à l'écran d'accueil. Si la mesure du bac de
+   stockage tourne mal, l'export redevient la première chose à construire.
 
 ## La longueur du lien
 
@@ -170,7 +197,7 @@ Deux vigilances de rendu :
 Les réglages de page (encoche, `100dvh`, clavier, `theme-color`) et la séance de test
 appareil par appareil sont dans [appareils.md](appareils.md).
 
-Pas de service worker en v1 — le `manifest.json` suffit pour l'ajout à l'écran d'accueil,
+Pas de service worker en v1 — le manifeste suffit pour l'ajout à l'écran d'accueil,
 dont la spécification complète est dans [installation.md](installation.md).
 
 Ce qui se passe quand on pousse une nouvelle version — fichiers empreintés, fenêtre de dix
@@ -197,8 +224,7 @@ src/
   fonts/                   les woff2 sous-ensemblés — importés par le CSS
 public/                    servi tel quel, noms stables
   plis/                    les poèmes encodés + l'index
-  og.jpg                   l'aperçu du lien, 1200 × 630
-  manifest.json  icons/    l'ajout à l'écran d'accueil
+  icones/                  les icônes, le manifeste, og.png — copiés du handoff
   404.html
   CNAME  .nojekyll
 plis-source/               les poèmes en clair — GITIGNORÉ

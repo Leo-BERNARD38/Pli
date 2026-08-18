@@ -11,8 +11,7 @@ dist/
   atelier/index.html      moi
   assets/                 js, css, polices, peintures — noms empreintés par Vite
   plis/                   les poèmes encodés + l'index      (copié de public/)
-  og.jpg                  l'aperçu du lien, 1200 × 630      (→ partage.md)
-  manifest.json  icons/   l'ajout à l'écran d'accueil
+  icones/                 icônes, manifeste, og.png         (→ installation.md)
   404.html  CNAME  .nojekyll
 ```
 
@@ -66,7 +65,7 @@ Trois conséquences qui gouvernent tout le reste :
 2. **Chaque visite est presque une visite froide.** Le budget de [chargement.md](chargement.md)
    se mesure cache vide — c'est le cas réaliste, pas le pire cas.
 3. **Le seul vrai remède serait un service worker.** Il n'est pas en v1
-   ([roadmap.md](roadmap.md)) : le `manifest.json` suffit pour l'écran d'accueil, et un cache
+   ([roadmap.md](roadmap.md)) : le manifeste suffit pour l'écran d'accueil, et un cache
    qu'on gère mal est pire qu'un cache court.
 
 ## Le domaine

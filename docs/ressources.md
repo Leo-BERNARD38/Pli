@@ -105,23 +105,34 @@ C'est aussi ce qui rend une image manquante sans conséquence : le fond reste ju
 |---|---|---|
 | les cinq peintures servies | importées depuis `src/` | **empreinté par Vite** |
 | les polices sous-ensemblées | importées par le CSS | **empreinté par Vite** |
-| l'aperçu du lien | `public/og.jpg` | **stable, jamais empreinté** |
-| les icônes de l'app | `public/icons/` | stables |
+| l'aperçu du lien, les icônes, le manifeste | `public/icones/` | **stables, jamais empreintés** |
 | les originaux | `design/handoff/assets/` | jamais servis |
 
 L'empreinte n'est pas un détail de confort : c'est ce qui rend impossible de servir une
-ancienne peinture avec un nouveau code ([mises-a-jour.md](mises-a-jour.md)). Seul `og.jpg`
-y échappe, parce qu'un aperçu déjà envoyé pointe vers une adresse qui doit rester valable.
+ancienne peinture avec un nouveau code ([mises-a-jour.md](mises-a-jour.md)). Seul `icones/`
+y échappe : un aperçu déjà envoyé et une icône déjà posée sur un écran d'accueil pointent
+vers des adresses qui doivent rester valables.
 
-## L'aperçu du lien
+## L'aperçu du lien et les icônes
 
-1200 × 630, recadré depuis le papier froissé à `50% 25%`, **JPEG q78, ≤ 300 ko**
-([partage.md](partage.md#limage-daperçu)).
+Ils ne se produisent plus : ils sont livrés, dessinés à la main du produit — le P de Pinyon
+en crème sur carmin — dans
+[`design/handoff/icones/`](../design/handoff/icones/README.md).
 
-```sh
-# 1536×2752 → largeur 1200 (soit 1200×2151), puis fenêtre de 630 à 25 % du jeu vertical
-magick papier-froisse-creme.webp -resize 1200x -crop 1200x630+0+380 -quality 78 public/og.jpg
-```
+| Fichier | Format | Poids |
+|---|---|---|
+| `og.png` | 1200 × 630 | 53 ko |
+| `apple-touch-icon.png` | 180 | 7,7 ko |
+| `icon-192.png` · `icon-512.png` · `icon-1024.png` | manifeste et réserve | 8,5 · 17 · 45 ko |
+| `favicon.ico` · `favicon.svg` · `marque-encre.svg` | l'onglet | 3,8 · 0,3 · 0,3 ko |
+
+Le papier froissé ne sert donc plus l'aperçu — il lui reste le journal vide et l'écran
+d'installation ([design-system.md](design-system.md#les-deux-images-du-produit)).
+
+**Trois défauts à corriger avant de les servir**, tous mesurés : le `maskable` déborde la
+zone sûre, le SVG appelle une police qu'il n'embarque pas, et `marque-encre.svg` a un fond
+là où Safari attend de la transparence. Le détail et les corrections sont dans
+[installation.md](installation.md#trois-corrections-avant-de-servir-ces-fichiers).
 
 ## Les polices
 
@@ -176,8 +187,10 @@ Contraintes de tracé, pour que ça reste le produit et pas une icône :
 
 - [ ] trancher : servir le natif, ou régénérer les peintures ≥ 1800 de large
 - [ ] les cinq textures dans `src/`, ré-encodées q80 **seulement si un master existe**
-- [ ] `og.jpg` 1200 × 630, ≤ 300 ko, vérifié dans une vraie conversation
+- [ ] `og.png` réexporté sans « une seule lecture », vérifié dans une vraie conversation
+      ([partage.md](partage.md#limage-daperçu))
 - [ ] les quatre polices sous-ensemblées, poids réels notés dans
       [chargement.md](chargement.md#le-budget-écran-par-écran)
 - [ ] les deux flèches tracées
-- [ ] les icônes de l'app ([installation.md](installation.md#le-manifest))
+- [ ] les trois corrections d'icônes
+      ([installation.md](installation.md#trois-corrections-avant-de-servir-ces-fichiers))

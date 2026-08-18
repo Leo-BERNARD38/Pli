@@ -123,9 +123,14 @@ raison pour laquelle on peut servir des peintures d'un mégaoctet. Et **deux tex
 décodées vivantes au maximum** : une image de 4,2 Mpx occupe 17 Mo de mémoire une fois
 décodée ([ressources.md](ressources.md#ce-quune-grande-image-coûte)).
 
+Une requête ne vient pas de nous : **le navigateur va chercher l'icône de l'onglet** tout
+seul. Elle est déclarée en SVG (0,3 ko) et l'`.ico` ne sert que de repli — c'est la seule
+raison pour laquelle ces fichiers restent minuscules. En app installée, la question ne se
+pose pas : il n'y a pas d'onglet.
+
 Ce qui n'est **pas** en vague 3 : l'atelier (bundle séparé, jamais servi sur son téléphone),
-les quatre autres textures, la police des titres de documentation, l'aperçu `og.jpg` — il
-n'est lu que par le crawler de WhatsApp.
+les quatre autres textures, la police des titres de documentation, l'aperçu `og.png` — il
+n'est lu que par le fabricant d'aperçu, jamais par le produit.
 
 ## Le poème, le seul cas qui dépend du réseau
 

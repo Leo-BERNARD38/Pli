@@ -22,6 +22,12 @@ et ils divergent, la liste est dans [`docs/integration.md`](../docs/integration.
 
 Aucun build, aucune dépendance. Ouvrir `handoff/index.html` dans un navigateur suffit.
 
+Les icônes, le manifeste et l'aperçu du lien vivent dans
+[handoff/icones/](handoff/icones/README.md) — importés le 18 août 2026, après le reste.
+Ce sont des fichiers finis, destinés à être copiés dans `public/icones/` ; les trois
+corrections à leur apporter sont dans
+[`docs/installation.md`](../docs/installation.md#trois-corrections-avant-de-servir-ces-fichiers).
+
 Les images vivent dans [handoff/assets/](handoff/assets/README.md) — cinq peintures, leur
 emploi et leurs cadrages. Elles, contrairement au reste du dossier, ont bougé depuis
 l'import : quatre se sont ajoutées et toutes ont été nommées.
