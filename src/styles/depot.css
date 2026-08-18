@@ -126,11 +126,11 @@
   border-bottom: 1px solid var(--trait);
 }
 
-.type[aria-selected='true'] {
+.type[aria-pressed='true'] {
   background: rgba(200, 30, 51, 0.05);
 }
 
-.type[aria-selected='true'] .type__nom {
+.type[aria-pressed='true'] .type__nom {
   color: var(--carmin);
 }
 

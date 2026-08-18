@@ -92,7 +92,9 @@ export function tenirLeType(ecran: HTMLElement, choisi: (quel: Type) => void): (
 
   const marquer = (quel: Type): void => {
     for (const ligne of lignes) {
-      ligne.setAttribute('aria-selected', String(ligne.dataset['type'] === quel))
+      // `aria-pressed`, et non `aria-selected` : celui-là n'a de sens que dans une liste ou
+      // un groupe de boutons radio, et un lecteur d'écran l'ignore sur un bouton seul.
+      ligne.setAttribute('aria-pressed', String(ligne.dataset['type'] === quel))
     }
     if (action) action.disabled = false
     choisi(quel)
@@ -113,8 +115,8 @@ export function tenirLeType(ecran: HTMLElement, choisi: (quel: Type) => void): (
       if (!quel) continue
       const dispo = PAPIERS[quel].ici && (quel !== 'inv' || reponse)
       ligne.disabled = !dispo
-      if (!dispo) ligne.setAttribute('aria-selected', 'false')
+      if (!dispo) ligne.setAttribute('aria-pressed', 'false')
     }
-    if (action) action.disabled = !lignes.some((l) => l.getAttribute('aria-selected') === 'true')
+    if (action) action.disabled = !lignes.some((l) => l.getAttribute('aria-pressed') === 'true')
   }
 }
