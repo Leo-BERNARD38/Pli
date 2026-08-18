@@ -104,12 +104,21 @@ const TYPES: readonly Type[] = ['inv', 'pen', 'poe', 'sou']
 
 /**
  * Le minimum qui distingue un pli d'un json quelconque qui aurait survécu au trajet.
- * Sans ce garde, un payload bien formé mais étranger tomberait dans l'écran, pas dans C4.
+ * Sans ce garde, un payload à demi lisible tomberait dans l'écran — « déposé par undefined »
+ * plutôt que C4. On vérifie ce qui s'affiche toujours, rien de plus : les clés optionnelles
+ * restent optionnelles.
  */
 function estUnPli(relu: unknown): relu is Pli {
   if (typeof relu !== 'object' || relu === null) return false
   const pli = relu as Partial<Pli>
-  return typeof pli.t === 'string' && TYPES.includes(pli.t as Type)
+  return (
+    typeof pli.t === 'string' &&
+    TYPES.includes(pli.t as Type) &&
+    typeof pli.n === 'number' &&
+    typeof pli.ti === 'string' &&
+    typeof pli.s === 'string' &&
+    (typeof pli.b === 'string' || Array.isArray(pli.b))
+  )
 }
 
 /** Le pli devient le payload d'un lien : `#c=<payload>`. */

@@ -123,3 +123,17 @@ test('un json qui n’est pas un pli donne un lien abîmé', async () => {
   const etranger = await encoder({ bonjour: 'ceci n’est pas un pli' } as unknown as Pli)
   await assert.rejects(() => decoder(etranger), /lien abîmé/)
 })
+
+test('un pli amputé de ce qui s’affiche toujours donne un lien abîmé', async () => {
+  const amputes = [
+    { ...INVITATION, s: undefined },
+    { ...INVITATION, ti: undefined },
+    { ...INVITATION, n: undefined },
+    { ...INVITATION, b: undefined },
+    { ...INVITATION, t: 'xxx' },
+  ]
+  for (const ampute of amputes) {
+    const lien = await encoder(ampute as unknown as Pli)
+    await assert.rejects(() => decoder(lien), /lien abîmé/)
+  }
+})
