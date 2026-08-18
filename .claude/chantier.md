@@ -36,19 +36,20 @@ Aucun ne bloque le jalon 2.
 - [x] `src/lib/codec.ts` — isomorphe Node + navigateur, avec ses tests
 - [x] `src/lib/dates.ts` — les formats français, avec ses tests
 - [x] le routeur par hash
-- [x] `CNAME`, `.nojekyll`, `404.html`, `base: '/'`
+- [x] `.nojekyll`, `404.html`, `base: '/'` — le `CNAME` est parti avec `pli.re`
 - [x] les deux workflows GitHub — vérification sur PR, déploiement sur `main`
 - [x] un pli en dur, sans style
 - [x] **à la main, chez moi** : Pages activé, source « GitHub Actions » — c'est bien celle
       que `deploiement.yml` demande, `actions/deploy-pages` ne sait pas déployer autrement
-- [ ] **à la main, chez moi** : le **domaine personnalisé** `pli.re` renseigné dans les
-      réglages du dépôt, ses enregistrements DNS, puis « Enforce HTTPS » et le `curl` de
-      vérification ([docs/hebergement.md](../docs/hebergement.md#avant-le-premier-déploiement)).
-      **Tant qu'il manque, le site est servi sur `leo-bernard38.github.io/Pli/` et il y est
-      cassé** : `base: '/'` et toutes les adresses du produit (`/icones/`, `/plis/`, les
-      empreintes de Vite) partent de la racine du domaine. Le sous-chemin de dépôt n'est pas
-      une cible — `hebergement.md` l'écrit, et le domaine est déjà dans les liens à venir.
-      Le domaine posé, `leo-bernard38.github.io/Pli/` redirige tout seul vers `pli.re`
+- [x] le déploiement tourne : les runs 2 et 3 de `deploiement.yml` sont en succès, le site
+      est construit et publié
+- [ ] **à la main, chez moi** : **renommer le dépôt `Pli` en `leo-bernard38.github.io`**, et
+      retirer le domaine personnalisé des réglages de Pages. Le site sera alors servi à la
+      racine de `https://leo-bernard38.github.io/`, ce que `base: '/'` suppose déjà. Rien
+      d'autre à faire : ni DNS, ni `CNAME`, ni « Enforce HTTPS » — un site d'utilisateur est
+      en HTTPS d'office ([docs/hebergement.md](../docs/hebergement.md#ladresse))
+- [ ] **à la main, chez moi** : le `curl` de vérification sur l'adresse réelle
+      ([docs/hebergement.md](../docs/hebergement.md#ce-que-pages-ne-donne-pas))
 - [ ] **à la main, sur les deux téléphones** : le lien ouvert chez elle
 
 **Fin du jalon :** un lien fabriqué à la main s'ouvre sur son téléphone.
@@ -190,11 +191,12 @@ chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip g
 
 ## Ce qui reste ouvert
 
-- **Le `CNAME` du build suffit-il quand la source de Pages est « GitHub Actions » ?**
-  `hebergement.md` décrit le domaine « par un `CNAME` à la racine du build », ce qui était
-  vrai de la publication par branche. La documentation de GitHub n'est pas joignable depuis
-  cette machine : **poser le domaine dans les réglages du dépôt** est sûr dans les deux cas, et
-  le fichier `CNAME` reste où il est. À vérifier au premier déploiement.
+- **Un vrai domaine, plus tard ?** L'adresse ne se gèle qu'au **premier pli envoyé**. Tant
+  qu'aucun lien n'est parti, `leo-bernard38.github.io` peut encore devenir un domaine acheté :
+  on le renseigne dans les réglages du dépôt, on pose les enregistrements DNS de GitHub, on
+  active « Enforce HTTPS ». Après le premier pli, non — il est dans une conversation. Le
+  préfixe coûte 28 signes aujourd'hui contre 12 pour un domaine court, à rapprocher de la
+  mesure nº 1 quand elle sera faite.
 
 - **L'alphabet du jeton d'un poème.** Le routeur n'accepte que `numéro-jeton` en minuscules et
   chiffres. [docs/donnees.md](../docs/donnees.md#la-moulinette) dit « quatre signes » et rien

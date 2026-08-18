@@ -233,3 +233,24 @@ si la mesure sur les deux téléphones le rend visible.
 - **18/08/2026 — `chantier.md` se coupe en deux.** L'état vivant reste ; les arbitrages datés
   passent dans ce fichier-ci, qu'on n'ouvre que lorsqu'une décision est en cause. Le fichier
   lu au démarrage de chaque session passe de 28 à 12 ko.
+
+### L'adresse
+
+- **18/08/2026 — l'adresse devient `leo-bernard38.github.io`, à la racine.** `pli.re` n'a
+  jamais été acheté : le réglage « Custom domain » ne fait que dire à GitHub de répondre à un
+  nom, il ne le donne pas. Renseigné sans DNS, il redirigeait `…github.io/Pli/` vers un nom
+  qui ne résout nulle part — d'où le « site inaccessible ». Trois voies étaient ouvertes :
+  acheter le domaine, nommer le dépôt `leo-bernard38.github.io` (site d'utilisateur, servi à
+  la racine), ou rester sur le sous-chemin `/Pli/`. La troisième est la pire : elle demande
+  `base: '/Pli/'`, toutes les adresses absolues du produit, et donne le préfixe le plus long
+  — or chaque signe de préfixe est un signe de moins pour un pli qui voyage entièrement dans
+  le fragment. La deuxième est gratuite, ne change **pas une ligne de code** (`base: '/'`
+  reste juste) et marche aujourd'hui. Décision prise avec toi.
+- **18/08/2026 — le `CNAME` sort du dépôt.** Il nommait un domaine qu'on ne possède pas, et
+  sous la source « GitHub Actions » il n'est au mieux d'aucun effet, au pire il rejoue la
+  panne. `docs/hebergement.md` a une section « L'adresse » à la place de « Le domaine ».
+- **18/08/2026 — l'invariant du domaine se reformule.** Il disait « le domaine ne change
+  plus » ; c'était faux tant qu'aucun lien n'était parti, et ça a failli coûter un mauvais
+  choix. Il dit maintenant **ce qui est vrai** : l'adresse se gèle au **premier pli envoyé**.
+  Avant, elle peut encore devenir un vrai domaine ; après, elle est dans une conversation.
+  Les citations des maquettes gardent `pli.re` — une maquette se cite, elle ne se réécrit pas.

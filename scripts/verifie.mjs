@@ -164,8 +164,8 @@ for (const chemin of aRegarder) {
     if (/history\.(pushState|replaceState)/.test(ligne))
       refus(f, n, 'invariant — routage par hash seulement : Pages ne réécrit aucune URL, une route profonde tombe en 404')
     const url = ligne.match(/https?:\/\/[^\s"'`)]+/)
-    if (url && !/^https?:\/\/(pli\.re|www\.w3\.org)/.test(url[0]))
-      refus(f, n, `invariant — aucun tiers : « ${url[0]} » sort de pli.re`)
+    if (url && !/^https?:\/\/(leo-bernard38\.github\.io|www\.w3\.org)/.test(url[0]))
+      refus(f, n, `invariant — aucun tiers : « ${url[0]} » sort du site`)
 
     /* les encres et le mouvement (design-system.md, fluidite.md, chargement.md) */
     if (ext === '.css') {

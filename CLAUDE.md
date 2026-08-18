@@ -6,14 +6,14 @@ commits, interface. On garde le français.
 ## Ce qu'est Pli
 
 Un lien = un pli. Elle reçoit un lien par WhatsApp, trouve une feuille fermée, la tire du
-doigt, le message se découvre. Statique (GitHub Pages, domaine `pli.re`), **sans backend,
+doigt, le message se découvre. Statique (GitHub Pages, domaine `leo-bernard38.github.io`), **sans backend,
 sans compte, sans base de données**. Deux personnes, deux téléphones — pas un produit
 publiable.
 
 | Entrée | Pour qui | Contenu |
 |---|---|---|
-| `pli.re/` | elle | les plis reçus (A1→A4), le journal (C1→C5) |
-| `pli.re/atelier/` | moi | déposer, fabriquer le lien (D0→D4, E1) |
+| `leo-bernard38.github.io/` | elle | les plis reçus (A1→A4), le journal (C1→C5) |
+| `leo-bernard38.github.io/atelier/` | moi | déposer, fabriquer le lien (D0→D4, E1) |
 
 Quatre types de pli — `inv` invitation, `pen` pensée, `poe` poème, `sou` souvenir. Les trois
 courts voyagent **entièrement dans le fragment de l'URL** ; le poème est un fichier encodé du
@@ -68,7 +68,9 @@ Un lien parti n'a plus de version : il est dans une conversation, pour toujours.
    du payload — **jamais sur `n`**. La navigation privée dégrade proprement.
 7. **Aucun tiers, jamais.** Pas de CDN, pas de mesure d'audience, pas de framework, pas de
    polyfill. On cible iOS 26 et Android 16, deux appareils connus.
-8. **Le domaine ne change plus.** Il est dans chaque lien déjà envoyé.
+8. **L'adresse se gèle au premier pli envoyé.** Aujourd'hui `leo-bernard38.github.io`,
+   à la racine, sans domaine personnalisé ni `CNAME`. Tant qu'aucun lien n'est parti elle peut
+   encore devenir un vrai domaine ; après, elle est dans une conversation, pour toujours.
 
 ## Le rituel — comment une tâche se termine ici
 

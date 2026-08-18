@@ -162,7 +162,7 @@ Elle lit le front-matter et le corps, construit **le même objet JSON qu'un pli 
 met l'index à jour et imprime le lien fini :
 
 ```
-nº 015 → https://pli.re/#p=015-vhtq
+nº 015 → https://leo-bernard38.github.io/#p=015-vhtq
 ```
 
 Je ne nomme que le numéro. **Le jeton de quatre signes est ajouté par la moulinette** dans

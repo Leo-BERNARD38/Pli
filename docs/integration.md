@@ -80,7 +80,7 @@ Voici tout ce qui s'en déduit.
 | A4 | « écrire à ton tour ↑ » | « tes plis ↑ » — elle n'a pas d'atelier |
 | D3 | `pli.re/015-vhtq` affiché en clair | Le lien ne s'affiche pas : **envoyer** et **copier le lien** |
 | E1 | « lien valable 30 jours » | Supprimé — il n'y a plus d'expiration |
-| E1 | `pli.re/deposer` dans le chrome | `pli.re/atelier/` |
+| E1 | `pli.re/deposer` dans le chrome | `leo-bernard38.github.io/atelier/` |
 | C4 | « lien mort · expiré » | « lien abîmé » — le cas réel est le lien tronqué par la messagerie |
 
 ### Structure
