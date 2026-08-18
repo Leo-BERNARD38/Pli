@@ -40,6 +40,19 @@ test('ce qu’un client colle après le nom ne fabrique pas un fichier', () => {
   assert.deepEqual(lire('#p=015%2Dvhtq'), { ecran: 'inconnu' })
 })
 
+test('une entrée du journal se relit par son empreinte', () => {
+  assert.deepEqual(lire('#/relire/0123456789abcdef'), {
+    ecran: 'relire',
+    h: '0123456789abcdef',
+  })
+})
+
+test('une empreinte qui n’en est pas une ne désigne rien', () => {
+  for (const h of ['', '0123456789ABCDEF', '0123456789abcde', '0123456789abcdef0', '../c']) {
+    assert.deepEqual(lire(`#/relire/${h}`), { ecran: 'inconnu' }, h)
+  }
+})
+
 test('l’ajout à l’écran d’accueil a son adresse', () => {
   assert.deepEqual(lire('#/installer'), { ecran: 'installer' })
 })

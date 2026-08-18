@@ -317,3 +317,24 @@ si la mesure sur les deux téléphones le rend visible.
   copie du module partagé, le budget de 14 ko ne bouge pas, et la garde « une entrée = un
   fichier » — qui a déjà attrapé un bug au jalon 3 — reste debout. `npm run build` lance Vite
   deux fois, `--mode lecteur` puis `--mode atelier`.
+
+### Le journal
+
+- **18/08/2026 — une entrée du journal a une adresse, `#/relire/<h>`.** `docs/parcours.md`
+  dit « depuis une entrée, elle relit le pli entier », sans dire par où. Reprendre `#c=`
+  aurait retombé sur C3, le pli refermé : il fallait une seconde adresse. Elle porte
+  l'empreinte, seize signes hexadécimaux, et **ne quitte jamais l'appareil** — sans le
+  journal qui la porte, elle ne désigne rien. C'est ce qui l'autorise à vivre à côté de
+  `#c=` et `#p=`, qui, eux, sont dans une conversation pour toujours : l'invariant nº 1 ne
+  la couvre pas, et n'a pas besoin de la couvrir.
+- **18/08/2026 — le journal est le seul écran qui défile, et le défilement est enfermé dans
+  la liste.** « Un pli = un écran, jamais de défilement dans un pli » vaut pour un pli ; le
+  journal n'en est pas un, c'est un sommaire de revue (`docs/parcours.md#le-journal`). Le
+  cadre, la tête et les marges ne bougent pas : seule `.plis` défile, avec
+  `touch-action: pan-y` — le cadre coupe tout le toucher pour le geste du dépliage, et sans
+  cette ligne le sommaire ne se ferait pas défiler du doigt.
+- **18/08/2026 — le retour de WhatsApp par rechargement retombe sur C2, plus sur A4.**
+  Le jalon 3 avait posé A4 au retour, faute de C2. `docs/partage.md#le-retour` tranche :
+  « une `reponse` déjà notée mène à C2 ». Le pli relu porte son mot rappelé à la place de
+  « répondre » — on ne répond pas deux fois. `poserLeMot` disparaît de `reponse.ts` : A4
+  reste ce qu'elle est, l'écran qui suit le tap, dans la même page.

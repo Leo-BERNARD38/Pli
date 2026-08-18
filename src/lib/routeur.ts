@@ -6,6 +6,7 @@
 //   leo-bernard38.github.io/#/            ses plis
 //   leo-bernard38.github.io/#c=<payload>  un pli porté par le lien
 //   leo-bernard38.github.io/#p=<nom>      un poème, porté par un fichier
+//   leo-bernard38.github.io/#/relire/<h>  un pli de son journal, relu
 //   leo-bernard38.github.io/#/installer   l'ajout à l'écran d'accueil
 
 /** L'écran que le lien demande. */
@@ -13,6 +14,7 @@ export type Route =
   | { ecran: 'journal' }
   | { ecran: 'pli'; payload: string }
   | { ecran: 'poeme'; nom: string }
+  | { ecran: 'relire'; h: string }
   | { ecran: 'installer' }
   | { ecran: 'inconnu' }
 
@@ -22,6 +24,14 @@ export type Route =
  */
 const NOM_DE_POEME = /^[0-9]+-[a-z0-9]+$/
 
+/**
+ * L'empreinte d'une entrée du journal — seize signes hexadécimaux, ceux que `journal.ts`
+ * écrit. Cette adresse ne quitte jamais l'appareil : elle ne désigne rien sans le journal
+ * qui la porte, et c'est pour ça qu'elle peut exister à côté de `#c=` et `#p=`, qui, eux,
+ * sont dans une conversation pour toujours.
+ */
+const EMPREINTE = /^[0-9a-f]{16}$/
+
 /** Ce que dit le hash. Une fonction pure : elle ne touche ni la page ni le réseau. */
 export function lire(hash: string): Route {
   const chemin = hash.startsWith('#') ? hash.slice(1) : hash
@@ -29,6 +39,11 @@ export function lire(hash: string): Route {
   if (chemin === '' || chemin === '/') return { ecran: 'journal' }
   if (chemin === '/installer') return { ecran: 'installer' }
   if (chemin.startsWith('c=')) return { ecran: 'pli', payload: chemin.slice(2) }
+
+  if (chemin.startsWith('/relire/')) {
+    const h = chemin.slice('/relire/'.length)
+    return EMPREINTE.test(h) ? { ecran: 'relire', h } : { ecran: 'inconnu' }
+  }
 
   if (chemin.startsWith('p=')) {
     const nom = chemin.slice(2)

@@ -2,6 +2,10 @@
 //
 // Jalon 3 : A1 l'attente, A2 la découverte, C4 le lien abîmé, et le journal qui se remplit
 // au dépliage. A3 et A4 — la réponse et le mot — suivent dans le même jalon.
+//
+// Jalon 5 : le journal se lit. C1 le sommaire, C2 la relecture, C3 le pli refermé — et
+// l'arrivée décide d'après le journal, jamais d'après le seul lien
+// (docs/partage.md#le-retour).
 
 // Les jetons d'abord, le gabarit ensuite : l'ordre est celui de la cascade. Les deux
 // entrent dans le document au build, ils ne coûtent aucune requête
@@ -10,12 +14,13 @@ import '../styles/tokens.css'
 import '../styles/pli.css'
 
 import { decoder, type Pli } from '../lib/codec.ts'
-import { empreinte, noterLaReponse, noterLeDepliage, trouver } from '../lib/journal.ts'
+import { empreinte, entrees, noterLaReponse, noterLeDepliage, trouver } from '../lib/journal.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
 import { tenirDansLecran } from './plateau.ts'
 import { ecrire, oublierLaPeinture, ETIQUETTES } from './a1.ts'
 import { preparer } from './fond.ts'
 import { armer, type Geste } from './geste.ts'
+import { chemin, journal, rappeler, refermer } from './plis.ts'
 
 // Ordre imposé par docs/chargement.md : si le hash est un #p=, le fetch part en TOUTE
 // première instruction, avant qu'on décode quoi que ce soit. C'est la seule requête que le
@@ -38,6 +43,10 @@ const cadre = document.querySelector<HTMLElement>('.pli')
 // changer. On mesure le plateau — c'est lui qui porte les retraits de sécurité
 // (docs/appareils.md#les-réglages-de-page) — et on écrit sur le pli, son seul consommateur.
 export const echelle = cadre ? tenirDansLecran(document.body, cadre) : null
+
+// La marque « Pli » mène au journal, sur A1 comme sur C4. Elle est déjà dans le gabarit :
+// le chemin ne coûte que son `href` (docs/parcours.md#a2--la-découverte).
+if (cadre) chemin(cadre)
 const a1 = document.querySelector<HTMLElement>('#a1')
 const c4 = document.querySelector<HTMLElement>('#c4')
 const dessous = document.querySelector<HTMLElement>('.pli__dessous')
@@ -48,21 +57,13 @@ const dessous = document.querySelector<HTMLElement>('.pli__dessous')
  * gabarit porte la règle qui va avec (docs/parcours.md#larrivée).
  */
 function montrer(ecran: HTMLElement | null): void {
-  if (cadre) cadre.hidden = ecran === null
-  for (const autre of [a1, c4]) {
-    if (autre) autre.hidden = autre !== ecran
-  }
-}
-
-/**
- * Le pli visible, mais ni A1 ni C4 : A4 se pose par-dessus et couvre tout le cadre. C'est
- * le retour de WhatsApp par rechargement, et lui seul.
- */
-function montrerLeCadreSeul(): void {
   if (cadre) cadre.hidden = false
-  for (const autre of [a1, c4]) {
-    if (autre) autre.hidden = true
+  for (const couche of cadre?.querySelectorAll<HTMLElement>('.pli__dessus') ?? []) {
+    couche.hidden = couche !== ecran
   }
+  // La couche du dessous ne se montre que pour elle-même — la relecture, qui n'a pas de
+  // couche du dessus. Le geste, lui, la découvre en tirant : il ne passe pas par ici.
+  if (dessous && ecran) dessous.hidden = true
 }
 
 /**
@@ -197,6 +198,10 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
   await preparer(dessous, pli, ETIQUETTES[pli.t])
   if (mienne !== generation) return mienne
 
+  // La marque d'A2 mène au journal : pour une pensée et un souvenir, qui n'ont pas
+  // d'action, c'est le seul chemin qui reste (docs/parcours.md#a2--la-découverte).
+  chemin(dessous)
+
   geste ??= armer({
     cadre,
     dessus: a1,
@@ -234,44 +239,92 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
 }
 
 /**
- * Elle revient de WhatsApp par un rechargement : le hash `#c=` est toujours dans la barre,
- * et l'arrivée doit retomber sur A4, jamais sur A1 (docs/partage.md#le-retour). Par le
- * bfcache, rien de tout ceci ne joue — la page est restaurée telle quelle, et c'est très
- * bien : on ne dépend jamais d'un rechargement.
+ * C2 · la relecture — le pli entier, tel qu'il s'est déplié, et le mot rappelé s'il y en a
+ * un. Deux chemins y mènent, et c'est le même écran : une entrée du journal, et le retour
+ * de WhatsApp par rechargement, où le hash `#c=` est toujours dans la barre
+ * (docs/partage.md#le-retour). Par le bfcache, rien de ceci ne joue — la page est restaurée
+ * telle quelle, et c'est très bien : on ne dépend jamais d'un rechargement.
  */
-async function retomberSurLeMot(pli: Pli, payload: string, mot: string): Promise<void> {
+async function relireLePli(pli: Pli, mot: string | null): Promise<void> {
+  if (!dessous) return
+  const mienne = generation
+  retirerLesCouchesQuiMontent()
+  // La même vague 3 que le dépliage, et le même A2 au bout : un pli relu est le pli, pas
+  // un résumé. Il n'y a simplement plus de feuille à tirer par-dessus.
+  await preparer(dessous, pli, ETIQUETTES[pli.t])
+  if (mienne !== generation) return
+  rappeler(dessous, mot)
+  montrer(null)
+  // La couche du dessous vit d'habitude sous une feuille qu'on tire : le geste la pose 9 %
+  // plus bas et la sort du clavier tant qu'elle est cachée. Relue, elle est l'écran — elle
+  // reprend sa place et redevient atteignable (docs/fluidite.md#ce-qui-a-le-droit-de-bouger).
+  dessous.style.transform = 'none'
+  dessous.inert = false
+  dessous.hidden = false
+}
+
+/** C1 · le journal, reconstruit à chaque passage : elle en revient après avoir déplié. */
+async function montrerLeJournal(): Promise<void> {
   if (!cadre) return
   const mienne = generation
-  const { armerLaReponse } = await import('./reponse.ts')
-  if (mienne !== generation) return
-  // Rien à noter : le mot est déjà au journal, c'est même lui qui nous amène ici.
-  const reponse = armerLaReponse({ cadre, dessous: null, pli, noter: () => {} })
-  montrerLeCadreSeul()
-  reponse.poserLeMot(mot)
+  const ecran = await journal(cadre)
+  if (mienne === generation) montrer(ecran)
 }
 
 suivre((route) => {
-  // Le journal et l'ajout à l'écran d'accueil n'ont pas encore d'écran : C1 est le jalon 5,
-  // `#/installer` attend la mesure 4. La page reste nue plutôt que de montrer un pli qui
-  // n'existe pas — le module du journal, lui, existe et se remplit depuis ce jalon.
-  if (route.ecran === 'journal' || route.ecran === 'installer') {
-    rangerAuJournal()
-    montrer(null)
+  rangerAuJournal()
+  const mienne = ++generation
+
+  if (route.ecran === 'journal') {
+    void montrerLeJournal()
     return
   }
 
-  const mienne = ++generation
+  // `#/installer` n'a pas encore d'écran : sa forme dépend de la mesure 4, et elle ne se
+  // simule pas (docs/README.md#les-mesures-à-faire-avant-de-sengager). La page reste nue
+  // plutôt que de montrer un écran qu'aucune mesure n'a dessiné.
+  if (route.ecran === 'installer') {
+    montrer(null)
+    if (cadre) cadre.hidden = true
+    return
+  }
+
+  // Une entrée du journal qu'on relit. Elle ne quitte jamais l'appareil : sans le journal
+  // qui la porte, cette adresse ne désigne rien — et c'est un lien abîmé, comme un autre.
+  if (route.ecran === 'relire') {
+    const entree = entrees().find((e) => e.h === route.h)
+    if (!entree) {
+      montrer(c4)
+      return
+    }
+    decoder(entree.c).then(
+      (pli) => {
+        if (mienne === generation) void relireLePli(pli, entree.reponse?.mot ?? null)
+      },
+      () => {
+        if (mienne === generation) montrer(c4)
+      },
+    )
+    return
+  }
+
   pliDe(route).then(
     ({ pli, payload }) => {
       if (mienne !== generation) return
       retirerLesCouchesQuiMontent()
 
-      // L'arrivée décide l'écran d'après le journal, jamais d'après le seul lien. Ce jalon
-      // n'en tient qu'une moitié : le mot déjà noté ramène sur A4. C3 — le pli déjà déplié
-      // — et C2 sont le jalon 5, et ils passeront devant celui-ci le jour où ils existent.
-      const dejaRepondu = trouver(payload)?.reponse
-      if (dejaRepondu) {
-        void retomberSurLeMot(pli, payload, dejaRepondu.mot)
+      // L'arrivée décide l'écran d'après le journal, jamais d'après le seul lien : une
+      // réponse déjà notée mène à C2, un dépliage déjà noté à C3
+      // (docs/partage.md#le-retour).
+      const entree = trouver(payload)
+      if (entree?.reponse) {
+        void relireLePli(pli, entree.reponse.mot)
+        return
+      }
+      if (entree && cadre) {
+        void refermer(cadre, pli).then((ecran) => {
+          if (mienne === generation) montrer(ecran)
+        })
         return
       }
 
