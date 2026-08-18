@@ -1,4 +1,5 @@
-// L'atelier — D0 le seuil, D4 le tiroir, D1 le type, D2 les textes, D3 le lien.
+// L'atelier — D0 le seuil, D4 le tiroir, D1 le type, D2 les textes, D3 le lien,
+// D5 les plis déposés.
 //
 // Le pendant de src/lecteur/main.ts, de mon côté. Rien de ce qui s'écrit ici ne peut
 // atterrir dans le bundle qui part chez elle : les deux entrées sont buildées séparément
@@ -23,20 +24,22 @@ import '../styles/pen.css'
 import '../styles/sou.css'
 
 import type { Type } from '../lib/codec.ts'
-import { prochainNumero, seuilFranchi } from '../lib/tiroir.ts'
+import { prochainNumero, seuilFranchi, type Depose } from '../lib/tiroir.ts'
 
 import { poserLapercu } from './apercu.ts'
-import { deposerLePli, tenirLeLien, type Depot } from './lien.ts'
+import { tenirLesDeposes } from './deposes.ts'
+import { adresseDuPayload, deposerLePli, tenirLeLien, type Depot } from './lien.ts'
 import { laReponseEstPossible, tenirLeTiroir } from './reglages.ts'
 import { tenirLeSeuil } from './seuil.ts'
 import { fabriquer, tenirLesTextes } from './textes.ts'
 import { tenirLeType } from './type.ts'
 
-/** Les écrans de l'atelier, dans l'ordre où on les traverse. */
-type Ecran = 'd0' | 'd4' | 'd1' | 'd2' | 'd3'
+/** Les écrans de l'atelier, dans l'ordre où on les traverse. D5 est à part : on n'y passe
+ * pas, on y va — c'est une salle, pas une étape. */
+type Ecran = 'd0' | 'd4' | 'd1' | 'd2' | 'd3' | 'd5'
 
 const ecrans = new Map<Ecran, HTMLElement>()
-for (const nom of ['d0', 'd4', 'd1', 'd2', 'd3'] as const) {
+for (const nom of ['d0', 'd4', 'd1', 'd2', 'd3', 'd5'] as const) {
   const element = document.getElementById(nom)
   if (element) ecrans.set(nom, element)
 }
@@ -80,6 +83,41 @@ const textes = ecrans.get('d2')
 
 const lien = ecrans.get('d3') ? tenirLeLien(ecrans.get('d3') as HTMLElement) : null
 
+/**
+ * D3 sert deux fois : à la fin d'un dépôt, et au renvoi d'un pli déjà déposé. L'écran ne
+ * change pas — seule sa conduite dit d'où l'on vient, et où le retour ramène.
+ */
+function conduireLeLien(depuisD5: boolean): void {
+  const d3 = ecrans.get('d3')
+  const retour = d3?.querySelector<HTMLElement>('[data-lien="retour"]')
+  const pas = d3?.querySelector<HTMLElement>('[data-lien="pas"]')
+  if (retour) {
+    retour.dataset['va'] = depuisD5 ? 'd5' : 'd2'
+    retour.textContent = depuisD5 ? '← les plis déposés' : '← modifier'
+  }
+  if (pas) pas.textContent = depuisD5 ? 'déjà déposé' : '3 sur 3'
+}
+
+/**
+ * D5 · les plis déposés. Renvoyer n'est pas déposer : le lien se refabrique depuis le
+ * payload gardé, sans réencoder, sans noter un dépôt et sans avancer le compteur — c'est
+ * le pli qui est parti la première fois, à l'identique.
+ */
+const relireLesDeposes = ecrans.get('d5')
+  ? tenirLesDeposes(ecrans.get('d5') as HTMLElement, (quoi: Depose) => {
+      lien?.({ adresse: adresseDuPayload(quoi.c), payload: quoi.c }, quoi.n)
+      conduireLeLien(true)
+      montrer('d3')
+    })
+  : null
+
+/** Le chemin vers D5, sur D1 : il ne s'ouvre que s'il mène quelque part. */
+const passage = document.querySelector<HTMLElement>('.passage')
+async function poserLePassage(): Promise<void> {
+  const combien = (await relireLesDeposes?.()) ?? 0
+  if (passage) passage.hidden = combien === 0
+}
+
 const relireLesTypes = ecrans.get('d1')
   ? tenirLeType(ecrans.get('d1') as HTMLElement, (quel) => {
       type = quel
@@ -96,6 +134,7 @@ async function deposer(): Promise<void> {
   numero = prochainNumero()
   const depot: Depot = await deposerLePli(fabriquer(type, textes.lire(), numero))
   lien(depot, numero)
+  conduireLeLien(false)
   montrer('d3')
 }
 
@@ -107,8 +146,12 @@ document.addEventListener('click', (evenement) => {
   const va = bouton?.dataset['va'] as Ecran | undefined
   if (!va) return
 
-  if (va === 'd1') relireLesTypes?.()
+  if (va === 'd1') {
+    relireLesTypes?.()
+    void poserLePassage()
+  }
   if (va === 'd2') textes?.poser(type)
+  if (va === 'd5') void relireLesDeposes?.()
   if (va === 'd3') {
     void deposer()
     return
@@ -128,6 +171,7 @@ function apresLeSeuil(premier: boolean): void {
     return
   }
   relireLesTypes?.()
+  void poserLePassage()
   montrer('d1')
 }
 

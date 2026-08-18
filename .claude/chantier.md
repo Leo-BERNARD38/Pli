@@ -223,8 +223,15 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
 - [x] D3 · le lien — le lien ne s'affiche pas, deux actions à la place : envoyer (partage
       natif) et copier. Le dépôt est noté avant le partage
 - [x] mon historique des plis déposés — `pli.v1.deposes`, dédoublonné sur le payload, jamais
-      sur le numéro. L'**écran** qui le relit n'existe pas encore : la roadmap ne le
-      demandait pas, et rien ne le décrit dans `parcours.md`
+      sur le numéro
+- [x] D5 · les plis déposés — l'écran qui relit le tiroir. La roadmap le demandait bien
+      (« mon historique des plis déposés ») ; `parcours.md` ne le dessine pas et n'en dit
+      qu'une ligne, « relire et renvoyer ce que j'ai déposé ». Les deux trous ont été
+      comblés avec l'auteur, pas devinés : la ligne reprend la grammaire du sommaire de C1,
+      et l'accès est une ligne discrète sur D1, qui ne se montre que si elle mène quelque
+      part. **Renvoyer n'est pas déposer** : le lien se refabrique depuis le payload gardé,
+      sans réencoder, sans noter un dépôt et sans avancer le compteur — c'est le pli qui est
+      parti la première fois, à l'identique. D3 sert les deux fois, seule sa conduite change
 - [ ] **à la main, chez moi** : fabriquer l'empreinte du seuil avec `/seuil` et la recopier
       dans la constante `EMPREINTE` de `src/atelier/seuil.ts`. Tant qu'elle est vide, **rien
       ne passe la porte** — un seuil sans empreinte serait une porte ouverte, une empreinte
