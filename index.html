@@ -4,6 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#E9E2D2" />
+
+    <!-- La seule requête que le réseau nous impose, lancée ici et nulle part ailleurs.
+         Le module la lancerait en première instruction, mais une feuille de style
+         bloquante gèle l'exécution d'un module : le poème attendrait un aller-retour de
+         plus, sur le seul écran d'attente du produit (docs/chargement.md#le-poème-le-seul-cas-qui-dépend-du-réseau).
+         Cinq lignes, inline, avant tout le reste. Le jour où le CSS sera inline lui aussi,
+         au jalon 2, elles n'auront plus de raison d'être.
+         Le motif est celui du routeur, qui revalide derrière : se tromper ici ne coûte
+         qu'une demande abandonnée, jamais un mauvais fichier. -->
+    <script>
+      var nom = /^#p=([0-9]+-[a-z0-9]+)$/.exec(location.hash)
+      if (nom) {
+        window.poemeDemande = { nom: nom[1], reponse: fetch('/plis/' + nom[1] + '.txt') }
+        window.poemeDemande.reponse.catch(function () {})
+      }
+    </script>
     <meta name="color-scheme" content="light" />
     <title>Pli</title>
 
@@ -31,20 +47,41 @@
     <meta name="robots" content="noindex, nofollow" />
   </head>
   <body>
-    <!-- Jalon 0 : un pli en dur, sans style. Le lien en remplace le contenu ; le papier,
-         le volet et le geste arrivent aux jalons 1 et 2. -->
+    <!-- Les deux flèches du produit, écrites par scripts/fleches.py.
+         L'unique exception au « pas de SVG », nommée et fermée
+         (docs/design-system.md#ton-et-vocabulaire). On ne les retouche pas : on regénère.
+         width et height à zéro sur le conteneur : un <svg> sans dimension occupe 300 × 150
+         avant toute feuille de style, et display:none casserait le <use> sur WebKit. -->
+    <svg class="fleches" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+      <symbol id="fleche-haut" viewBox="0 0 1000 1000"><path d="M500.0 125.0L839.8 440.2L578.0 340.4L578.0 865.0L693.0 865.0L693.0 875.0L307.0 875.0L307.0 865.0L422.0 865.0L422.0 340.4L160.2 440.2Z"/></symbol>
+      <symbol id="fleche-droite" viewBox="0 0 1000 1000"><path d="M875.0 500.0L559.8 839.8L659.6 578.0L135.0 578.0L135.0 693.0L125.0 693.0L125.0 307.0L135.0 307.0L135.0 422.0L659.6 422.0L559.8 160.2Z"/></symbol>
+    </defs></svg>
+
+    <!-- Le pli en dur, posé sur le gabarit : tête, corps, volet, et le cachet à cheval
+         sur la pliure (docs/design-system.md#le-gabarit). Un lien en remplace le
+         contenu ; c'est un échafaudage, pas un écran — A1 et sa promesse, A2 et sa
+         composition par type, le trait d'action, l'invite du volet et le geste arrivent
+         au jalon 2. Le volet reste vide : ce qui s'y écrit n'a de sens qu'avec le geste. -->
     <main class="pli" data-type="inv">
-      <p class="marque">Pli</p>
-      <p class="cachet">nº 014</p>
-      <h1 class="titre">Tu es invitée</h1>
-      <div class="voix"><p>Mets la robe verte, celle du printemps.</p></div>
-      <ul class="faits">
-        <li>samedi 22 août · 20h00</li>
-        <li>Le Petit Comptoir</li>
-      </ul>
-      <p class="griffe">rien qu'à toi</p>
-      <p class="etiquette etiquette--fine">déposé par a.</p>
+      <header class="tete">
+        <p class="marque">Pli</p>
+      </header>
+
+      <div class="corps">
+        <h1 class="titre">Tu es invitée</h1>
+        <div class="voix"><p>Mets la robe verte, celle du printemps.</p></div>
+        <ul class="faits">
+          <li>samedi 22 août · 20h00</li>
+          <li>Le Petit Comptoir</li>
+        </ul>
+        <p class="griffe">rien qu'à toi</p>
+        <p class="etiquette etiquette--fine">déposé par a.</p>
+      </div>
+
+      <p class="cachet">014</p>
+      <div class="volet"></div>
     </main>
+
     <script type="module" src="/src/lecteur/main.ts"></script>
   </body>
 </html>

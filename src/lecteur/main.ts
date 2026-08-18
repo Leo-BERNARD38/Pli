@@ -3,17 +3,24 @@
 // Jalon 0 : le pli en dur de la page cède la place au pli du lien, sans style. A1, le
 // geste, les papiers et les états C viennent aux jalons 1 et 2.
 
+// Les jetons d'abord, le gabarit ensuite : l'ordre est celui de la cascade.
+import '../styles/tokens.css'
+import '../styles/pli.css'
+
 import { decoder, type Pli } from '../lib/codec.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
 
-// Ordre imposé par docs/chargement.md : si le hash est un #p=, le fetch part en toute
-// première instruction, avant de décoder quoi que ce soit. C'est la seule requête que
-// le réseau nous impose.
+// Ordre imposé par docs/chargement.md : si le hash est un #p=, le fetch part avant qu'on
+// décode quoi que ce soit. C'est la seule requête que le réseau nous impose — et elle est
+// déjà partie, lancée par les cinq lignes inline du <head> : une feuille de style
+// bloquante gèle l'exécution d'un module, et attendre ici coûterait un aller-retour.
+// On la reprend si elle est là, on la lance sinon.
 const premiere = lire(window.location.hash)
 let dejaDemande =
-  premiere.ecran === 'poeme'
+  window.poemeDemande ??
+  (premiere.ecran === 'poeme'
     ? { nom: premiere.nom, reponse: fetch(`/plis/${premiere.nom}.txt`) }
-    : null
+    : null)
 
 const pliDeLaPage = document.querySelector<HTMLElement>('.pli')
 
@@ -32,7 +39,9 @@ function ecrire(pli: Pli): void {
     pliDeLaPage.hidden = false
   }
 
-  poser('.cachet', `nº ${String(pli.n).padStart(3, '0')}`)
+  // Le cachet porte le numéro seul : « nº 014 » ne tient pas dans une pastille de 38px
+  // composée à 10px. C'est ce que montre la maquette, et le « nº » reste dans la prose.
+  poser('.cachet', String(pli.n).padStart(3, '0'))
   poser('.titre', pli.ti)
   poser('.griffe', pli.g ?? '')
   poser('.etiquette--fine', `déposé par ${pli.s}`)
@@ -61,6 +70,19 @@ function ecrire(pli: Pli): void {
     )
     faits.hidden = !pli.f?.length
   }
+}
+
+/**
+ * Le repère du budget de chargement, posé une fois, quand le premier texte est à
+ * l'écran — que le lien l'ait remplacé ou non. Safari ne donne pas de LCP, et le premier
+ * rendu peint le plateau avant le texte : sans cette marque, la colonne « Mesuré le » de
+ * docs/chargement.md#le-budget-écran-par-écran reste vide pour toujours.
+ */
+let marquee = false
+function marquer(): void {
+  if (marquee) return
+  marquee = true
+  performance.mark('a1')
 }
 
 /**
@@ -118,6 +140,7 @@ suivre((route) => {
       if (mienne !== generation) return
       if (pli) ecrire(pli)
       else montrer()
+      marquer()
     },
     () => {
       if (mienne === generation) laisserNue()

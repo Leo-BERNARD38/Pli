@@ -124,7 +124,7 @@ décodées vivantes au maximum** : une image de 4,2 Mpx occupe 17 Mo de mémoire
 décodée ([ressources.md](ressources.md#ce-quune-grande-image-coûte)).
 
 Une requête ne vient pas de nous : **le navigateur va chercher l'icône de l'onglet** tout
-seul. Elle est déclarée en SVG (0,3 ko) et l'`.ico` ne sert que de repli — c'est la seule
+seul. Elle est déclarée en SVG (2,1 ko) et l'`.ico` ne sert que de repli — c'est la seule
 raison pour laquelle ces fichiers restent minuscules. En app installée, la question ne se
 pose pas : il n'y a pas d'onglet.
 
@@ -141,18 +141,24 @@ s'il dure ([parcours.md](parcours.md#larrivée)).
 
 ## Le budget, écran par écran
 
-| Poste | Cible | Mesuré le |
-|---|---|---|
-| document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 ko** | — |
-| les trois polices d'A1 | **≤ 90 ko** | — |
-| une texture | définition native, **600 ko à 1,15 Mo** | mesuré |
-| requêtes avant le texte d'A1 | **1** | — |
-| requêtes avant A1 complet (rideau compris) | **≤ 5** | — |
-| texte d'A1 peint, 4G, cache vide | **< 1 s** | — |
-| A2 après le geste | **0 requête** | — |
+| Poste | Cible | Mesuré | Le |
+|---|---|---|---|
+| document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 ko** | **5,8 ko** — 1,7 de document, 2,7 de CSS, 1,4 de module | 18/08/2026, en local |
+| les trois polices d'A1 | **≤ 90 ko** | **52,6 ko** — Pinyon 24,6 · Newsreader 20,8 · Space Mono 7,2 | 18/08/2026, en local |
+| une texture | définition native, **600 ko à 1,15 Mo** | 600 ko à 1,15 Mo | 17/08/2026 |
+| requêtes avant le texte d'A1 | **1** | **2** — le document et la feuille de style | 18/08/2026, en local |
+| requêtes avant A1 complet (rideau compris) | **≤ 5** | **6** sans le rideau — document, CSS, module, trois polices | 18/08/2026, en local |
+| texte d'A1 peint, 4G, cache vide | **< 1 s** | — | à mesurer sur les deux téléphones |
+| A2 après le geste | **0 requête** | — | A2 arrive au jalon 2 |
 
-La colonne de droite se remplit au jalon 1, sur son téléphone. Un budget sans date de mesure
-est une intention, pas un budget.
+Les trois premières lignes sont tenues, et largement. Les deux lignes de requêtes ne le sont
+pas encore, et pour une seule raison : **le CSS et le module ne sont pas inline**. Vite émet
+deux fichiers empreintés, dont l'un est bloquant. C'est une étape nommée du jalon 2, et c'est
+elle qui ramènera 2 à 1 et 6 à 5 — le rideau prenant alors la place libérée.
+
+La colonne de droite ne se remplit que de ce qui a vraiment été mesuré. Un budget sans date
+de mesure est une intention, pas un budget — et **les deux dernières lignes ne se mesurent
+que sur les deux téléphones**, avec le `performance.mark('a1')` posé dans le lecteur.
 
 ## Comment on mesure
 

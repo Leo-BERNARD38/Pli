@@ -1,0 +1,9 @@
+<!-- Les deux flèches du produit, écrites par scripts/fleches.py.
+     L'unique exception au « pas de SVG », nommée et fermée
+     (docs/design-system.md#ton-et-vocabulaire). On ne les retouche pas : on regénère.
+     width et height à zéro sur le conteneur : un <svg> sans dimension occupe 300 × 150
+     avant toute feuille de style, et display:none casserait le <use> sur WebKit. -->
+<svg class="fleches" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+  <symbol id="fleche-haut" viewBox="0 0 1000 1000"><path d="M500.0 125.0L839.8 440.2L578.0 340.4L578.0 865.0L693.0 865.0L693.0 875.0L307.0 875.0L307.0 865.0L422.0 865.0L422.0 340.4L160.2 440.2Z"/></symbol>
+  <symbol id="fleche-droite" viewBox="0 0 1000 1000"><path d="M875.0 500.0L559.8 839.8L659.6 578.0L135.0 578.0L135.0 693.0L125.0 693.0L125.0 307.0L135.0 307.0L135.0 422.0L659.6 422.0L559.8 160.2Z"/></symbol>
+</defs></svg>

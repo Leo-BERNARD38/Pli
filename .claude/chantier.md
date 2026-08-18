@@ -8,9 +8,13 @@ Une étape n'est cochée que lorsqu'elle est **écrite, relue et commitée**.
 
 ## Jalon courant
 
-**Jalon 0 — socle.** Écrit, relu, commité. Il reste deux gestes qui ne se font qu'à la main,
-et personne ne peut les faire à ma place : régler GitHub Pages et le domaine, puis ouvrir un
-lien sur son téléphone.
+**Jalon 1 — mesures et fondations.** Les fondations sont écrites, relues et commitées : les
+polices, les deux flèches, le gabarit, les cinq peintures, le préchargement. **Les mesures,
+elles, ne sont pas faites** — et elles sont la moitié du jalon. Aucune ne se simule : elles
+se font sur les deux téléphones.
+
+Le jalon 0 reste ouvert lui aussi sur ses deux gestes manuels : régler GitHub Pages et le
+domaine, puis ouvrir un lien sur son téléphone.
 
 ## Ce qui existe
 
@@ -22,6 +26,10 @@ lien sur son téléphone.
 - [x] le socle npm — `package.json`, `tsconfig.json`, `tsconfig.isomorphe.json`, `vite.config.ts`
 - [x] `src/lib/` — `codec.ts`, `dates.ts`, `routeur.ts`, avec leurs tests
 - [x] les deux entrées — `index.html`, `atelier/index.html`
+- [x] `polices-source/` et `src/fonts/` — les quatre familles, sources et sous-ensembles
+- [x] `src/styles/` — `tokens.css` et `pli.css`
+- [x] `src/textures/` — les cinq peintures, en définition native
+- [x] `src/fleches.html` — les deux tracés
 
 ## Jalon 0 — socle
 
@@ -39,14 +47,59 @@ lien sur son téléphone.
 
 **Fin du jalon :** un lien fabriqué à la main s'ouvre sur son téléphone.
 
-Ce qui est vérifié pour de bon : 34 tests passent, `npm run types` compile deux fois (dont
-`src/lib/` sans la bibliothèque DOM), et dans Chromium un lien `#c=` **encodé sous Node** se
-décode et remplace le pli en dur — l'isomorphisme du codec n'est pas qu'une intention. Un
-lien abîmé et un poème introuvable laissent la page nue — **masquée, pas vidée** : le lien
-suivant s'écrit dans le même balisage, sans rechargement. Et seule la dernière route écrit :
-un poème lent qui répond en retard n'efface pas le pli arrivé après lui.
-Poids du premier écran, cache vide : **1,12 ko gzip** de document et **1,21 ko gzip** de
-module, loin des 14 ko — mais ce sont deux requêtes, pas une (voir la décision 5).
+## Jalon 1 — mesures et fondations
+
+- [x] les quatre polices, sources et OFL dans `polices-source/`, sous-ensembles dans
+      `src/fonts/`, regénérés par `scripts/polices.py`
+- [x] les deux flèches tracées — `scripts/fleches.py`, `src/fleches.html`
+- [x] `tokens.css` et `pli.css` repris de `design/`, avec les quatre corrections
+      d'[integration.md](../docs/integration.md#corrections-à-appliquer)
+- [x] les cinq peintures en définition native dans `src/textures/`
+- [x] le pli en dur posé sur le gabarit — tête, corps, volet, cachet
+- [x] le préchargement des trois polices d'A1, par un greffon Vite maison
+- [x] les balises `og:` en place — déjà posées au jalon 0, vérifiées sur la sortie de build
+- [x] le budget de chargement rempli **de ce qui se mesure en local**
+      ([chargement.md](../docs/chargement.md#le-budget-écran-par-écran))
+- [ ] **à la main, sur les deux téléphones** : les mesures 1, 2 et 3 (voir plus bas)
+- [ ] **à la main** : l'aperçu du lien vérifié en s'envoyant le lien dans une vraie
+      conversation WhatsApp ([partage.md](../docs/partage.md#vérifier-un-aperçu))
+- [ ] **à la main** : le texte d'A1 peint en moins d'une seconde en 4G, cache vide, sur les
+      deux téléphones — le `performance.mark('a1')` est posé et attend
+
+La roadmap ne donne pas de phrase de fin au jalon 1, et on n'en invente pas. Le jalon est
+fini quand cette liste est cochée : les fondations seules ne ferment pas un jalon dont la
+moitié s'appelle « mesures ».
+
+### Les trois refus de relecteurs, et ce qu'ils ont trouvé
+
+Aucun n'est resté debout, et deux valaient le détour :
+
+- **`.pli[hidden]` ne masquait rien.** `display: flex` est une déclaration d'auteur : elle
+  bat le `[hidden]` de la feuille du navigateur. Un lien abîmé affichait donc **un pli qui
+  n'était pas le sien** — l'inverse exact de ce que le jalon 0 croyait avoir vérifié, parce
+  qu'il avait regardé l'attribut et non le rendu.
+- **Le `fetch` d'un poème ne partait plus en première instruction.** Le module respectait la
+  lettre, mais une feuille de style bloquante gèle l'exécution d'un module : mesuré avec 60 ms
+  de latence, la demande partait à 153 ms au lieu de 90. Un aller-retour complet ajouté sur
+  le seul écran d'attente du produit. Réparé par cinq lignes inline dans le `<head>`, avant
+  la feuille — elles disparaîtront quand le CSS sera inline, au jalon 2.
+- **Le texte du pli n'était pas sélectionnable.** `user-select: none` du cadre cascadait
+  jusqu'à la voix. Il reste sur le cadre, pour le geste ; `.corps` le rend au texte.
+
+### Ce qui est vérifié pour de bon
+
+Les 34 tests passent, `npm run types` compile deux fois, et dans Chromium en 390 × 844 à 3× :
+le gabarit tient, les quatre polices se posent, un `#c=` **encodé sous Node** remplit le même
+balisage sans rechargement, un lien abîmé laisse la page nue sans la vider, le tiret cadratin
+et les accents français rendent, et `performance.mark('a1')` se pose une fois.
+
+Poids réels, après build : **5,8 ko gzip** pour le premier écran (1,7 de document, 2,7 de
+CSS, 1,4 de module) et **52,6 ko** pour les trois polices d'A1 — les deux largement sous
+leurs cibles de 14 et 90 ko. Les cinq woff2 sont reproductibles **au bit près**.
+
+En revanche : **2 requêtes avant le premier texte au lieu d'une**, et **6 avant A1 complet au
+lieu de 5** — parce que le CSS et le module ne sont pas encore inline. C'est l'étape nommée
+du jalon 2 qui ramènera 2 à 1 et 6 à 5.
 
 ## Les mesures — aucune ne se devine
 
@@ -60,13 +113,16 @@ Tant qu'une case est vide, ce qu'elle conditionne ne se tranche pas.
 - [ ] **4 · le journal de l'app installée** est-il celui de Safari → décide de l'existence de
       l'écran `#/installer`
 
-Aucune des quatre ne bloquait le jalon 0.
+Les trois premières appartiennent au jalon 1 et **le tiennent ouvert**. Aucune ne bloquait ce
+qui a été construit : les fondations ne dépendent d'aucune des quatre.
 
 ## Décisions prises en construisant
 
 Ce que les docs ne tranchaient pas et qui a été tranché en chemin. Une ligne par décision,
 avec sa date. Si elle contredit une doc, la doc se corrige et l'écart se note dans
 [docs/integration.md](../docs/integration.md).
+
+### Jalon 0
 
 - **18/08/2026 — le lanceur de tests est `node --test`, sans dépendance.** Node 22.18+ lit
   les `.ts` sans compilation. La version est épinglée dans `engines` et dans les deux
@@ -85,10 +141,11 @@ avec sa date. Si elle contredit une doc, la doc se corrige et l'écart se note d
   normative (A4) : aucune phrase nouvelle n'a été inventée pour une page d'égarement.
 - **18/08/2026 — le module d'ouverture n'est pas encore inline.**
   [docs/chargement.md](../docs/chargement.md) veut A1 en une requête, document et module
-  compris ; au jalon 0 l'entrée reste un `<script type="module">` empreinté. **L'inlining du
-  CSS et du module devient une étape nommée du jalon 2**, par un plugin Vite écrit à la main
-  — pas de dépendance. Tant qu'il n'existe pas, une page périmée de dix minutes ne se suffit
-  pas à elle-même ([docs/mises-a-jour.md](../docs/mises-a-jour.md#1-une-page-périmée-doit-rester-lisible)).
+  compris ; l'entrée reste un `<script type="module">` empreinté, et depuis le jalon 1 une
+  feuille de style empreintée l'accompagne. **L'inlining du CSS et du module est une étape
+  nommée du jalon 2**, par un greffon Vite écrit à la main — pas de dépendance. Tant qu'il
+  n'existe pas, une page périmée de dix minutes ne se suffit pas à elle-même
+  ([docs/mises-a-jour.md](../docs/mises-a-jour.md#1-une-page-périmée-doit-rester-lisible)).
 - **18/08/2026 — `tsconfig.isomorphe.json` fait vérifier l'isomorphisme par la machine.**
   `codec.ts` et `dates.ts` compilent sans la bibliothèque DOM : un `document.` y est refusé.
   La limite connue : les types de Node laissent passer `Buffer` et `node:fs`, qui n'existent
@@ -97,34 +154,110 @@ avec sa date. Si elle contredit une doc, la doc se corrige et l'écart se note d
   fois. Le `fetch` d'un poème part toujours en première instruction ; les changements de hash
   qui suivent réutilisent le routeur, sans rechargement.
 
+### Jalon 1
+
+- **18/08/2026 — les peintures se servent en définition native.** Décision prise avec toi :
+  1536 × 2752, 1296 × 2304 pour le drapé, copiées telles quelles. Régénérer ≥ 1800 aurait
+  demandé un nouveau tirage de chaque toile, qui ne serait pas identique — et au-delà de
+  1080 de large, rien n'est visible de plus sur son téléphone
+  ([ressources.md](../docs/ressources.md#la-règle-de-définition)).
+- **18/08/2026 — la plage de caractères des sous-ensembles vaut pour les quatre familles.**
+  `ressources.md` ne donnait la plage exacte que pour Newsreader. Bodoni porte aussi le titre
+  en cours de frappe dans l'atelier, du texte libre en casse normale : le réduire à
+  « capitales, chiffres, ponctuation » casserait un titre accentué en minuscules.
+- **18/08/2026 — `U+2013-2014` entre dans la plage.** L'exemple de `ressources.md` oubliait
+  le tiret cadratin, que `chargement.md` nomme pourtant dans la ponctuation française à
+  garder. L'exemple a été corrigé. Au passage : `U+202F`, l'espace fine insécable, n'existe
+  que dans Pinyon Script — les trois autres familles la laissent à la police de secours.
+  C'est une espace, rien ne se voit.
+- **18/08/2026 — le bytecode TrueType ne part pas dans les woff2.** Ni CoreText sur iOS ni
+  FreeType tel que Chrome l'emploie sur Android ne l'exécutent à ces corps, et il pesait un
+  tiers du fichier sur Pinyon. Deux appareils connus, pas le web.
+- **18/08/2026 — Newsreader est figé à `opsz` 18**, la valeur par défaut de la police
+  elle-même. La voix est composée entre 23 et 31px, juste au-dessus. Bodoni est la seule
+  famille qui garde un axe.
+- **18/08/2026 — les deux flèches sont dessinées, pas tracées depuis Bodoni.** Décision prise
+  avec toi. **Bodoni Moda n'a ni `U+2191` ni `U+2192`** — ni la source, ni les sous-ensembles
+  `math` et `symbols` servis par Google : le `↑` des maquettes venait de la police de secours
+  du système, et il n'y avait aucun dessin d'origine à reprendre. Les épaisseurs sont
+  mesurées sur Bodoni à la coupe où la flèche vit (graisse 700, `opsz` 22 → contraste
+  15,6 : 1), les proportions sur le `↑` de Space Mono Bold. Les flancs restent droits : une
+  concavité aurait demandé un chiffre que personne n'a mesuré.
+  **À confirmer** : un didone porte son contraste sur l'axe vertical, donc le `→` obtenu par
+  rotation a une hampe horizontale pleine — l'inverse de la logique du didone. Le dessin est
+  cohérent avec lui-même, et la doc le dit ; si ça déplaît, c'est un mot à dire.
+- **18/08/2026 — la classe `.champ` devient `.ligne`.** « champ » est sur la liste fermée du
+  lexique, que `CLAUDE.md` désigne comme normative, alors qu'`integration.md` recopiait la
+  classe telle quelle du design. Le lexique gagne ; `.champ__nom` et `.champ--titre` suivent,
+  les docs sont corrigées, et rien n'appelait encore la classe. Au passage `@keyframes nudge`
+  devient `invite`, le mot que la doc emploie déjà.
+- **18/08/2026 — le plateau, c'est le corps de la page.** La classe `.plateau` de la
+  section 7 ne servait qu'aux planches de documentation, mais les réglages, eux, sont réels :
+  `100dvh`, `env(safe-area-inset-*)`, `-webkit-text-size-adjust`, `overscroll-behavior`
+  ([appareils.md](../docs/appareils.md#les-réglages-de-page)). **Le pli y est centré** — les
+  docs disent « on ne l'élargit pas, on l'entoure » et rien de plus ; ce qui se passe quand
+  la fenêtre fait moins de 780px de haut se tranche avec A1, au jalon 2.
+- **18/08/2026 — le filet de focus s'écrit en fin de feuille.** À spécificité égale c'est
+  l'ordre qui tranche, et tous les `all: unset` sont au-dessus : écrit avant, il n'existait
+  pas. Il passe au rose sur encre et au crème sur carmin, sinon il serait invisible là où il
+  compte.
+- **18/08/2026 — le cachet porte le numéro seul**, « 014 » et non « nº 014 » : six signes ne
+  tiennent pas dans une pastille de 38px composée à 10px. `donnees.md` écrivait « nº 014 » et
+  a été corrigé ; « nº 014 » reste la forme de la prose.
+- **18/08/2026 — `--pliure-part` et `--corps-pied` entrent dans les jetons.** Un padding en
+  pourcentage se compte sur la **largeur**, jamais sur la hauteur : le corps qui doit
+  s'arrêter au-dessus du volet ne peut pas réutiliser `--pliure` tel quel. Plutôt que de
+  recopier `0.34` et `30px` dans un `calc`, les deux nombres deviennent des jetons — ils ne
+  vivent qu'à un endroit. C'est un écart au « bloc `:root` repris tel quel », noté dans
+  [integration.md](../docs/integration.md#corrections-à-appliquer).
+- **18/08/2026 — le `fetch` d'un poème part du `<head>`, pas du module.** Cinq lignes inline
+  avant la feuille de style, parce qu'une feuille bloquante gèle l'exécution d'un module. Le
+  motif est celui du routeur, qui revalide derrière : se tromper ne coûte qu'une demande
+  abandonnée, jamais un mauvais fichier. **Ces lignes disparaissent au jalon 2**, quand le CSS
+  sera inline.
+- **18/08/2026 — le volet du pli en dur reste vide.** Ce qui s'y écrit — l'invite, « déplier »
+  et sa flèche — n'a de sens qu'avec le geste. Le placer maintenant aurait demandé d'inventer
+  la composition d'A1.
+
 ## Ce que les relecteurs demandent pour la suite
 
-Rien de tout cela n'est un refus au jalon 0 ; tout est à prendre au jalon suivant, et c'est
-écrit ici pour ne pas le redécouvrir.
+**Au jalon 2, pour le gabarit** — deux choses ne peuvent pas rester silencieuses, elles sont
+écrites dans [integration.md](../docs/integration.md#ce-qui-reste-à-trancher-avec-a1) : le
+**débordement par le haut** (au maximum autorisé, le contenu passe sur la marque et se fait
+couper sans un mot), et **un pli de 780px sur un écran visible plus court** — mesuré à
+390 × 664, la page défile et le bas du volet sort du champ, ce qui contredit « un pli = un
+écran ». La seconde est une question à poser, pas à résoudre.
 
-**Au jalon 1, en reprenant `pli.css`** — le pli est un conteneur plat : ni `.tete`, ni
-`.corps`, ni `.volet` (`design/handoff/pli.css` §4-5). C'est `.corps` qui porte l'alignement
-en bas ; sans lui, l'arrivée du gabarit est une réécriture du balisage. Le cachet est le
-premier nœud du document alors qu'il se pose en bas, à cheval sur la pliure : l'ordre de
-lecture au clavier et l'ordre visuel divergeront. Le `<ul class="faits">` porte un retrait
-par défaut, qui est un second retrait horizontal — à neutraliser. Et le `↑` du 404 reste un
-caractère : les deux flèches se tracent au jalon 1.
+**Au jalon 2, pour le geste** — `.pli` est la **couche du dessous** : le geste demande deux
+couches, une par `translate3d`. Le `<button>` « déplier » du clavier a maintenant un endroit
+où vivre — le volet — mais il n'y est pas encore, faute de geste à déclencher.
 
-**Au jalon 2, pour le geste** — décider dès le découpage que `.pli` est la **couche du
-dessous** : le geste demande deux couches, une par `translate3d`, et le `<button>` « déplier »
-du clavier n'a aujourd'hui aucun endroit où vivre.
+**Au jalon 2, pour le chargement** — l'inlining du CSS et du module, par un greffon Vite écrit
+à la main. Et le jour où l'atelier importera `codec.ts`, Rollup sortira un chunk commun et
+Vite posera un `modulepreload` dans le document **du lecteur** : une requête de plus avant le
+premier texte. Soit `manualChunks` garde une entrée = un fichier, soit le greffon d'inlining
+inline **le graphe entier**, pas seulement le fichier d'entrée.
 
-**Au jalon 1, pour mesurer** — poser un `performance.mark('a1')` juste après l'écriture du
-texte d'A1 : Safari ne donne pas de LCP, et la colonne « Mesuré le » de
-[docs/chargement.md](../docs/chargement.md#le-budget-écran-par-écran) reste vide sans lui.
+**Au jalon 2, pour l'invite et le mouvement** — l'invite du volet doit se **mettre en pause**
+au toucher, pas redémarrer ([fluidite.md](../docs/fluidite.md)) : une animation infinie
+composée promeut le volet en couche permanente, et si elle tourne pendant le geste
+l'inspecteur montrera **trois** couches bordées au lieu de deux. Et sous
+`prefers-reduced-motion`, l'ouverture tombe à **120 ms** — le bloc `@media` existe, la
+transition à régler n'existe pas encore.
 
-**Au jalon 2, dans `vite.config.ts`** — le jour où l'atelier importera `codec.ts`, Rollup
-sortira un chunk commun et Vite posera un `modulepreload` dans le document **du lecteur** :
-une requête de plus avant le premier texte. Soit `manualChunks` garde une entrée = un fichier,
-soit le plugin d'inlining inline **le graphe entier**, pas seulement le fichier d'entrée.
+**Au jalon 2, pour la marque `a1`** — elle date aujourd'hui l'échafaudage déplié ; elle devra
+suivre le texte d'A1. Un lien abîmé ne marque rien : à trancher avec C4. Et pour un `#p=`,
+la marque inclut l'aller-retour réseau — **noter le type de lien à côté du chiffre**, sinon
+la ligne du budget ne veut rien dire.
 
-**Un écart de doc à réconcilier** : `chargement.md` annonce le favicon SVG à 0,3 ko,
-`installation.md` et `ressources.md` à 2,1 ko. Le fichier livré fait 2 180 octets.
+**Au jalon 2, pour A1 et A2** — trois choses restent en l'air, notées dans
+[integration.md](../docs/integration.md#ce-qui-reste-à-trancher-avec-a1) : le fond d'A1
+(`parcours.md` dit le rideau, la maquette montre un papier crème), l'empilement de
+`.image--pleine` avec le texte, et la composition des faits.
+
+**Au jalon 5, pour l'atelier** — `index.html` embarque `#fleche-droite` sans s'en servir : le
+seul `→` du produit est dans l'atelier. Le fragment reste monolithique pour n'avoir qu'une
+chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip gênent.
 
 ## Ce qui reste ouvert
 

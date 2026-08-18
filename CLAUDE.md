@@ -32,8 +32,8 @@ jalon 1 et le jalon 2 de [docs/roadmap.md](docs/roadmap.md).
 Ce qui existe et sert : `docs/` (la spécification, elle fait foi), `design/` (l'archive figée
 du design, **dont les cinq peintures** dans `design/handoff/assets/`), `public/icones/`
 (livré, à servir tel quel), `public/CNAME` · `.nojekyll` · `404.html`, `scripts/icones.py`.
-**Les polices ne sont pas dans le dépôt** :
-les faire entrer, sources et sous-ensembles, fait partie du jalon 1
+Les polices sont entrées au jalon 1 : les sources et leurs OFL dans `polices-source/`, les
+woff2 sous-ensemblés dans `src/fonts/`, regénérés par `scripts/polices.py`
 ([docs/ressources.md](docs/ressources.md#les-polices)).
 
 L'état vivant de la construction est dans [`.claude/chantier.md`](.claude/chantier.md).
@@ -57,6 +57,14 @@ npm test           # codec.ts, dates.ts, le routeur — rien d'autre
 Et ce qui tourne à côté :
 
 ```sh
+# les quatre polices — regénère src/fonts/ en entier depuis polices-source/
+# dépendances : fonttools, brotli
+python3 scripts/polices.py
+
+# les deux flèches — regénère src/fleches.html, et dit quel document est en retard
+# dépendances : freetype-py, numpy
+python3 scripts/fleches.py
+
 # la planche des icônes — regénère public/icones/ en entier
 # dépendances : freetype-py, pillow, numpy, fonttools + les deux Google Fonts
 python3 scripts/icones.py --pinyon PinyonScript-Regular.ttf \

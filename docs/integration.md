@@ -46,7 +46,8 @@ Deux choses à retirer au passage :
 Elles sont normatives mais vivent dans les `<style>` de `lecteur.html` :
 
 - **`.oui`** — la liste des trois mots d'A3.
-- **`.invite`** + `@keyframes nudge` — le seul mouvement décoratif du produit.
+- **`.invite`** + ses images clés — le seul mouvement décoratif du produit. Le design les
+  appelait `nudge` ; le dépôt est en français, et la doc dit déjà « l'invite du volet ».
 
 ### Classes à ne pas emporter
 
@@ -99,13 +100,17 @@ Voici tout ce qui s'en déduit.
 | Le lieu du dépôt | « studio » / « déposer » | **l'atelier** |
 | Chargement C5 | tous les plis | **le poème uniquement** |
 | Définition des textures | 720 × 1560, ~70 ko | **la définition native de la source** (1536 × 2752, ou 1296 × 2304 pour le drapé), servie telle quelle — [ressources.md](ressources.md) |
-| Les flèches | caractères `↑` `→` en Bodoni | **deux tracés SVG inline** — l'unique exception au « pas de SVG » |
+| Les flèches | caractères `↑` `→` en Bodoni | **deux tracés SVG inline** — l'unique exception au « pas de SVG ». Bodoni Moda n'a en fait ni l'un ni l'autre : le `↑` des maquettes venait de la police de secours du système, et les deux flèches sont dessinées ([ressources.md](ressources.md#les-deux-flèches)) |
 | Bodoni sur A1 | présent, par la flèche de la pliure | **absent** — trois familles au premier écran, sans arrangement |
 | L'aperçu du lien | un recadrage du papier froissé | **`og.png`**, dessiné : marque, phrase, pliure — 53 ko ([partage.md](partage.md#limage-daperçu)) |
 | `og:description` | « Une seule lecture, pas de compte. » | **« Il ne s'ouvre qu'une fois. »** — la première promesse n'est pas tenable |
 | Le bas de `og.png` | « UNE SEULE LECTURE · PAS DE COMPTE » | **« POUR TOI SEULE »** — corrigé |
 | `icon-512` en `maskable` | annoncé masquable | **`purpose: any`** ; le masquable est un fichier à part, lettre à 52 % de large |
 | La lettre sur la grille | `x = 30` dans le texte et les SVG, 29 dans les PNG | **29**, celui des tirages validés — SVG et PNG s'accordent |
+| `.champ` | la classe des lignes de dépôt | **`.ligne`** — « champ » est sur la liste fermée du lexique, qui fait foi ; `.champ__nom` et `.champ--titre` suivent |
+| Le cachet | « nº 014 » dans `donnees.md`, `014` dans la maquette | **`014`** — six signes ne tiennent pas dans 38px à 10px. `donnees.md` est corrigé ; « nº 014 » reste la forme de la prose |
+| `--pliure` | `34%`, seul | **`--pliure-part: 0.34`** en plus, sans unité — un padding en pourcentage se compte sur la largeur, et le corps doit s'arrêter au-dessus du volet. Le nombre ne vit qu'à un endroit |
+| `--corps-pied` | le `30px` du pied de `.corps`, écrit deux fois | **un jeton** — même raison |
 | `twitter:card` | présent dans les balises livrées | **retiré** — un pli ne se partage pas ailleurs qu'en conversation |
 | `mask-icon` | présent, avec un SVG à fond crème | **retiré** — l'onglet épinglé est une affaire de Safari de bureau |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
@@ -130,6 +135,30 @@ tient encore est le poème, dont le fichier se réencode sans changer de lien : 
 le permet déjà, délibérément (voir [donnees.md](donnees.md#la-moulinette)). Rien à décider
 avant qu'un poème ait besoin d'une correction.
 
+### Ce qui reste à trancher avec A1
+
+**Le débordement du gabarit.** `.corps` est `flex: 1` avec `justify-content: flex-end` :
+au maximum autorisé par [donnees.md](donnees.md), le contenu s'évacue **par le haut**, passe
+sur la marque et se fait couper par l'`overflow: hidden` du pli, sans un mot. L'échafaudage
+du jalon 1 empile titre, voix, faits, griffe et étiquette — une combinaison qu'aucun type
+réel ne compose — mais **la direction du débordement est une propriété du gabarit**, pas de
+l'écran. Se tranche avec A2, au jalon 2 : soit une garde dans le gabarit, soit un plafond
+réel écrit dans `donnees.md`.
+
+**Un pli de 780px sur un écran plus court.** [design-system.md](design-system.md#le-gabarit)
+dit « 360 × 780, jamais élargie », [appareils.md](appareils.md#les-réglages-de-page) dit que
+le plateau porte les retraits — ni l'un ni l'autre ne dit ce que devient le pli quand la
+hauteur visible est inférieure à 780. Mesuré à 390 × 664 : la page défile et le bas du volet
+sort du champ, ce qui contredit « un pli = un écran ». **Question ouverte**, à poser avant
+d'écrire A1.
+
+**Le fond d'A1.** [parcours.md](parcours.md#a1--lattente) écrit « le fond est le rideau,
+la seule image des états fermés » ; la maquette, elle, montre un papier crème avec son
+grain et un volet carmin, sans aucune image. Les deux ne peuvent pas être vrais ensemble,
+et le choix emporte le fondu qui va avec — `.image__fondu` ramène au papier,
+`.image__fondu--encre` ramène à l'encre. Repéré au jalon 1 en faisant entrer les cinq
+peintures ; **se tranche en écrivant A1, au jalon 2**, pas avant.
+
 ### Écrans qui n'existaient pas
 
 **D0 · le seuil** (l'atelier n'était pas protégé), **D2p · quel poème**,
@@ -142,7 +171,7 @@ Rien de tout cela n'est dans les prototypes. `PLI.md` §10 l'admet lui-même.
 
 - [ ] Un `<button>` « déplier » atteignable au clavier, qui pose `p = 1` directement.
 - [ ] `@media (prefers-reduced-motion: reduce)` : pas d'invite du volet, ouverture à 120 ms.
-- [ ] Focus visible partout — `.champ input { all: unset }` le supprime aujourd'hui.
+- [ ] Focus visible partout — `.ligne input { all: unset }` le supprime aujourd'hui.
       Un filet carmin de 2px à gauche sur `:focus-visible`.
 - [ ] Le texte reste sélectionnable et présent si une animation échoue.
 - [ ] `.etiquette--fine` à `.62`.

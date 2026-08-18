@@ -187,7 +187,7 @@ Absente des prototypes, obligatoire dans le produit.
 - **Une alternative au geste**, toujours : un `<button>` « déplier » atteignable au clavier
   qui pose `p = 1` directement.
 - **`prefers-reduced-motion: reduce`** supprime l'invite du volet et ramène l'ouverture à 120 ms.
-- **Le focus doit rester visible.** `.champ input { all: unset }` le supprime : ajouter un
+- **Le focus doit rester visible.** `.ligne input { all: unset }` le supprime : ajouter un
   filet carmin de 2px à gauche sur `:focus-visible`, comme `.note` en porte déjà un.
 - Le texte reste sélectionnable et présent même si une animation échoue.
 

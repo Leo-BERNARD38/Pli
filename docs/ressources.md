@@ -154,9 +154,9 @@ Quatre familles, un seul style chacune, sous-ensemblées en woff2.
 
 ```sh
 pyftsubset Newsreader-Italic.ttf \
-  --unicodes="U+0020-007E,U+00A0-00FF,U+0152-0153,U+0178,U+2018-201D,U+2026,U+202F" \
+  --unicodes="U+0020-007E,U+00A0-00FF,U+0152-0153,U+0178,U+2013-2014,U+2018-201D,U+2026,U+202F" \
   --layout-features="kern,liga,ccmp" --flavor=woff2 \
-  --output-file=newsreader-italic.woff2
+  --output-file=newsreader-italique.woff2
 ```
 
 Bodoni est variable : instancier `wght` aux deux valeurs utiles et **ne garder que l'axe
@@ -172,18 +172,29 @@ doit donc contenir **les minuscules et les capitales**, malgré ce que montrent 
 ## Les deux flèches
 
 Elles ne sont plus des caractères. `↑` et `→` sont **deux tracés SVG inline**, définis une
-fois par document et appelés par `<use>` — environ 200 octets, zéro requête, zéro
-dépendance à une police.
+fois par document et appelés par `<use>` — zéro requête, zéro dépendance à une police.
+Mesuré au jalon 1 : le fragment fait **912 octets bruts**, et **219 octets gzip** dans le
+document construit. Les deux tracés voyagent ensemble partout, même là où un seul sert :
+une seule chose à recopier, une seule à comparer.
 
 Ce que ça change, et c'est la raison du changement : **Bodoni n'est plus nécessaire avant
 A2**. La pliure d'A1 portait un `↑` en Bodoni, ce qui contredisait « trois familles au
 premier écran ». Le premier écran n'appelle plus que Pinyon, Newsreader et Space Mono, sans
 arrangement.
 
+**Bodoni Moda n'a ni `↑` ni `→`** — vérifié au jalon 1, dans la source d'origine comme dans
+les sous-ensembles `math` et `symbols` que Google sert. Le `↑` des maquettes était donc
+tracé par la police de secours du système : il n'y avait aucun dessin d'origine à reprendre.
+Les deux flèches sont dessinées par [`scripts/fleches.py`](../scripts/fleches.py), **à la
+manière didone, sans qu'aucun chiffre soit estimé** — les épaisseurs sont mesurées sur
+Bodoni Moda à la coupe où la flèche vit (graisse 700, `opsz` 22), les proportions sur le
+`↑` de Space Mono Bold, la seule vraie flèche des polices du produit.
+
 Contraintes de tracé, pour que ça reste le produit et pas une icône :
 
-- **Tracé depuis le glyphe Bodoni**, même dessin, mêmes pleins et déliés — on remplace le
-  moyen, pas la forme.
+- **Les épaisseurs sont celles de Bodoni** — hampe, délié, empattement plat non ramifié.
+  Le contraste mesuré est de 15,6 : 1. On remplace le moyen, pas l'esprit.
+- **Le `→` est le `↑` tourné d'un quart de tour** : même dessin, littéralement.
 - `fill: currentColor`, aucune dimension en dur : la flèche prend la couleur et la taille du
   texte qui l'entoure.
 - `aria-hidden="true"` : elle décore une étiquette qui dit déjà ce qu'elle fait.
@@ -192,10 +203,14 @@ Contraintes de tracé, pour que ça reste le produit et pas une icône :
 
 ## À produire au jalon 1
 
-- [ ] trancher : servir le natif, ou régénérer les peintures ≥ 1800 de large
-- [ ] les cinq textures dans `src/`, ré-encodées q80 **seulement si un master existe**
+- [x] **tranché : on sert le natif.** Régénérer aurait demandé un nouveau tirage de chaque
+      toile, qui ne serait pas identique — et la définition en plus n'achète que de la
+      réserve, rien de visible sur son téléphone
+- [x] les cinq textures dans `src/`, copiées telles quelles : aucun master, donc aucun
+      ré-encodage
 - [ ] l'aperçu vérifié dans une vraie conversation ([partage.md](partage.md#vérifier-un-aperçu))
-- [ ] les quatre polices sous-ensemblées, poids réels notés dans
-      [chargement.md](chargement.md#le-budget-écran-par-écran)
-- [ ] les deux flèches tracées
-- [ ] `public/icones/` copié tel quel dans le build
+      — **à la main, personne ne peut le faire à ma place**
+- [x] les quatre polices sous-ensemblées, poids réels notés dans
+      [chargement.md](chargement.md#le-budget-écran-par-écran) — 52,6 ko pour les trois d'A1
+- [x] les deux flèches tracées
+- [x] `public/icones/` copié tel quel dans le build
