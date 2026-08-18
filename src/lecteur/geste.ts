@@ -48,6 +48,12 @@ export interface Pieces {
   bouton: HTMLElement | null
   /** L'échelle du plateau, à figer le temps du geste. */
   echelle: Echelle
+  /**
+   * Le seuil vient d'être franchi : l'entrée du journal est **décidée**, pas encore écrite.
+   * C'est le moment que docs/parcours.md#le-dépliage nomme, et il tombe avant l'animation
+   * (docs/fluidite.md#écrire-le-journal-sans-bloquer).
+   */
+  auSeuil: () => void
   /** Le pli est déplié et la transition est finie. Une seule fois. */
   auDepliage: () => void
 }
@@ -135,6 +141,9 @@ export function armer(p: Pieces): Geste {
   function poser(vers: boolean): void {
     const duree = CALME.matches ? OUVERTURE_CALME : vers ? r.ouvre : r.referme
     for (const couche of couches) couche.style.transition = `transform ${duree}ms var(--courbe)`
+    // La décision se prend ici, l'écriture attend la fin de l'animation : le fil principal
+    // n'a rien à faire d'autre que déplacer deux couches jusqu'à `transitionend`.
+    if (vers && !ouvert) p.auSeuil()
     ouvert = vers
 
     const avant = p.dessus.style.transform

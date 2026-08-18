@@ -1,6 +1,7 @@
 // Le lecteur — ce qu'elle trouve au bout du lien.
 //
-// Jalon 2 : A1 l'attente et C4 le lien abîmé. A2, le geste et le journal suivent.
+// Jalon 3 : A1 l'attente, A2 la découverte, C4 le lien abîmé, et le journal qui se remplit
+// au dépliage. A3 et A4 — la réponse et le mot — suivent dans le même jalon.
 
 // Les jetons d'abord, le gabarit ensuite : l'ordre est celui de la cascade. Les deux
 // entrent dans le document au build, ils ne coûtent aucune requête
@@ -9,6 +10,7 @@ import '../styles/tokens.css'
 import '../styles/pli.css'
 
 import { decoder, type Pli } from '../lib/codec.ts'
+import { empreinte, noterLeDepliage } from '../lib/journal.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
 import { tenirDansLecran } from './plateau.ts'
 import { ecrire, oublierLaPeinture, ETIQUETTES } from './a1.ts'
@@ -81,22 +83,64 @@ function chercher(nom: string): Promise<Response> {
   return fetch(`/plis/${nom}.txt`)
 }
 
+/** Le pli, et le payload dont il sort : le journal range le second, jamais le premier. */
+interface Apport {
+  pli: Pli
+  /** Ce qui est rangé au journal — une seule source de vérité (docs/donnees.md#4-son-journal). */
+  payload: string
+}
+
 /**
  * Le pli que cette route demande. Cette fonction n'écrit pas — un seul endroit écrit, plus
  * bas. Un hash qu'on ne sait pas lire est un lien abîmé : c'est exactement ce que le
  * routeur appelle « inconnu », et il n'y a rien d'autre à en dire.
  */
-async function pliDe(route: Route): Promise<Pli> {
-  if (route.ecran === 'pli') return decoder(route.payload)
+async function pliDe(route: Route): Promise<Apport> {
+  if (route.ecran === 'pli') return { pli: await decoder(route.payload), payload: route.payload }
 
   if (route.ecran === 'poeme') {
     const reponse = await chercher(route.nom)
     if (!reponse.ok) throw new Error('lien abîmé')
-    return decoder((await reponse.text()).trim())
+    // Le contenu récupéré est recopié dans l'entrée : un fichier supprimé ne doit pas faire
+    // disparaître un pli de son archive (docs/donnees.md#4-son-journal).
+    const payload = (await reponse.text()).trim()
+    return { pli: await decoder(payload), payload }
   }
 
   throw new Error('lien abîmé')
 }
+
+// ── le journal ───────────────────────────────────────────────────────────────────────
+//
+// Franchir le seuil DÉCIDE l'entrée ; l'écriture, elle, attend la fin de l'animation —
+// jusque-là le fil principal ne fait que déplacer deux couches
+// (docs/fluidite.md#écrire-le-journal-sans-bloquer) :
+//
+//   seuil franchi      → l'entrée est décidée, gardée en mémoire
+//   transitionend      → écriture
+//   pagehide / hidden  → écriture aussi, au cas où elle quitte avant la fin
+//
+// Deux écritures possibles, aucun doublon : `noterLeDepliage` dédoublonne sur l'empreinte.
+
+/** L'entrée du pli à l'écran, prête bien avant qu'un doigt se pose. */
+let entreeDuPli: { h: string; c: string } | null = null
+
+/** Décidée au seuil, en attente d'écriture. */
+let aRanger: { h: string; c: string } | null = null
+
+function rangerAuJournal(): void {
+  const entree = aRanger
+  if (!entree) return
+  aRanger = null
+  noterLeDepliage(entree.h, entree.c)
+}
+
+// `pagehide` couvre le départ vers WhatsApp et la fermeture de l'onglet ; `hidden` couvre
+// l'application qu'on met de côté, que Safari ne fait pas toujours suivre d'un `pagehide`.
+window.addEventListener('pagehide', rangerAuJournal)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') rangerAuJournal()
+})
 
 // Seule la dernière route écrit. Sans ce jeton, un poème lent suivi d'un lien valide
 // masquerait, en arrivant en retard, un pli parfaitement décodé.
@@ -112,11 +156,25 @@ let geste: Geste | null = null
  * coûterait une disposition complète dans la fenêtre de 4 ms
  * (docs/fluidite.md#la-file-dattente-principale).
  */
-async function preparerLeGeste(pli: Pli): Promise<number> {
+async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
   const mienne = generation
   if (!cadre || !a1 || !dessous || !echelle) return mienne
 
+  // Un pli qui s'en va sans que sa transition soit finie se range quand même : il a été
+  // déplié, et c'est le dépliage qui décide, pas l'animation.
+  rangerAuJournal()
   geste?.refermer()
+  // Les écouteurs du geste survivent d'un pli à l'autre : entre ici et l'empreinte du
+  // nouveau payload, un seuil franchi rangerait l'ANCIENNE entrée sous le pli qui vient
+  // de s'afficher. Mieux vaut ne rien ranger que ranger le mauvais pli.
+  entreeDuPli = null
+
+  // L'empreinte se calcule ICI, pendant qu'elle regarde le volet fermé. L'écriture, elle,
+  // doit rester synchrone : à `pagehide`, plus rien d'asynchrone n'a le temps d'aboutir.
+  const h = await empreinte(payload)
+  if (mienne !== generation) return mienne
+  entreeDuPli = { h, c: payload }
+
   await preparer(dessous, pli, ETIQUETTES[pli.t])
   if (mienne !== generation) return mienne
 
@@ -127,30 +185,39 @@ async function preparerLeGeste(pli: Pli): Promise<number> {
     invite: a1.querySelector('.invite'),
     bouton: a1.querySelector('.deplier'),
     echelle,
-    // Le pli est déplié : A1 rend sa peinture. Deux textures décodées au maximum, et A2
-    // vient d'en poser une. C'est aussi ici que l'entrée du journal s'écrira, au jalon 4 —
-    // après la transition, jamais pendant (docs/fluidite.md#écrire-le-journal-sans-bloquer).
-    auDepliage: oublierLaPeinture,
+    // Le geste s'arme une seule fois pour tous les plis de la session : ces deux fonctions
+    // lisent l'entrée du pli à l'écran, elles ne la capturent pas.
+    auSeuil: () => {
+      aRanger = entreeDuPli
+    },
+    // Le pli est déplié : l'entrée s'écrit, et A1 rend sa peinture. Deux textures décodées
+    // au maximum, et A2 vient d'en poser une.
+    auDepliage: () => {
+      rangerAuJournal()
+      oublierLaPeinture()
+    },
   })
   return mienne
 }
 
 suivre((route) => {
-  // Le journal et l'ajout à l'écran d'accueil n'ont pas encore d'écran : ils sont le
-  // jalon 4. La page reste nue plutôt que de montrer un pli qui n'existe pas.
+  // Le journal et l'ajout à l'écran d'accueil n'ont pas encore d'écran : C1 est le jalon 5,
+  // `#/installer` attend la mesure 4. La page reste nue plutôt que de montrer un pli qui
+  // n'existe pas — le module du journal, lui, existe et se remplit depuis ce jalon.
   if (route.ecran === 'journal' || route.ecran === 'installer') {
+    rangerAuJournal()
     montrer(null)
     return
   }
 
   const mienne = ++generation
   pliDe(route).then(
-    (pli) => {
+    ({ pli, payload }) => {
       if (mienne !== generation) return
       ecrire(pli)
       montrer(a1)
       marquer(route.ecran === 'poeme' ? 'p' : 'c')
-      void preparerLeGeste(pli)
+      void preparerLeGeste(pli, payload)
     },
     () => {
       if (mienne === generation) montrer(c4)
