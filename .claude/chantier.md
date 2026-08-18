@@ -8,20 +8,21 @@ Une étape n'est cochée que lorsqu'elle est **écrite, relue et commitée**.
 
 ## Jalon courant
 
-**Jalon 2 — le pli et le geste.** Le code est écrit, relu et commité en trois lots. Ce qui
-reste tient en une séance sur les deux téléphones, et personne ne peut la faire à ma place.
+**Jalon 3 — la boucle.** Le code est écrit, relu et commité en deux lots : le module du
+journal, puis A3 et A4 avec le passage à WhatsApp. L'échange fonctionne de bout en bout dans
+Chromium. Ce qui reste tient en une séance sur les deux téléphones — et le jalon 2, lui,
+attend toujours la sienne.
 
 Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : renommer le dépôt,
 ouvrir un lien sur son téléphone, et les trois mesures du jalon 1. Aucun ne bloque la suite.
 
-**La roadmap a été regroupée le 18/08/2026** : sept jalons deviennent cinq. Ce qui vient est
-le **jalon 3 — la boucle** : `lib/journal.ts` (le module, pas l'écran), A3, A4, et le passage
-à WhatsApp. Le lancement tombe à sa fin — tout ce qui suit (l'atelier, l'écran du journal)
-est du confort. Le poème et le bureau sont passés dans « plus tard ».
+**La roadmap a été regroupée le 18/08/2026** : sept jalons deviennent cinq. Ce qui vient
+maintenant est le **jalon 4 — l'atelier** : D0 le seuil, D4 le tiroir, D1 à D3, le partage.
+Il dépend de la mesure 1 pour son compteur de signes.
 
-Deux choses trouvées en regroupant, et qui changent l'ordre : **A3 note la réponse dans le
-journal avant d'ouvrir WhatsApp**, donc le module `journal.ts` remonte au jalon 3 ; et **C2
-n'est atteignable que depuis une entrée du journal**, donc il descend au jalon 5 avec C1.
+Le lancement tombe à la fin du jalon 3 — donc ici. Tout ce qui suit est du confort : un pli
+se fabrique encore en ligne de commande, et le journal se remplit sans se lire. L'échange,
+lui, va de bout en bout.
 
 ## Ce qui existe
 
@@ -31,8 +32,10 @@ n'est atteignable que depuis une entrée du journal**, donc il descend au jalon 
 - [x] `scripts/icones.py` — la planche des icônes
 - [x] `.claude/` — relecteurs, commandes, gardes
 - [x] le socle npm — `package.json`, `tsconfig.json`, `tsconfig.isomorphe.json`, `vite.config.ts`
-- [x] `src/lib/` — `codec.ts`, `dates.ts`, `routeur.ts`, avec leurs tests
+- [x] `src/lib/` — `codec.ts`, `dates.ts`, `routeur.ts`, `journal.ts`, avec leurs tests
 - [x] les deux entrées — `index.html`, `atelier/index.html`
+- [x] `src/lecteur/` — `main.ts`, `a1.ts`, `a2.ts`, `reponse.ts`, `geste.ts`, `fond.ts`,
+      `plateau.ts`
 - [x] `polices-source/` et `src/fonts/` — les quatre familles, sources et sous-ensembles
 - [x] `src/styles/` — `tokens.css` et `pli.css`
 - [x] `src/textures/` — les cinq peintures, en définition native
@@ -114,13 +117,15 @@ leurs cibles de 14 et 90 ko. Les cinq woff2 sont reproductibles **au bit près**
 
 En revanche : **2 requêtes avant le premier texte au lieu d'une**, et **6 avant A1 complet au
 lieu de 5** — parce que le CSS et le module n'étaient pas encore inline. **Réglé au jalon 2**,
-première étape : c'est une requête avant le premier texte, et le document pèse 5,86 ko gzip.
+première étape : c'est une requête avant le premier texte. Le document pesait alors 5,86 ko
+gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
 
 ## Jalon 2 — le pli et le geste
 
 - [x] le document du lecteur se suffit à lui-même — gabarit et module inline, par le greffon
       `pli-inliner-le-document` de `vite.config.ts` ; **1 requête** avant le premier texte,
-      **5,86 ko gzip**, plafond de 14 ko tenu par le build
+      **5,86 ko gzip** à l'époque, **10,5 ko** une fois A2, le geste, la réponse et le
+      journal dedans — plafond de 14 ko tenu par le build, à chaque commit
 - [x] le pli tient dans l'écran — `--echelle` sur le pli, vérifié de 320 × 568 à 1440 × 900 :
       la page ne défile jamais et la composition ne bouge pas
 - [x] A1 · l'attente, pour les quatre types — le rideau, la promesse, le volet, l'invite
@@ -136,6 +141,48 @@ première étape : c'est une requête avant le premier texte, et le document pè
 - [ ] **à la main** : le texte d'A1 peint en moins d'une seconde en 4G, cache vide
 
 **Fin du jalon :** le premier vrai pli envoyé.
+
+## Jalon 3 — la boucle
+
+- [x] `lib/journal.ts` — le module, pas l'écran. Le seul qui touche `localStorage` ;
+      dédoublonnage sur `h`, l'empreinte du payload, jamais sur `n` ; `[]` sur un JSON abîmé,
+      rien qui lève en navigation privée
+- [x] l'écriture au dépliage — le seuil **décide**, `transitionend` **écrit**, et `pagehide`
+      comme `visibilitychange` écrivent aussi : elle peut partir avant la fin de l'animation
+      ([fluidite.md](../docs/fluidite.md#écrire-le-journal-sans-bloquer))
+- [x] A3 · la réponse — les trois mots, en `<a href>` : le navigateur gère la sortie
+- [x] A4 · le mot — il affiche son mot et **n'affirme rien de plus**
+- [x] le passage à WhatsApp dans le bon ordre : la réponse notée, **puis** A4, **puis**
+      `wa.me` — et le retour par rechargement retombe sur A4, jamais sur A1
+- [ ] **à la main, sur les deux téléphones** : la réponse envoyée pour de vrai, depuis le
+      navigateur intégré de WhatsApp comme depuis Safari — c'est le seul endroit où l'on
+      verra si `wa.me` revient bien sur la page, et dans quel bac de stockage
+- [ ] **à la main** : le premier vrai pli envoyé (fin du jalon 2)
+
+**Fin du jalon :** elle a répondu, et le mot est arrivé.
+
+### Ce que ce jalon a trouvé, et qui ne se devinait pas
+
+- **Un chunk de la vague 3 ne partage rien avec le module d'ouverture.** `reponse.ts`
+  réemployait deux fonctions de `a2.ts` : Rollup en a fait un chunk qui importe le chunk
+  d'entrée — lequel est inliné dans le document, **puis supprimé**. Build vert, vague 3
+  morte au moment du geste, sans un mot. Les deux fonctions sont recopiées, et
+  `pli-inliner-le-document` refuse désormais le build qui le referait. C'est la moitié du
+  « chunk commun » que le jalon 2 avait gardé sans le résoudre — l'autre moitié attend
+  l'atelier.
+- **`touch-action: none` avalait le tap de la réponse.** Le geste ne relâchait que ce qui
+  était dans un `<button>` ; les trois mots d'A3 sont des `<a>`. Aucun clic n'arrivait, et
+  rien ne le disait. La sortie est maintenant `a, button`.
+- **La couche cachée restait au clavier.** Les deux couches d'un pli sont toujours là,
+  l'une seulement décalée : au Tab depuis A1, on tombait sur « répondre » en bas d'A2 — et
+  depuis qu'il agit, il ouvrait la réponse d'un pli qu'elle n'avait pas déplié. `inert` suit
+  maintenant l'état : A1 sort quand le pli s'ouvre, A2 quand la réponse monte, A3 quand le
+  mot arrive. Vérifié au Tab sur les quatre écrans.
+- **Le carmin sur carmin ne se voit pas.** A4 affichait son mot en 78px, entièrement
+  invisible : `.titre` bascule sur encre depuis le jalon 1, pas sur carmin.
+- **Les imports dynamiques du document inliné sont réécrits en absolus.** La garde qui les
+  interdisait en relatif était là depuis le jalon 2 ; rien ne les rendait absolus, et le
+  premier `import()` de module l'a fait échouer.
 
 ## Les mesures — aucune ne se devine
 
@@ -171,10 +218,11 @@ couches, une par `translate3d`. Le `<button>` « déplier » du clavier a mainte
 où vivre — le volet — mais il n'y est pas encore, faute de geste à déclencher.
 
 **Au jalon 2, pour le chargement** — ~~l'inlining du CSS et du module~~ **fait**, première
-étape du jalon 2. Le chunk commun annoncé ici n'est pas résolu mais **gardé** : le build
-échoue si le chunk d'entrée du lecteur porte le moindre import statique. Le jour où l'atelier
-importera `codec.ts` (jalon 4), il faudra trancher — deux builds séparés, ou l'inlining du
-graphe entier. La garde nomme le problème au lieu de le laisser entrer.
+étape du jalon 2. Le chunk commun est **à moitié résolu** : côté lecteur, un chunk de la
+vague 3 qui partagerait quoi que ce soit avec le module d'ouverture fait maintenant échouer
+le build, et `reponse.ts` recopie les deux fonctions plutôt que de les importer d'`a2.ts`.
+Reste l'autre moitié : le jour où l'atelier importera `codec.ts` (jalon 4), il faudra
+trancher — deux builds séparés, ou l'inlining du graphe entier.
 
 **Au jalon 2, pour l'invite et le mouvement** — l'invite du volet doit se **mettre en pause**
 au toucher, pas redémarrer ([fluidite.md](../docs/fluidite.md)) : une animation infinie

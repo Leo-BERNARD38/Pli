@@ -209,6 +209,41 @@ si la mesure sur les deux téléphones le rend visible.
   lui poser « la suite ↑ » alors que rien ne suit serait un mensonge.
 
 
+### Jalon 3 — la boucle
+
+- **18/08/2026 — l'empreinte `h` est un sha-256 tronqué à huit octets.** `docs/donnees.md`
+  dit « empreinte du payload » et s'arrête là. Huit octets, seize signes hexadécimaux : la
+  même primitive que le seuil de l'atelier, donc rien de neuf à maintenir, et une collision
+  demanderait des milliards de plis quand il en circulera quelques centaines. C'est un
+  **dédoublonnage**, pas une signature : rien de secret n'en dépend.
+- **18/08/2026 — l'empreinte se calcule pendant la vague 3, l'écriture reste synchrone.**
+  `crypto.subtle.digest` est asynchrone, et à `pagehide` plus rien d'asynchrone n'aboutit —
+  elle part vers WhatsApp, l'onglet gèle, l'entrée n'existe jamais. L'empreinte est donc
+  prête bien avant qu'un doigt se pose, pendant qu'elle regarde le volet fermé ; il ne reste
+  à `pagehide` qu'un `JSON.stringify` et une écriture.
+- **18/08/2026 — la recherche à l'arrivée se fait sur le payload, le dédoublonnage sur `h`.**
+  Chercher par `h` à l'arrivée coûterait une attente asynchrone sur le chemin du premier
+  texte. Le payload est **équivalent** à son empreinte — c'est ce dont elle est tirée — et la
+  règle qui compte (« jamais sur `n` ») est tenue des deux côtés.
+- **18/08/2026 — la ligne libre d'A3 se tape dans WhatsApp, pas dans le pli.**
+  `docs/parcours.md` dit « une ligne libre facultative après » ; le message part déjà écrit
+  dans une conversation qu'elle a sous les yeux. Un champ de saisie dans le pli ajouterait un
+  clavier, un mot du lexique interdit, et une seconde façon d'écrire la même phrase. `ligne`
+  reste dans le format du journal, à `null`, pour le jour où l'on changerait d'avis.
+- **18/08/2026 — A4 garde son action « tes plis ↑ », muette.** Le journal ne se lit qu'au
+  jalon 5. Recomposer le bas d'A4 deux fois coûterait plus qu'une action qui attend — c'est
+  le choix déjà fait pour « répondre » au jalon 2, et le prototype le faisait aussi.
+- **18/08/2026 — la vague 3 ne partage rien avec le module d'ouverture.** Deux fonctions de
+  `a2.ts` réemployées par `reponse.ts` ont suffi à faire de celui-ci un chunk qui importe le
+  chunk d'entrée — inliné dans le document, puis supprimé. Build vert, vague 3 morte au
+  moment du geste. On recopie plutôt que de partager, et le greffon refuse le build qui
+  referait le lien.
+- **18/08/2026 — `wa.me` n'est pas un tiers.** L'invariant « aucun tiers » interdit ce qui
+  **entre** dans la page : un CDN, une mesure d'audience, une police distante.
+  `https://wa.me/…` est une destination de lien sortant, prescrite au caractère près par
+  `docs/donnees.md#6-la-réponse-whatsapp`. `scripts/verifie.mjs` l'autorise nommément, et
+  rien d'autre.
+
 ### La configuration des agents
 
 - **18/08/2026 — la relecture déterministe passe avant les agents.** Les jalons 1 et 2 ont

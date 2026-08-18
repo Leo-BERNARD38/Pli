@@ -163,8 +163,11 @@ for (const chemin of aRegarder) {
       regard(f, n, 'invariant — `garde-invariants` demande qu’aucun stockage ne vive hors de `journal.ts`')
     if (/history\.(pushState|replaceState)/.test(ligne))
       refus(f, n, 'invariant — routage par hash seulement : Pages ne réécrit aucune URL, une route profonde tombe en 404')
+    // `wa.me` n'est pas un tiers au sens de la règle : rien n'en est chargé, c'est la
+    // destination d'un lien sortant, et docs/donnees.md#6-la-réponse-whatsapp prescrit
+    // cette adresse au caractère près. Un tiers, c'est ce qui entre dans la page.
     const url = ligne.match(/https?:\/\/[^\s"'`)]+/)
-    if (url && !/^https?:\/\/(leo-bernard38\.github\.io|www\.w3\.org)/.test(url[0]))
+    if (url && !/^https?:\/\/(leo-bernard38\.github\.io|wa\.me\/|www\.w3\.org)/.test(url[0]))
       refus(f, n, `invariant — aucun tiers : « ${url[0]} » sort du site`)
 
     /* les encres et le mouvement (design-system.md, fluidite.md, chargement.md) */

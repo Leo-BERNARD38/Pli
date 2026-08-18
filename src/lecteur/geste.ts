@@ -48,6 +48,12 @@ export interface Pieces {
   bouton: HTMLElement | null
   /** L'échelle du plateau, à figer le temps du geste. */
   echelle: Echelle
+  /**
+   * Le seuil vient d'être franchi : l'entrée du journal est **décidée**, pas encore écrite.
+   * C'est le moment que docs/parcours.md#le-dépliage nomme, et il tombe avant l'animation
+   * (docs/fluidite.md#écrire-le-journal-sans-bloquer).
+   */
+  auSeuil: () => void
   /** Le pli est déplié et la transition est finie. Une seule fois. */
   auDepliage: () => void
 }
@@ -135,7 +141,17 @@ export function armer(p: Pieces): Geste {
   function poser(vers: boolean): void {
     const duree = CALME.matches ? OUVERTURE_CALME : vers ? r.ouvre : r.referme
     for (const couche of couches) couche.style.transition = `transform ${duree}ms var(--courbe)`
+    // La décision se prend ici, l'écriture attend la fin de l'animation : le fil principal
+    // n'a rien à faire d'autre que déplacer deux couches jusqu'à `transitionend`.
+    if (vers && !ouvert) p.auSeuil()
     ouvert = vers
+
+    // Ce qui passe derrière sort du clavier en même temps qu'il sort de la vue. Les deux
+    // couches sont toujours là, l'une seulement décalée : sans ça, « répondre » en bas
+    // d'A2 se ramassait au Tab depuis A1 — et depuis qu'il agit, il ouvrait la réponse
+    // d'un pli qu'elle n'a pas encore déplié.
+    p.dessus.inert = vers
+    p.dessous.inert = !vers
 
     const avant = p.dessus.style.transform
     placer(vers ? 1 : 0)
@@ -162,8 +178,10 @@ export function armer(p: Pieces): Geste {
   }
 
   p.cadre.addEventListener('pointerdown', (e) => {
-    // Le bouton fait son travail tout seul : le geste ne le lui prend pas.
-    if (doigt !== null || (e.target as Element | null)?.closest('button')) return
+    // Ce qui agit fait son travail tout seul : le geste ne le lui prend pas. Le bouton
+    // « déplier » du clavier, « répondre » en bas d'A2, et les trois liens d'A3 — sans le
+    // `a`, `touch-action: none` avalait le tap et la réponse ne partait jamais.
+    if (doigt !== null || (e.target as Element | null)?.closest('a, button')) return
     doigt = e.pointerId
     hauteur = p.cadre.getBoundingClientRect().height
     y0 = y = yImage = e.clientY
@@ -218,6 +236,7 @@ export function armer(p: Pieces): Geste {
   })
 
   placer(0)
+  p.dessous.inert = true
 
   return {
     // Un autre lien arrive sans rechargement : le pli doit être refermé, et le prochain

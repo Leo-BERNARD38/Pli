@@ -112,6 +112,28 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 - Deux textures décodées vivantes au maximum — une peinture de 1536 × 2752 coûte **17 Mo**
   décodés, quelle que soit sa taille d'affichage.
 
+## Le journal et la réponse (donnees.md, parcours.md)
+
+| Clé | Où | Quoi |
+|---|---|---|
+| `pli.v1.journal` | son téléphone | `{ h, c, deplieLe, reponse? }`, du plus récent au plus ancien |
+| `pli.v1.reglages` · `pli.v1.compteur` · `pli.v1.deposes` · `pli.v1.seuil` | mon téléphone | le tiroir, et rien de commun avec son journal |
+
+`h` est un **sha-256 tronqué à 8 octets** du payload — 16 signes hexadécimaux. Le
+dédoublonnage se fait sur `h`, **jamais sur `n`**. Tout passe par `journal.ts`.
+
+Les trois mots d'A3, et ce qui part dans la conversation :
+
+| Elle lit | Noté | Le message |
+|---|---|---|
+| oui, j'y serai | `Oui` | `Oui, j'y serai ❤️` |
+| peut-être | `Peut-être` | `Peut-être…` |
+| je ne peux pas | `Non` | `Je ne peux pas` |
+
+`https://wa.me/<w>?text=…`, et `whatsapp://send?text=…` sans `w`. L'ordre ne change pas :
+**noter, afficher A4, puis ouvrir WhatsApp.** Le cœur est la seule exception à « pas
+d'emoji », et A4 n'affirme rien : rien ne garantit qu'elle a appuyé sur envoyer.
+
 ## Ce qui ne se devine pas
 
 Quatre mesures restent ouvertes (`docs/README.md#les-mesures-à-faire-avant-de-sengager`) :
