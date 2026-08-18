@@ -1,0 +1,10 @@
+/* LA PENSÉE — une phrase, deux lignes au plus, sur encre, la peinture prend la page
+   (docs/parcours.md#a2--la-découverte). Aucune action : le parcours s'arrête là, et la
+   marque mène au journal.
+
+   La phrase est la seule chose à lire : elle garde la grande voix, 31px. */
+[data-pli='pen'] .voix {
+  font-size: 31px;
+  line-height: 1.28;
+  max-width: 15ch;
+}

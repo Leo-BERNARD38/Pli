@@ -1,0 +1,14 @@
+/* LE SOUVENIR — titre haut, une ligne en bas, la peinture prend la page, sur crème
+   (docs/parcours.md#a2--la-découverte). Aucune action.
+
+   C'est le seul type dont le corps se répartit vraiment : le titre en haut, la ligne en
+   bas, et la peinture entre les deux. */
+[data-pli='sou'] .titre {
+  font-size: 64px;
+}
+
+[data-pli='sou'] .voix {
+  font-size: 23px;
+  line-height: 1.32;
+  max-width: 18ch;
+}

@@ -146,8 +146,9 @@ s'il dure ([parcours.md](parcours.md#larrivée)).
 | document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 ko** | **5,86 ko** — un seul fichier, gabarit et module compris | 18/08/2026, en local |
 | les trois polices d'A1 | **≤ 90 ko** | **52,6 ko** — Pinyon 24,6 · Newsreader 20,8 · Space Mono 7,2 | 18/08/2026, en local |
 | une texture | définition native, **600 ko à 1,15 Mo** | 600 ko à 1,15 Mo | 17/08/2026 |
-| requêtes avant le texte d'A1 | **1** | **1** — le document, et lui seul | 18/08/2026, en local |
-| requêtes avant A1 complet (rideau compris) | **≤ 5** | **5** sans le rideau — document, trois polices, **et Bodoni** | 18/08/2026, en local |
+| requêtes **bloquantes** avant le premier rendu | **1** | **1** — le document, et lui seul | 18/08/2026, en local |
+| requêtes avant le texte d'A1 **lisible** | **4** | **4** — le document et les trois polices | 18/08/2026, en local |
+| requêtes avant A1 complet (rideau compris) | **≤ 5** | **5** — le document, trois polices, le rideau | 18/08/2026, en local |
 | texte d'A1 peint, 4G, cache vide | **< 1 s** | — | à mesurer sur les deux téléphones |
 | A2 après le geste | **0 requête** | — | A2 arrive au jalon 2 |
 
@@ -156,10 +157,21 @@ et c'est ce qui ramène la première ligne de requêtes de 2 à 1. **Aucune requ
 plus entre le HTML et le premier texte**, et le plafond de 14 ko est désormais tenu par le
 build lui-même : il échoue au-dessus.
 
-La ligne du bas, elle, n'est pas encore la bonne : la cinquième requête est **Bodoni**, que
-l'échafaudage appelle par son titre. `docs/design-system.md` la met en vague 3 et A1 n'a pas
-de titre — elle disparaîtra avec l'échafaudage, et le rideau prendra sa place. À remesurer
-ce jour-là, et pas avant.
+Les deux lignes de requêtes sont désormais séparées, et il le fallait : **une** requête
+bloquante n'est pas **un** texte à l'écran. Avec `font-display: block`, le texte d'A1
+n'existe qu'à l'arrivée des polices — la quatrième requête. Lire « 1 » tout court se
+lisait comme une victoire qui n'était pas gagnée.
+
+Bodoni n'est plus sur ce chemin : A1 n'a pas de titre, et le seul du document — celui de
+C4 — est dans un bloc `hidden`, donc jamais mis en forme au premier rendu. La cinquième
+requête est le rideau, préchargé en priorité basse.
+
+**Deux réserves, à lever sur les deux téléphones.** Le panneau réseau montrera sept ou huit
+lignes, pas cinq : le navigateur va chercher l'icône de l'onglet et le manifeste tout seul —
+ce n'est pas un dépassement. Et sur **C4**, Bodoni est demandée au moment où l'écran
+s'affiche : le titre « lien abîmé » reste invisible le temps qu'elle arrive. La phrase qui
+porte le message, elle, est en Newsreader, préchargée — l'écran n'est jamais muet, seul son
+titre se pose un instant après.
 
 La colonne de droite ne se remplit que de ce qui a vraiment été mesuré. Un budget sans date
 de mesure est une intention, pas un budget — et **les deux dernières lignes ne se mesurent

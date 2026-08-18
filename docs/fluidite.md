@@ -145,8 +145,20 @@ rien. La seule exception à la règle est le départ vers WhatsApp : là, on éc
 ## Le mouvement décoratif
 
 L'invite du volet (`translateY(-9px)`, 2,6 s) est une animation CSS composée, donc gratuite.
-Elle se met en **pause** dès que le doigt touche (`animation-play-state: paused`), pas en
-« redémarrage » : une animation qui repart de zéro au relâchement se voit.
+Elle **s'arrête** dès que le doigt touche — `animation: none`, et non `animation-play-state:
+paused`.
+
+C'est une correction, et elle vient d'une mesure. Une animation composée mise en pause
+**garde la couche** qu'elle a promue : le compositeur la connaît toujours. Compté à
+l'inspecteur le 18/08/2026, pendant un vrai glissement : en pause, quatre couches bordées —
+`dessus`, `dessous`, l'invite, **et le cachet**, promu à son tour parce qu'il la recouvre.
+Arrêtée franchement, exactement deux. « Pause » et « exactement deux couches bordées » ne
+pouvaient pas être vraies ensemble ; c'est la seconde qui compte, et la première qui cède.
+
+Ce que la pause protégeait reste protégé autrement : l'invite ne **repart** qu'une fois le
+pli refermé, jamais pendant qu'il retombe — une animation qui repart de zéro au relâchement
+se voit. Le prix accepté est un saut d'au plus 9px à l'instant où le doigt se pose, sur un
+élément décoratif, alors que le doigt entraîne déjà toute la feuille.
 
 Sous `prefers-reduced-motion: reduce`, elle n'existe pas et l'ouverture tombe à 120 ms.
 

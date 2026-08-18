@@ -4,4 +4,7 @@
 // rien de ce qui s'écrira ici — les textes, les aperçus, l'index des poèmes — ne puisse
 // atterrir dans le bundle qui part chez elle (docs/architecture.md#deux-entrées).
 
+import '../styles/tokens.css'
+import '../styles/depot.css'
+
 export {}

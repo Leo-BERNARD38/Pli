@@ -6,3 +6,9 @@
 
 /** Une feuille de style importée pour son effet : Vite l'écrit dans le document. */
 declare module '*.css' {}
+
+/** Une peinture importée : Vite l'empreinte et rend son adresse. */
+declare module '*.webp' {
+  const adresse: string
+  export default adresse
+}

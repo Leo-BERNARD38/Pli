@@ -274,6 +274,44 @@ Et ce que la construction a tranché :
   sur le cadrage que le pli affiche vraiment, mesurée dans Chromium. Le rideau donne
   `#743c3b` en haut et `#440b10` en bas ; le drapé, dans son bandeau de 46 %, `#944850` et
   `#904a53`.
+- **18/08/2026 — le greffon d'inlining travaille en `generateBundle`, pas en
+  `transformIndexHtml`.** Trouvé en essayant de brancher la vague 3 : le greffon CSS de Vite
+  **supprime en `generateBundle` les chunks « purement CSS »** — ceux d'un `import()` de
+  feuille — et réécrit les références qui y menaient. Inliner avant lui figeait dans le
+  document un `import('./inv-….js')` vers un fichier qui n'existait jamais : le CSS d'un type
+  ne se serait plus chargé, **en silence**. Le greffon porte maintenant `enforce: 'post'`, et
+  une garde de plus : aucun `import()` relatif ne doit survivre dans le module inliné, qui
+  vit à l'adresse du document et non dans `/assets/`.
+- **18/08/2026 — l'atelier sort du document qui part chez elle.** La section 6 de `pli.css`,
+  « le dépôt », était inlinée dans le document du lecteur : **623 octets gzip** sur 7 513,
+  pour des écrans qu'elle ne verra jamais. Elle devient `styles/depot.css`, importée par
+  `src/atelier/` seul. La garde du greffon refusait déjà le **JS** d'atelier absorbé par le
+  lecteur ; le CSS passait par ce trou-là.
+- **18/08/2026 — le rideau est préchargé, pas seulement posé par le module.** Son adresse ne
+  vivait que dans la chaîne d'un script : le scanner de préchargement ne la voyait pas, et
+  pour un `#p=` la peinture attendait la fin de l'aller-retour réseau du poème — deux
+  requêtes sérialisées sans aucune dépendance. Un `<link rel="preload" as="image"
+  fetchpriority="low">` la fait découvrir tôt et servir tard, ce que `chargement.md`
+  demandait déjà.
+- **18/08/2026 — l'invite s'arrête, elle ne se met pas en pause.** `fluidite.md` prescrivait
+  `animation-play-state: paused` et « exactement deux couches bordées » ; les deux ne
+  pouvaient pas être vraies ensemble. Compté à l'inspecteur pendant un vrai glissement : en
+  pause, **quatre** couches — l'invite garde la sienne, et le cachet est promu parce qu'il la
+  recouvre. Arrêtée, exactement deux. `fluidite.md` est corrigé.
+- **18/08/2026 — A1 ne peint aucune valeur en dur.** Le type, le numéro, la signature et le
+  cachet restent vides dans le document : `decoder()` traverse un `DecompressionStream`, et
+  pour un `#p=` c'est un aller-retour réseau complet — un pli « UNE INVITATION » se serait
+  peint sur une pensée, et pendant tout le fetch sur un poème. Seul l'invariant est écrit.
+- **18/08/2026 — le focus du bouton « déplier » est crème.** Le volet est carmin même quand
+  sa couche est en encre : `.pli--encre :focus-visible` y posait un filet rose, à 2,9:1, sur
+  le seul élément atteignable au clavier du premier écran.
+
+**Dette nommée, à ne pas perdre : Bodoni sur C4.** Le titre « lien abîmé » est en Bodoni, qui
+n'est ni préchargée ni en vague 3 — elle est demandée à l'instant où C4 s'affiche, et
+`font-display: block` laisse le titre invisible le temps qu'elle arrive. L'écran n'est pas
+muet pour autant : la phrase qui porte le message est en Newsreader, préchargée. À trancher
+si la mesure sur les deux téléphones le rend visible.
+
 
 ## Ce que les relecteurs demandent pour la suite
 
