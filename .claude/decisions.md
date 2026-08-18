@@ -254,3 +254,15 @@ si la mesure sur les deux téléphones le rend visible.
   choix. Il dit maintenant **ce qui est vrai** : l'adresse se gèle au **premier pli envoyé**.
   Avant, elle peut encore devenir un vrai domaine ; après, elle est dans une conversation.
   Les citations des maquettes gardent `pli.re` — une maquette se cite, elle ne se réécrit pas.
+
+### La roadmap
+
+- **18/08/2026 — sept jalons deviennent cinq, et le lancement est nommé.** Décision prise
+  avec toi, pour partir plus vite. Ce qui a changé : **l'atelier passe devant le journal**
+  (tant qu'il n'existe pas, chaque pli passe par un terminal — c'est le seul jalon qui change
+  ma vie à moi), et **le poème et le bureau descendent dans « plus tard »**. Le poème est le
+  quatrième type et de loin le plus de machinerie : une moulinette, un format de fichier
+  public pour toujours, une pagination, deux écrans. Trois types de plis partent sans lui.
+  Surtout, la roadmap dit maintenant **où on lance** : à la fin du jalon 3, quand elle a
+  répondu. Tout ce qui suit est du confort — précieux, mais du confort. Réversible en une
+  ligne si le poème compte plus que le journal.

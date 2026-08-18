@@ -68,8 +68,8 @@ npm run types      # dont src/lib/ compilé sans la bibliothèque DOM
 npm test           # codec.ts, dates.ts, le routeur
 ```
 
-La moulinette et son `plier.sh` n'existent pas encore : c'est le **jalon 6**
-([docs/roadmap.md](docs/roadmap.md)).
+La moulinette et son `plier.sh` n'existent pas encore : le poème est passé dans
+**« plus tard »** ([docs/roadmap.md](docs/roadmap.md)). Trois types de plis partent sans lui.
 
 ## Documentation
 

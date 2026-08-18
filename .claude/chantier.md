@@ -11,9 +11,17 @@ Une étape n'est cochée que lorsqu'elle est **écrite, relue et commitée**.
 **Jalon 2 — le pli et le geste.** Le code est écrit, relu et commité en trois lots. Ce qui
 reste tient en une séance sur les deux téléphones, et personne ne peut la faire à ma place.
 
-Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : régler GitHub
-Pages et le domaine, ouvrir un lien sur son téléphone, et les trois mesures du jalon 1.
-Aucun ne bloque le jalon 2.
+Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : renommer le dépôt,
+ouvrir un lien sur son téléphone, et les trois mesures du jalon 1. Aucun ne bloque la suite.
+
+**La roadmap a été regroupée le 18/08/2026** : sept jalons deviennent cinq. Ce qui vient est
+le **jalon 3 — la boucle** : `lib/journal.ts` (le module, pas l'écran), A3, A4, et le passage
+à WhatsApp. Le lancement tombe à sa fin — tout ce qui suit (l'atelier, l'écran du journal)
+est du confort. Le poème et le bureau sont passés dans « plus tard ».
+
+Deux choses trouvées en regroupant, et qui changent l'ordre : **A3 note la réponse dans le
+journal avant d'ouvrir WhatsApp**, donc le module `journal.ts` remonte au jalon 3 ; et **C2
+n'est atteignable que depuis une entrée du journal**, donc il descend au jalon 5 avec C1.
 
 ## Ce qui existe
 
@@ -165,7 +173,7 @@ où vivre — le volet — mais il n'y est pas encore, faute de geste à déclen
 **Au jalon 2, pour le chargement** — ~~l'inlining du CSS et du module~~ **fait**, première
 étape du jalon 2. Le chunk commun annoncé ici n'est pas résolu mais **gardé** : le build
 échoue si le chunk d'entrée du lecteur porte le moindre import statique. Le jour où l'atelier
-importera `codec.ts` (jalon 5), il faudra trancher — deux builds séparés, ou l'inlining du
+importera `codec.ts` (jalon 4), il faudra trancher — deux builds séparés, ou l'inlining du
 graphe entier. La garde nomme le problème au lieu de le laisser entrer.
 
 **Au jalon 2, pour l'invite et le mouvement** — l'invite du volet doit se **mettre en pause**
@@ -185,7 +193,7 @@ la ligne du budget ne veut rien dire.
 (`parcours.md` dit le rideau, la maquette montre un papier crème), l'empilement de
 `.image--pleine` avec le texte, et la composition des faits.
 
-**Au jalon 5, pour l'atelier** — `index.html` embarque `#fleche-droite` sans s'en servir : le
+**Au jalon 4, pour l'atelier** — `index.html` embarque `#fleche-droite` sans s'en servir : le
 seul `→` du produit est dans l'atelier. Le fragment reste monolithique pour n'avoir qu'une
 chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip gênent.
 
@@ -201,7 +209,7 @@ chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip g
 - **L'alphabet du jeton d'un poème.** Le routeur n'accepte que `numéro-jeton` en minuscules et
   chiffres. [docs/donnees.md](../docs/donnees.md#la-moulinette) dit « quatre signes » et rien
   de plus. Être plus large que la moulinette est sans danger, l'inverse casserait un lien déjà
-  parti : **l'alphabet se décide dans le routeur et la moulinette ensemble**, au jalon 6.
+  parti : **l'alphabet se décide dans le routeur et la moulinette ensemble**, avec le poème.
 - **Les versions des actions GitHub** n'ont pas pu être vérifiées depuis cette machine (l'API
   de GitHub n'y est pas ouverte). Si un workflow tombe sur une action dépréciée, monter la
   version majeure — le contenu des deux fichiers, lui, ne bouge pas.

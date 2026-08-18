@@ -157,7 +157,7 @@ image sombre**, non en encre et carmin sur du papier.
 **Le débordement du gabarit** se traite des deux côtés, et les deux sont écrits. Un plafond
 **par type**, mesuré à 360 × 780 et daté, dans
 [donnees.md](donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé) — c'est le dépôt qui
-s'y tiendra, au jalon 5. Et une garde dans le gabarit : `.corps { overflow: hidden }`, pour
+s'y tiendra, au jalon 4. Et une garde dans le gabarit : `.corps { overflow: hidden }`, pour
 qu'un lien fabriqué à la main ne recouvre jamais la marque.
 
 La mesure a sorti un résultat que personne n'attendait : **l'invitation ne tient pas les
