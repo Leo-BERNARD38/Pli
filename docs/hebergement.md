@@ -12,7 +12,7 @@ dist/
   assets/                 js, css, polices, peintures — noms empreintés par Vite
   plis/                   les poèmes encodés + l'index      (copié de public/)
   icones/                 icônes, manifeste, og.png         (→ installation.md)
-  404.html  CNAME  .nojekyll
+  404.html  .nojekyll
 ```
 
 Deux workflows, et pas un de plus :
@@ -37,7 +37,7 @@ peintures servies vivent dans `src/`, d'où Vite les empreinte
 | Aucun en-tête personnalisable | `cache-control: max-age=600` sur tout, sans exception — voir plus bas |
 | Aucune réécriture d'URL | routage par hash, non négociable ([architecture.md](architecture.md#routage)) |
 | gzip, pas de brotli | compter les budgets en **gzip**, jamais en brotli |
-| Pas de redirection, pas de règle | le seul filet est `404.html`, en crème, qui renvoie à `pli.re/` |
+| Pas de redirection, pas de règle | le seul filet est `404.html`, en crème, qui renvoie à `leo-bernard38.github.io/` |
 | Aucun secret, aucune variable | tout ce qui est buildé est public — le numéro WhatsApp voyage dans le lien |
 
 Pas de `robots.txt` : tenir les moteurs à l'écart est le travail de la balise `noindex`, et
@@ -46,7 +46,7 @@ un `Disallow` global couperait aussi l'aperçu du lien ([partage.md](partage.md#
 Vérification, à refaire le jour où Pages change d'avis :
 
 ```sh
-curl -sSI -H 'Accept-Encoding: br, gzip' https://pli.re/ | grep -i 'cache-control\|content-encoding'
+curl -sSI -H 'Accept-Encoding: br, gzip' https://leo-bernard38.github.io/ | grep -i 'cache-control\|content-encoding'
 ```
 
 Mesuré sur un site Pages le 17 août 2026 : `cache-control: max-age=600`,
@@ -68,13 +68,21 @@ Trois conséquences qui gouvernent tout le reste :
    ([roadmap.md](roadmap.md)) : le manifeste suffit pour l'écran d'accueil, et un cache
    qu'on gère mal est pire qu'un cache court.
 
-## Le domaine
+## L'adresse
 
-`pli.re`, apex, par un `CNAME` à la racine du build et les enregistrements DNS fournis par
-GitHub. « Enforce HTTPS » activé dans les réglages du dépôt — un lien en clair qui redirige
-coûte un aller-retour et casse l'aperçu.
+`https://leo-bernard38.github.io/`, servie à la **racine** — c'est le site d'utilisateur de
+GitHub, obtenu en nommant le dépôt `leo-bernard38.github.io`. Pas de domaine personnalisé,
+donc **pas de `CNAME`**, pas de DNS à tenir, et HTTPS d'office. `base` de Vite reste `/` :
+c'est la racine d'un hôte, pas un sous-chemin de dépôt.
 
-**Le domaine ne change plus.** Il est dans chaque lien déjà envoyé.
+Un sous-chemin (`…github.io/Pli/`) n'est **pas** une cible : `base` devrait changer, toutes
+les adresses absolues du produit avec, et le préfixe de chaque lien s'allongerait de cinq
+signes — cinq signes de moins pour le pli, qui voyage entièrement dans le fragment.
+
+**L'adresse se gèle au premier pli envoyé**, pas avant. Tant qu'aucun lien n'est parti, elle
+peut encore devenir un vrai domaine : il suffirait de l'acheter, de le renseigner dans les
+réglages du dépôt, de poser les enregistrements DNS de GitHub et d'activer « Enforce HTTPS ».
+Après le premier pli, **elle ne change plus** — elle est dans une conversation, pour toujours.
 
 ## Ce qui ne doit jamais casser
 
@@ -95,10 +103,10 @@ vigilance est de ne pas y verser un jour les originaux des peintures.
 
 ## Avant le premier déploiement
 
-- [ ] `base: '/'` dans Vite — un domaine propre, pas un sous-chemin de dépôt
-- [ ] `CNAME` et `.nojekyll` dans `public/`, donc à la racine de `dist/`
-- [ ] HTTPS forcé
-- [ ] `404.html` en crème, qui renvoie à `pli.re/`
+- [ ] `base: '/'` dans Vite — la racine d'un hôte, pas un sous-chemin de dépôt
+- [ ] `.nojekyll` dans `public/`, donc à la racine de `dist/` — et **pas** de `CNAME`
+- [ ] le dépôt nommé `leo-bernard38.github.io`, source de Pages = « GitHub Actions »
+- [ ] `404.html` en crème, qui renvoie à `leo-bernard38.github.io/`
 - [ ] `design/` absent de `dist/`
 - [ ] les balises `og:` servies dans le HTML statique ([partage.md](partage.md))
 - [ ] `curl` de vérification passé sur le domaine réel

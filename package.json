@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "verifie": "node scripts/verifie.mjs",
     "types": "tsc --noEmit && tsc --noEmit -p tsconfig.isomorphe.json",
     "test": "node --test src/lib/*.test.ts"
   },

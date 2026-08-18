@@ -30,10 +30,12 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - run: npm run verifie
       - run: npm test
       - run: npm run build
 
-      # dist/ porte déjà CNAME, .nojekyll et 404.html, copiés de public/.
+      # dist/ porte déjà .nojekyll et 404.html, copiés de public/. Pas de CNAME :
+      # le site est servi à la racine de leo-bernard38.github.io (docs/hebergement.md#ladresse).
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

@@ -80,7 +80,7 @@ Voici tout ce qui s'en déduit.
 | A4 | « écrire à ton tour ↑ » | « tes plis ↑ » — elle n'a pas d'atelier |
 | D3 | `pli.re/015-vhtq` affiché en clair | Le lien ne s'affiche pas : **envoyer** et **copier le lien** |
 | E1 | « lien valable 30 jours » | Supprimé — il n'y a plus d'expiration |
-| E1 | `pli.re/deposer` dans le chrome | `pli.re/atelier/` |
+| E1 | `pli.re/deposer` dans le chrome | `leo-bernard38.github.io/atelier/` |
 | C4 | « lien mort · expiré » | « lien abîmé » — le cas réel est le lien tronqué par la messagerie |
 
 ### Structure
@@ -157,7 +157,7 @@ image sombre**, non en encre et carmin sur du papier.
 **Le débordement du gabarit** se traite des deux côtés, et les deux sont écrits. Un plafond
 **par type**, mesuré à 360 × 780 et daté, dans
 [donnees.md](donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé) — c'est le dépôt qui
-s'y tiendra, au jalon 5. Et une garde dans le gabarit : `.corps { overflow: hidden }`, pour
+s'y tiendra, au jalon 4. Et une garde dans le gabarit : `.corps { overflow: hidden }`, pour
 qu'un lien fabriqué à la main ne recouvre jamais la marque.
 
 La mesure a sorti un résultat que personne n'attendait : **l'invitation ne tient pas les

@@ -1,6 +1,6 @@
 # polices-source/ — les quatre familles, telles qu'elles arrivent
 
-Aucun tiers, jamais : pas de CDN de polices, pas une connexion en dehors de `pli.re`. Les
+Aucun tiers, jamais : pas de CDN de polices, pas une connexion en dehors de `leo-bernard38.github.io`. Les
 polices vivent donc dans le dépôt, et ce dossier garde **les sources**, avec leurs licences.
 
 Ce qui est servi n'est pas ici : c'est `src/fonts/`, écrit par

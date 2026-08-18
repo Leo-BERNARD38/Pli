@@ -63,7 +63,7 @@ probable est celle-ci — pas une panne de réseau, puisque le document est arri
 échec d'un import empreinté
   → sessionStorage a-t-il déjà le drapeau « rechargé » ?
       oui  → on n'insiste pas : on reste sur ce qui est affiché
-      non  → poser le drapeau, puis recharger sur pli.re/?r=<horodatage>#<hash inchangé>
+      non  → poser le drapeau, puis recharger sur leo-bernard38.github.io/?r=<horodatage>#<hash inchangé>
 ```
 
 Deux points qui font que ça marche :

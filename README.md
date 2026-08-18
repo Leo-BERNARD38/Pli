@@ -10,8 +10,8 @@ Mobile pour elle, statique (GitHub Pages), sans backend, sans compte.
 
 | Entrée | Pour qui |
 |---|---|
-| `pli.re/` | elle — les plis reçus, le journal |
-| `pli.re/atelier/` | moi — déposer, fabriquer le lien |
+| `leo-bernard38.github.io/` | elle — les plis reçus, le journal |
+| `leo-bernard38.github.io/atelier/` | moi — déposer, fabriquer le lien |
 
 ## Déposer un poème
 
@@ -49,7 +49,7 @@ plier.bat
 La moulinette écrit `public/plis/015-vhtq.txt` et `public/plis/index`, puis imprime :
 
 ```
-nº 015 → https://pli.re/#p=015-vhtq
+nº 015 → https://leo-bernard38.github.io/#p=015-vhtq
 ```
 
 **3. Pousser**, et envoyer le lien.
@@ -63,12 +63,13 @@ nº 015 → https://pli.re/#p=015-vhtq
 npm install
 npm run dev        # les deux entrées
 npm run build
+npm run verifie    # lexique, encres, invariants, mouvement — déterministe, sans agent
 npm run types      # dont src/lib/ compilé sans la bibliothèque DOM
 npm test           # codec.ts, dates.ts, le routeur
 ```
 
-La moulinette et son `plier.sh` n'existent pas encore : c'est le **jalon 6**
-([docs/roadmap.md](docs/roadmap.md)).
+La moulinette et son `plier.sh` n'existent pas encore : le poème est passé dans
+**« plus tard »** ([docs/roadmap.md](docs/roadmap.md)). Trois types de plis partent sans lui.
 
 ## Documentation
 

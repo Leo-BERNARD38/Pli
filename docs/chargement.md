@@ -20,7 +20,7 @@ L'objectif chiffré ne bouge pas : **le texte d'A1 lisible en moins d'une second
 
 Cible d'ensemble : **A1 en cinq requêtes** — le document, trois polices, une peinture. Et
 rien de tiers, jamais : pas de CDN de polices, pas de mesure d'audience, pas une seule
-connexion en dehors de `pli.re`.
+connexion en dehors de `leo-bernard38.github.io`.
 
 ## Vague 1 — le document se suffit à lui-même
 
@@ -198,7 +198,7 @@ d'A1 : Safari ne donne pas de LCP, et le premier rendu peint le plateau avant le
 
 ## Ce qui fait échouer la revue d'un écran
 
-1. Une requête vers un domaine autre que `pli.re`.
+1. Une requête vers un domaine autre que `leo-bernard38.github.io`.
 2. Une feuille de style ou un script bloquant entre le HTML et le premier texte.
 3. Une image, une police ou un module chargé **pendant** le geste
    ([fluidite.md](fluidite.md#la-file-dattente-principale)).

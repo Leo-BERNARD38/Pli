@@ -74,7 +74,7 @@ Le titre est le levier : à 64px, 22 signes font une troisième ligne de capital
 92px d'un coup, là où le paragraphe ci-dessus n'en veut que deux. D'où **16** — et « Tu es
 invitée » en fait 13.
 
-Ces plafonds sont ceux du **dépôt** : c'est l'atelier qui les tiendra, au jalon 5. Le lecteur,
+Ces plafonds sont ceux du **dépôt** : c'est l'atelier qui les tiendra, au jalon 4. Le lecteur,
 lui, ne fait plus confiance à personne — le corps coupe chez lui plutôt que de recouvrir la
 marque ([integration.md](integration.md)).
 
@@ -162,7 +162,7 @@ Elle lit le front-matter et le corps, construit **le même objet JSON qu'un pli 
 met l'index à jour et imprime le lien fini :
 
 ```
-nº 015 → https://pli.re/#p=015-vhtq
+nº 015 → https://leo-bernard38.github.io/#p=015-vhtq
 ```
 
 Je ne nomme que le numéro. **Le jeton de quatre signes est ajouté par la moulinette** dans

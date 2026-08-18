@@ -1,5 +1,9 @@
 # Roadmap
 
+Sept jalons sont devenus cinq : le journal et l'atelier ont changé de place, le poème et le
+bureau sont passés dans « plus tard ». Le lancement, lui, est nommé — il tombe à la fin du
+jalon 3, et tout ce qui suit est du confort.
+
 ## Avant la première ligne de code
 
 ### Tranché
@@ -15,8 +19,8 @@
 
 | Point | Ce qui manque | Quand |
 |---|---|---|
-| **Le numéro `n` des plis courts** | il vient de `pli.v1.compteur`, sur mon téléphone seul. Le tiroir l'affiche et permet de le corriger — reste à décider ce qui se passe si je ne m'en aperçois pas | jalon 5 |
-| **Hors ligne ≠ introuvable** | pour un poème, C4 confond un fichier absent et un réseau coupé. Le second mérite « réessayer », pas « lien abîmé » ([parcours.md](parcours.md#les-états)) | jalon 6 |
+| **Le numéro `n` des plis courts** | il vient de `pli.v1.compteur`, sur mon téléphone seul. Le tiroir l'affiche et permet de le corriger — reste à décider ce qui se passe si je ne m'en aperçois pas | jalon 4 |
+| **Hors ligne ≠ introuvable** | pour un poème, C4 confond un fichier absent et un réseau coupé. Le second mérite « réessayer », pas « lien abîmé » ([parcours.md](parcours.md#les-états)) | avec le poème |
 
 Les écrans qui ne sont pas encore maquettés sont listés à part, en fin de
 [parcours.md](parcours.md#3-ce-qui-nest-pas-encore-maquetté).
@@ -26,7 +30,7 @@ Les écrans qui ne sont pas encore maquettés sont listés à part, en fin de
 - Vite + TypeScript, deux entrées (`/` et `/atelier/`)
 - Les deux workflows : vérification sur PR, déploiement sur `main`
   ([hebergement.md](hebergement.md#ce-qui-est-déployé))
-- Domaine `pli.re`, `CNAME`, `.nojekyll`, `404.html`, déploiement GitHub Pages par Actions
+- Adresse `leo-bernard38.github.io`, `.nojekyll`, `404.html`, déploiement GitHub Pages par Actions
   ([hebergement.md](hebergement.md#avant-le-premier-déploiement))
 - Routeur par hash
 - `lib/codec.ts` : encode / décode, **isomorphe Node + navigateur**, avec tests
@@ -68,51 +72,78 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
 
 **Fin du jalon :** le premier vrai pli envoyé.
 
-## Jalon 3 — La réponse
+## Jalon 3 — La boucle
 
+Deux écrans et un module, et le produit existe pour de bon : elle reçoit, elle répond, le
+mot arrive.
+
+- `lib/journal.ts` — **le module, pas l'écran** : l'écriture au dépliage et le dédoublonnage
+  sur l'empreinte `h`. A3 note la réponse dans le journal avant d'ouvrir WhatsApp
+  ([parcours.md](parcours.md#a3--la-réponse--invitation-seulement)), donc le module vient ici
+  et pas plus tard. Il porte aussi l'invariant « tout `localStorage` passe par `journal.ts` »
 - A3 les trois mots, A4 le mot
-- Le passage à WhatsApp, dans le bon ordre
-- C2 déjà répondu
+- Le passage à WhatsApp, dans le bon ordre — la réponse notée, **puis** A4, **puis** `wa.me`
 
-## Jalon 4 — Le journal
+**Fin du jalon :** elle a répondu, et le mot est arrivé.
 
-- Écriture au dépliage, dédoublonnage sur l'empreinte
-- C1 le journal, et son état vide
-- C3 refermé, et son chemin vers le journal
-- La marque comme chemin discret
-- Le manifeste et les icônes — faits, à servir tels quels
-  ([installation.md](installation.md#le-manifeste-et-les-icônes))
-- L'écran `#/installer` — **sa forme dépend de la mesure du jalon 1**
-- Le réglage de cadence sur son iPhone, au moment de l'installation
-  ([installation.md](installation.md#le-réglage-de-cadence))
-- Export du journal
+> **C'est ici qu'on lance.** Tout ce qui suit est du confort — précieux, mais du confort. Un
+> pli se fabrique encore en ligne de commande et le journal ne se lit pas encore : l'échange,
+> lui, fonctionne de bout en bout.
+>
+> À dire honnêtement : A3 n'existe **que pour l'invitation**. Une pensée et un souvenir
+> s'ouvrent et se referment sans réponse — c'est le produit, pas un manque.
 
-**Fin du jalon :** son journal existe et survit à deux semaines de silence.
+## Jalon 4 — L'atelier
 
-## Jalon 5 — L'atelier
+Le seul jalon qui change ma vie à moi : tant qu'il n'existe pas, chaque pli passe par un
+terminal.
 
-- D0 le seuil
-- D4 le tiroir : le numéro de réponse et la signature, gardés sur mon téléphone
+- D0 le seuil, D4 le tiroir — le numéro de réponse et la signature, gardés sur mon téléphone
 - D1 le type, D2 les textes, D3 le lien
-- Compteur de signes calé sur le plafond mesuré
+- Compteur de signes calé sur le plafond mesuré — **dépend de la mesure 1**
 - Partage natif et copie du lien
 - Mon historique des plis déposés
 
 **Fin du jalon :** je compose et j'envoie depuis mon téléphone, sans passer par le code.
 
-## Jalon 6 — Le poème
+## Jalon 5 — La durée
+
+Ce qui fait qu'un pli reste un pli, et pas un message.
+
+- C1 le journal et son état vide — le module existe depuis le jalon 3, l'écran non
+- C2 déjà répondu — il n'est atteignable **que** depuis une entrée du journal
+  ([parcours.md](parcours.md)), donc il vient avec C1 et pas avant
+- C3 refermé, et son chemin vers le journal
+- La marque comme chemin discret
+- Le manifeste et les icônes — faits, à servir tels quels
+  ([installation.md](installation.md#le-manifeste-et-les-icônes))
+- L'écran `#/installer` — **sa forme dépend de la mesure 4**
+- Le réglage de cadence sur son iPhone, au moment de l'installation
+
+**Fin du jalon :** son journal existe et survit à deux semaines de silence.
+
+## Plus tard
+
+### Le poème
+
+Le quatrième type, et de loin le plus de machinerie : une moulinette, un format de fichier
+public pour toujours, une pagination, deux écrans de plus. Trois types de plis partent sans
+lui. Il remonte le jour où il manque vraiment.
 
 - `scripts/plier.mjs`, `plier.bat`, `plier.sh`
 - `plis-source/` gitignoré, garde-fou avant commit
 - B2 · B3 : la pagination strophe par strophe, au même geste
 - C5 l'attente du fichier
 - D2p : la liste des poèmes dans l'atelier
+- **Hors ligne ≠ introuvable** : pour un poème, C4 confond un fichier absent et un réseau
+  coupé. Le second mérite « réessayer », pas « lien abîmé »
+  ([parcours.md](parcours.md#les-états))
 
-## Jalon 7 — Le bureau
+### Le bureau
 
-- E1, l'atelier en 1440 × 900
+E1, l'atelier en 1440 × 900. Deux téléphones suffisent à faire vivre le produit.
 
-## Plus tard
+### Le reste
 
 - Un service worker, seul moyen de dépasser les dix minutes de cache de GitHub Pages
   ([hebergement.md](hebergement.md#ce-que-max-age600-change))
