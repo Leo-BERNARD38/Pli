@@ -43,7 +43,7 @@ function rechargerUneFois(): void {
     // n'insiste pas — ce qui est affiché reste affiché.
     return
   }
-  window.location.replace(`/?r=${Date.now()}${window.location.hash}`)
+  window.location.replace(`${import.meta.env.BASE_URL}?r=${Date.now()}${window.location.hash}`)
 }
 
 /** Après le premier rendu, et pas avant. */

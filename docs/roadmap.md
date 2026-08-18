@@ -30,7 +30,7 @@ Les écrans qui ne sont pas encore maquettés sont listés à part, en fin de
 - Vite + TypeScript, deux entrées (`/` et `/atelier/`)
 - Les deux workflows : vérification sur PR, déploiement sur `main`
   ([hebergement.md](hebergement.md#ce-qui-est-déployé))
-- Adresse `leo-bernard38.github.io`, `.nojekyll`, `404.html`, déploiement GitHub Pages par Actions
+- Adresse `leo-bernard38.github.io/Pli`, `.nojekyll`, `404.html`, déploiement GitHub Pages par Actions
   ([hebergement.md](hebergement.md#avant-le-premier-déploiement))
 - Routeur par hash
 - `lib/codec.ts` : encode / décode, **isomorphe Node + navigateur**, avec tests

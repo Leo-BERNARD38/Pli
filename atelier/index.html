@@ -8,11 +8,14 @@
     <title>l'atelier</title>
 
     <!-- Les mêmes icônes et le même manifeste que chez elle
-         (docs/installation.md#le-manifeste-et-les-icônes). -->
-    <link rel="icon" href="/icones/favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="icon" href="/icones/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/icones/apple-touch-icon.png" />
-    <link rel="manifest" href="/icones/site.webmanifest" />
+         (docs/installation.md#le-manifeste-et-les-icônes). Le préfixe `/Pli/` est écrit à la
+         main ici, et seulement ici : le build de l'atelier tourne sans `publicDir`, donc Vite
+         n'a pas de fichier public à reconnaître et ne réécrit pas ces adresses. Chez elle,
+         `index.html` les écrit sans préfixe et Vite le pose (docs/hebergement.md#ladresse). -->
+    <link rel="icon" href="/Pli/icones/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/Pli/icones/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/Pli/icones/apple-touch-icon.png" />
+    <link rel="manifest" href="/Pli/icones/site.webmanifest" />
 
     <!-- Personne ne partage l'atelier : aucune balise og:, seulement noindex
          (docs/partage.md#les-balises-écrites-une-fois-pour-toutes). -->

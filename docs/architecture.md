@@ -13,8 +13,8 @@ Le framework coûterait plus qu'il ne rapporte.
 ## Deux entrées
 
 ```
-leo-bernard38.github.io/           elle   → index.html
-leo-bernard38.github.io/atelier/   moi    → atelier/index.html
+leo-bernard38.github.io/Pli/           elle   → index.html
+leo-bernard38.github.io/Pli/atelier/   moi    → atelier/index.html
 ```
 
 Deux entrées Vite, donc **deux bundles réellement distincts**. Le formulaire, les aperçus
@@ -27,11 +27,11 @@ Routage par **hash**, obligatoire sur GitHub Pages : pas de réécriture serveur
 URL profonde tomberait en 404.
 
 ```
-leo-bernard38.github.io/#/            ses plis (vide tant qu'elle n'a rien reçu)
-leo-bernard38.github.io/#c=<payload>  un pli porté par le lien
-leo-bernard38.github.io/#p=<nom>      un poème, porté par un fichier
-leo-bernard38.github.io/#/installer   la marche à suivre pour l'ajout à l'écran d'accueil
-leo-bernard38.github.io/atelier/      D0 → D1 → D2 → D3
+leo-bernard38.github.io/Pli/#/            ses plis (vide tant qu'elle n'a rien reçu)
+leo-bernard38.github.io/Pli/#c=<payload>  un pli porté par le lien
+leo-bernard38.github.io/Pli/#p=<nom>      un poème, porté par un fichier
+leo-bernard38.github.io/Pli/#/installer   la marche à suivre pour l'ajout à l'écran d'accueil
+leo-bernard38.github.io/Pli/atelier/      D0 → D1 → D2 → D3
 ```
 
 Le routeur est une fonction sur `hashchange`. Pas de librairie.
@@ -128,9 +128,10 @@ de « je t'ai envoyé un pli ». C'est ce qui justifie que le poème passe par u
 ## Hébergement
 
 GitHub Pages, déploiement par GitHub Actions sur push vers `main`. Adresse :
-**`leo-bernard38.github.io`**, le site d'utilisateur, servi à la racine — le dépôt porte ce
-nom-là. Pas de domaine personnalisé, donc pas de `CNAME`. `base` de Vite = `/`, `.nojekyll` à
-la racine, aucune variable secrète — tout ce qui est buildé est public.
+**`leo-bernard38.github.io/Pli/`**, le site de projet, servi sous un sous-chemin — le dépôt
+s'appelle `Pli`, et rien n'a été renommé. Pas de domaine personnalisé, donc pas de `CNAME`.
+`base` de Vite = `/Pli/`, `.nojekyll` à la racine de `dist/`, aucune variable secrète — tout
+ce qui est buildé est public ([hebergement.md](hebergement.md#ladresse)).
 
 Deux traits de l'hébergeur gouvernent le reste et ne se contournent pas :
 
@@ -149,7 +150,7 @@ Trois points qui restent ici parce qu'ils touchent au produit :
   lien envoyé y gagne 18 caractères.
 - **Ne plus changer de domaine.** Il est dans chaque lien déjà envoyé.
 - `public/plis/` est copié tel quel dans la sortie — les poèmes se lisent en **même
-  origine**, `leo-bernard38.github.io/plis/015-vhtq.txt`. Aucune question de CORS, un cache HTTP normal.
+  origine**, `leo-bernard38.github.io/Pli/plis/015-vhtq.txt`. Aucune question de CORS, un cache HTTP normal.
 
 ## Poids
 

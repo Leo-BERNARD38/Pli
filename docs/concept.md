@@ -31,8 +31,8 @@ publiable : pas de comptes, pas de modération, pas d'inscription.
 
 | Entrée | Pour qui | Rôle |
 |---|---|---|
-| `leo-bernard38.github.io/` | elle | Les plis reçus, et le journal |
-| `leo-bernard38.github.io/atelier/` | moi | Déposer un pli, fabriquer le lien |
+| `leo-bernard38.github.io/Pli/` | elle | Les plis reçus, et le journal |
+| `leo-bernard38.github.io/Pli/atelier/` | moi | Déposer un pli, fabriquer le lien |
 
 Deux points d'entrée, deux bundles distincts. L'atelier ne se charge jamais sur son
 téléphone. Le détail des routes est dans [architecture.md](architecture.md#routage).
@@ -58,7 +58,7 @@ réponse** — les trois autres se lisent et s'archivent.
 l'envoi est instantané et fonctionne hors ligne.
 
 **Le poème est un fichier.** Je l'écris à la main dans un `.md`, une moulinette locale
-l'encode, je pousse. Le lien ne porte que son numéro : `leo-bernard38.github.io/#p=015-vhtq`. C'est ce qui
+l'encode, je pousse. Le lien ne porte que son numéro : `leo-bernard38.github.io/Pli/#p=015-vhtq`. C'est ce qui
 permet à un poème d'être long sans produire un lien de deux mille caractères.
 
 Le format des deux est détaillé dans [donnees.md](donnees.md).

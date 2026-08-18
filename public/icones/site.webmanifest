@@ -4,17 +4,17 @@
   "description": "Un message qui arrive plié.",
   "lang": "fr",
   "dir": "ltr",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/Pli/",
+  "scope": "/Pli/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#F7F2E8",
   "theme_color": "#C81E33",
   "icons": [
-    { "src": "/icones/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
-    { "src": "/icones/icon-192.png", "type": "image/png", "sizes": "192x192" },
-    { "src": "/icones/icon-512.png", "type": "image/png", "sizes": "512x512" },
-    { "src": "/icones/icon-512-masque.png", "type": "image/png", "sizes": "512x512",
+    { "src": "/Pli/icones/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/Pli/icones/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/Pli/icones/icon-512.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "/Pli/icones/icon-512-masque.png", "type": "image/png", "sizes": "512x512",
       "purpose": "maskable" }
   ]
 }

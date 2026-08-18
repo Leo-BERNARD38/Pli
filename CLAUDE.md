@@ -6,14 +6,14 @@ commits, interface. On garde le français.
 ## Ce qu'est Pli
 
 Un lien = un pli. Elle reçoit un lien par WhatsApp, trouve une feuille fermée, la tire du
-doigt, le message se découvre. Statique (GitHub Pages, domaine `leo-bernard38.github.io`), **sans backend,
-sans compte, sans base de données**. Deux personnes, deux téléphones — pas un produit
+doigt, le message se découvre. Statique (GitHub Pages, servi sous
+`leo-bernard38.github.io/Pli/`), **sans backend, sans compte, sans base de données**. Deux personnes, deux téléphones — pas un produit
 publiable.
 
 | Entrée | Pour qui | Contenu |
 |---|---|---|
-| `leo-bernard38.github.io/` | elle | les plis reçus (A1→A4), le journal (C1→C5) |
-| `leo-bernard38.github.io/atelier/` | moi | déposer, fabriquer le lien (D0→D4, E1) |
+| `leo-bernard38.github.io/Pli/` | elle | les plis reçus (A1→A4), le journal (C1→C5) |
+| `leo-bernard38.github.io/Pli/atelier/` | moi | déposer, fabriquer le lien (D0→D4, E1) |
 
 Quatre types de pli — `inv` invitation, `pen` pensée, `poe` poème, `sou` souvenir. Les trois
 courts voyagent **entièrement dans le fragment de l'URL** ; le poème est un fichier encodé du
@@ -70,9 +70,12 @@ Un lien parti n'a plus de version : il est dans une conversation, pour toujours.
    proprement.
 7. **Aucun tiers, jamais.** Pas de CDN, pas de mesure d'audience, pas de framework, pas de
    polyfill. On cible iOS 26 et Android 16, deux appareils connus.
-8. **L'adresse se gèle au premier pli envoyé.** Aujourd'hui `leo-bernard38.github.io`,
-   à la racine, sans domaine personnalisé ni `CNAME`. Tant qu'aucun lien n'est parti elle peut
-   encore devenir un vrai domaine ; après, elle est dans une conversation, pour toujours.
+8. **L'adresse se gèle au premier pli envoyé.** Aujourd'hui `leo-bernard38.github.io/Pli/`,
+   un **site de projet** servi sous un sous-chemin, sans domaine personnalisé ni `CNAME`. Le
+   préfixe `/Pli/` n'est écrit qu'une fois, dans `vite.config.ts` : le module le lit dans
+   `import.meta.env.BASE_URL`, et rien du produit ne s'écrit à la racine de l'hôte. Tant
+   qu'aucun lien n'est parti l'adresse peut encore devenir un vrai domaine ; après, elle est
+   dans une conversation, pour toujours.
 
 ## Le rituel — comment une tâche se termine ici
 

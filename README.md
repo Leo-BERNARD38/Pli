@@ -10,8 +10,8 @@ Mobile pour elle, statique (GitHub Pages), sans backend, sans compte.
 
 | Entrée | Pour qui |
 |---|---|
-| `leo-bernard38.github.io/` | elle — les plis reçus, le journal |
-| `leo-bernard38.github.io/atelier/` | moi — déposer, fabriquer le lien |
+| `leo-bernard38.github.io/Pli/` | elle — les plis reçus, le journal |
+| `leo-bernard38.github.io/Pli/atelier/` | moi — déposer, fabriquer le lien |
 
 ## Déposer un poème
 
@@ -49,7 +49,7 @@ plier.bat
 La moulinette écrit `public/plis/015-vhtq.txt` et `public/plis/index`, puis imprime :
 
 ```
-nº 015 → https://leo-bernard38.github.io/#p=015-vhtq
+nº 015 → https://leo-bernard38.github.io/Pli/#p=015-vhtq
 ```
 
 **3. Pousser**, et envoyer le lien.

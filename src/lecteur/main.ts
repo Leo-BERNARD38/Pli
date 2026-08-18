@@ -31,10 +31,15 @@ import { chemin, journal, rappeler, refermer } from './plis.ts'
 // partait 63 ms trop tard. Il n'y a plus de feuille à attendre — mesuré à 60 ms de latence,
 // cinq passes alternées : 75 ms d'ici contre 77 ms depuis le <head>. L'écart a disparu avec
 // sa cause, et le nom d'un poème redevient l'affaire du seul routeur.
+// Le site est servi sous un sous-chemin — `leo-bernard38.github.io/Pli/` — et rien de ce qui
+// s'écrit à la main ne doit l'oublier : Vite remplace `BASE_URL` par ce préfixe au build, et
+// c'est le seul endroit du produit où il est écrit (docs/hebergement.md#ladresse).
+const RACINE = import.meta.env.BASE_URL
+
 const premiere = lire(window.location.hash)
 let dejaDemande =
   premiere.ecran === 'poeme'
-    ? { nom: premiere.nom, reponse: fetch(`/plis/${premiere.nom}.txt`) }
+    ? { nom: premiere.nom, reponse: fetch(`${RACINE}plis/${premiere.nom}.txt`) }
     : null
 
 const cadre = document.querySelector<HTMLElement>('.pli')
@@ -100,7 +105,7 @@ function chercher(nom: string): Promise<Response> {
   if (demande?.nom === nom) return demande.reponse
   // Une demande qu'on abandonne ne doit pas laisser un échec sans personne pour l'entendre.
   demande?.reponse.catch(() => {})
-  return fetch(`/plis/${nom}.txt`)
+  return fetch(`${RACINE}plis/${nom}.txt`)
 }
 
 /** Le pli, et le payload dont il sort : le journal range le second, jamais le premier. */

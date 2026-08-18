@@ -22,6 +22,13 @@ const POLICES_DU_PREMIER_ECRAN = [
 // qui n'ont aucune dépendance entre elles.
 const TOILE_DU_PREMIER_ECRAN = 'rideau-carmin-nuit'
 
+// Le sous-chemin où le site est servi. Le dépôt s'appelle `Pli` : GitHub Pages en fait un
+// **site de projet**, servi sous `leo-bernard38.github.io/Pli/` et non à la racine de l'hôte
+// (docs/hebergement.md#ladresse). Tout ce qui s'écrit en absolu dans le produit part d'ici,
+// et de nulle part ailleurs — le module lit `import.meta.env.BASE_URL`, que Vite remplace
+// par cette chaîne au build.
+const BASE = '/Pli/'
+
 // L'entrée du lecteur. L'atelier ne précharge rien et ne s'inline pas : il n'est jamais
 // servi sur son téléphone, et son premier écran n'a aucun budget de temps.
 const LECTEUR = '/index.html'
@@ -80,7 +87,7 @@ function prechargerLaVague2(): Plugin {
             type: 'font/woff2',
             // obligatoire même en même origine, sinon la police est chargée deux fois
             crossorigin: '',
-            href: `/${empreinte(paquet, famille, 'woff2')}`,
+            href: `${BASE}${empreinte(paquet, famille, 'woff2')}`,
           },
         }))
 
@@ -94,7 +101,7 @@ function prechargerLaVague2(): Plugin {
               as: 'image',
               // Le texte ne l'attend jamais : elle est découverte tôt, servie tard.
               fetchpriority: 'low',
-              href: `/${empreinte(paquet, TOILE_DU_PREMIER_ECRAN, 'webp')}`,
+              href: `${BASE}${empreinte(paquet, TOILE_DU_PREMIER_ECRAN, 'webp')}`,
             },
           },
         ]
@@ -213,7 +220,7 @@ function inlinerLeDocument(): Plugin {
         sortie = sortie.replace(
           /import\((["'`])\.\/([^"'`]+)\1\)/g,
           (_tout: string, guillemet: string, nom: string) =>
-            `import(${guillemet}/${dossier}${nom}${guillemet})`,
+            `import(${guillemet}${BASE}${dossier}${nom}${guillemet})`,
         )
 
         const relatif = sortie.match(/import\(["'`]\.\/[^"'`]+["'`]\)/g)
@@ -301,7 +308,7 @@ export default defineConfig(({ mode }) => {
     : { [ENTREE]: DOCUMENT }
 
   return {
-    base: '/',
+    base: BASE,
     // `public/` est recopié tel quel par le premier build ; le second le recopierait
     // par-dessus, à l'identique, pour rien.
     publicDir: atelier ? false : 'public',

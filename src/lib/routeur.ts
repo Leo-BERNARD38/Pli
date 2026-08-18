@@ -3,11 +3,11 @@
 // GitHub Pages ne réécrit aucune URL : toute URL profonde tomberait en 404, d'où le
 // routage par hash (docs/architecture.md#routage).
 //
-//   leo-bernard38.github.io/#/            ses plis
-//   leo-bernard38.github.io/#c=<payload>  un pli porté par le lien
-//   leo-bernard38.github.io/#p=<nom>      un poème, porté par un fichier
-//   leo-bernard38.github.io/#/relire/<h>  un pli de son journal, relu
-//   leo-bernard38.github.io/#/installer   l'ajout à l'écran d'accueil
+//   leo-bernard38.github.io/Pli/#/            ses plis
+//   leo-bernard38.github.io/Pli/#c=<payload>  un pli porté par le lien
+//   leo-bernard38.github.io/Pli/#p=<nom>      un poème, porté par un fichier
+//   leo-bernard38.github.io/Pli/#/relire/<h>  un pli de son journal, relu
+//   leo-bernard38.github.io/Pli/#/installer   l'ajout à l'écran d'accueil
 
 /** L'écran que le lien demande. */
 export type Route =

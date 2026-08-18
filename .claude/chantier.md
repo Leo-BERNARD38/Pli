@@ -26,8 +26,8 @@ et A4 avec le passage à WhatsApp. L'échange fonctionne de bout en bout dans Ch
 reste tient en une séance sur les deux téléphones — et le jalon 2, lui, attend toujours la
 sienne.
 
-Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : renommer le dépôt,
-ouvrir un lien sur son téléphone, et les trois mesures du jalon 1. Aucun ne bloque la suite.
+Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : déplier un lien
+sur son téléphone, et les trois mesures du jalon 1. Aucun ne bloque la suite.
 
 **La roadmap a été regroupée le 18/08/2026** : sept jalons deviennent cinq. Le jalon 5 est le
 dernier ; après lui, il n'y a plus que « plus tard » — le poème, le bureau, le reste.
@@ -62,18 +62,19 @@ journal se lit.
 - [x] `src/lib/codec.ts` — isomorphe Node + navigateur, avec ses tests
 - [x] `src/lib/dates.ts` — les formats français, avec ses tests
 - [x] le routeur par hash
-- [x] `.nojekyll`, `404.html`, `base: '/'` — le `CNAME` est parti avec `pli.re`
+- [x] `.nojekyll`, `404.html`, `base: '/Pli/'` — le `CNAME` est parti avec `pli.re`
 - [x] les deux workflows GitHub — vérification sur PR, déploiement sur `main`
 - [x] un pli en dur, sans style
 - [x] **à la main, chez moi** : Pages activé, source « GitHub Actions » — c'est bien celle
       que `deploiement.yml` demande, `actions/deploy-pages` ne sait pas déployer autrement
 - [x] le déploiement tourne : les runs 2 et 3 de `deploiement.yml` sont en succès, le site
       est construit et publié
-- [ ] **à la main, chez moi** : **renommer le dépôt `Pli` en `leo-bernard38.github.io`**, et
-      retirer le domaine personnalisé des réglages de Pages. Le site sera alors servi à la
-      racine de `https://leo-bernard38.github.io/`, ce que `base: '/'` suppose déjà. Rien
-      d'autre à faire : ni DNS, ni `CNAME`, ni « Enforce HTTPS » — un site d'utilisateur est
-      en HTTPS d'office ([docs/hebergement.md](../docs/hebergement.md#ladresse))
+- [x] l'adresse réelle : **`https://leo-bernard38.github.io/Pli/`**. Le dépôt garde son nom,
+      Pages en fait un site de projet servi sous `/Pli/`, et `base` vaut `/Pli/`. Le site ne
+      répondait que des 404 tant que `base` valait `/` — corrigé le 18/08/2026, avec tout ce
+      qui s'écrivait à la racine de l'hôte : le `fetch` d'un poème, le rechargement de
+      secours, l'adresse fabriquée par l'atelier, le manifeste, `404.html`, les balises `og:`
+      ([docs/hebergement.md](../docs/hebergement.md#ladresse))
 - [ ] **à la main, chez moi** : le `curl` de vérification sur l'adresse réelle
       ([docs/hebergement.md](../docs/hebergement.md#ce-que-pages-ne-donne-pas))
 - [ ] **à la main, sur les deux téléphones** : le lien ouvert chez elle
@@ -328,11 +329,12 @@ chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip g
 ## Ce qui reste ouvert
 
 - **Un vrai domaine, plus tard ?** L'adresse ne se gèle qu'au **premier pli envoyé**. Tant
-  qu'aucun lien n'est parti, `leo-bernard38.github.io` peut encore devenir un domaine acheté :
+  qu'aucun lien n'est parti, `leo-bernard38.github.io/Pli` peut encore devenir un domaine acheté :
   on le renseigne dans les réglages du dépôt, on pose les enregistrements DNS de GitHub, on
   active « Enforce HTTPS ». Après le premier pli, non — il est dans une conversation. Le
-  préfixe coûte 28 signes aujourd'hui contre 12 pour un domaine court, à rapprocher de la
-  mesure nº 1 quand elle sera faite.
+  préfixe compte **36 signes** aujourd'hui (`https://leo-bernard38.github.io/Pli/`), dont
+  quatre pour le sous-chemin, contre 15 pour un domaine court (`https://pli.re/`) — à
+  rapprocher de la mesure nº 1 quand elle sera faite.
 
 - **L'alphabet du jeton d'un poème.** Le routeur n'accepte que `numéro-jeton` en minuscules et
   chiffres. [docs/donnees.md](../docs/donnees.md#la-moulinette) dit « quatre signes » et rien
