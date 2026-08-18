@@ -423,6 +423,19 @@ a:hover {
   gap: 18px;
 }
 
+/* LA GARDE DU CORPS. Un pli trop long s'évacue par le haut — `flex: 1` avec
+   `justify-content: flex-end` — passe sur la tête, recouvre la marque, et se fait couper par
+   l'`overflow: hidden` du pli sans un mot. Vu, capturé : le titre d'un pli trop long
+   s'imprime par-dessus « Pli ».
+
+   Le corps coupe donc chez lui. Ce n'est pas la vraie réparation — celle-là est un plafond
+   au dépôt, mesuré et écrit dans docs/donnees.md#ce-que-le-papier-peut-porter — mais c'est
+   ce qui garantit qu'un lien fabriqué à la main, ou un pli d'une version antérieure au
+   plafond, ne recouvre jamais la marque (docs/integration.md). */
+.corps {
+  overflow: hidden;
+}
+
 /* Le volet occupe les 34 % du bas : quand il est là, le corps s'arrête au-dessus de
    lui, en gardant les 30px qu'il a déjà en pied (docs/design-system.md#le-gabarit).
 

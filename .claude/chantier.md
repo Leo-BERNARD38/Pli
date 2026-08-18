@@ -8,8 +8,8 @@ Une étape n'est cochée que lorsqu'elle est **écrite, relue et commitée**.
 
 ## Jalon courant
 
-**Jalon 2 — le pli et le geste.** En cours. Le document du lecteur se suffit désormais à
-lui-même ; A1, le geste, A2 et C4 suivent.
+**Jalon 2 — le pli et le geste.** Le code est écrit, relu et commité en trois lots. Ce qui
+reste tient en une séance sur les deux téléphones, et personne ne peut la faire à ma place.
 
 Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : régler GitHub
 Pages et le domaine, ouvrir un lien sur son téléphone, et les trois mesures du jalon 1.
@@ -105,14 +105,15 @@ première étape : c'est une requête avant le premier texte, et le document pè
 - [x] le document du lecteur se suffit à lui-même — gabarit et module inline, par le greffon
       `pli-inliner-le-document` de `vite.config.ts` ; **1 requête** avant le premier texte,
       **5,86 ko gzip**, plafond de 14 ko tenu par le build
-- [ ] le pli tient dans l'écran, quelle que soit la hauteur visible
-- [ ] A1 · l'attente, pour les quatre types
-- [ ] A2 · la découverte — invitation, pensée, souvenir
-- [ ] la vague 3 — la texture du type, Bodoni, le CSS du type, décodés pendant qu'elle
-      regarde le volet
-- [ ] le geste — seuil, élan, caoutchouc, alternative clavier, `prefers-reduced-motion`
-- [ ] C4 · le lien abîmé
-- [ ] le plafond du gabarit, mesuré, et la garde qui va avec
+- [x] le pli tient dans l'écran — `--echelle` sur le pli, vérifié de 320 × 568 à 1440 × 900 :
+      la page ne défile jamais et la composition ne bouge pas
+- [x] A1 · l'attente, pour les quatre types — le rideau, la promesse, le volet, l'invite
+- [x] A2 · la découverte — invitation, pensée, souvenir, et la première strophe d'un poème
+- [x] la vague 3 — la texture du type, son décodage, la feuille du type, Bodoni, puis le DOM
+      d'A2 : **0 requête après le geste**, mesuré
+- [x] le geste — les cinq chemins joués au pointeur, **exactement deux couches composées**
+- [x] C4 · le lien abîmé
+- [x] le plafond du gabarit, mesuré par type, et la garde qui va avec
 - [ ] **à la main, sur les deux téléphones** : dix dépliages d'affilée, les quatre types, à
       froid et à chaud — **aucune image perdue**
       ([fluidite.md](../docs/fluidite.md#comment-on-mesure))
@@ -312,6 +313,35 @@ n'est ni préchargée ni en vague 3 — elle est demandée à l'instant où C4 s
 muet pour autant : la phrase qui porte le message est en Newsreader, préchargée. À trancher
 si la mesure sur les deux téléphones le rend visible.
 
+
+### Jalon 2 — les lots B et C
+
+- **18/08/2026 — l'invite s'arrête, et `fluidite.md` est corrigé.** Il prescrivait
+  `animation-play-state: paused` **et** « exactement deux couches bordées » : les deux ne
+  pouvaient pas être vraies ensemble. Compté à l'inspecteur pendant un vrai glissement, en
+  pause il y a **quatre** couches — l'invite garde la sienne, et le cachet est promu parce
+  qu'il la recouvre. Arrêtée, il y en a deux.
+- **18/08/2026 — les cinq chemins du geste sont vérifiés à la machine** : hésitation à 30,8 %
+  referme, course à 51 % ouvre, coup sec à **11,5 % de course** ouvre, mauvais sens referme,
+  clavier ouvre. `will-change` retiré à chaque fois, le rideau sorti du document au dépliage.
+- **18/08/2026 — le voile d'une image dépend de ce qu'on écrit dessus, pas de la toile.**
+  Trois voiles mesurés, aucun choisi : pleine page sur encre `.68`, sous la tête d'un bandeau
+  `.82` tenu jusqu'à 20 %, sur le souvenir `.85` tenu jusqu'au tiers. Chacun est l'alpha qui
+  ramène le pire pixel de sa toile à 4,5:1 pour du crème.
+- **18/08/2026 — le souvenir écrit en crème, pas en carmin.** Sa toile porte un pixel **quasi
+  blanc** (`#fffffb`) là où la tête et le titre se posent : le carmin y est impossible quel
+  que soit le voile, le rose demanderait `.93`. C'est le seul écran du jalon dont aucune
+  maquette n'existe, et **le seul point tranché sans filet** — validé sur capture.
+- **18/08/2026 — l'invitation ne tient pas les maximums que `donnees.md` documentait.** Elle
+  porte trois de ses quatre éléments, jamais les quatre. Son titre descend à **16 signes** :
+  à 64px, 22 signes font une troisième ligne de capitales et coûtent 92px d'un coup. Les
+  plafonds sont désormais **par type**, mesurés et datés
+  ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé)).
+- **18/08/2026 — le corps coupe chez lui.** `.corps { overflow: hidden }` : la vraie
+  réparation est le plafond au dépôt, mais un lien fabriqué à la main ne doit jamais recouvrir
+  la marque. Vu et capturé avant la garde : le titre s'imprimait par-dessus « Pli ».
+- **18/08/2026 — le poème ne montre que sa première strophe.** La pagination est le jalon 6 ;
+  lui poser « la suite ↑ » alors que rien ne suit serait un mensonge.
 
 ## Ce que les relecteurs demandent pour la suite
 

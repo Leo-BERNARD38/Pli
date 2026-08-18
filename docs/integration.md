@@ -146,21 +146,25 @@ avant qu'un poème ait besoin d'une correction.
 
 ### Ce qui a été tranché avec A1, au jalon 2
 
-Cinq questions que cette section laissait ouvertes sont tranchées. Elles sont reportées dans
-le tableau ci-dessus ; voici ce qui les a tranchées. **Une seule est tranchée sans être
-faite** — le plafond du gabarit : l'approche est décidée, la mesure et la garde restent à
-écrire, et [donnees.md](donnees.md) dit toujours que le plafond « se fixe par la mesure ».
+Cinq questions que cette section laissait ouvertes sont tranchées, et faites. Elles sont
+reportées dans le tableau ci-dessus ; voici ce qui les a tranchées.
 
 **Le fond d'A1, c'est le rideau.** `parcours.md` et `design-system.md` le disent tous les
 deux, seule la maquette montre un papier crème — et `docs/` gagne toujours contre `design/`.
 Le choix emporte le fondu, comme annoncé : A1 compose donc **en crème et en rose sur une
 image sombre**, non en encre et carmin sur du papier.
 
-**Le débordement du gabarit** se traite des deux côtés : un plafond par clé, **mesuré** à
-360 × 780 et écrit dans [donnees.md](donnees.md) avec sa date, plus une garde dans le gabarit
-pour que le lecteur ne recouvre jamais la marque en silence. **Ni l'un ni l'autre n'existe
-encore** : `.pli { overflow: hidden }` coupe toujours sans un mot. C'est la seule décision de
-cette liste qui laisse du travail derrière elle.
+**Le débordement du gabarit** se traite des deux côtés, et les deux sont écrits. Un plafond
+**par type**, mesuré à 360 × 780 et daté, dans
+[donnees.md](donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé) — c'est le dépôt qui
+s'y tiendra, au jalon 5. Et une garde dans le gabarit : `.corps { overflow: hidden }`, pour
+qu'un lien fabriqué à la main ne recouvre jamais la marque.
+
+La mesure a sorti un résultat que personne n'attendait : **l'invitation ne tient pas les
+maximums que `donnees.md` documentait**. Elle porte trois de ses quatre éléments — titre à
+22 signes, voix, trois faits, griffe — jamais les quatre. Le titre est le levier : à 64px,
+22 signes font une troisième ligne de capitales et coûtent 92px d'un coup. Son plafond
+descend donc à **16**.
 
 **Un pli de 780px sur un écran plus court** : il se met à l'échelle. Mesuré de 320 × 568 à
 1440 × 900, la page ne défile plus jamais et la composition ne bouge pas d'un pixel.
