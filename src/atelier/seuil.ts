@@ -17,7 +17,7 @@ import { empreinteDuSeuil, noterLeSeuil } from '../lib/tiroir.ts'
  * qu'elle est vide, **rien ne passe** : un seuil sans empreinte serait une porte ouverte,
  * et une empreinte inventée serait une porte qu'aucune date n'ouvre.
  */
-const EMPREINTE = ''
+const EMPREINTE = '06e905485d3d3745e1fa94bdd0138854a7d2d9f42d8275afa1af9c108966e378'
 
 /** Le nombre de chiffres d'une date complète : au huitième, la ligne se juge. */
 const CHIFFRES = 8
