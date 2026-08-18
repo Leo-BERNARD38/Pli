@@ -52,11 +52,16 @@ export interface Pieces {
   auDepliage: () => void
 }
 
+/** Ce que l'appelant garde du geste : de quoi le remettre à zéro pour un autre pli. */
+export interface Geste {
+  refermer(): void
+}
+
 /**
  * Arme le dépliage. À n'appeler que **quand la couche du dessous est peinte** : le geste
  * déplace ce qui est prêt, il ne fabrique rien (docs/fluidite.md#la-file-dattente-principale).
  */
-export function armer(p: Pieces): void {
+export function armer(p: Pieces): Geste {
   const r = reglages()
   const couches = [p.dessus, p.dessous]
 
@@ -75,14 +80,14 @@ export function armer(p: Pieces): void {
   let yImage = 0
   let tImage = 0
   let vitesse = 0
-  let image = 0
+  let demandeImage = 0
 
   /**
    * Les deux seules écritures de tout le geste. En **pourcentages** : un `translate` en %
    * se rapporte à l'élément lui-même, donc plus rien ne dépend de la hauteur ici, et la
    * mise à l'échelle du plateau ne fausse rien.
    */
-  function peindre(course: number): void {
+  function placer(course: number): void {
     p.dessus.style.transform = `translate3d(0,${-course * 100}%,0)`
     p.dessous.style.transform = `translate3d(0,${(1 - course) * r.entree * 100}%,0)`
   }
@@ -133,7 +138,7 @@ export function armer(p: Pieces): void {
     ouvert = vers
 
     const avant = p.dessus.style.transform
-    peindre(vers ? 1 : 0)
+    placer(vers ? 1 : 0)
     // Rien n'a bougé : aucune transition ne se déclenchera, et `will-change` resterait posé.
     // Une propriété `will-change` oubliée transforme chaque écran en couche permanente.
     if (p.dessus.style.transform === avant) finir()
@@ -144,7 +149,7 @@ export function armer(p: Pieces): void {
    * et non entre deux événements — les événements pointeur sont coalescés, leur cadence
    * n'est pas celle de l'écran, et l'élan de 0,55 px/ms a été calibré sur des images.
    */
-  function auRythme(t: number): void {
+  function aChaqueImage(t: number): void {
     if (doigt === null) return
     if (tImage) {
       const dt = t - tImage
@@ -152,8 +157,8 @@ export function armer(p: Pieces): void {
     }
     yImage = y
     tImage = t
-    peindre(course(y))
-    image = requestAnimationFrame(auRythme)
+    placer(course(y))
+    demandeImage = requestAnimationFrame(aChaqueImage)
   }
 
   p.cadre.addEventListener('pointerdown', (e) => {
@@ -171,7 +176,7 @@ export function armer(p: Pieces): void {
     // taille d'une couche qui porte l'ombre et le grain, et la re-rastériserait.
     p.echelle.figer()
     preparer()
-    image = requestAnimationFrame(auRythme)
+    demandeImage = requestAnimationFrame(aChaqueImage)
   })
 
   // Un seul écouteur, passif, qui ne fait que mémoriser. Aucun `preventDefault` :
@@ -186,12 +191,12 @@ export function armer(p: Pieces): void {
 
   function relacher(e: PointerEvent): void {
     if (doigt !== e.pointerId) return
-    cancelAnimationFrame(image)
+    cancelAnimationFrame(demandeImage)
     p.cadre.releasePointerCapture(doigt)
     doigt = null
     const fin = course(e.clientY)
     // Un coup sec vers le bas referme même au-delà du seuil ; un coup sec vers le haut
-    // ouvre même à 10 % de course.
+    // déplie même à 10 % de course.
     poser(vitesse > r.elan ? false : vitesse < -r.elan || fin > r.seuil)
   }
 
@@ -212,5 +217,15 @@ export function armer(p: Pieces): void {
     if (e.target === p.dessus && e.propertyName === 'transform') finir()
   })
 
-  peindre(0)
+  placer(0)
+
+  return {
+    // Un autre lien arrive sans rechargement : le pli doit être refermé, et le prochain
+    // dépliage doit compter pour un.
+    refermer: () => {
+      if (!ouvert) return
+      deplie = false
+      poser(false)
+    },
+  }
 }

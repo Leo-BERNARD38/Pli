@@ -47,7 +47,7 @@ function rechargerUneFois(): void {
 }
 
 /** Après le premier rendu, et pas avant. */
-function auCalme(): Promise<void> {
+function auRepos(): Promise<void> {
   return new Promise((suite) => {
     const poser = (): void => {
       // `in window` restreindrait `window` à `never` dans la branche du repli : on regarde
@@ -89,7 +89,7 @@ async function peinture(type: Type): Promise<HTMLImageElement | null> {
  * peinte** — c'est à ce moment, et pas avant, que le geste peut s'armer.
  */
 export async function preparer(dessous: HTMLElement, pli: Pli, etiquette: string): Promise<void> {
-  await auCalme()
+  await auRepos()
 
   // 1 · la texture du type, d'abord, et décodée.
   const toile = await peinture(pli.t)

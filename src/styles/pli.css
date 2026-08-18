@@ -163,6 +163,13 @@ a:hover {
   color: var(--rose);
 }
 
+/* Le titre porte le carmin dans sa propre règle, pas par la classe `.carmin` : sur encre,
+   il lui faut la même bascule. Mesuré : carmin sur encre vaut 3,2:1, rose 9,7:1
+   (docs/design-system.md#encres). */
+.pli--encre .titre {
+  color: var(--rose);
+}
+
 .pli--carmin .carmin {
   color: var(--creme);
 }

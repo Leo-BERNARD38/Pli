@@ -7,13 +7,13 @@
    rien ne suit encore serait un mensonge.
 
    La strophe garde ses retours à la ligne : c'est de la poésie, pas un paragraphe. */
-[data-pli='poe'] .voix {
+[data-type='poe'] .voix {
   font-size: 23px;
   line-height: 1.32;
   max-width: 18ch;
   white-space: pre-line;
 }
 
-[data-pli='poe'] .titre {
+[data-type='poe'] .titre {
   font-size: 52px;
 }

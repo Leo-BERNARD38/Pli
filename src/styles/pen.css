@@ -3,7 +3,7 @@
    marque mène au journal.
 
    La phrase est la seule chose à lire : elle garde la grande voix, 31px. */
-[data-pli='pen'] .voix {
+[data-type='pen'] .voix {
   font-size: 31px;
   line-height: 1.28;
   max-width: 15ch;

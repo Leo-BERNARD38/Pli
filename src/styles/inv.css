@@ -5,10 +5,30 @@
    (docs/chargement.md#vague-3--pendant-quelle-regarde-le-volet). Un pli n'a qu'un type,
    donc une seule de ces quatre feuilles est jamais demandée. */
 
+/* Le voile du bandeau, sous la tête. `.image__fondu` part de `.5` et s'éteint au tiers :
+   dessiné pour un bandeau qu'on regarde, pas pour un bandeau qu'on écrit. Mesuré sur ce que
+   le navigateur peint, la tête posée sur le drapé : **44,6 %** de « une invitation » tombait
+   sous 4,5:1 — le haut de cette toile est presque blanc.
+
+   Deux nombres, aucun estimé : **.82** est l'alpha qui ramène le pire pixel à 4,5:1 pour du
+   crème, et **20 %** la hauteur qu'occupe la tête dans le bandeau. Après elle, le voile
+   reprend exactement les arrêts de `.image__fondu` — il finit sur le papier, comme le veut
+   docs/design-system.md#les-images. */
+[data-type='inv'] .image--haute .image__fondu {
+  background: linear-gradient(
+    180deg,
+    rgba(14, 12, 11, 0.82) 0%,
+    rgba(14, 12, 11, 0.82) 20%,
+    rgba(14, 12, 11, 0) 34%,
+    rgba(247, 242, 232, 0.05) 72%,
+    var(--creme) 100%
+  );
+}
+
 /* La tête se pose DANS le bandeau, comme la maquette la montre — le corps commence sous
    l'image, qui reste dans le flux. Les 34px et la marge de 26px sont ceux du gabarit :
    aucun retrait nouveau (docs/design-system.md#le-gabarit). */
-[data-pli='inv'] .image--haute .tete {
+[data-type='inv'] .image--haute .tete {
   position: absolute;
   inset: 34px var(--marge) auto;
   padding: 0;
@@ -17,12 +37,12 @@
 }
 
 /* 64px : la deuxième taille du titre (docs/design-system.md#les-mains). */
-[data-pli='inv'] .titre {
+[data-type='inv'] .titre {
   font-size: 64px;
 }
 
 /* La voix de l'invitation est celle du corps : le titre porte déjà la hauteur. */
-[data-pli='inv'] .voix {
+[data-type='inv'] .voix {
   font-size: 23px;
   line-height: 1.32;
   max-width: 18ch;
@@ -34,13 +54,13 @@
    composition qui n'a pas été dessinée pour elle.
 
    14px et .3em sont ceux de `.etiquette--forte` ; l'écart de 6px est celui de `.ligne`. */
-[data-pli='inv'] .faits {
+[data-type='inv'] .faits {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-[data-pli='inv'] .faits li {
+[data-type='inv'] .faits li {
   font-family: var(--mono);
   font-weight: 700;
   font-size: 14px;
@@ -48,6 +68,6 @@
   text-transform: uppercase;
 }
 
-[data-pli='inv'] .faits li:first-child {
+[data-type='inv'] .faits li:first-child {
   color: var(--carmin);
 }

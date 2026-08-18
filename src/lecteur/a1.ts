@@ -17,7 +17,7 @@ import rideau from '../textures/rideau-carmin-nuit.webp'
  * (docs/design-system.md#les-mains). Le rideau, lui, ne dit rien du contenu — c'est tout
  * son intérêt.
  */
-const ETIQUETTES: Record<Type, string> = {
+export const ETIQUETTES: Record<Type, string> = {
   inv: 'une invitation',
   pen: 'une pensée',
   poe: 'un poème',
@@ -60,4 +60,14 @@ export function ecrire(pli: Pli): void {
   poser('[data-signature]', `déposé par ${pli.s}`)
   poser('[data-cachet]', numero(pli.n))
   peindre()
+}
+
+/**
+ * A1 rend sa peinture. Deux textures décodées vivantes au maximum, et A2 vient d'en poser
+ * une : une image de 4,2 Mpx occupe 17 Mo une fois décodée, et ça ne se garde pas « au cas
+ * où » (docs/ressources.md#ce-quune-grande-image-coûte). L'`<img>` sort du document ; le
+ * cadre garde son aplat, qui ne coûte pas un octet.
+ */
+export function oublierLaPeinture(): void {
+  ecran?.querySelector('img')?.remove()
 }

@@ -69,10 +69,14 @@ function element(nom: string, classe: string, texte?: string): HTMLElement {
   return e
 }
 
-/** La flèche du produit — un `<use>` vers le tracé déjà dans le document, zéro requête. */
+/**
+ * La flèche du produit — un `<use>` vers le tracé déjà dans le document, zéro requête.
+ * Elle porte `carmin` comme l'étiquette qu'elle accompagne : `fill: currentColor` la prend
+ * de la couleur du texte, et sans ça elle sortait en encre à côté d'une action carmin.
+ */
 function fleche(): SVGSVGElement {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-  svg.setAttribute('class', 'fleche')
+  svg.setAttribute('class', 'fleche carmin')
   svg.setAttribute('aria-hidden', 'true')
   svg.setAttribute('focusable', 'false')
   const use = document.createElementNS('http://www.w3.org/2000/svg', 'use')
@@ -100,9 +104,9 @@ export function construire(
 ): void {
   const c = COMPOSITIONS[pli.t]
   dessous.className = `pli__dessous${c.encre ? ' pli--encre' : ''}`
-  // Le type se lit dans le balisage : c'est par là que sa feuille compose, et c'est ce qui
+  // Le type se lit dans le balisage : c'est par là que sa feuille de style compose, et c'est ce qui
   // permet à une feuille par type d'exister sans que le module en sache rien.
-  dessous.dataset.pli = pli.t
+  dessous.dataset.type = pli.t
   const morceaux: HTMLElement[] = []
 
   if (c.toile && peinture) {

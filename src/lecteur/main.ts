@@ -11,7 +11,9 @@ import '../styles/pli.css'
 import { decoder, type Pli } from '../lib/codec.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
 import { tenirDansLecran } from './plateau.ts'
-import { ecrire } from './a1.ts'
+import { ecrire, oublierLaPeinture, ETIQUETTES } from './a1.ts'
+import { preparer } from './fond.ts'
+import { armer, type Geste } from './geste.ts'
 
 // Ordre imposé par docs/chargement.md : si le hash est un #p=, le fetch part en TOUTE
 // première instruction, avant qu'on décode quoi que ce soit. C'est la seule requête que le
@@ -36,6 +38,7 @@ const cadre = document.querySelector<HTMLElement>('.pli')
 export const echelle = cadre ? tenirDansLecran(document.body, cadre) : null
 const a1 = document.querySelector<HTMLElement>('#a1')
 const c4 = document.querySelector<HTMLElement>('#c4')
+const dessous = document.querySelector<HTMLElement>('.pli__dessous')
 
 /**
  * Un seul écran à la fois, et jamais deux. `hidden` seul ne suffit pas : les couches sont
@@ -99,6 +102,39 @@ async function pliDe(route: Route): Promise<Pli> {
 // masquerait, en arrivant en retard, un pli parfaitement décodé.
 let generation = 0
 
+// Le geste s'arme une fois : ses écouteurs vivent sur le cadre, qui ne bouge pas. Un
+// second lien referme le pli au lieu d'armer une seconde fois.
+let geste: Geste | null = null
+
+/**
+ * La vague 3, puis le geste. Dans cet ordre et pas dans l'autre : la couche du dessous doit
+ * **exister et être peinte avant qu'un doigt se pose** — construire A2 au pointerdown
+ * coûterait une disposition complète dans la fenêtre de 4 ms
+ * (docs/fluidite.md#la-file-dattente-principale).
+ */
+async function preparerLeGeste(pli: Pli): Promise<number> {
+  const mienne = generation
+  if (!cadre || !a1 || !dessous || !echelle) return mienne
+
+  geste?.refermer()
+  await preparer(dessous, pli, ETIQUETTES[pli.t])
+  if (mienne !== generation) return mienne
+
+  geste ??= armer({
+    cadre,
+    dessus: a1,
+    dessous,
+    invite: a1.querySelector('.invite'),
+    bouton: a1.querySelector('.deplier'),
+    echelle,
+    // Le pli est déplié : A1 rend sa peinture. Deux textures décodées au maximum, et A2
+    // vient d'en poser une. C'est aussi ici que l'entrée du journal s'écrira, au jalon 4 —
+    // après la transition, jamais pendant (docs/fluidite.md#écrire-le-journal-sans-bloquer).
+    auDepliage: oublierLaPeinture,
+  })
+  return mienne
+}
+
 suivre((route) => {
   // Le journal et l'ajout à l'écran d'accueil n'ont pas encore d'écran : ils sont le
   // jalon 4. La page reste nue plutôt que de montrer un pli qui n'existe pas.
@@ -114,6 +150,7 @@ suivre((route) => {
       ecrire(pli)
       montrer(a1)
       marquer(route.ecran === 'poeme' ? 'p' : 'c')
+      void preparerLeGeste(pli)
     },
     () => {
       if (mienne === generation) montrer(c4)
