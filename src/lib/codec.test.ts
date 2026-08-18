@@ -139,3 +139,21 @@ test('un pli amputé de ce qui s’affiche toujours donne un lien abîmé', asyn
     await assert.rejects(() => decoder(lien), /lien abîmé/)
   }
 })
+
+test('les clés optionnelles sont refusées quand elles ont la mauvaise forme', async () => {
+  const tordus = [
+    { ...INVITATION, f: 'samedi 22 août' },
+    { ...INVITATION, f: ['samedi', 3] },
+    { ...INVITATION, g: 12 },
+    { ...INVITATION, w: 336 },
+  ]
+  for (const tordu of tordus) {
+    const lien = await encoder(tordu as unknown as Pli)
+    await assert.rejects(() => decoder(lien), /lien abîmé/)
+  }
+})
+
+test('un pli sans ses clés optionnelles passe', async () => {
+  const nu: Pli = { v: 1, t: 'pen', n: 20, ti: 'Rien de plus', b: 'Une ligne.', s: 'a.' }
+  assert.deepEqual(await allerRetour(nu), nu)
+})

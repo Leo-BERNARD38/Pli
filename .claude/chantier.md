@@ -39,11 +39,12 @@ lien sur son téléphone.
 
 **Fin du jalon :** un lien fabriqué à la main s'ouvre sur son téléphone.
 
-Ce qui est vérifié pour de bon : 32 tests passent, `npm run types` compile deux fois (dont
+Ce qui est vérifié pour de bon : 34 tests passent, `npm run types` compile deux fois (dont
 `src/lib/` sans la bibliothèque DOM), et dans Chromium un lien `#c=` **encodé sous Node** se
 décode et remplace le pli en dur — l'isomorphisme du codec n'est pas qu'une intention. Un
 lien abîmé et un poème introuvable laissent la page nue — **masquée, pas vidée** : le lien
-suivant s'écrit dans le même balisage, sans rechargement.
+suivant s'écrit dans le même balisage, sans rechargement. Et seule la dernière route écrit :
+un poème lent qui répond en retard n'efface pas le pli arrivé après lui.
 Poids du premier écran, cache vide : **1,12 ko gzip** de document et **1,21 ko gzip** de
 module, loin des 14 ko — mais ce sont deux requêtes, pas une (voir la décision 5).
 

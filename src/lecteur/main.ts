@@ -76,21 +76,21 @@ function chercher(nom: string): Promise<Response> {
   return fetch(`/plis/${nom}.txt`)
 }
 
-async function deplier(route: Route): Promise<void> {
-  if (route.ecran === 'pli') {
-    ecrire(await decoder(route.payload))
-    return
-  }
+/**
+ * Le pli que cette route demande, ou rien : le journal, l'ajout à l'écran d'accueil et
+ * l'inconnu n'ont pas encore d'écran (jalons 2 et 4), la page garde alors le pli en dur.
+ * Cette fonction n'écrit pas — un seul endroit écrit, plus bas.
+ */
+async function deplier(route: Route): Promise<Pli | null> {
+  if (route.ecran === 'pli') return decoder(route.payload)
 
   if (route.ecran === 'poeme') {
     const reponse = await chercher(route.nom)
     if (!reponse.ok) throw new Error('lien abîmé')
-    ecrire(await decoder((await reponse.text()).trim()))
-    return
+    return decoder((await reponse.text()).trim())
   }
 
-  // Le journal, l'ajout à l'écran d'accueil et l'inconnu n'ont pas encore d'écran
-  // (jalons 2 et 4) : la page garde le pli en dur.
+  return null
 }
 
 /**
@@ -103,6 +103,24 @@ function laisserNue(): void {
   if (pliDeLaPage) pliDeLaPage.hidden = true
 }
 
+function montrer(): void {
+  if (pliDeLaPage) pliDeLaPage.hidden = false
+}
+
+// Seule la dernière route écrit. Sans ce jeton, un poème lent suivi d'un lien valide
+// masquerait, en arrivant en retard, un pli parfaitement décodé.
+let generation = 0
+
 suivre((route) => {
-  deplier(route).catch(laisserNue)
+  const mienne = ++generation
+  deplier(route).then(
+    (pli) => {
+      if (mienne !== generation) return
+      if (pli) ecrire(pli)
+      else montrer()
+    },
+    () => {
+      if (mienne === generation) laisserNue()
+    },
+  )
 })

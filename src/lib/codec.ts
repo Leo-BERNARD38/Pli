@@ -9,7 +9,8 @@
 //   · aucune API du DOM ici — le module tourne sous Node comme dans le navigateur,
 //     sous peine de deux encodages qui divergent ;
 //   · un changement d'encodage prend un NOUVEAU préfixe, il ne réécrit jamais l'ancien :
-//     un lien parti n'a plus de version.
+//     un lien parti n'a plus de version. Le garde de forme est gelé avec son préfixe :
+//     le resserrer refuserait des liens déjà partis, donc ça se fait sous un préfixe neuf.
 
 /** Les quatre types de pli. */
 export type Type = 'inv' | 'pen' | 'poe' | 'sou'
@@ -112,6 +113,7 @@ function estUnPli(relu: unknown): relu is Pli {
   if (typeof relu !== 'object' || relu === null) return false
   const pli = relu as Partial<Pli>
   const texte = (valeur: unknown): boolean => typeof valeur === 'string'
+  const absentOuTexte = (valeur: unknown): boolean => valeur === undefined || texte(valeur)
   return (
     typeof pli.v === 'number' &&
     typeof pli.t === 'string' &&
@@ -119,7 +121,10 @@ function estUnPli(relu: unknown): relu is Pli {
     typeof pli.n === 'number' &&
     texte(pli.ti) &&
     texte(pli.s) &&
-    (texte(pli.b) || (Array.isArray(pli.b) && pli.b.every(texte)))
+    (texte(pli.b) || (Array.isArray(pli.b) && pli.b.every(texte))) &&
+    (pli.f === undefined || (Array.isArray(pli.f) && pli.f.every(texte))) &&
+    absentOuTexte(pli.g) &&
+    absentOuTexte(pli.w)
   )
 }
 
