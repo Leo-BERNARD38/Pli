@@ -63,6 +63,7 @@ nº 015 → https://pli.re/#p=015-vhtq
 npm install
 npm run dev        # les deux entrées
 npm run build
+npm run verifie    # lexique, encres, invariants, mouvement — déterministe, sans agent
 npm run types      # dont src/lib/ compilé sans la bibliothèque DOM
 npm test           # codec.ts, dates.ts, le routeur
 ```
