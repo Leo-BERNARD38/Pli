@@ -103,8 +103,9 @@ Voici tout ce qui s'en déduit.
 | Bodoni sur A1 | présent, par la flèche de la pliure | **absent** — trois familles au premier écran, sans arrangement |
 | L'aperçu du lien | un recadrage du papier froissé | **`og.png`**, dessiné : marque, phrase, pliure — 53 ko ([partage.md](partage.md#limage-daperçu)) |
 | `og:description` | « Une seule lecture, pas de compte. » | **« Il ne s'ouvre qu'une fois. »** — la première promesse n'est pas tenable |
-| Le bas de `og.png` | « UNE SEULE LECTURE · PAS DE COMPTE » | **« POUR TOI SEULE »** — à réexporter |
-| `icon-512` en `maskable` | annoncé masquable | **`purpose: any`** tant qu'une variante à 66 % n'existe pas — mesuré à 70 % de large, 10 % de marge à droite |
+| Le bas de `og.png` | « UNE SEULE LECTURE · PAS DE COMPTE » | **« POUR TOI SEULE »** — corrigé |
+| `icon-512` en `maskable` | annoncé masquable | **`purpose: any`** ; le masquable est un fichier à part, lettre à 52 % de large |
+| La lettre sur la grille | `x = 30` dans le texte et les SVG, 29 dans les PNG | **29**, celui des tirages validés — SVG et PNG s'accordent |
 | `twitter:card` | présent dans `tete.html` | **retiré** — un pli ne se partage pas ailleurs qu'en conversation |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
 

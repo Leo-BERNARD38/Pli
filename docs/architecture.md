@@ -224,11 +224,12 @@ src/
   fonts/                   les woff2 sous-ensemblés — importés par le CSS
 public/                    servi tel quel, noms stables
   plis/                    les poèmes encodés + l'index
-  icones/                  les icônes, le manifeste, og.png — copiés du handoff
+  icones/                  les icônes, le manifeste, og.png — écrits par scripts/icones.py
   404.html
   CNAME  .nojekyll
 plis-source/               les poèmes en clair — GITIGNORÉ
 scripts/plier.mjs          la moulinette
+scripts/icones.py          la planche des icônes — regénère public/icones/
 plier.bat · plier.sh       les deux enveloppes
 design/                    l'archive figée du design — jamais dans le build
 docs/

@@ -51,24 +51,24 @@ pointillé carmin. **Le produit se présente lui-même, dans sa propre voix.**
 
 | Réglage | Valeur |
 |---|---|
-| Fichier | [`design/handoff/icones/og.png`](../design/handoff/icones/README.md) |
+| Fichier | `public/icones/og.png`, regénéré par [`scripts/icones.py`](../scripts/icones.py) |
 | Format | **1200 × 630**, PNG |
-| Poids | **53 ko** — très loin du plafond des messageries |
+| Poids | **30 ko** — très loin du plafond des messageries |
 | Servi depuis | `/icones/og.png`, nom stable, jamais empreinté |
 
 PNG et non JPEG, et c'est le bon choix ici : des aplats et de la typographie, pas une
 photographie. Le JPEG salirait les bords des lettres pour le même poids.
 
-**Une correction avant de la servir.** Le bas de l'image porte
-« PLI.RE · UNE SEULE LECTURE · PAS DE COMPTE ». « Une seule lecture » est exactement la
-promesse que le produit ne tient pas : le refermement est une convention locale, et le pli
+**Une phrase a été corrigée.** Le bas de l'image livrée portait
+« PLI.RE · UNE SEULE LECTURE · PAS DE COMPTE » : « une seule lecture » est exactement la
+promesse que le produit ne tient pas — le refermement est une convention locale, et le pli
 reste lisible dans son journal
-([integration.md](integration.md#corrections-de-contenu-dans-les-maquettes)). À réexporter
-avec **« PLI.RE · POUR TOI SEULE »**, qui est du lexique et qui est vrai.
+([integration.md](integration.md#corrections-de-contenu-dans-les-maquettes)). Le pied dit
+désormais **« PLI.RE · POUR TOI SEULE »**, qui est du lexique et qui est vrai. Seule cette
+bande de treize pixels a bougé ; le reste de l'image est intact, au pixel près.
 
-La même phrase est à corriger dans `og:description` : les balises livrées dans
-[`tete.html`](../design/handoff/icones/tete.html) portent « Une seule lecture, pas de
-compte. » — c'est « Il ne s'ouvre qu'une fois. » qui fait foi.
+La même phrase était dans `og:description` — c'est « Il ne s'ouvre qu'une fois. » qui fait
+foi, et les balises de `public/icones/tete.html` sont à jour.
 
 `twitter:card` est écarté : personne ne partage un pli ailleurs que dans une conversation, et
 une balise de plus est une balise de plus à maintenir juste.

@@ -9,7 +9,7 @@
 | **Le seuil de l'atelier** | chiffres seuls, préfixe `pli.seuil.`, sha-256, l'empreinte fabriquée en local et seule à entrer dans le dépôt ([architecture.md](architecture.md#le-seuil-de-latelier)) |
 | **Le numéro de réponse** | un écran de l'atelier, **D4 · le tiroir**, qui garde `w` et la signature sur mon téléphone ([parcours.md](parcours.md#d4--le-tiroir)) |
 | **L'export du journal** | **pas en v1.** Le seul filet devient l'ajout à l'écran d'accueil — si la mesure du bac de stockage tourne mal, l'export repasse en tête |
-| **L'icône** | livrée : le P de Pinyon en crème sur carmin, plus l'aperçu du lien ([installation.md](installation.md#le-manifest-et-les-icônes)) |
+| **L'icône** | livrée et mise au propre : `public/icones/`, regénéré par `scripts/icones.py` ([installation.md](installation.md#le-manifeste-et-les-icônes)) |
 
 ### Ce qui reste
 
@@ -51,8 +51,8 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
   plus l'aperçu OG en 1200 × 630 — et la décision « natif ou régénérer ≥ 1800 »
   ([ressources.md](ressources.md#la-règle-de-définition))
 - Les deux flèches tracées, en SVG inline ([ressources.md](ressources.md#les-deux-flèches))
-- Les balises `og:` et l'aperçu vérifié en s'envoyant le lien à soi-même, `og.png` réexporté
-  sans « une seule lecture » ([partage.md](partage.md#limage-daperçu))
+- Les balises `og:` en place et l'aperçu vérifié en s'envoyant le lien à soi-même
+  ([partage.md](partage.md#vérifier-un-aperçu))
 - Le budget de chargement rempli avec de vrais chiffres, mesuré sur les deux téléphones
   ([chargement.md](chargement.md#le-budget-écran-par-écran))
 
@@ -80,8 +80,8 @@ Deux mesures conditionnent des décisions qu'on ne peut pas prendre au jugé.
 - C1 le journal, et son état vide
 - C3 refermé, et son chemin vers le journal
 - La marque comme chemin discret
-- Le manifeste et les icônes, avec les **trois corrections** mesurées
-  ([installation.md](installation.md#trois-corrections-avant-de-servir-ces-fichiers))
+- Le manifeste et les icônes — faits, à servir tels quels
+  ([installation.md](installation.md#le-manifeste-et-les-icônes))
 - L'écran `#/installer` — **sa forme dépend de la mesure du jalon 1**
 - Le réglage de cadence sur son iPhone, au moment de l'installation
   ([installation.md](installation.md#le-réglage-de-cadence))

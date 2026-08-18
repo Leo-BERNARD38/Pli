@@ -23,66 +23,63 @@ C'est la mesure à faire avant de construire cet écran —
 `#/installer` est soit le chemin principal, soit remplacé par « ouvrir dans Safari » et un
 export sérieux du journal.
 
-## Le manifest et les icônes
+## Le manifeste et les icônes
 
-Livrés, dessinés, mesurés : [`design/handoff/icones/`](../design/handoff/icones/README.md).
-Le dessin retenu est **le P de Pinyon en crème sur carmin plein** — pas d'icône inventée, la
-main du produit.
+Le dessin est **le P de Pinyon en crème sur carmin plein** — la main du produit, pas une
+icône inventée. Le handoff est archivé dans
+[`design/handoff/icones/`](../design/handoff/icones/README.md) ; **les fichiers servis sont
+dans `public/icones/`**, regénérés depuis le tracé par
+[`scripts/icones.py`](../scripts/icones.py).
 
 | Fichier | Emploi | Poids |
 |---|---|---|
-| `favicon.ico` (16 · 32 · 48) | l'onglet | 3,8 ko |
-| `favicon.svg`, `favicon-petite.svg` | l'onglet, en vectoriel | 0,3 ko |
-| `apple-touch-icon.png` 180 | l'écran d'accueil iOS | 7,7 ko |
-| `icon-192.png`, `icon-512.png` | le manifeste | 8,5 et 17 ko |
-| `icon-1024.png` | la réserve | 45 ko |
-| `og.png` 1200 × 630 | l'aperçu du lien ([partage.md](partage.md)) | 53 ko |
-| `marque-encre.svg` | encre sur crème — onglet épinglé, impression | 0,3 ko |
+| `favicon.ico` (16 · 32 · 48) | l'onglet — trois tirages, pas un redimensionnement | 3,7 ko |
+| `favicon.svg` · `favicon-petite.svg` | l'onglet, en vectoriel | 2,2 ko |
+| `apple-touch-icon.png` 180 | l'écran d'accueil iOS | 4,2 ko |
+| `icon-192.png` · `icon-512.png` · `icon-1024.png` | le manifeste et la réserve | 4,5 · 12,8 · 27 ko |
+| **`icon-512-masque.png`** | le seul déclaré `maskable` | 9,9 ko |
+| `masque-safari.svg` | `mask-icon` — forme noire sur fond transparent | 2,1 ko |
+| `marque-encre.svg` | encre sur crème — impression, tampon | 2,2 ko |
+| `og.png` 1200 × 630 | l'aperçu du lien ([partage.md](partage.md)) | 30 ko |
 
-Servis depuis **`public/icones/`**, noms stables, jamais empreintés
+Noms **stables**, jamais empreintés
 ([mises-a-jour.md](mises-a-jour.md#les-fichiers-stables-un-par-un)) : une icône posée sur son
-écran d'accueil pointe vers une adresse qui doit rester valable.
+écran d'accueil et un aperçu déjà envoyé pointent vers des adresses qui doivent rester
+valables.
 
-```json
-{
-  "name": "Pli",  "short_name": "Pli",  "description": "Un message qui arrive plié.",
-  "lang": "fr",   "dir": "ltr",
-  "start_url": "/",  "scope": "/",
-  "display": "standalone",  "orientation": "portrait",
-  "background_color": "#F7F2E8",
-  "theme_color": "#C81E33",
-  "icons": [ … ]
-}
-```
-
-| Champ | Pourquoi cette valeur |
+| Champ du manifeste | Pourquoi cette valeur |
 |---|---|
 | `start_url: "/"` | l'app s'ouvre sur son journal, jamais sur un pli |
 | `display: "standalone"` | pas de barre d'URL — c'est aussi ce qui stabilise la hauteur |
 | `orientation: "portrait"` | le pli est un objet tenu à la main, il n'a pas de paysage |
-| `background_color` | le **crème** du papier : l'écran de lancement est une feuille, pas un rectangle blanc |
-| `theme_color` | le **carmin**, la seule couleur d'action, pour la barre système d'Android |
+| `background_color: #F7F2E8` | le **crème** du papier : l'écran de lancement est une feuille, pas un rectangle blanc |
+| `theme_color: #C81E33` | le **carmin**, la seule couleur d'action, pour la barre système d'Android |
 
-Les balises du `<head>` sont écrites dans
-[`tete.html`](../design/handoff/icones/tete.html) — à reprendre telles quelles, avec les
-deux corrections ci-dessous.
+Les balises du `<head>` sont dans `public/icones/tete.html`, à coller telles quelles.
 
-### Trois corrections avant de servir ces fichiers
+### Ce qui a été corrigé sur les fichiers livrés
 
-**1. Le `maskable` ne l'est pas encore.** Mesuré sur les fichiers livrés : la lettre occupe
-**70 % de la largeur**, avec seulement **10 % de marge à droite** contre 19,7 % à gauche. Le
-masque d'Android recadre en cercle — un disque de 80 % du côté — et la boucle haute de la
-lettre en sort. Déclarer les fichiers actuels en `purpose: "any"`, et **exporter une variante
-masquable** où la lettre tient dans les 66 % centraux, marges égales.
+Trois défauts mesurés, trois corrections faites — c'est ce qui sépare
+`design/handoff/icones/` de `public/icones/`.
 
-**2. Le SVG appelle une police qu'il n'embarque pas.** `favicon.svg` contient
-`font-family: Pinyon Script` : partout où la police n'est pas installée — c'est-à-dire
-partout — le navigateur dessine un `P` en cursive de secours. **Vectoriser la lettre** avant
-de servir le fichier ; les PNG, eux, sont définitifs. Le README des icônes le note déjà.
+| Défaut | Mesure | Correction |
+|---|---|---|
+| Le `maskable` débordait | la lettre occupait **70 % de la largeur**, 10 % de marge à droite contre 19,7 % à gauche : le masque circulaire d'Android l'aurait rognée | `icon-512-masque.png`, lettre **centrée à 52 % de la largeur**, toute l'encre dans le disque de 66 % — les autres tirages restent `purpose: any` |
+| Les SVG appelaient une police | `font-family: Pinyon Script`, qu'un SVG n'embarque pas : partout où la police manque, le navigateur dessine un `P` de secours | **lettre vectorisée** — 2,2 ko, plus aucune police appelée à l'affichage |
+| `mask-icon` avait un fond | Safari attend une forme monochrome sur transparent ; l'aplat crème aurait donné un carré plein | **`masque-safari.svg`**, la forme seule. `marque-encre.svg` reste le tampon encre sur crème |
 
-**3. `mask-icon` attend une image monochrome à fond transparent.** `marque-encre.svg` porte
-un aplat crème : l'onglet épinglé de Safari afficherait un carré plein. Soit on retire le
-fond, soit on retire la balise — elle ne sert plus qu'à d'anciennes versions de Safari.
+Deux détails réglés au passage :
+
+- **Le SVG et les PNG n'étaient pas au même endroit.** Le texte du handoff pose la lettre à
+  `x = 30` sur la grille de 64, ses PNG — ceux qui ont été vus et validés — la posent à 29.
+  On suit les PNG : le tirage regénéré recouvre le livré à **98,6 %**, et les deux familles
+  de fichiers s'accordent enfin.
+- **Les PNG sont passés en palette** : deux encres et leurs fondus tiennent en 256 teintes,
+  sans rien perdre. `icon-512` tombe de 17 à 12,8 ko, `icon-1024` de 45 à 27.
+
+Les grades optiques du handoff — l'épaisseur ajoutée au tracé sous 64 px — sont repris tels
+quels, taille par taille, et comparés aux tirages livrés à l'œil : à 16 px, un grade plus
+lourd bouche la panse de la lettre.
 
 ## L'écran `#/installer`
 
@@ -116,6 +113,7 @@ dépend d'une case cochée dans un menu caché.
 ## Vérifier une installation
 
 - [ ] l'icône est nette sur l'écran d'accueil, et **rien n'est rogné** par le masque Android
+- [ ] l'onglet de Safari et de Chrome montre le P, pas une cursive de secours
 - [ ] le lancement montre le crème du papier, pas un écran blanc
 - [ ] l'app s'ouvre sur le journal
 - [ ] pas de barre d'URL, hauteur stable pendant le geste

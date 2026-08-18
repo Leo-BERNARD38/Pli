@@ -24,9 +24,11 @@ Aucun build, aucune dépendance. Ouvrir `handoff/index.html` dans un navigateur 
 
 Les icônes, le manifeste et l'aperçu du lien vivent dans
 [handoff/icones/](handoff/icones/README.md) — importés le 18 août 2026, après le reste.
-Ce sont des fichiers finis, destinés à être copiés dans `public/icones/` ; les trois
-corrections à leur apporter sont dans
-[`docs/installation.md`](../docs/installation.md#trois-corrections-avant-de-servir-ces-fichiers).
+Comme le reste du dossier, ils ne bougent plus : **les fichiers servis vivent dans
+`public/icones/`**, regénérés depuis le tracé de la lettre par
+[`scripts/icones.py`](../scripts/icones.py). Ce qui les sépare — trois défauts mesurés et
+corrigés — est dans
+[`docs/installation.md`](../docs/installation.md#ce-qui-a-été-corrigé-sur-les-fichiers-livrés).
 
 Les images vivent dans [handoff/assets/](handoff/assets/README.md) — cinq peintures, leur
 emploi et leurs cadrages. Elles, contrairement au reste du dossier, ont bougé depuis

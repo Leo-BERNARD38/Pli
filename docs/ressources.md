@@ -115,24 +115,32 @@ vers des adresses qui doivent rester valables.
 
 ## L'aperçu du lien et les icônes
 
-Ils ne se produisent plus : ils sont livrés, dessinés à la main du produit — le P de Pinyon
-en crème sur carmin — dans
-[`design/handoff/icones/`](../design/handoff/icones/README.md).
+Ils ne se produisent plus à la main : ils sont **regénérés** depuis le tracé du P par
+[`scripts/icones.py`](../scripts/icones.py), qui écrit `public/icones/` en entier — les
+quatre SVG, les sept tirages PNG, l'`.ico`, le manifeste, les balises du `<head>` et
+l'aperçu du lien.
+
+```sh
+python3 scripts/icones.py --pinyon PinyonScript-Regular.ttf \
+                          --space-mono SpaceMono-Bold.ttf \
+                          --og design/handoff/icones/og.png
+```
+
+**Regénérer, jamais retoucher** — la règle du handoff, tenue par le script.
 
 | Fichier | Format | Poids |
 |---|---|---|
-| `og.png` | 1200 × 630 | 53 ko |
-| `apple-touch-icon.png` | 180 | 7,7 ko |
-| `icon-192.png` · `icon-512.png` · `icon-1024.png` | manifeste et réserve | 8,5 · 17 · 45 ko |
-| `favicon.ico` · `favicon.svg` · `marque-encre.svg` | l'onglet | 3,8 · 0,3 · 0,3 ko |
+| `og.png` | 1200 × 630 | 30 ko |
+| `icon-512.png` · `icon-1024.png` | palette, sans perte | 12,8 · 27 ko |
+| `icon-512-masque.png` | la variante masquable | 9,9 ko |
+| `apple-touch-icon.png` · `icon-192.png` | 180 · 192 | 4,2 · 4,6 ko |
+| `favicon.ico` + les quatre SVG | l'onglet | 3,7 ko + 2,2 ko pièce |
+
+Le détail des trois corrections apportées aux fichiers livrés est dans
+[installation.md](installation.md#ce-qui-a-été-corrigé-sur-les-fichiers-livrés).
 
 Le papier froissé ne sert donc plus l'aperçu — il lui reste le journal vide et l'écran
 d'installation ([design-system.md](design-system.md#les-deux-images-du-produit)).
-
-**Trois défauts à corriger avant de les servir**, tous mesurés : le `maskable` déborde la
-zone sûre, le SVG appelle une police qu'il n'embarque pas, et `marque-encre.svg` a un fond
-là où Safari attend de la transparence. Le détail et les corrections sont dans
-[installation.md](installation.md#trois-corrections-avant-de-servir-ces-fichiers).
 
 ## Les polices
 
@@ -187,10 +195,8 @@ Contraintes de tracé, pour que ça reste le produit et pas une icône :
 
 - [ ] trancher : servir le natif, ou régénérer les peintures ≥ 1800 de large
 - [ ] les cinq textures dans `src/`, ré-encodées q80 **seulement si un master existe**
-- [ ] `og.png` réexporté sans « une seule lecture », vérifié dans une vraie conversation
-      ([partage.md](partage.md#limage-daperçu))
+- [ ] l'aperçu vérifié dans une vraie conversation ([partage.md](partage.md#vérifier-un-aperçu))
 - [ ] les quatre polices sous-ensemblées, poids réels notés dans
       [chargement.md](chargement.md#le-budget-écran-par-écran)
 - [ ] les deux flèches tracées
-- [ ] les trois corrections d'icônes
-      ([installation.md](installation.md#trois-corrections-avant-de-servir-ces-fichiers))
+- [ ] `public/icones/` copié tel quel dans le build
