@@ -8,21 +8,28 @@ Une étape n'est cochée que lorsqu'elle est **écrite, relue et commitée**.
 
 ## Jalon courant
 
-**Jalon 3 — la boucle.** Le code est écrit, relu et commité en deux lots : le module du
-journal, puis A3 et A4 avec le passage à WhatsApp. L'échange fonctionne de bout en bout dans
-Chromium. Ce qui reste tient en une séance sur les deux téléphones — et le jalon 2, lui,
-attend toujours la sienne.
+**Jalon 4 — l'atelier.** Le code est écrit, relu et commité en trois lots : le socle (le
+tiroir, la garde à deux modules, les deux builds), D0 et D4, puis D1 à D3 avec le partage.
+Un pli se compose et se dépose depuis le téléphone, sans passer par le code. Deux gestes
+manuels restent, et un seul bloque : **l'empreinte du seuil**, à fabriquer en local avec
+`/seuil` et à recopier dans `src/atelier/seuil.ts` — tant qu'elle est vide, rien ne passe la
+porte, et c'est délibéré.
+
+**Jalon 3 — la boucle.** Écrit, relu et commité en deux lots : le module du journal, puis A3
+et A4 avec le passage à WhatsApp. L'échange fonctionne de bout en bout dans Chromium. Ce qui
+reste tient en une séance sur les deux téléphones — et le jalon 2, lui, attend toujours la
+sienne.
 
 Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : renommer le dépôt,
 ouvrir un lien sur son téléphone, et les trois mesures du jalon 1. Aucun ne bloque la suite.
 
 **La roadmap a été regroupée le 18/08/2026** : sept jalons deviennent cinq. Ce qui vient
-maintenant est le **jalon 4 — l'atelier** : D0 le seuil, D4 le tiroir, D1 à D3, le partage.
-Il dépend de la mesure 1 pour son compteur de signes.
+maintenant est le **jalon 5 — la durée** : C1 le journal et son état vide, C2, C3, la marque
+comme chemin discret, `#/installer`.
 
-Le lancement tombe à la fin du jalon 3 — donc ici. Tout ce qui suit est du confort : un pli
-se fabrique encore en ligne de commande, et le journal se remplit sans se lire. L'échange,
-lui, va de bout en bout.
+Le lancement tombait à la fin du jalon 3, et il y est resté : l'échange va de bout en bout.
+Ce qui vient depuis est du confort — un pli ne se fabrique plus en ligne de commande, mais
+le journal se remplit toujours sans se lire.
 
 ## Ce qui existe
 
@@ -32,12 +39,15 @@ lui, va de bout en bout.
 - [x] `scripts/icones.py` — la planche des icônes
 - [x] `.claude/` — relecteurs, commandes, gardes
 - [x] le socle npm — `package.json`, `tsconfig.json`, `tsconfig.isomorphe.json`, `vite.config.ts`
-- [x] `src/lib/` — `codec.ts`, `dates.ts`, `routeur.ts`, `journal.ts`, avec leurs tests
+- [x] `src/lib/` — `codec.ts`, `dates.ts`, `routeur.ts`, `journal.ts`, `tiroir.ts`, avec
+      leurs tests
 - [x] les deux entrées — `index.html`, `atelier/index.html`
 - [x] `src/lecteur/` — `main.ts`, `a1.ts`, `a2.ts`, `reponse.ts`, `geste.ts`, `fond.ts`,
       `plateau.ts`
 - [x] `polices-source/` et `src/fonts/` — les quatre familles, sources et sous-ensembles
-- [x] `src/styles/` — `tokens.css` et `pli.css`
+- [x] `src/atelier/` — `main.ts`, `seuil.ts`, `reglages.ts`, `type.ts`, `textes.ts`,
+      `apercu.ts`, `lien.ts`
+- [x] `src/styles/` — `tokens.css`, `pli.css`, `depot.css` et les feuilles des types
 - [x] `src/textures/` — les cinq peintures, en définition native
 - [x] `src/fleches.html` — les deux tracés
 
@@ -184,6 +194,43 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
   interdisait en relatif était là depuis le jalon 2 ; rien ne les rendait absolus, et le
   premier `import()` de module l'a fait échouer.
 
+## Jalon 4 — l'atelier
+
+- [x] `src/lib/tiroir.ts` — le second et dernier module de stockage : le seuil, les réglages,
+      le compteur, les déposés, et l'empreinte du seuil. Séparé de `journal.ts` parce que le
+      numéro de réponse n'a rien à faire dans le module que le lecteur importe ; la garde de
+      `verifie.mjs` accepte deux modules, et deux seulement
+- [x] **deux builds au lieu de deux entrées** — `vite build --mode lecteur` puis
+      `--mode atelier`. L'atelier importe `codec.ts` sans que Rollup sorte un chunk commun
+      qui coûterait une requête avant le premier texte. C'est l'autre moitié du « chunk
+      commun » que le jalon 2 avait laissée ouverte : elle est refermée
+- [x] D0 · le seuil — une ligne, aucune action à appuyer, la comparaison sur une empreinte
+- [x] D4 · le tiroir — le numéro de réponse, la signature, le prochain numéro, gardés à
+      chaque signe ; l'invitation reste grise tant que le numéro est vide
+- [x] D1 · le type — quatre lignes, chacune avec le layout vu en petit. Le poème est visible
+      mais inactif : il passe par la moulinette, et D2p arrive avec lui
+- [x] D2 · les textes — les lignes nommées, l'aperçu qui se remplit pendant la frappe, et le
+      compteur calé sur ce que **le papier** porte, mesuré
+      ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter))
+- [x] D3 · le lien — le lien ne s'affiche pas, deux actions à la place : envoyer (partage
+      natif) et copier. Le dépôt est noté avant le partage
+- [x] mon historique des plis déposés — `pli.v1.deposes`, dédoublonné sur le payload, jamais
+      sur le numéro. L'**écran** qui le relit n'existe pas encore : la roadmap ne le
+      demandait pas, et rien ne le décrit dans `parcours.md`
+- [ ] **à la main, chez moi** : fabriquer l'empreinte du seuil avec `/seuil` et la recopier
+      dans la constante `EMPREINTE` de `src/atelier/seuil.ts`. Tant qu'elle est vide, **rien
+      ne passe la porte** — un seuil sans empreinte serait une porte ouverte, une empreinte
+      inventée une porte qu'aucune date n'ouvre
+- [ ] **le compteur de signes du LIEN attend la mesure 1.** D3 affiche le nombre de signes
+      du lien fini, sans le juger : le plafond se mesure WhatsApp → iOS → Safari, il ne
+      s'estime pas. Ce qui est tenu aujourd'hui, ce sont les plafonds du **papier**, qui sont
+      mesurés, eux
+- [ ] **à la main, sur les deux téléphones** : composer un pli de chaque type et l'ouvrir
+      chez elle — c'est le seul endroit où l'on verra le partage natif et le presse-papier
+
+**Fin du jalon :** je compose et j'envoie depuis mon téléphone, sans passer par le code.
+Vraie dès que l'empreinte du seuil est posée.
+
 ## Les mesures — aucune ne se devine
 
 Elles sont décrites dans [docs/README.md](../docs/README.md#les-mesures-à-faire-avant-de-sengager).
@@ -241,8 +288,10 @@ la ligne du budget ne veut rien dire.
 (`parcours.md` dit le rideau, la maquette montre un papier crème), l'empilement de
 `.image--pleine` avec le texte, et la composition des faits.
 
-**Au jalon 4, pour l'atelier** — `index.html` embarque `#fleche-droite` sans s'en servir : le
-seul `→` du produit est dans l'atelier. Le fragment reste monolithique pour n'avoir qu'une
+**Au jalon 4, pour l'atelier** — ~~`index.html` embarque `#fleche-droite` sans s'en servir~~
+**toujours vrai** : l'atelier a maintenant sa propre copie du trace, et celle du lecteur ne
+sert toujours a rien. 219 octets gzip dans le document qui part chez elle, a reprendre le
+jour ou le budget serre. Le fragment reste monolithique pour n'avoir qu'une
 chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip gênent.
 
 ## Ce qui reste ouvert

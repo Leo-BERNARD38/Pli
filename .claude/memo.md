@@ -120,7 +120,12 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 | `pli.v1.reglages` · `pli.v1.compteur` · `pli.v1.deposes` · `pli.v1.seuil` | mon téléphone | le tiroir, et rien de commun avec son journal |
 
 `h` est un **sha-256 tronqué à 8 octets** du payload — 16 signes hexadécimaux. Le
-dédoublonnage se fait sur `h`, **jamais sur `n`**. Tout passe par `journal.ts`.
+dédoublonnage se fait sur `h`, **jamais sur `n`**. Son journal passe par `journal.ts`, mon
+tiroir par `tiroir.ts`, et rien d'autre ne touche le stockage.
+
+Le seuil de l'atelier : les chiffres seuls dans l'ordre tapé, préfixés de `pli.seuil.`,
+sha-256 **complet** en hexadécimal, comparé à la constante du bundle. La normalisation est
+la seule tolérance offerte.
 
 Les trois mots d'A3, et ce qui part dans la conversation :
 

@@ -18,9 +18,277 @@
          (docs/partage.md#les-balises-écrites-une-fois-pour-toutes). -->
     <meta name="robots" content="noindex, nofollow" />
   </head>
-  <body>
-    <!-- L'atelier n'a pas encore d'écran : D0 · le seuil ouvre le jalon 5. L'entrée existe
-         dès maintenant pour que les deux bundles soient réellement distincts. -->
+  <body class="atelier">
+    <!-- La flèche de l'atelier — le seul → du produit
+         (docs/ressources.md#les-deux-flèches). Écrite par scripts/fleches.py, jamais
+         retouchée : on regénère. -->
+    <svg class="fleches" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+      <symbol id="fleche-droite" viewBox="0 0 1000 1000"><path d="M875.0 500.0L559.8 839.8L659.6 578.0L135.0 578.0L135.0 693.0L125.0 693.0L125.0 307.0L135.0 307.0L135.0 422.0L659.6 422.0L559.8 160.2Z"/></symbol>
+    </defs></svg>
+
+    <!-- D0 · le seuil. Une seule fois, puis mémorisé. Une question, une ligne
+         (docs/parcours.md#d0--le-seuil). La comparaison porte sur une empreinte, jamais
+         sur la date en clair (docs/architecture.md#le-seuil-de-latelier). -->
+    <section class="ecran" id="d0">
+      <div class="corps corps--reparti">
+        <p class="marque">Pli</p>
+        <div class="groupe">
+          <h1 class="question">Depuis quand ?</h1>
+          <label class="ligne ligne--seule">
+            <span class="ligne__nom">jj/mm/aaaa</span>
+            <input
+              id="seuil"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="jj/mm/aaaa"
+            />
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- D4 · le tiroir. Ce que je ne veux pas retaper, et qui n'a rien à faire dans le
+         dépôt (docs/parcours.md#d4--le-tiroir). Ce qui est écrit est gardé : aucune
+         action ne l'enregistre, la ligne suffit. -->
+    <section class="ecran" id="d4" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d1" hidden>← le type</button>
+        <p class="conduite__pas">le tiroir</p>
+      </div>
+
+      <div class="corps">
+        <div class="groupe">
+          <h1 class="question">Ce que tu ne retapes pas.</h1>
+          <p class="aide">Trois lignes, gardées sur ce téléphone seul. Rien n'en sort.</p>
+        </div>
+      </div>
+
+      <div class="lignes">
+        <label class="ligne">
+          <span class="ligne__nom">le numéro de réponse</span>
+          <input
+            id="w"
+            type="text"
+            inputmode="tel"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="336XXXXXXXX"
+          />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">la signature</span>
+          <input id="s" type="text" autocomplete="off" placeholder="a." />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">le prochain numéro</span>
+          <input id="n" type="text" inputmode="numeric" autocomplete="off" />
+        </label>
+      </div>
+
+      <button class="bouton" type="button" data-va="d1">
+        <span>continuer</span>
+        <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-droite" /></svg>
+      </button>
+    </section>
+
+    <!-- D1 · le type. Quatre lignes, chacune avec son nom, sa glose et le layout vu en
+         petit — un vrai pli réduit par transform, jamais un dessin séparé
+         (docs/parcours.md#d1--le-type). Le type fixe la mise en page : après lui, il n'y a
+         plus que du texte. -->
+    <section class="ecran" id="d1" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d4">← le tiroir</button>
+        <p class="conduite__pas">1 sur 3</p>
+      </div>
+
+      <div class="corps corps--haut">
+        <p class="marque marque--petite">Pli</p>
+        <div class="groupe">
+          <h1 class="question">Qu'est-ce que tu envoies ?</h1>
+          <p class="aide">
+            Le type choisit la mise en page. Tu n'auras plus que les textes à écrire.
+          </p>
+        </div>
+      </div>
+
+      <div class="lignes">
+        <button class="type" type="button" data-type="inv">
+          <span>
+            <span class="type__nom">une invitation</span>
+            <span class="type__glose">un titre, un mot, la date et le lieu — elle répond oui ou non</span>
+          </span>
+          <span class="apercu apercu--vignette">
+            <span class="mini">
+              <span class="mini__volet"></span>
+              <span class="mini__pile">
+                <span class="mini__bloc mini__bloc--carmin" style="height: 104px"></span>
+                <span class="mini__bloc mini__bloc--encre" style="height: 12px; width: 150px"></span>
+                <span class="mini__bloc mini__bloc--encre" style="height: 12px; width: 190px"></span>
+              </span>
+            </span>
+          </span>
+        </button>
+
+        <button class="type" type="button" data-type="pen">
+          <span>
+            <span class="type__nom">une pensée</span>
+            <span class="type__glose">deux lignes seules au milieu de la page — rien à répondre</span>
+          </span>
+          <span class="apercu apercu--vignette">
+            <span class="mini pli--encre">
+              <span class="mini__pile">
+                <span class="mini__bloc mini__bloc--clair" style="height: 22px"></span>
+                <span class="mini__bloc mini__bloc--clair" style="height: 22px; width: 70%"></span>
+              </span>
+            </span>
+          </span>
+        </button>
+
+        <button class="type" type="button" data-type="sou">
+          <span>
+            <span class="type__nom">un souvenir</span>
+            <span class="type__glose">un titre haut, une ligne en bas, beaucoup de vide</span>
+          </span>
+          <span class="apercu apercu--vignette">
+            <span class="mini">
+              <span class="mini__pile">
+                <span class="mini__bloc mini__bloc--carmin" style="height: 76px"></span>
+                <span class="mini__bloc mini__bloc--encre" style="height: 18px; width: 60%"></span>
+              </span>
+            </span>
+          </span>
+        </button>
+
+        <!-- Le poème ne s'écrit pas ici : il passe par la moulinette, à mon bureau
+             (docs/parcours.md#le-poème-hors-atelier). D2p, la liste des poèmes déjà
+             déposés, arrive avec lui. La ligne se montre quand même — les quatre types
+             sont le produit, et en cacher un ferait croire qu'il n'existe pas. -->
+        <button class="type" type="button" data-type="poe" disabled>
+          <span>
+            <span class="type__nom">un poème</span>
+            <span class="type__glose">il s’écrit à ton bureau, et la moulinette en fait le lien</span>
+          </span>
+          <span class="apercu apercu--vignette">
+            <span class="mini pli--encre">
+              <span class="mini__pile">
+                <span class="mini__bloc mini__bloc--clair" style="height: 14px; width: 80%"></span>
+                <span class="mini__bloc mini__bloc--clair" style="height: 14px; width: 62%"></span>
+                <span class="mini__bloc mini__bloc--clair" style="height: 14px; width: 74%"></span>
+              </span>
+            </span>
+          </span>
+        </button>
+      </div>
+
+      <button class="bouton" type="button" data-va="d2" disabled>
+        <span>continuer</span>
+        <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-droite" /></svg>
+      </button>
+    </section>
+
+    <!-- D2 · les textes. « Voici la page telle qu'elle la recevra. Tu remplis, elle se
+         remplit » (docs/parcours.md#d2--les-textes). L'aperçu est un vrai pli 360 × 780
+         réduit, et il porte `data-type` : les feuilles des types le composent exactement
+         comme elle le lira. -->
+    <section class="ecran" id="d2" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d1">← le type</button>
+        <p class="conduite__pas">2 sur 3</p>
+      </div>
+
+      <div class="corps corps--haut">
+        <div class="entete">
+          <div class="groupe">
+            <h1 class="question">Écris ton invitation.</h1>
+            <p class="aide">Voici la page telle qu'elle la recevra. Tu remplis, elle se remplit.</p>
+          </div>
+
+          <div class="apercu apercu--tete">
+            <div class="mini" id="mini" data-type="inv">
+              <div class="tete">
+                <p class="marque">Pli</p>
+                <p class="etiquette carmin" data-mini="type"></p>
+              </div>
+              <div class="corps">
+                <h2 class="titre" data-mini="titre"></h2>
+                <p class="voix" data-mini="voix"></p>
+                <ul class="faits">
+                  <li class="etiquette carmin" data-mini="quand"></li>
+                  <li class="etiquette attenue" data-mini="ou"></li>
+                </ul>
+                <p class="etiquette etiquette--fine" data-mini="signature"></p>
+              </div>
+              <div class="mini__volet"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lignes">
+        <label class="ligne ligne--titre" data-si="titre">
+          <span class="ligne__nom">Le titre <span class="reste" id="reste-ti"></span></span>
+          <input id="ti" type="text" autocomplete="off" placeholder="Tu es invitée" />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">Ton mot <span class="reste" id="reste-b"></span></span>
+          <textarea
+            id="b"
+            rows="2"
+            placeholder="Une ou deux lignes, comme tu le dirais à voix haute."
+          ></textarea>
+        </label>
+        <label class="ligne" data-si="faits">
+          <span class="ligne__nom">Quand</span>
+          <input id="quand" type="text" autocomplete="off" placeholder="samedi 22 août · 20h00" />
+        </label>
+        <label class="ligne" data-si="faits">
+          <span class="ligne__nom">Où <span class="facultatif">— facultatif</span></span>
+          <input id="ou" type="text" autocomplete="off" placeholder="Le Petit Comptoir" />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">Signé</span>
+          <input id="signe" type="text" autocomplete="off" placeholder="a." />
+        </label>
+      </div>
+
+      <button class="bouton" type="button" data-va="d3" disabled>
+        <span>déposer le pli</span>
+        <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-droite" /></svg>
+      </button>
+    </section>
+
+    <!-- D3 · le lien, identique pour les quatre types. Le lien ne s'affiche pas : un vrai
+         payload ne tient pas sur une ligne. Deux actions à la place — envoyer, et copier
+         (docs/parcours.md#d3--le-lien). Aucune expiration : elle n'existe plus. -->
+    <section class="ecran pli--carmin" id="d3" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d2">← modifier</button>
+        <p class="conduite__pas">3 sur 3</p>
+      </div>
+
+      <div class="corps corps--reparti">
+        <p class="marque marque--petite">Pli</p>
+        <div class="groupe">
+          <h1 class="titre titre--geant" data-lien="numero"></h1>
+          <p class="voix voix--corps">
+            Envoie ce lien à la personne. Il se déplie une fois, chez elle, et se referme.
+          </p>
+          <p class="etiquette etiquette--fine" data-lien="longueur"></p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="action" type="button" id="envoyer">
+          <span class="etiquette etiquette--forte">envoyer</span>
+          <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-droite" /></svg>
+        </button>
+        <button class="action action--fine" type="button" id="copier">copier le lien</button>
+      </div>
+    </section>
+
     <script type="module" src="/src/atelier/main.ts"></script>
   </body>
 </html>

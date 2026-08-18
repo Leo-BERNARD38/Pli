@@ -281,20 +281,39 @@ function inlinerLeDocument(): Plugin {
 
 // Deux entrées, deux bundles réellement distincts : rien de l'atelier ne doit pouvoir
 // atterrir dans le bundle qui part chez elle (docs/architecture.md#deux-entrées).
-export default defineConfig({
-  base: '/',
-  publicDir: 'public',
-  plugins: [prechargerLaVague2(), inlinerLeDocument()],
-  build: {
-    // Deux appareils connus, iOS 26 et Android 16 : aucun préfixe, aucun polyfill, pas
-    // même celui que Vite injecte pour modulepreload (docs/architecture.md#compatibilité).
-    target: 'esnext',
-    modulePreload: { polyfill: false },
-    rollupOptions: {
-      input: {
-        lecteur: 'index.html',
-        atelier: 'atelier/index.html',
-      },
+//
+// **Deux builds, et non deux entrées d'un même build.** Le jour où l'atelier importe
+// `codec.ts`, Rollup en fait un chunk commun aux deux entrées : le document du lecteur
+// perd son inlining et gagne une requête avant le premier texte, sans que personne l'ait
+// demandée. Un build par entrée rend à chacune sa copie du module partagé — exactement
+// l'état d'aujourd'hui côté lecteur — et la garde « une entrée = un fichier » ne bouge pas.
+//
+//   vite build --mode lecteur    vide dist/, écrit index.html et ses ressources
+//   vite build --mode atelier    écrit atelier/ à côté, sans rien effacer
+//
+// L'atelier ne précharge rien et ne s'inline pas : il n'est jamais servi sur son téléphone,
+// et son premier écran n'a aucun budget de temps.
+export default defineConfig(({ mode }) => {
+  const atelier = mode === 'atelier'
+  // Une entrée, et une seule, par build — le type le dit, sinon Rollup lit une union.
+  const entree: Record<string, string> = atelier
+    ? { atelier: 'atelier/index.html' }
+    : { [ENTREE]: DOCUMENT }
+
+  return {
+    base: '/',
+    // `public/` est recopié tel quel par le premier build ; le second le recopierait
+    // par-dessus, à l'identique, pour rien.
+    publicDir: atelier ? false : 'public',
+    plugins: atelier ? [] : [prechargerLaVague2(), inlinerLeDocument()],
+    build: {
+      // Deux appareils connus, iOS 26 et Android 16 : aucun préfixe, aucun polyfill, pas
+      // même celui que Vite injecte pour modulepreload (docs/architecture.md#compatibilité).
+      target: 'esnext',
+      modulePreload: { polyfill: false },
+      // Le second build écrit à côté du premier : vider serait effacer le lecteur.
+      emptyOutDir: !atelier,
+      rollupOptions: { input: entree },
     },
-  },
+  }
 })

@@ -301,3 +301,19 @@ si la mesure sur les deux téléphones le rend visible.
   Surtout, la roadmap dit maintenant **où on lance** : à la fin du jalon 3, quand elle a
   répondu. Tout ce qui suit est du confort — précieux, mais du confort. Réversible en une
   ligne si le poème compte plus que le journal.
+
+### L'atelier
+
+- **18/08/2026 — le stockage a deux modules, pas un.** L'invariant disait « tout
+  `localStorage` passe par `journal.ts` » ; l'atelier range quatre clés qui n'ont rien à voir
+  avec ses plis à elle — « il n'a rien à voir avec son journal et ne se synchronise pas »
+  (`docs/donnees.md#5-mon-historique`). Les mettre dans `journal.ts` aurait posé le **numéro
+  de réponse** dans le module que le lecteur importe. D'où `src/lib/tiroir.ts`, et une garde
+  qui accepte désormais deux modules de stockage — deux, et pas trois.
+- **18/08/2026 — deux builds au lieu de deux entrées.** Le jour où l'atelier importe
+  `codec.ts`, Rollup en fait un chunk commun : le document du lecteur perd son inlining et
+  gagne une requête avant le premier texte. `docs/architecture.md` laissait le choix entre
+  deux builds séparés et l'inlining du graphe entier. C'est **deux builds** : chacun garde sa
+  copie du module partagé, le budget de 14 ko ne bouge pas, et la garde « une entrée = un
+  fichier » — qui a déjà attrapé un bug au jalon 3 — reste debout. `npm run build` lance Vite
+  deux fois, `--mode lecteur` puis `--mode atelier`.

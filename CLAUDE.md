@@ -64,8 +64,10 @@ Un lien parti n'a plus de version : il est dans une conversation, pour toujours.
 4. **Rien de secret dans le dépôt.** Le numéro WhatsApp `w` ne vit que dans le tiroir et dans
    un lien déjà envoyé. Seule l'empreinte du seuil entre, jamais la date.
 5. **`plis-source/` ne se commite jamais.**
-6. **Tout accès à `localStorage` passe par `journal.ts`.** Dédoublonnage sur `h`, l'empreinte
-   du payload — **jamais sur `n`**. La navigation privée dégrade proprement.
+6. **Tout accès au stockage passe par `journal.ts` ou `tiroir.ts`**, et par eux seuls — ses
+   plis à elle d'un côté, mes réglages d'atelier de l'autre, jamais mélangés. Dédoublonnage
+   sur `h`, l'empreinte du payload — **jamais sur `n`**. La navigation privée dégrade
+   proprement.
 7. **Aucun tiers, jamais.** Pas de CDN, pas de mesure d'audience, pas de framework, pas de
    polyfill. On cible iOS 26 et Android 16, deux appareils connus.
 8. **L'adresse se gèle au premier pli envoyé.** Aujourd'hui `leo-bernard38.github.io`,
