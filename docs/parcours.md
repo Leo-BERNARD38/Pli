@@ -6,7 +6,7 @@ enchaînent, ce qui les déclenche, et ce qui se range où.
 
 ---
 
-# 1. Elle — `leo-bernard38.github.io/`
+# 1. Elle — `leo-bernard38.github.io/Pli/`
 
 ```
              lien reçu par WhatsApp
@@ -119,7 +119,7 @@ Le mot choisi en 78px, sur carmin. Deux corrections à la maquette :
 - **« écrire à ton tour ↑ » devient « tes plis ↑ ».** Elle n'a pas d'atelier ; le relais
   n'existe pas dans un produit à deux. La composition ne change pas, la destination si.
 
-## Le journal — `leo-bernard38.github.io/#/`
+## Le journal — `leo-bernard38.github.io/Pli/#/`
 
 La racine mène au journal. Vide au départ : tant qu'elle n'a rien reçu, il n'y a rien —
 et cet écran vide porte le papier froissé, la seule fois où le produit se montre lui-même.
@@ -143,7 +143,7 @@ tronqué par l'application de messagerie. Le message le dit et propose de me le 
 
 ---
 
-# 2. Moi — `leo-bernard38.github.io/atelier/`
+# 2. Moi — `leo-bernard38.github.io/Pli/atelier/`
 
 ```
         D0  le seuil  ──▶  D4  le tiroir  ──▶  D1  le type  ──┬──▶  D2   les textes  ──▶  D3  le lien
@@ -228,7 +228,7 @@ parce que c'est la seule forme dans laquelle il sera lu.
   plis-source/015.md   ──▶  plier.bat / plier.sh  ──▶  public/plis/015-vhtq.txt
    écrit à la main                                     public/plis/index
                                                        ↓
-                                        stdout : nº 015 → leo-bernard38.github.io/#p=015-vhtq
+                                        stdout : nº 015 → leo-bernard38.github.io/Pli/#p=015-vhtq
 ```
 
 J'écris le poème à mon bureau, dans un `.md` à front-matter. Une ligne vide sépare deux

@@ -37,7 +37,7 @@ peintures servies vivent dans `src/`, d'où Vite les empreinte
 | Aucun en-tête personnalisable | `cache-control: max-age=600` sur tout, sans exception — voir plus bas |
 | Aucune réécriture d'URL | routage par hash, non négociable ([architecture.md](architecture.md#routage)) |
 | gzip, pas de brotli | compter les budgets en **gzip**, jamais en brotli |
-| Pas de redirection, pas de règle | le seul filet est `404.html`, en crème, qui renvoie à `leo-bernard38.github.io/` |
+| Pas de redirection, pas de règle | le seul filet est `404.html`, en crème, qui renvoie à `leo-bernard38.github.io/Pli/` |
 | Aucun secret, aucune variable | tout ce qui est buildé est public — le numéro WhatsApp voyage dans le lien |
 
 Pas de `robots.txt` : tenir les moteurs à l'écart est le travail de la balise `noindex`, et
@@ -46,7 +46,7 @@ un `Disallow` global couperait aussi l'aperçu du lien ([partage.md](partage.md#
 Vérification, à refaire le jour où Pages change d'avis :
 
 ```sh
-curl -sSI -H 'Accept-Encoding: br, gzip' https://leo-bernard38.github.io/ | grep -i 'cache-control\|content-encoding'
+curl -sSI -H 'Accept-Encoding: br, gzip' https://leo-bernard38.github.io/Pli/ | grep -i 'cache-control\|content-encoding'
 ```
 
 Mesuré sur un site Pages le 17 août 2026 : `cache-control: max-age=600`,
@@ -70,14 +70,22 @@ Trois conséquences qui gouvernent tout le reste :
 
 ## L'adresse
 
-`https://leo-bernard38.github.io/`, servie à la **racine** — c'est le site d'utilisateur de
-GitHub, obtenu en nommant le dépôt `leo-bernard38.github.io`. Pas de domaine personnalisé,
-donc **pas de `CNAME`**, pas de DNS à tenir, et HTTPS d'office. `base` de Vite reste `/` :
-c'est la racine d'un hôte, pas un sous-chemin de dépôt.
+`https://leo-bernard38.github.io/Pli/`, servie sous un **sous-chemin** — c'est le site de
+projet de GitHub, obtenu sans rien renommer : le dépôt s'appelle `Pli`, Pages le sert sous
+`/Pli/`. Pas de domaine personnalisé, donc **pas de `CNAME`**, pas de DNS à tenir, et HTTPS
+d'office. `base` de Vite vaut donc **`/Pli/`**, et c'est le seul endroit où ce préfixe est
+écrit : le module le lit dans `import.meta.env.BASE_URL`, Vite le pose partout ailleurs —
+dans le document, dans les feuilles, dans les imports de la vague 3.
 
-Un sous-chemin (`…github.io/Pli/`) n'est **pas** une cible : `base` devrait changer, toutes
-les adresses absolues du produit avec, et le préfixe de chaque lien s'allongerait de cinq
-signes — cinq signes de moins pour le pli, qui voyage entièrement dans le fragment.
+Ce que le sous-chemin coûte : **quatre signes de préfixe**, pris sur ce qu'un pli peut
+porter, puisqu'il voyage entièrement dans le fragment. C'est le prix d'une adresse qui marche
+sans renommer le dépôt — à rapprocher de la mesure nº 1 quand elle sera faite.
+
+Trois choses ne s'écrivent donc **jamais** à la racine de l'hôte : le `fetch` d'un poème, le
+rechargement de secours, et l'adresse que l'atelier fabrique. Toutes les trois partent de
+`BASE_URL`. Deux exceptions, et elles sont nommées : `public/404.html` et
+`public/icones/site.webmanifest` ne passent pas par Vite — ils portent `/Pli/` en clair,
+comme le `<head>` de l'atelier, dont le build tourne sans `publicDir`.
 
 **L'adresse se gèle au premier pli envoyé**, pas avant. Tant qu'aucun lien n'est parti, elle
 peut encore devenir un vrai domaine : il suffirait de l'acheter, de le renseigner dans les
@@ -103,10 +111,10 @@ vigilance est de ne pas y verser un jour les originaux des peintures.
 
 ## Avant le premier déploiement
 
-- [ ] `base: '/'` dans Vite — la racine d'un hôte, pas un sous-chemin de dépôt
+- [ ] `base: '/Pli/'` dans Vite — un sous-chemin de dépôt, pas la racine d'un hôte
 - [ ] `.nojekyll` dans `public/`, donc à la racine de `dist/` — et **pas** de `CNAME`
-- [ ] le dépôt nommé `leo-bernard38.github.io`, source de Pages = « GitHub Actions »
-- [ ] `404.html` en crème, qui renvoie à `leo-bernard38.github.io/`
+- [ ] le dépôt nommé `Pli`, source de Pages = « GitHub Actions »
+- [ ] `404.html` en crème, qui renvoie à `leo-bernard38.github.io/Pli/`
 - [ ] `design/` absent de `dist/`
 - [ ] les balises `og:` servies dans le HTML statique ([partage.md](partage.md))
 - [ ] `curl` de vérification passé sur le domaine réel

@@ -1,0 +1,77 @@
+/* C1 · le journal, C2 · le rappel, C3 · le pli refermé.
+   ==========================================================================
+
+   Le sommaire de ses plis, et les deux écrans qui y mènent. Demandée à la volée par
+   src/lecteur/plis.ts : le premier texte ne l'attend jamais
+   (docs/chargement.md#les-trois-vagues).
+
+   Le gabarit ne bouge pas : tête, corps, mêmes marges, mêmes encres. Ce qui est nouveau
+   tient en une chose — le journal est le SEUL écran du produit qui défile. « Un pli = un
+   écran » vaut pour un pli ; le journal n'en est pas un, c'est un sommaire de revue
+   (docs/parcours.md#le-journal). Le défilement est enfermé dans la liste : le pli, lui,
+   ne défile toujours pas. */
+
+/* La marque devient un chemin — elle mène au journal, depuis A1, A2, C3 et C4
+   (docs/parcours.md#a2--la-découverte). Elle ne change pas d'aspect : le geste est
+   discret, c'est tout son intérêt. */
+a.marque {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* « tes plis ↑ » sur C3 et A4 : la même composition que « répondre », en lien. */
+a.action {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Le sommaire. Une liste porte une puce et un retrait par défaut : les deux partent,
+   comme pour les faits. */
+.plis {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Le cadre coupe tout le toucher pour le geste du dépliage : ici il n'y en a pas, et
+     sans cette ligne le sommaire ne se ferait pas défiler du doigt. */
+  touch-action: pan-y;
+}
+
+/* Une entrée : trois lignes, du plus froid au plus chaud — le numéro et le type, ce qui
+   est écrit, puis depuis quand. Le filet les sépare, comme les faits d'une invitation. */
+.ligne {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--trait);
+  color: inherit;
+  text-decoration: none;
+}
+
+.plis li:first-child .ligne {
+  padding-top: 0;
+}
+
+.plis li:last-child .ligne {
+  border-bottom: 0;
+}
+
+/* La voix d'une ligne de sommaire se lit d'un coup d'œil : deux lignes au plus, et la
+   suite se devine. C'est un sommaire, pas le pli. */
+.ligne .voix {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* Le journal vide porte le papier froissé — la seule fois où le produit se montre
+   lui-même (docs/design-system.md). Le corps passe devant l'image, comme partout. */
+#c1 .corps {
+  position: relative;
+  z-index: 1;
+}

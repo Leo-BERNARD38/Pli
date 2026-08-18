@@ -12,7 +12,7 @@ import { encoder, type Pli } from '../lib/codec.ts'
 import { noterUnDepot } from '../lib/tiroir.ts'
 
 /** L'adresse du produit. Elle se gèle au premier pli envoyé (CLAUDE.md#les-invariants). */
-const ADRESSE = 'https://leo-bernard38.github.io/'
+const ADRESSE = `https://leo-bernard38.github.io${import.meta.env.BASE_URL}`
 
 /** Ce qu'un dépôt a produit, une fois le lien fabriqué. */
 export interface Depot {

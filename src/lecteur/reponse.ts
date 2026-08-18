@@ -57,21 +57,17 @@ const MOTS: readonly Mot[] = [
   { mot: 'Non', etiquette: 'je ne peux pas', message: 'Je ne peux pas' },
 ]
 
-/** Ce dont la réponse a besoin pour vivre. */
+/** Ce dont la réponse a besoin pour vivre. Le retour de WhatsApp par rechargement ne passe
+ * plus par ici : il retombe sur C2, le pli relu et le mot rappelé
+ * (docs/partage.md#le-retour). */
 export interface Attaches {
   /** Le cadre du pli : les deux couches qui montent s'y ajoutent. */
   cadre: HTMLElement
-  /** La couche d'A2, où vit « répondre ». Absente au retour de WhatsApp : A2 n'est pas rejouée. */
+  /** La couche d'A2, où vit « répondre ». */
   dessous: HTMLElement | null
   pli: Pli
   /** Noter le mot au journal, **avant** de quitter la page. */
   noter: (mot: string) => void
-}
-
-/** Ce que l'appelant garde : de quoi retomber sur A4 au retour de WhatsApp. */
-export interface Reponse {
-  /** A4 tout de suite, sans transition — la page vient d'être rechargée, rien n'a bougé. */
-  poserLeMot(mot: string): void
 }
 
 /**
@@ -106,7 +102,7 @@ function tete(etiquette: string): HTMLElement {
  * Construit A3 et A4, et branche le chemin de la réponse. À appeler **après le geste** :
  * elles ne servent qu'une fois le pli déplié, et rien ne les attend avant.
  */
-export function armerLaReponse(a: Attaches): Reponse {
+export function armerLaReponse(a: Attaches): void {
   // A3 · la réponse. Le titre de la maquette reste ; la voix, elle, était fausse — « elle
   // le saura tout de suite » promettait une remontée automatique qui n'existe pas
   // (docs/integration.md#corrections-de-contenu-dans-les-maquettes).
@@ -156,9 +152,11 @@ export function armerLaReponse(a: Attaches): Reponse {
   haut4.append(leMot, element('p', 'voix voix--corps', 'Le pli se referme derrière toi.'))
 
   // « tes plis ↑ », et non « écrire à ton tour » : elle n'a pas d'atelier, le relais
-  // n'existe pas dans un produit à deux (docs/integration.md). Posée mais **muette** —
-  // C1, le journal, est le jalon 5. Elle s'allumera avec lui.
-  const vers = element('div', 'action')
+  // n'existe pas dans un produit à deux (docs/integration.md). Elle mène au journal
+  // depuis le jalon 5 — un vrai `href`, comme les trois mots d'A3.
+  const vers = document.createElement('a')
+  vers.className = 'action'
+  vers.href = '#/'
   vers.append(element('span', 'etiquette etiquette--forte', 'tes plis'), fleche())
   corps4.append(haut4, vers)
   a4.append(tete('ton mot'), corps4)
@@ -185,16 +183,4 @@ export function armerLaReponse(a: Attaches): Reponse {
     couvrir(a.dessous)
     monter(a3)
   })
-
-  return {
-    poserLeMot: (mot: string) => {
-      // Rechargement, pas retour du bfcache : rien n'a bougé à l'écran, donc rien ne monte.
-      // A4 est simplement là, comme elle l'a laissée (docs/partage.md#le-retour).
-      a4.style.transition = 'none'
-      montrerLeMot(mot)
-      requestAnimationFrame(() => {
-        a4.style.transition = ''
-      })
-    },
-  }
 }

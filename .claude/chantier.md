@@ -8,6 +8,12 @@ Une étape n'est cochée que lorsqu'elle est **écrite, relue et commitée**.
 
 ## Jalon courant
 
+**Jalon 5 — la durée.** Le journal se lit. C1 le sommaire et son état vide, C2 la relecture
+d'un pli depuis une entrée, C3 le pli refermé, et la marque « Pli » devenue chemin discret :
+elle mène au journal depuis A1, A2, C3 et C4, et « tes plis ↑ » d'A4 s'allume enfin. Une
+entrée a son adresse, `#/relire/<h>`, qui ne quitte jamais l'appareil. Reste `#/installer`,
+dont la forme dépend de la **mesure 4** — elle ne se simule pas, la page reste nue.
+
 **Jalon 4 — l'atelier.** Le code est écrit, relu et commité en trois lots : le socle (le
 tiroir, la garde à deux modules, les deux builds), D0 et D4, puis D1 à D3 avec le partage.
 Un pli se compose et se dépose depuis le téléphone, sans passer par le code. Deux gestes
@@ -20,16 +26,15 @@ et A4 avec le passage à WhatsApp. L'échange fonctionne de bout en bout dans Ch
 reste tient en une séance sur les deux téléphones — et le jalon 2, lui, attend toujours la
 sienne.
 
-Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : renommer le dépôt,
-ouvrir un lien sur son téléphone, et les trois mesures du jalon 1. Aucun ne bloque la suite.
+Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : déplier un lien
+sur son téléphone, et les trois mesures du jalon 1. Aucun ne bloque la suite.
 
-**La roadmap a été regroupée le 18/08/2026** : sept jalons deviennent cinq. Ce qui vient
-maintenant est le **jalon 5 — la durée** : C1 le journal et son état vide, C2, C3, la marque
-comme chemin discret, `#/installer`.
+**La roadmap a été regroupée le 18/08/2026** : sept jalons deviennent cinq. Le jalon 5 est le
+dernier ; après lui, il n'y a plus que « plus tard » — le poème, le bureau, le reste.
 
 Le lancement tombait à la fin du jalon 3, et il y est resté : l'échange va de bout en bout.
-Ce qui vient depuis est du confort — un pli ne se fabrique plus en ligne de commande, mais
-le journal se remplit toujours sans se lire.
+Ce qui vient depuis est du confort — un pli ne se fabrique plus en ligne de commande, et le
+journal se lit.
 
 ## Ce qui existe
 
@@ -43,7 +48,7 @@ le journal se remplit toujours sans se lire.
       leurs tests
 - [x] les deux entrées — `index.html`, `atelier/index.html`
 - [x] `src/lecteur/` — `main.ts`, `a1.ts`, `a2.ts`, `reponse.ts`, `geste.ts`, `fond.ts`,
-      `plateau.ts`
+      `plateau.ts`, `plis.ts`
 - [x] `polices-source/` et `src/fonts/` — les quatre familles, sources et sous-ensembles
 - [x] `src/atelier/` — `main.ts`, `seuil.ts`, `reglages.ts`, `type.ts`, `textes.ts`,
       `apercu.ts`, `lien.ts`
@@ -57,18 +62,19 @@ le journal se remplit toujours sans se lire.
 - [x] `src/lib/codec.ts` — isomorphe Node + navigateur, avec ses tests
 - [x] `src/lib/dates.ts` — les formats français, avec ses tests
 - [x] le routeur par hash
-- [x] `.nojekyll`, `404.html`, `base: '/'` — le `CNAME` est parti avec `pli.re`
+- [x] `.nojekyll`, `404.html`, `base: '/Pli/'` — le `CNAME` est parti avec `pli.re`
 - [x] les deux workflows GitHub — vérification sur PR, déploiement sur `main`
 - [x] un pli en dur, sans style
 - [x] **à la main, chez moi** : Pages activé, source « GitHub Actions » — c'est bien celle
       que `deploiement.yml` demande, `actions/deploy-pages` ne sait pas déployer autrement
 - [x] le déploiement tourne : les runs 2 et 3 de `deploiement.yml` sont en succès, le site
       est construit et publié
-- [ ] **à la main, chez moi** : **renommer le dépôt `Pli` en `leo-bernard38.github.io`**, et
-      retirer le domaine personnalisé des réglages de Pages. Le site sera alors servi à la
-      racine de `https://leo-bernard38.github.io/`, ce que `base: '/'` suppose déjà. Rien
-      d'autre à faire : ni DNS, ni `CNAME`, ni « Enforce HTTPS » — un site d'utilisateur est
-      en HTTPS d'office ([docs/hebergement.md](../docs/hebergement.md#ladresse))
+- [x] l'adresse réelle : **`https://leo-bernard38.github.io/Pli/`**. Le dépôt garde son nom,
+      Pages en fait un site de projet servi sous `/Pli/`, et `base` vaut `/Pli/`. Le site ne
+      répondait que des 404 tant que `base` valait `/` — corrigé le 18/08/2026, avec tout ce
+      qui s'écrivait à la racine de l'hôte : le `fetch` d'un poème, le rechargement de
+      secours, l'adresse fabriquée par l'atelier, le manifeste, `404.html`, les balises `og:`
+      ([docs/hebergement.md](../docs/hebergement.md#ladresse))
 - [ ] **à la main, chez moi** : le `curl` de vérification sur l'adresse réelle
       ([docs/hebergement.md](../docs/hebergement.md#ce-que-pages-ne-donne-pas))
 - [ ] **à la main, sur les deux téléphones** : le lien ouvert chez elle
@@ -163,7 +169,9 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
 - [x] A3 · la réponse — les trois mots, en `<a href>` : le navigateur gère la sortie
 - [x] A4 · le mot — il affiche son mot et **n'affirme rien de plus**
 - [x] le passage à WhatsApp dans le bon ordre : la réponse notée, **puis** A4, **puis**
-      `wa.me` — et le retour par rechargement retombe sur A4, jamais sur A1
+      `wa.me` — et le retour par rechargement ne retombe jamais sur A1. Il tombait sur A4
+      faute de mieux ; depuis le jalon 5 il tombe sur **C2**, le pli relu et le mot rappelé,
+      ce que [partage.md](../docs/partage.md#le-retour) demandait
 - [ ] **à la main, sur les deux téléphones** : la réponse envoyée pour de vrai, depuis le
       navigateur intégré de WhatsApp comme depuis Safari — c'est le seul endroit où l'on
       verra si `wa.me` revient bien sur la page, et dans quel bac de stockage
@@ -231,6 +239,30 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
 **Fin du jalon :** je compose et j'envoie depuis mon téléphone, sans passer par le code.
 Vraie dès que l'empreinte du seuil est posée.
 
+## Jalon 5 — la durée
+
+- [x] C1 · le journal — un sommaire de revue, pas un fil : le numéro et le type, ce qui est
+      écrit, depuis quand, et le mot s'il y en a un. Le décodage se rejoue à l'affichage —
+      le journal range le payload, jamais l'objet décodé. Une entrée devenue illisible s'en
+      va seule, les autres restent
+- [x] C1 à l'état vide — le papier froissé, la seule fois où le produit se montre lui-même
+- [x] C2 · la relecture — le pli entier, tel qu'il s'est déplié, et le mot rappelé à la
+      place de « répondre » : on ne répond pas deux fois. Deux chemins y mènent, et c'est le
+      même écran — une entrée du journal, et le retour de WhatsApp par rechargement
+      ([partage.md](../docs/partage.md#le-retour))
+- [x] C3 · le pli refermé — un lien déjà déplié ne se rejoue pas ; il mène au journal
+- [x] la marque comme chemin discret, et `#/relire/<h>` dans le routeur, avec ses tests
+- [ ] **`#/installer` attend la mesure 4.** Sa forme dépend de la réponse : le journal de
+      l'app installée est-il celui de Safari. La route existe, la page reste nue — un écran
+      qu'aucune mesure n'a dessiné ne s'invente pas
+- [ ] **le réglage de cadence sur son iPhone**, au moment de l'installation — à faire à la
+      main, sur son téléphone
+- [ ] **à la main, sur les deux téléphones** : le journal relu après deux semaines de
+      silence — c'est la phrase de fin du jalon, et elle **dépend de la mesure 2**
+
+**Fin du jalon :** son journal existe et survit à deux semaines de silence. La première
+moitié est vraie ; la seconde se mesure, elle ne se code pas.
+
 ## Les mesures — aucune ne se devine
 
 Elles sont décrites dans [docs/README.md](../docs/README.md#les-mesures-à-faire-avant-de-sengager).
@@ -297,11 +329,12 @@ chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip g
 ## Ce qui reste ouvert
 
 - **Un vrai domaine, plus tard ?** L'adresse ne se gèle qu'au **premier pli envoyé**. Tant
-  qu'aucun lien n'est parti, `leo-bernard38.github.io` peut encore devenir un domaine acheté :
+  qu'aucun lien n'est parti, `leo-bernard38.github.io/Pli` peut encore devenir un domaine acheté :
   on le renseigne dans les réglages du dépôt, on pose les enregistrements DNS de GitHub, on
   active « Enforce HTTPS ». Après le premier pli, non — il est dans une conversation. Le
-  préfixe coûte 28 signes aujourd'hui contre 12 pour un domaine court, à rapprocher de la
-  mesure nº 1 quand elle sera faite.
+  préfixe compte **36 signes** aujourd'hui (`https://leo-bernard38.github.io/Pli/`), dont
+  quatre pour le sous-chemin, contre 15 pour un domaine court (`https://pli.re/`) — à
+  rapprocher de la mesure nº 1 quand elle sera faite.
 
 - **L'alphabet du jeton d'un poème.** Le routeur n'accepte que `numéro-jeton` en minuscules et
   chiffres. [docs/donnees.md](../docs/donnees.md#la-moulinette) dit « quatre signes » et rien

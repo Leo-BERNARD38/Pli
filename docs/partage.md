@@ -6,7 +6,7 @@ montre, et comment la réponse y revient.
 ## L'aperçu ne peut pas fuiter, par construction
 
 Tout ce qui suit le `#` **n'est jamais envoyé au serveur** — c'est la spécification HTTP,
-pas une précaution. Le fabricant d'aperçu ne voit donc que `https://leo-bernard38.github.io/`, jamais
+pas une précaution. Le fabricant d'aperçu ne voit donc que `https://leo-bernard38.github.io/Pli/`, jamais
 `#c=…` ni `#p=…`.
 
 Conséquence : **tous les plis ont exactement le même aperçu**. Rien à filtrer, rien à
@@ -18,10 +18,10 @@ produit — le papier froissé, et deux phrases qui n'en disent pas plus qu'A1.
 ```html
 <meta property="og:title"       content="Un pli t'attend.">
 <meta property="og:description" content="Il ne s'ouvre qu'une fois.">
-<meta property="og:image"       content="https://leo-bernard38.github.io/icones/og.png">
+<meta property="og:image"       content="https://leo-bernard38.github.io/Pli/icones/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url"         content="https://leo-bernard38.github.io/">
+<meta property="og:url"         content="https://leo-bernard38.github.io/Pli/">
 <meta property="og:type"        content="website">
 <meta property="og:site_name"   content="Pli">
 <meta property="og:locale"      content="fr_FR">
@@ -54,7 +54,7 @@ pointillé carmin. **Le produit se présente lui-même, dans sa propre voix.**
 | Fichier | `public/icones/og.png`, regénéré par [`scripts/icones.py`](../scripts/icones.py) |
 | Format | **1200 × 630**, PNG |
 | Poids | **30 ko** — très loin du plafond des messageries |
-| Servi depuis | `/icones/og.png`, nom stable, jamais empreinté |
+| Servi depuis | `/Pli/icones/og.png`, nom stable, jamais empreinté |
 
 PNG et non JPEG, et c'est le bon choix ici : des aplats et de la typographie, pas une
 photographie. Le JPEG salirait les bords des lettres pour le même poids.
@@ -80,18 +80,18 @@ Trois comportements qui ne se devinent pas, et qui changent la manière de trava
 
 1. **L'aperçu est fabriqué sur le téléphone qui envoie**, au moment où le lien est collé,
    puis voyage **dans le message** — le chiffrement de bout en bout l'impose. Donc : mon
-   Android doit pouvoir joindre `leo-bernard38.github.io` au moment où je colle. Hors réseau, pas de
+   Android doit pouvoir joindre `leo-bernard38.github.io/Pli` au moment où je colle. Hors réseau, pas de
    vignette ; le lien, lui, fonctionne quand même.
 2. **Coller, attendre que la vignette apparaisse, puis envoyer.** Envoyer trop vite part
    sans aperçu. C'est un geste à connaître, pas un réglage.
 3. **La vignette est mise en cache sur l'appareil, sans moyen de purge.** Changer les
-   balises ne change rien à ce que mon téléphone affichera pour `leo-bernard38.github.io/`.
+   balises ne change rien à ce que mon téléphone affichera pour `leo-bernard38.github.io/Pli/`.
 
 Le remède au troisième point, le jour où les balises changent : ajouter un paramètre de
 requête au lien.
 
 ```
-https://leo-bernard38.github.io/?a=2#c=<payload>
+https://leo-bernard38.github.io/Pli/?a=2#c=<payload>
 ```
 
 WhatsApp y voit une adresse neuve et refabrique l'aperçu. Le fragment reste intact, le
@@ -103,7 +103,7 @@ serveur ignore la requête, le produit ne s'en aperçoit pas. Coût : cinq signe
 - **Que les balises sont bien servies** — une commande suffit :
 
   ```sh
-  curl -sS https://leo-bernard38.github.io/ | grep 'og:'
+  curl -sS https://leo-bernard38.github.io/Pli/ | grep 'og:'
   ```
 
 - **Ce que WhatsApp en fait** — s'envoyer le lien à soi-même, dans WhatsApp, sur le
@@ -139,7 +139,7 @@ Elle revient par le bouton système. Deux chemins possibles, et les deux doivent
 | Retour | Ce qui se passe | Ce qu'il faut |
 |---|---|---|
 | depuis le **bfcache** | la page est restaurée telle quelle, aucun script rejoué | A4 est déjà là, rien à faire — ne jamais dépendre d'un rechargement |
-| par un **rechargement** | le hash `#c=` est toujours dans la barre | l'arrivée relit le journal et retombe sur A4, pas sur A1 |
+| par un **rechargement** | le hash `#c=` est toujours dans la barre | l'arrivée relit le journal et retombe sur C2, pas sur A1 |
 
 C'est la règle de [parcours.md](parcours.md#larrivée) étendue d'un cran : l'arrivée décide
 l'écran d'après le journal — `deplieLe` mène à C3, une `reponse` déjà notée mène à C2.
