@@ -159,6 +159,40 @@ porte sa liste de ce qui fait échouer une revue. L'essentiel :
   mémoire décodée, quelle qu'en soit la taille d'affichage.
 - **On mesure sur les deux téléphones, jamais sur un émulateur.**
 
+## Le rituel — comment une tâche se termine ici
+
+Ce dépôt est écrit avec des agents, et personne ne relit les diffs ligne à ligne. La revue
+n'est donc pas une politesse de fin de tâche, c'est la seule relecture qui aura lieu.
+
+| Ce que tu viens d'écrire | Qui le relit |
+|---|---|
+| un écran | `revue-ecran`, puis `gardien-lexique` |
+| un geste, une animation, un chemin de chargement | `garde-fluidite` |
+| `lib/`, la moulinette, le routeur, `package.json` | `garde-invariants` |
+| un écran fini | `/revue` — il lance les trois premiers ensemble |
+| un jalon entier | `/jalon`, qui le découpe avant d'écrire quoi que ce soit |
+
+Deux règles qui vont avec :
+
+- **Petits diffs.** Une étape = un écran, un module, un fichier de configuration. Un gros
+  diff est un diff que personne ne lit.
+- **Un refus n'attend pas.** On ne passe pas à l'étape suivante avec un refus de relecteur
+  derrière soi.
+
+## Quand tu ne sais pas
+
+Le seul mode de défaillance qui coûte cher ici est l'invention plausible. Une règle qui n'est
+pas dans `docs/` n'existe pas.
+
+- **Une doc muette n'autorise pas à trancher.** Ni sur une valeur de la DA, ni sur un texte
+  d'interface, ni sur une des quatre mesures ouvertes. Dis ce qui manque et demande.
+- **Un chiffre se cite, il ne s'estime pas.** 26px, 34 %, 460 ms, 0,55 px/ms, 14 ko gzip,
+  `.62` — tous viennent d'un fichier, et le fichier se nomme.
+- **Le README décrit la cible, pas l'existant** : `npm run dev` et `npm test` n'existeront
+  qu'au jalon 0.
+- Ce qui reste ouvert est ouvert exprès : les quatre mesures, et « modifier un pli après
+  dépôt » ([docs/integration.md](docs/integration.md#les-cinq-questions-laissées-ouvertes-par-le-design)).
+
 ## Conventions d'écriture
 
 Le lexique est **normatif et fermé**. On dit : déplier · déposer · répondre · refermer ·
@@ -176,7 +210,23 @@ deux.
 
 ## Structure agents
 
-`.claude/agents/` — trois relecteurs à lancer sur un écran fini ou un diff :
-`revue-ecran`, `gardien-lexique`, `garde-fluidite`.
-`.claude/commands/` — `/revue` (la revue complète d'un écran), `/seuil` (fabriquer
-l'empreinte), `/etat` (où en est le jalon courant).
+**`.claude/agents/`** — quatre relecteurs, chacun sur un domaine : `revue-ecran` (les cinq
+règles, le gabarit, l'accessibilité), `gardien-lexique` (les mots visibles et les noms du
+code), `garde-fluidite` (le geste et le chargement), `garde-invariants` (ce qui ne se rouvre
+pas : le codec, les noms de fichiers, le journal, les secrets, les tiers).
+
+**`.claude/commands/`** — `/revue` (la revue complète d'un écran), `/jalon` (cadrer un jalon
+avant d'écrire), `/seuil` (fabriquer l'empreinte), `/etat` (où en est le jalon courant).
+
+**`.claude/hooks/`** — deux gardes déterministes, parce qu'une règle écrite en prose se
+contourne sans le vouloir :
+
+- `garde-irreversible.sh` refuse un commit qui emporte `plis-source/`, supprime ou renomme un
+  fichier de `public/plis/`, modifie `design/`, ou fait entrer dans du code un numéro de
+  téléphone ou la date du seuil en clair. Les exemples délibérés de `docs/` et `design/` sont
+  exemptés. **On ne la contourne pas** : quand elle refuse, on corrige.
+- `rappel-relecteur.sh` nomme, après chaque écriture dans `src/`, le relecteur qui va avec le
+  fichier.
+
+`.claude/settings.json` ferme en plus l'écriture dans `design/`, la lecture de `plis-source/`
+et `git add -f`, et fait demander avant un `git push` ou une écriture dans `public/plis/`.

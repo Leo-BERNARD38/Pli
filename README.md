@@ -59,6 +59,9 @@ nº 015 → https://pli.re/#p=015-vhtq
 
 ## Développement
 
+Rien de tout cela n'existe encore : c'est la cible du **jalon 0**
+([docs/roadmap.md](docs/roadmap.md)), à créer telle quelle.
+
 ```sh
 npm install
 npm run dev        # les deux entrées
