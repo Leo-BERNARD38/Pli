@@ -44,6 +44,45 @@ Un seul objet pour les quatre types, à clés courtes pour tenir dans une URL.
 
 Les clés absentes sont omises, jamais mises à `null`.
 
+### Ce que le papier peut porter — mesuré, pas estimé
+
+Le gabarit fait 360 × 780, et **le corps est ce qui reste** entre la tête et la pliure. Les
+clés s'y disputent la même place : un titre long vole ses lignes à la voix. Mesuré le
+18/08/2026 dans Chromium, un vrai pli déplié, chaque clé poussée par dichotomie pendant que
+les autres tiennent l'exemple ci-dessus.
+
+| Type | `ti` | `b` | `f` |
+|---|---|---|---|
+| invitation | **16** | **46** | trois faits d'une ligne |
+| pensée | — (elle n'en montre pas) | **256** | — |
+| souvenir | **70** | **312** | — |
+| poème | **88** | **358** par strophe | — |
+
+**L'invitation est le cas serré**, et c'est le seul : elle empile un titre à 64px, une
+griffe, une voix, jusqu'à trois faits et une action. Mesuré, elle porte **trois de ces
+quatre-là, pas les quatre** :
+
+| Composition | |
+|---|---|
+| titre 13 · voix · 2 faits · griffe | tient |
+| titre 13 · voix · 3 faits · **sans griffe** | tient |
+| titre 13 · **sans voix** · 3 faits · griffe | tient |
+| titre 13 · voix · **3 faits** · griffe | déborde de 4px |
+| **titre 22** · voix · 2 faits · griffe | déborde de **92px** |
+
+Le titre est le levier : à 64px, 22 signes font une troisième ligne de capitales et coûtent
+92px d'un coup, là où le paragraphe ci-dessus n'en veut que deux. D'où **16** — et « Tu es
+invitée » en fait 13.
+
+Ces plafonds sont ceux du **dépôt** : c'est l'atelier qui les tiendra, au jalon 5. Le lecteur,
+lui, ne fait plus confiance à personne — le corps coupe chez lui plutôt que de recouvrir la
+marque ([integration.md](integration.md)).
+
+**À ne pas confondre avec la longueur du lien**, qui est une des quatre mesures ouvertes et
+se fait sur les deux téléphones : l'une est la place sur le papier, l'autre le nombre de
+caractères qu'une conversation transporte.
+
+
 `w` voyage dans le lien et **jamais dans le dépôt** : un numéro de téléphone en clair dans
 un dépôt public se fait moissonner. C'est aussi pourquoi seule l'invitation le porte —
 les trois autres types n'appellent pas de réponse.
@@ -165,6 +204,7 @@ et **ça ne changerait rien au risque d'effacement** décrit dans
 | Clé | Contenu |
 |---|---|
 | `pli.v1.journal` | tableau d'entrées, triées par date de dépliage décroissante |
+| `pli.v1.recharge` | en `sessionStorage` : le drapeau du rechargement de secours, posé une fois et une seule ([mises-a-jour.md](mises-a-jour.md#2-un-rechargement-de-secours-une-seule-fois)) |
 
 ```json
 {

@@ -8,13 +8,12 @@ Une étape n'est cochée que lorsqu'elle est **écrite, relue et commitée**.
 
 ## Jalon courant
 
-**Jalon 1 — mesures et fondations.** Les fondations sont écrites, relues et commitées : les
-polices, les deux flèches, le gabarit, les cinq peintures, le préchargement. **Les mesures,
-elles, ne sont pas faites** — et elles sont la moitié du jalon. Aucune ne se simule : elles
-se font sur les deux téléphones.
+**Jalon 2 — le pli et le geste.** Le code est écrit, relu et commité en trois lots. Ce qui
+reste tient en une séance sur les deux téléphones, et personne ne peut la faire à ma place.
 
-Le jalon 0 reste ouvert lui aussi sur ses deux gestes manuels : régler GitHub Pages et le
-domaine, puis ouvrir un lien sur son téléphone.
+Les jalons 0 et 1 restent ouverts sur leurs gestes manuels, et eux seuls : régler GitHub
+Pages et le domaine, ouvrir un lien sur son téléphone, et les trois mesures du jalon 1.
+Aucun ne bloque le jalon 2.
 
 ## Ce qui existe
 
@@ -82,7 +81,7 @@ Aucun n'est resté debout, et deux valaient le détour :
   lettre, mais une feuille de style bloquante gèle l'exécution d'un module : mesuré avec 60 ms
   de latence, la demande partait à 153 ms au lieu de 90. Un aller-retour complet ajouté sur
   le seul écran d'attente du produit. Réparé par cinq lignes inline dans le `<head>`, avant
-  la feuille — elles disparaîtront quand le CSS sera inline, au jalon 2.
+  la feuille — **elles ont disparu au jalon 2**, avec la feuille bloquante.
 - **Le texte du pli n'était pas sélectionnable.** `user-select: none` du cadre cascadait
   jusqu'à la voix. Il reste sur le cadre, pour le geste ; `.corps` le rend au texte.
 
@@ -98,8 +97,29 @@ CSS, 1,4 de module) et **52,6 ko** pour les trois polices d'A1 — les deux larg
 leurs cibles de 14 et 90 ko. Les cinq woff2 sont reproductibles **au bit près**.
 
 En revanche : **2 requêtes avant le premier texte au lieu d'une**, et **6 avant A1 complet au
-lieu de 5** — parce que le CSS et le module ne sont pas encore inline. C'est l'étape nommée
-du jalon 2 qui ramènera 2 à 1 et 6 à 5.
+lieu de 5** — parce que le CSS et le module n'étaient pas encore inline. **Réglé au jalon 2**,
+première étape : c'est une requête avant le premier texte, et le document pèse 5,86 ko gzip.
+
+## Jalon 2 — le pli et le geste
+
+- [x] le document du lecteur se suffit à lui-même — gabarit et module inline, par le greffon
+      `pli-inliner-le-document` de `vite.config.ts` ; **1 requête** avant le premier texte,
+      **5,86 ko gzip**, plafond de 14 ko tenu par le build
+- [x] le pli tient dans l'écran — `--echelle` sur le pli, vérifié de 320 × 568 à 1440 × 900 :
+      la page ne défile jamais et la composition ne bouge pas
+- [x] A1 · l'attente, pour les quatre types — le rideau, la promesse, le volet, l'invite
+- [x] A2 · la découverte — invitation, pensée, souvenir, et la première strophe d'un poème
+- [x] la vague 3 — la texture du type, son décodage, la feuille du type, Bodoni, puis le DOM
+      d'A2 : **0 requête après le geste**, mesuré
+- [x] le geste — les cinq chemins joués au pointeur, **exactement deux couches composées**
+- [x] C4 · le lien abîmé
+- [x] le plafond du gabarit, mesuré par type, et la garde qui va avec
+- [ ] **à la main, sur les deux téléphones** : dix dépliages d'affilée, les quatre types, à
+      froid et à chaud — **aucune image perdue**
+      ([fluidite.md](../docs/fluidite.md#comment-on-mesure))
+- [ ] **à la main** : le texte d'A1 peint en moins d'une seconde en 4G, cache vide
+
+**Fin du jalon :** le premier vrai pli envoyé.
 
 ## Les mesures — aucune ne se devine
 
@@ -139,12 +159,10 @@ avec sa date. Si elle contredit une doc, la doc se corrige et l'écart se note d
   [docs/integration.md](../docs/integration.md#structure).
 - **18/08/2026 — `404.html` ne dit que « tes plis ↑ »**, sur crème. La formule est déjà
   normative (A4) : aucune phrase nouvelle n'a été inventée pour une page d'égarement.
-- **18/08/2026 — le module d'ouverture n'est pas encore inline.**
-  [docs/chargement.md](../docs/chargement.md) veut A1 en une requête, document et module
-  compris ; l'entrée reste un `<script type="module">` empreinté, et depuis le jalon 1 une
-  feuille de style empreintée l'accompagne. **L'inlining du CSS et du module est une étape
-  nommée du jalon 2**, par un greffon Vite écrit à la main — pas de dépendance. Tant qu'il
-  n'existe pas, une page périmée de dix minutes ne se suffit pas à elle-même
+- **18/08/2026 — le module d'ouverture n'est pas encore inline.** ~~L'entrée reste un
+  `<script type="module">` empreinté, accompagné depuis le jalon 1 d'une feuille de style
+  empreintée.~~ **Fait au jalon 2**, première étape : le greffon `pli-inliner-le-document`
+  de `vite.config.ts`. Une page périmée de dix minutes se suffit désormais à elle-même
   ([docs/mises-a-jour.md](../docs/mises-a-jour.md#1-une-page-périmée-doit-rester-lisible)).
 - **18/08/2026 — `tsconfig.isomorphe.json` fait vérifier l'isomorphisme par la machine.**
   `codec.ts` et `dates.ts` compilent sans la bibliothèque DOM : un `document.` y est refusé.
@@ -210,14 +228,120 @@ avec sa date. Si elle contredit une doc, la doc se corrige et l'écart se note d
   recopier `0.34` et `30px` dans un `calc`, les deux nombres deviennent des jetons — ils ne
   vivent qu'à un endroit. C'est un écart au « bloc `:root` repris tel quel », noté dans
   [integration.md](../docs/integration.md#corrections-à-appliquer).
-- **18/08/2026 — le `fetch` d'un poème part du `<head>`, pas du module.** Cinq lignes inline
-  avant la feuille de style, parce qu'une feuille bloquante gèle l'exécution d'un module. Le
-  motif est celui du routeur, qui revalide derrière : se tromper ne coûte qu'une demande
-  abandonnée, jamais un mauvais fichier. **Ces lignes disparaissent au jalon 2**, quand le CSS
-  sera inline.
+- **18/08/2026 — le `fetch` d'un poème part du `<head>`, pas du module.** ~~Cinq lignes inline
+  avant la feuille de style, parce qu'une feuille bloquante gèle l'exécution d'un module.~~
+  **Renversé au jalon 2** : il n'y a plus de feuille à attendre, la demande repart du module,
+  et le nom d'un poème redevient l'affaire du seul routeur.
 - **18/08/2026 — le volet du pli en dur reste vide.** Ce qui s'y écrit — l'invite, « déplier »
   et sa flèche — n'a de sens qu'avec le geste. Le placer maintenant aurait demandé d'inventer
   la composition d'A1.
+
+### Jalon 2
+
+Six points que les docs laissaient ouverts ont été tranchés **avec toi** avant d'écrire, et
+trois d'entre eux ferment des questions d'[integration.md](../docs/integration.md#ce-qui-reste-à-trancher-avec-a1) :
+
+- **18/08/2026 — un pli sur un écran plus court se met à l'échelle.** Un `scale()` sur le
+  plateau, jamais une recomposition : le gabarit reste littéralement 360 × 780 et aucun écran
+  n'est à refaire. L'idiome existe déjà dans le dépôt, `.mini` réduit un vrai pli.
+- **18/08/2026 — le fond d'A1 est le rideau.** `parcours.md` et `design-system.md` le disent,
+  seule la maquette montre un papier crème, et `docs/` gagne toujours contre `design/`.
+  **Le fondu suit** : `integration.md` dit que le choix emporte le fondu, donc
+  `.image__fondu--encre` — et A1 compose en crème et rose, non en encre et carmin.
+- **18/08/2026 — le débordement du gabarit se traite des deux côtés** : un plafond par clé,
+  **mesuré** en local à 360 × 780 et écrit dans `donnees.md` avec sa date, plus une garde
+  dans le gabarit pour que le lecteur ne recouvre jamais la marque en silence.
+- **18/08/2026 — sur A1, seule l'étiquette de tête change avec le type.** La promesse est la
+  même pour les quatre. `parcours.md` dit « seule la promesse change » mais n'en écrit qu'une.
+- **18/08/2026 — les mots de C4** : titre « Lien abîmé », voix « Il a dû être coupé en
+  chemin. Redemande-le-moi. » Le texte n'était écrit nulle part ; le nom de l'état, si.
+- **18/08/2026 — les faits d'une invitation se composent uniformément** : une ligne par fait,
+  le premier en carmin. La hiérarchie de la maquette ne se devine pas dans une chaîne libre.
+
+Et ce que la construction a tranché :
+
+- **18/08/2026 — le document se suffit à lui-même, et la machine le tient.** Le greffon
+  `pli-inliner-le-document` porte quatre gardes, chacune vérifiée en la faisant échouer :
+  un chunk partagé, du code d'`atelier/` absorbé par le lecteur, une requête restée sur le
+  chemin du premier texte, et le **plafond de 14 ko gzip** de la vague 1. Il ne supprime du
+  paquet que ce que plus aucun document ne référence — sinon un atelier qui reprendrait
+  `pli.css` serait servi nu, sans un mot.
+- **18/08/2026 — les cinq lignes du `<head>` sont parties, sur mesure.** Elles gagnaient
+  63 ms quand une feuille bloquante gelait le module. Mesuré à nouveau dans Chromium à 60 ms
+  de latence forcée, cinq passes alternées : **75 ms depuis le module contre 77 ms depuis le
+  `<head>`**. L'écart est tombé dans le bruit, et elles portaient une seconde copie de
+  l'expression du nom d'un poème, hors du routeur.
+- **18/08/2026 — les aplats des cinq toiles sont prélevés, pas choisis.** Moyenne des pixels
+  sur le cadrage que le pli affiche vraiment, mesurée dans Chromium. Le rideau donne
+  `#743c3b` en haut et `#440b10` en bas ; le drapé, dans son bandeau de 46 %, `#944850` et
+  `#904a53`.
+- **18/08/2026 — le greffon d'inlining travaille en `generateBundle`, pas en
+  `transformIndexHtml`.** Trouvé en essayant de brancher la vague 3 : le greffon CSS de Vite
+  **supprime en `generateBundle` les chunks « purement CSS »** — ceux d'un `import()` de
+  feuille — et réécrit les références qui y menaient. Inliner avant lui figeait dans le
+  document un `import('./inv-….js')` vers un fichier qui n'existait jamais : le CSS d'un type
+  ne se serait plus chargé, **en silence**. Le greffon porte maintenant `enforce: 'post'`, et
+  une garde de plus : aucun `import()` relatif ne doit survivre dans le module inliné, qui
+  vit à l'adresse du document et non dans `/assets/`.
+- **18/08/2026 — l'atelier sort du document qui part chez elle.** La section 6 de `pli.css`,
+  « le dépôt », était inlinée dans le document du lecteur : **623 octets gzip** sur 7 513,
+  pour des écrans qu'elle ne verra jamais. Elle devient `styles/depot.css`, importée par
+  `src/atelier/` seul. La garde du greffon refusait déjà le **JS** d'atelier absorbé par le
+  lecteur ; le CSS passait par ce trou-là.
+- **18/08/2026 — le rideau est préchargé, pas seulement posé par le module.** Son adresse ne
+  vivait que dans la chaîne d'un script : le scanner de préchargement ne la voyait pas, et
+  pour un `#p=` la peinture attendait la fin de l'aller-retour réseau du poème — deux
+  requêtes sérialisées sans aucune dépendance. Un `<link rel="preload" as="image"
+  fetchpriority="low">` la fait découvrir tôt et servir tard, ce que `chargement.md`
+  demandait déjà.
+- **18/08/2026 — l'invite s'arrête, elle ne se met pas en pause.** `fluidite.md` prescrivait
+  `animation-play-state: paused` et « exactement deux couches bordées » ; les deux ne
+  pouvaient pas être vraies ensemble. Compté à l'inspecteur pendant un vrai glissement : en
+  pause, **quatre** couches — l'invite garde la sienne, et le cachet est promu parce qu'il la
+  recouvre. Arrêtée, exactement deux. `fluidite.md` est corrigé.
+- **18/08/2026 — A1 ne peint aucune valeur en dur.** Le type, le numéro, la signature et le
+  cachet restent vides dans le document : `decoder()` traverse un `DecompressionStream`, et
+  pour un `#p=` c'est un aller-retour réseau complet — un pli « UNE INVITATION » se serait
+  peint sur une pensée, et pendant tout le fetch sur un poème. Seul l'invariant est écrit.
+- **18/08/2026 — le focus du bouton « déplier » est crème.** Le volet est carmin même quand
+  sa couche est en encre : `.pli--encre :focus-visible` y posait un filet rose, à 2,9:1, sur
+  le seul élément atteignable au clavier du premier écran.
+
+**Dette nommée, à ne pas perdre : Bodoni sur C4.** Le titre « lien abîmé » est en Bodoni, qui
+n'est ni préchargée ni en vague 3 — elle est demandée à l'instant où C4 s'affiche, et
+`font-display: block` laisse le titre invisible le temps qu'elle arrive. L'écran n'est pas
+muet pour autant : la phrase qui porte le message est en Newsreader, préchargée. À trancher
+si la mesure sur les deux téléphones le rend visible.
+
+
+### Jalon 2 — les lots B et C
+
+- **18/08/2026 — l'invite s'arrête, et `fluidite.md` est corrigé.** Il prescrivait
+  `animation-play-state: paused` **et** « exactement deux couches bordées » : les deux ne
+  pouvaient pas être vraies ensemble. Compté à l'inspecteur pendant un vrai glissement, en
+  pause il y a **quatre** couches — l'invite garde la sienne, et le cachet est promu parce
+  qu'il la recouvre. Arrêtée, il y en a deux.
+- **18/08/2026 — les cinq chemins du geste sont vérifiés à la machine** : hésitation à 30,8 %
+  referme, course à 51 % ouvre, coup sec à **11,5 % de course** ouvre, mauvais sens referme,
+  clavier ouvre. `will-change` retiré à chaque fois, le rideau sorti du document au dépliage.
+- **18/08/2026 — le voile d'une image dépend de ce qu'on écrit dessus, pas de la toile.**
+  Trois voiles mesurés, aucun choisi : pleine page sur encre `.68`, sous la tête d'un bandeau
+  `.82` tenu jusqu'à 20 %, sur le souvenir `.85` tenu jusqu'au tiers. Chacun est l'alpha qui
+  ramène le pire pixel de sa toile à 4,5:1 pour du crème.
+- **18/08/2026 — le souvenir écrit en crème, pas en carmin.** Sa toile porte un pixel **quasi
+  blanc** (`#fffffb`) là où la tête et le titre se posent : le carmin y est impossible quel
+  que soit le voile, le rose demanderait `.93`. C'est le seul écran du jalon dont aucune
+  maquette n'existe, et **le seul point tranché sans filet** — validé sur capture.
+- **18/08/2026 — l'invitation ne tient pas les maximums que `donnees.md` documentait.** Elle
+  porte trois de ses quatre éléments, jamais les quatre. Son titre descend à **16 signes** :
+  à 64px, 22 signes font une troisième ligne de capitales et coûtent 92px d'un coup. Les
+  plafonds sont désormais **par type**, mesurés et datés
+  ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé)).
+- **18/08/2026 — le corps coupe chez lui.** `.corps { overflow: hidden }` : la vraie
+  réparation est le plafond au dépôt, mais un lien fabriqué à la main ne doit jamais recouvrir
+  la marque. Vu et capturé avant la garde : le titre s'imprimait par-dessus « Pli ».
+- **18/08/2026 — le poème ne montre que sa première strophe.** La pagination est le jalon 6 ;
+  lui poser « la suite ↑ » alors que rien ne suit serait un mensonge.
 
 ## Ce que les relecteurs demandent pour la suite
 
@@ -232,11 +356,11 @@ couper sans un mot), et **un pli de 780px sur un écran visible plus court** —
 couches, une par `translate3d`. Le `<button>` « déplier » du clavier a maintenant un endroit
 où vivre — le volet — mais il n'y est pas encore, faute de geste à déclencher.
 
-**Au jalon 2, pour le chargement** — l'inlining du CSS et du module, par un greffon Vite écrit
-à la main. Et le jour où l'atelier importera `codec.ts`, Rollup sortira un chunk commun et
-Vite posera un `modulepreload` dans le document **du lecteur** : une requête de plus avant le
-premier texte. Soit `manualChunks` garde une entrée = un fichier, soit le greffon d'inlining
-inline **le graphe entier**, pas seulement le fichier d'entrée.
+**Au jalon 2, pour le chargement** — ~~l'inlining du CSS et du module~~ **fait**, première
+étape du jalon 2. Le chunk commun annoncé ici n'est pas résolu mais **gardé** : le build
+échoue si le chunk d'entrée du lecteur porte le moindre import statique. Le jour où l'atelier
+importera `codec.ts` (jalon 5), il faudra trancher — deux builds séparés, ou l'inlining du
+graphe entier. La garde nomme le problème au lieu de le laisser entrer.
 
 **Au jalon 2, pour l'invite et le mouvement** — l'invite du volet doit se **mettre en pause**
 au toucher, pas redémarrer ([fluidite.md](../docs/fluidite.md)) : une animation infinie

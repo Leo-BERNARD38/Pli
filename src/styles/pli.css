@@ -86,11 +86,55 @@ a:hover {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Le pli tient dans l'écran, quelle qu'en soit la hauteur visible. `--echelle` est écrite
+   par src/lecteur/plateau.ts **sur le pli lui-même**, son seul consommateur : sur le corps
+   de page elle aurait invalidé le style de tout le sous-arbre, c'est-à-dire de l'arbre —
+   la règle de docs/fluidite.md#ce-qui-a-le-droit-de-bouger aurait été tenue à la lettre et
+   pas dans sa raison.
+
+   `transform: scale()` et non une recomposition : le gabarit reste littéralement 360 × 780,
+   et c'est déjà l'idiome du produit (.mini, plus bas, réduit un vrai pli de la même façon).
+
+   Les marges négatives ramènent la boîte de disposition à la taille peinte. Sans elles, le
+   pli occuperait toujours 780px de haut, la page défilerait, et on n'aurait rien corrigé :
+   c'est le défilement qui contredisait « un pli = un écran », pas la taille peinte. */
+.pli {
+  transform: scale(var(--echelle, 1));
+  margin-block: calc(var(--ecran-h) * (var(--echelle, 1) - 1) / 2);
+  margin-inline: calc(var(--ecran-l) * (var(--echelle, 1) - 1) / 2);
+}
+
 /* `display: flex` ci-dessus est une déclaration d'auteur : elle bat le `[hidden]` de la
    feuille du navigateur, et un pli masqué restait à l'écran. Un lien abîmé montrait donc
    un pli qui n'était pas le sien (docs/parcours.md#larrivée). */
-.pli[hidden] {
+.pli[hidden],
+.pli__dessus[hidden],
+.pli__dessous[hidden] {
   display: none;
+}
+
+/* Les deux couches du geste. « dessus » et « dessous » sont les mots de l'algorithme du
+   dépliage (docs/design-system.md#le-mouvement) : la feuille qu'on tire, et la page qui
+   attend derrière. Chacune porte son papier — la couche du dessus doit être opaque, sinon
+   on verrait A2 au travers pendant le dépliage.
+
+   Deux couches, pas une de plus (docs/fluidite.md#les-couches-et-ce-quelles-coûtent). */
+.pli__dessus,
+.pli__dessous {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--creme);
+  background-image: var(--grain);
+}
+
+.pli__dessus {
+  z-index: 2;
+}
+
+.pli__dessous {
+  z-index: 1;
 }
 
 /* Le texte se lit, donc il se sélectionne — `user-select: none` du cadre est là pour le
@@ -119,6 +163,13 @@ a:hover {
   color: var(--rose);
 }
 
+/* Le titre porte le carmin dans sa propre règle, pas par la classe `.carmin` : sur encre,
+   il lui faut la même bascule. Mesuré : carmin sur encre vaut 3,2:1, rose 9,7:1
+   (docs/design-system.md#encres). */
+.pli--encre .titre {
+  color: var(--rose);
+}
+
 .pli--carmin .carmin {
   color: var(--creme);
 }
@@ -126,12 +177,23 @@ a:hover {
 /* ==========================================================================
    2. TÊTE DE PLI — présente sur tous les écrans du lecteur.
    ========================================================================== */
+/* `position: relative` est un ajout au handoff : une image pleine page est une couche de
+   fond positionnée, et un élément statique passerait dessous (docs/integration.md). */
 .tete {
+  position: relative;
   padding: 34px var(--marge) 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   flex: 0 0 auto;
+}
+
+/* La marque fait 45px de haut, l'étiquette 16 : `align-items: flex-start` les collerait
+   au même trait. Les cinq maquettes donnent toutes un rattrapage optique à l'étiquette —
+   16px dans design/handoff/lecteur.html, le seul chiffre écrit pour A1. pli.css était
+   muet ; c'est une valeur reprise, pas estimée. */
+.tete .etiquette {
+  padding-top: 16px;
 }
 
 .marque {
@@ -212,6 +274,14 @@ a:hover {
   font-size: 10.5px;
   letter-spacing: 0.24em;
   opacity: 0.62;
+}
+
+/* Sur carmin, la même atténuation détruit ce qu'elle protégeait ailleurs : crème sur carmin
+   vaut déjà 5,1:1, exactement la cible — mesuré à .62, il tombe à 2,7:1. Le .62 avait été
+   calculé pour de l'encre sur crème, pas pour ça. */
+.pli--carmin .etiquette--fine,
+.volet .etiquette--fine {
+  opacity: 1;
 }
 
 .etiquette--forte {
@@ -313,6 +383,32 @@ a:hover {
   animation: invite 2.6s var(--courbe) infinite;
 }
 
+/* Ce que le volet porte : l'action, et la phrase qui dit le geste. Le retrait du haut
+   reprend les 34px de la tête — le gabarit ne nomme pas d'autre écart vertical en haut,
+   et en inventer un second serait un chiffre de plus à ne pouvoir citer. */
+.volet .invite {
+  padding: 34px var(--marge) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* L'alternative au geste, toujours présente : elle pose p = 1 directement
+   (docs/design-system.md#accessibilité). C'est un vrai bouton, pas une zone tapable. */
+.deplier {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  touch-action: manipulation;
+  /* `all: unset` laisse le bouton sans retrait, et le filet de focus de 2px se poserait
+     sous la première lettre. Une marge négative l'en écarte sans déplacer le texte : la
+     seule marge du pli reste 26px, portée par le volet. */
+  padding-left: 10px;
+  margin-left: -10px;
+}
+
 /* ==========================================================================
    5. CORPS — la zone de contenu entre tête et pliure.
    ========================================================================== */
@@ -327,14 +423,31 @@ a:hover {
   gap: 18px;
 }
 
+/* LA GARDE DU CORPS. Un pli trop long s'évacue par le haut — `flex: 1` avec
+   `justify-content: flex-end` — passe sur la tête, recouvre la marque, et se fait couper par
+   l'`overflow: hidden` du pli sans un mot. Vu, capturé : le titre d'un pli trop long
+   s'imprime par-dessus « Pli ».
+
+   Le corps coupe donc chez lui. Ce n'est pas la vraie réparation — celle-là est un plafond
+   au dépôt, mesuré et écrit dans docs/donnees.md#ce-que-le-papier-peut-porter — mais c'est
+   ce qui garantit qu'un lien fabriqué à la main, ou un pli d'une version antérieure au
+   plafond, ne recouvre jamais la marque (docs/integration.md). */
+.corps {
+  overflow: hidden;
+}
+
 /* Le volet occupe les 34 % du bas : quand il est là, le corps s'arrête au-dessus de
    lui, en gardant les 30px qu'il a déjà en pied (docs/design-system.md#le-gabarit).
 
    Le pourcentage d'un padding se compte sur la LARGEUR, jamais sur la hauteur : réutiliser
    --pliure tel quel réserverait 34 % de 360 au lieu de 34 % de 780, et le pied du corps
    passerait sous le volet. On repasse donc par --pliure-part et --ecran-h, qui portent
-   déjà les deux nombres. */
-.pli:has(.volet) .corps {
+   déjà les deux nombres.
+
+   La règle regarde le FRÈRE, pas l'ancêtre : depuis qu'il y a deux couches dans un même
+   pli, `.pli:has(.volet)` réservait la place du volet d'A1 dans le corps d'A2, qui n'en a
+   pas. Un `~` scope la règle à sa propre couche, sans lui donner de nom. */
+.corps:has(~ .volet) {
   padding-bottom: calc(var(--ecran-h) * var(--pliure-part) + var(--corps-pied));
 }
 
@@ -347,9 +460,9 @@ a:hover {
   justify-content: space-between;
 }
 
-/* Les faits d'une invitation. Une liste porte une puce et un retrait par défaut :
-   les deux partent, et rien de plus — la seule marge du pli est --marge, et elle est
-   déjà posée par .corps. Leur composition se décide avec A2, au jalon 2. */
+/* Les faits d'une invitation. Une liste porte une puce et un retrait par défaut : les deux
+   partent, et rien de plus — la seule marge du pli est --marge, et elle est déjà posée par
+   .corps. Leur composition, elle, vit dans la feuille du type. */
 .faits {
   margin: 0;
   padding: 0;
@@ -377,11 +490,44 @@ a:hover {
 }
 
 /* le pendant de .image--haute : la peinture prend la page — la pensée sur encre, le
-   souvenir sur crème (docs/design-system.md#les-trois-textures-de-type). C'est une
-   hauteur, pas une couche : l'empilement avec le texte se décide avec A2, au jalon 2.
-   (docs/integration.md#corrections-à-appliquer) */
+   souvenir sur crème (docs/design-system.md#les-trois-textures-de-type).
+
+   Tranché au jalon 2 : c'est une **couche de fond**, pas un frère du corps en flux. Le
+   texte se compose par-dessus, le fondu entre les deux. `z-index: 0` la range au fond de
+   sa couche sans la sortir de l'empilement (docs/integration.md). */
 .image--pleine {
-  height: 100%;
+  position: absolute;
+  inset: 0;
+  height: auto;
+  z-index: 0;
+}
+
+/* Quand un volet couvre le bas, la peinture s'arrête à la pliure. Mesuré sur A1 : ce
+   qu'elle mettait sous le volet n'était pas visible, et surtout le bout sombre du fondu —
+   son alpha le plus fort, .85 — tombait derrière le volet au lieu de tomber sous le texte.
+   Le texte se lisait alors sur les stries claires de la toile, à 2,8:1.
+
+   Le `~` regarde le frère : la règle ne vaut que pour la couche qui a un volet. */
+.image--pleine:has(~ .volet) {
+  bottom: var(--pliure);
+}
+
+/* L'aplat, sous la peinture. Un dégradé de deux couleurs **prélevées sur la toile** — la
+   moyenne des pixels du cadrage que le pli affiche vraiment, mesurée le 18/08/2026 — et
+   non deux couleurs choisies. Il ne coûte pas un octet, il est peint dès la première image,
+   et il rend une peinture manquante sans conséquence
+   (docs/ressources.md#le-fondu-darrivée). La peinture se fond par-dessus en 240 ms. */
+.image--rideau {
+  background: linear-gradient(180deg, #743c3b 0%, #440b10 100%);
+}
+
+.image img {
+  opacity: 0;
+  transition: opacity 240ms var(--courbe);
+}
+
+.image img[data-peinte] {
+  opacity: 1;
 }
 
 .image__fondu {
@@ -396,6 +542,31 @@ a:hover {
   );
 }
 
+/* Le voile d'une peinture PLEINE PAGE.
+
+   `.image__fondu--encre` a été dessiné pour un bandeau : son alpha retombe à .38 au tiers,
+   là où un bandeau n'a pas de texte. Sous une page entière de texte, ce creux tombe
+   exactement sous la tête et sous le numéro. Mesuré sur ce que le navigateur peint : 3,1 %
+   de la marque et 2,6 % de la ligne du numéro passaient sous 4,5:1, sur les stries claires
+   du rideau.
+
+   Ce n'est pas un écart au design : `.image--pleine` était **absente** de pli.css
+   (docs/integration.md#corrections-à-appliquer), et le voile qui va avec ne l'était pas
+   moins. Le voile d'un bandeau ne pouvait pas décider pour une page entière.
+
+   Trois nombres, aucun estimé : **.68** est l'alpha qui ramène le pire pixel de la strie la
+   plus claire à 4,5:1 pour du crème (mesuré le 18/08/2026) ; **.85** et **66 %** sont ceux
+   de `.image__fondu--encre`, repris tels quels — le voile finit sur l'encre, comme le veut
+   docs/design-system.md#les-images. */
+.image--pleine .image__fondu--encre {
+  background: linear-gradient(
+    180deg,
+    rgba(14, 12, 11, 0.68) 0%,
+    rgba(14, 12, 11, 0.68) 66%,
+    rgba(14, 12, 11, 0.85) 100%
+  );
+}
+
 .image__fondu--encre {
   background: linear-gradient(
     180deg,
@@ -407,232 +578,11 @@ a:hover {
 }
 
 /* ==========================================================================
-   6. LE DÉPÔT — trois questions : le type, les textes, le lien.
-   Aucun réglage de style, aucune image à déposer : le type fait la mise en page.
+   6. LES TROIS MOTS — la réponse d'A3, remontée de design/handoff/lecteur.html.
+   Le reste de l'ancienne section 6, « le dépôt », vit dans styles/depot.css : il
+   n'appartient qu'à l'atelier et n'a rien à faire dans le document du lecteur.
    ========================================================================== */
 
-/* barre de conduite : où j'en suis, comment je reviens */
-.conduite {
-  flex: 0 0 auto;
-  padding: 22px var(--marge) 14px;
-  border-bottom: 1px solid var(--trait);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.conduite__retour {
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.55;
-  cursor: pointer;
-}
-
-.conduite__pas {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  opacity: 0.45;
-}
-
-/* la question de l'écran, en français, une par écran */
-.question {
-  font-family: var(--serif);
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 1.06;
-  letter-spacing: -0.01em;
-}
-
-.aide {
-  font-family: var(--plume);
-  font-style: italic;
-  font-weight: 300;
-  font-size: 17px;
-  line-height: 1.4;
-  opacity: 0.6;
-}
-
-/* le choix du type : grande cible (min 70px), nom + glose + le layout en petit */
-.type {
-  all: unset;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px var(--marge);
-  border-top: 1px solid var(--trait);
-  cursor: pointer;
-  touch-action: manipulation;
-  min-height: 76px;
-  text-align: left;
-}
-
-.type:last-of-type {
-  border-bottom: 1px solid var(--trait);
-}
-
-.type[aria-selected='true'] {
-  background: rgba(200, 30, 51, 0.05);
-}
-
-.type[aria-selected='true'] .type__nom {
-  color: var(--carmin);
-}
-
-.type__nom {
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.type__glose {
-  display: block;
-  margin-top: 5px;
-  font-family: var(--plume);
-  font-style: italic;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 1.3;
-  opacity: 0.55;
-}
-
-/* le layout vu en petit : un vrai pli 360×780 réduit par transform, jamais un dessin à part */
-.apercu {
-  position: relative;
-  flex: 0 0 auto;
-  overflow: hidden;
-}
-
-.apercu--vignette {
-  width: 62px;
-  height: 134px;             /* échelle .1722 */
-}
-
-.apercu--tete {
-  width: 96px;
-  height: 208px;             /* échelle .2667 */
-  border-radius: 10px;
-  box-shadow: 0 6px 14px rgba(20, 16, 14, 0.16);
-}
-
-.mini {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: var(--ecran-l);
-  height: var(--ecran-h);
-  transform-origin: top left;
-  background: var(--creme);
-  background-image: var(--grain);
-  display: flex;
-  flex-direction: column;
-  pointer-events: none;
-}
-
-.apercu--vignette .mini {
-  transform: scale(0.1722);
-}
-
-.apercu--tete .mini {
-  transform: scale(0.2667);
-}
-
-.mini__volet {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: var(--pliure);
-  background: var(--carmin);
-}
-
-/* remplir : des lignes nommées, pas un pli à deviner. Le design les appelait .champ ;
-   « champ » est sur la liste fermée du lexique, et le lexique fait foi
-   (docs/integration.md#ce-qui-a-changé-depuis-le-design). */
-.ligne {
-  padding: 15px var(--marge);
-  border-top: 1px solid var(--trait);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.ligne__nom {
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 10px;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  opacity: 0.5;
-}
-
-.ligne:focus-within {
-  background: rgba(200, 30, 51, 0.05);
-}
-
-.ligne:focus-within .ligne__nom {
-  opacity: 1;
-  color: var(--carmin);
-}
-
-.ligne input,
-.ligne textarea {
-  all: unset;
-  width: 100%;
-  font-family: var(--plume);
-  font-weight: 300;
-  font-size: 20px;
-  line-height: 1.35;
-  color: var(--encre);
-  caret-color: var(--carmin);
-}
-
-.ligne textarea {
-  font-style: italic;
-  resize: none;
-  min-height: 64px;
-}
-
-.ligne input::placeholder,
-.ligne textarea::placeholder {
-  color: rgba(20, 16, 14, 0.32);
-}
-
-.ligne--titre input {
-  font-family: var(--serif);
-  font-style: normal;
-  font-weight: 700;
-  font-size: 26px;
-  letter-spacing: -0.01em;
-}
-
-.facultatif {
-  font-weight: 400;
-  letter-spacing: 0.16em;
-  opacity: 0.6;
-}
-
-.reste {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.4;
-}
-
-.reste[data-trop='1'] {
-  color: var(--carmin);
-  opacity: 1;
-}
-
-/* les trois mots d'A3 — remontés de design/handoff/lecteur.html */
 .oui {
   display: flex;
   flex-direction: column;
@@ -654,32 +604,6 @@ a:hover {
   border-top-color: rgba(247, 242, 232, 0.22);
 }
 
-/* une seule action, pleine largeur, toujours en bas */
-.bouton {
-  all: unset;
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: var(--carmin);
-  color: var(--creme);
-  padding: 22px;
-  cursor: pointer;
-  touch-action: manipulation;
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-}
-
-.bouton[disabled] {
-  background: rgba(20, 16, 14, 0.12);
-  color: rgba(20, 16, 14, 0.4);
-  cursor: default;
-}
-
 /* ==========================================================================
    LES DEUX FLÈCHES — l'unique exception au « pas de SVG », nommée et fermée
    (docs/ressources.md#les-deux-flèches). Les tracés sont écrits par
@@ -699,6 +623,24 @@ a:hover {
   .invite {
     animation: none;
   }
+
+  /* Les docs ne nomment que l'invite et les 120 ms d'ouverture. Le fondu d'arrivée d'une
+     peinture est du même ordre : elle se pose, elle n'apparaît pas. */
+  .image img {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   LES ÉCRANS DU LECTEUR — ce que le gabarit seul ne dit pas.
+   ========================================================================== */
+
+/* « lien abîmé » tient sur deux lignes, et le circonflexe d'ABÎMÉ touchait la ligne du
+   dessus. C'est exactement le cas que .titre--geant nomme — « les capitales accentuées ont
+   besoin d'air » — et .92 est son chiffre (docs/design-system.md#les-mains). On l'applique
+   pour sa raison, à la taille où la raison vaut. */
+#c4 .titre {
+  line-height: 0.92;
 }
 
 /* ==========================================================================
@@ -718,7 +660,12 @@ a:hover {
   box-shadow: inset 2px 0 0 var(--rose);
 }
 
+/* Le volet est carmin même quand sa couche est en encre : `.pli--encre :focus-visible`
+   y posait un filet ROSE, à 2,9:1 — sous les 3:1 d'un élément d'interface, et c'est le
+   seul élément atteignable au clavier du premier écran. Écrit après lui, à spécificité
+   égale : à égalité c'est l'ordre qui tranche. */
 .pli--carmin :focus-visible,
+.volet :focus-visible,
 .bouton:focus-visible {
   box-shadow: inset 2px 0 0 var(--creme);
 }

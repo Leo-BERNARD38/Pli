@@ -143,18 +143,36 @@ s'il dure ([parcours.md](parcours.md#larrivée)).
 
 | Poste | Cible | Mesuré | Le |
 |---|---|---|---|
-| document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 ko** | **5,8 ko** — 1,7 de document, 2,7 de CSS, 1,4 de module | 18/08/2026, en local |
+| document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 ko** | **9,56 ko** — un seul fichier : A1, C4, le gabarit, le geste et la vague 3 | 18/08/2026, en local |
 | les trois polices d'A1 | **≤ 90 ko** | **52,6 ko** — Pinyon 24,6 · Newsreader 20,8 · Space Mono 7,2 | 18/08/2026, en local |
 | une texture | définition native, **600 ko à 1,15 Mo** | 600 ko à 1,15 Mo | 17/08/2026 |
-| requêtes avant le texte d'A1 | **1** | **2** — le document et la feuille de style | 18/08/2026, en local |
-| requêtes avant A1 complet (rideau compris) | **≤ 5** | **6** sans le rideau — document, CSS, module, trois polices | 18/08/2026, en local |
+| requêtes **bloquantes** avant le premier rendu | **1** | **1** — le document, et lui seul | 18/08/2026, en local |
+| requêtes avant le texte d'A1 **lisible** | **4** | **4** — le document et les trois polices | 18/08/2026, en local |
+| requêtes avant A1 complet (rideau compris) | **≤ 5** | **5** — le document, trois polices, le rideau | 18/08/2026, en local |
 | texte d'A1 peint, 4G, cache vide | **< 1 s** | — | à mesurer sur les deux téléphones |
-| A2 après le geste | **0 requête** | — | A2 arrive au jalon 2 |
+| A2 après le geste | **0 requête** | **0** — tout est chargé et décodé pendant qu'elle regarde le volet | 18/08/2026, en local |
 
-Les trois premières lignes sont tenues, et largement. Les deux lignes de requêtes ne le sont
-pas encore, et pour une seule raison : **le CSS et le module ne sont pas inline**. Vite émet
-deux fichiers empreintés, dont l'un est bloquant. C'est une étape nommée du jalon 2, et c'est
-elle qui ramènera 2 à 1 et 6 à 5 — le rideau prenant alors la place libérée.
+Le document est inline depuis le jalon 2 — gabarit et module compris, en un seul fichier —
+et c'est ce qui ramène la première ligne de requêtes de 2 à 1. **Aucune requête ne s'interpose
+plus entre le HTML et le premier texte**, et le plafond de 14 ko est désormais tenu par le
+build lui-même : il échoue au-dessus.
+
+Les deux lignes de requêtes sont désormais séparées, et il le fallait : **une** requête
+bloquante n'est pas **un** texte à l'écran. Avec `font-display: block`, le texte d'A1
+n'existe qu'à l'arrivée des polices — la quatrième requête. Lire « 1 » tout court se
+lisait comme une victoire qui n'était pas gagnée.
+
+Bodoni n'est plus sur ce chemin : A1 n'a pas de titre, et le seul du document — celui de
+C4 — est dans un bloc `hidden`, donc jamais mis en forme au premier rendu. La cinquième
+requête est le rideau, préchargé en priorité basse.
+
+**Deux réserves, à lever sur les deux téléphones.** Le panneau réseau montrera plus de cinq
+lignes : le navigateur va chercher l'icône de l'onglet et le manifeste tout seul, et la
+vague 3 suit derrière — comptées ici, le document, trois polices et le rideau font bien les
+cinq, puis viennent la texture du type, sa feuille et Bodoni. Ce n'est pas un dépassement. Et sur **C4**, Bodoni est demandée au moment où l'écran
+s'affiche : le titre « lien abîmé » reste invisible le temps qu'elle arrive. La phrase qui
+porte le message, elle, est en Newsreader, préchargée — l'écran n'est jamais muet, seul son
+titre se pose un instant après.
 
 La colonne de droite ne se remplit que de ce qui a vraiment été mesuré. Un budget sans date
 de mesure est une intention, pas un budget — et **les deux dernières lignes ne se mesurent

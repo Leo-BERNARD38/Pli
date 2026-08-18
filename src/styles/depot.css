@@ -1,0 +1,266 @@
+/* ==========================================================================
+   LE DÉPÔT — trois questions : le type, les textes, le lien.
+   Aucun réglage de style, aucune image à déposer : le type fait la mise en page.
+
+   Cette feuille était la section 6 de pli.css, donc **inlinée dans le document qui part
+   chez elle** : mesuré au jalon 2, environ 900 octets gzip sur les 7 500 de la vague 1 —
+   12 % du budget du premier écran, pour des écrans qu'elle ne verra jamais. La garde du
+   greffon d'inlining refuse le JS d'atelier absorbé par le lecteur ; le CSS passait par ce
+   trou-là (docs/architecture.md#deux-entrées).
+
+   Elle n'est importée que par src/atelier/. Ce qui reste dans pli.css de l'ancienne
+   section 6, ce sont les trois mots d'A3 — `.oui` — parce qu'ils sont chez elle.
+   ========================================================================== */
+
+/* ==========================================================================
+   6. LE DÉPÔT — trois questions : le type, les textes, le lien.
+   Aucun réglage de style, aucune image à déposer : le type fait la mise en page.
+   ========================================================================== */
+
+/* barre de conduite : où j'en suis, comment je reviens */
+.conduite {
+  flex: 0 0 auto;
+  padding: 22px var(--marge) 14px;
+  border-bottom: 1px solid var(--trait);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.conduite__retour {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.conduite__pas {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}
+
+/* la question de l'écran, en français, une par écran */
+.question {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+}
+
+.aide {
+  font-family: var(--plume);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.4;
+  opacity: 0.6;
+}
+
+/* le choix du type : grande cible (min 70px), nom + glose + le layout en petit */
+.type {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px var(--marge);
+  border-top: 1px solid var(--trait);
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 76px;
+  text-align: left;
+}
+
+.type:last-of-type {
+  border-bottom: 1px solid var(--trait);
+}
+
+.type[aria-selected='true'] {
+  background: rgba(200, 30, 51, 0.05);
+}
+
+.type[aria-selected='true'] .type__nom {
+  color: var(--carmin);
+}
+
+.type__nom {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.type__glose {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--plume);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.3;
+  opacity: 0.55;
+}
+
+/* le layout vu en petit : un vrai pli 360×780 réduit par transform, jamais un dessin à part */
+.apercu {
+  position: relative;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.apercu--vignette {
+  width: 62px;
+  height: 134px;             /* échelle .1722 */
+}
+
+.apercu--tete {
+  width: 96px;
+  height: 208px;             /* échelle .2667 */
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(20, 16, 14, 0.16);
+}
+
+.mini {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--ecran-l);
+  height: var(--ecran-h);
+  transform-origin: top left;
+  background: var(--creme);
+  background-image: var(--grain);
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.apercu--vignette .mini {
+  transform: scale(0.1722);
+}
+
+.apercu--tete .mini {
+  transform: scale(0.2667);
+}
+
+.mini__volet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--pliure);
+  background: var(--carmin);
+}
+
+/* remplir : des lignes nommées, pas un pli à deviner. Le design les appelait .champ ;
+   « champ » est sur la liste fermée du lexique, et le lexique fait foi
+   (docs/integration.md#ce-qui-a-changé-depuis-le-design). */
+.ligne {
+  padding: 15px var(--marge);
+  border-top: 1px solid var(--trait);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ligne__nom {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.ligne:focus-within {
+  background: rgba(200, 30, 51, 0.05);
+}
+
+.ligne:focus-within .ligne__nom {
+  opacity: 1;
+  color: var(--carmin);
+}
+
+.ligne input,
+.ligne textarea {
+  all: unset;
+  width: 100%;
+  font-family: var(--plume);
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.35;
+  color: var(--encre);
+  caret-color: var(--carmin);
+}
+
+.ligne textarea {
+  font-style: italic;
+  resize: none;
+  min-height: 64px;
+}
+
+.ligne input::placeholder,
+.ligne textarea::placeholder {
+  color: rgba(20, 16, 14, 0.32);
+}
+
+.ligne--titre input {
+  font-family: var(--serif);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+}
+
+.facultatif {
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  opacity: 0.6;
+}
+
+.reste {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+.reste[data-trop='1'] {
+  color: var(--carmin);
+  opacity: 1;
+}
+
+/* les trois mots d'A3 — remontés de design/handoff/lecteur.html */
+/* une seule action, pleine largeur, toujours en bas */
+.bouton {
+  all: unset;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--carmin);
+  color: var(--creme);
+  padding: 22px;
+  cursor: pointer;
+  touch-action: manipulation;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.bouton[disabled] {
+  background: rgba(20, 16, 14, 0.12);
+  color: rgba(20, 16, 14, 0.4);
+  cursor: default;
+}

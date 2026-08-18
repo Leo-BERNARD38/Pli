@@ -114,6 +114,15 @@ Voici tout ce qui s'en déduit.
 | `twitter:card` | présent dans les balises livrées | **retiré** — un pli ne se partage pas ailleurs qu'en conversation |
 | `mask-icon` | présent, avec un SVG à fond crème | **retiré** — l'onglet épinglé est une affaire de Safari de bureau |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
+| `.pli` | le pli et son papier | **le cadre** : 360 × 780, l'ombre, le coin, `touch-action`. Le papier passe aux deux couches, `.pli__dessus` et `.pli__dessous` — les mots de l'algorithme du dépliage |
+| `.pli:has(.volet) .corps` | — | **`.corps:has(~ .volet)`** — la règle regarde le frère, sinon le volet d'A1 réserve sa place dans le corps d'A2, qui n'en a pas |
+| `.tete` | statique | **`position: relative`** — une image pleine page est une couche de fond positionnée, un élément statique passerait dessous |
+| Un pli plus haut que l'écran | non traité | **il se met à l'échelle** — `--echelle`, écrite sur le plateau, `transform: scale()` sur le pli. La composition ne bouge jamais |
+| `.image--pleine` | absente | **une couche de fond** (`inset: 0`), le texte par-dessus — et elle **s'arrête à la pliure** quand un volet couvre le bas |
+| Le voile d'une image pleine page | non spécifié | **`.image--pleine .image__fondu--encre`**, ses propres arrêts : `.68` mesuré, `.85` et `66 %` repris de `.image__fondu--encre`. Celui d'un bandeau retombe à `.38` au tiers, pile sous la tête et le numéro |
+| `.etiquette--fine` sur carmin | `.62` partout | **opacité pleine sur carmin** — crème sur carmin vaut déjà 5,1:1, le `.62` le ramenait à 2,7:1 |
+| La tête et le numéro d'A1 | en carmin | **en crème** — sur A1 la seule chose qui agit est le volet, et mesuré, le rose laissait 19,7 % de la ligne du numéro sous 4,5:1 |
+| Le titre de C4 | — | **`line-height: .92`** — deux lignes de capitales accentuées, le cas que `.titre--geant` nomme |
 | `theme-color` | `#C81E33` dans installation.md, `#E9E2D2` dans appareils.md | **`#E9E2D2`**, le sable, dans les deux entrées ; le carmin reste le `theme_color` du manifeste |
 
 ### Les cinq questions laissées ouvertes par le design
@@ -135,29 +144,38 @@ tient encore est le poème, dont le fichier se réencode sans changer de lien : 
 le permet déjà, délibérément (voir [donnees.md](donnees.md#la-moulinette)). Rien à décider
 avant qu'un poème ait besoin d'une correction.
 
-### Ce qui reste à trancher avec A1
+### Ce qui a été tranché avec A1, au jalon 2
 
-**Le débordement du gabarit.** `.corps` est `flex: 1` avec `justify-content: flex-end` :
-au maximum autorisé par [donnees.md](donnees.md), le contenu s'évacue **par le haut**, passe
-sur la marque et se fait couper par l'`overflow: hidden` du pli, sans un mot. L'échafaudage
-du jalon 1 empile titre, voix, faits, griffe et étiquette — une combinaison qu'aucun type
-réel ne compose — mais **la direction du débordement est une propriété du gabarit**, pas de
-l'écran. Se tranche avec A2, au jalon 2 : soit une garde dans le gabarit, soit un plafond
-réel écrit dans `donnees.md`.
+Cinq questions que cette section laissait ouvertes sont tranchées, et faites. Elles sont
+reportées dans le tableau ci-dessus ; voici ce qui les a tranchées.
 
-**Un pli de 780px sur un écran plus court.** [design-system.md](design-system.md#le-gabarit)
-dit « 360 × 780, jamais élargie », [appareils.md](appareils.md#les-réglages-de-page) dit que
-le plateau porte les retraits — ni l'un ni l'autre ne dit ce que devient le pli quand la
-hauteur visible est inférieure à 780. Mesuré à 390 × 664 : la page défile et le bas du volet
-sort du champ, ce qui contredit « un pli = un écran ». **Question ouverte**, à poser avant
-d'écrire A1.
+**Le fond d'A1, c'est le rideau.** `parcours.md` et `design-system.md` le disent tous les
+deux, seule la maquette montre un papier crème — et `docs/` gagne toujours contre `design/`.
+Le choix emporte le fondu, comme annoncé : A1 compose donc **en crème et en rose sur une
+image sombre**, non en encre et carmin sur du papier.
 
-**Le fond d'A1.** [parcours.md](parcours.md#a1--lattente) écrit « le fond est le rideau,
-la seule image des états fermés » ; la maquette, elle, montre un papier crème avec son
-grain et un volet carmin, sans aucune image. Les deux ne peuvent pas être vrais ensemble,
-et le choix emporte le fondu qui va avec — `.image__fondu` ramène au papier,
-`.image__fondu--encre` ramène à l'encre. Repéré au jalon 1 en faisant entrer les cinq
-peintures ; **se tranche en écrivant A1, au jalon 2**, pas avant.
+**Le débordement du gabarit** se traite des deux côtés, et les deux sont écrits. Un plafond
+**par type**, mesuré à 360 × 780 et daté, dans
+[donnees.md](donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé) — c'est le dépôt qui
+s'y tiendra, au jalon 5. Et une garde dans le gabarit : `.corps { overflow: hidden }`, pour
+qu'un lien fabriqué à la main ne recouvre jamais la marque.
+
+La mesure a sorti un résultat que personne n'attendait : **l'invitation ne tient pas les
+maximums que `donnees.md` documentait**. Elle porte trois de ses quatre éléments — titre à
+22 signes, voix, trois faits, griffe — jamais les quatre. Le titre est le levier : à 64px,
+22 signes font une troisième ligne de capitales et coûtent 92px d'un coup. Son plafond
+descend donc à **16**.
+
+**Un pli de 780px sur un écran plus court** : il se met à l'échelle. Mesuré de 320 × 568 à
+1440 × 900, la page ne défile plus jamais et la composition ne bouge pas d'un pixel.
+
+**L'empilement de `.image--pleine`** : c'est une couche de fond, le texte se compose
+par-dessus, le fondu entre les deux.
+
+**La composition des faits** est uniforme — une ligne par fait, le premier en carmin. La
+hiérarchie de la maquette (trois compositions distinctes, index par index) ne se devine pas
+dans une chaîne de texte libre, et une invitation à un seul fait tomberait sur une
+composition qui n'a pas été dessinée pour elle.
 
 ### Écrans qui n'existaient pas
 

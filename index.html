@@ -4,22 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#E9E2D2" />
-
-    <!-- La seule requête que le réseau nous impose, lancée ici et nulle part ailleurs.
-         Le module la lancerait en première instruction, mais une feuille de style
-         bloquante gèle l'exécution d'un module : le poème attendrait un aller-retour de
-         plus, sur le seul écran d'attente du produit (docs/chargement.md#le-poème-le-seul-cas-qui-dépend-du-réseau).
-         Cinq lignes, inline, avant tout le reste. Le jour où le CSS sera inline lui aussi,
-         au jalon 2, elles n'auront plus de raison d'être.
-         Le motif est celui du routeur, qui revalide derrière : se tromper ici ne coûte
-         qu'une demande abandonnée, jamais un mauvais fichier. -->
-    <script>
-      var nom = /^#p=([0-9]+-[a-z0-9]+)$/.exec(location.hash)
-      if (nom) {
-        window.poemeDemande = { nom: nom[1], reponse: fetch('/plis/' + nom[1] + '.txt') }
-        window.poemeDemande.reponse.catch(function () {})
-      }
-    </script>
     <meta name="color-scheme" content="light" />
     <title>Pli</title>
 
@@ -57,29 +41,79 @@
       <symbol id="fleche-droite" viewBox="0 0 1000 1000"><path d="M875.0 500.0L559.8 839.8L659.6 578.0L135.0 578.0L135.0 693.0L125.0 693.0L125.0 307.0L135.0 307.0L135.0 422.0L659.6 422.0L559.8 160.2Z"/></symbol>
     </defs></svg>
 
-    <!-- Le pli en dur, posé sur le gabarit : tête, corps, volet, et le cachet à cheval
-         sur la pliure (docs/design-system.md#le-gabarit). Un lien en remplace le
-         contenu ; c'est un échafaudage, pas un écran — A1 et sa promesse, A2 et sa
-         composition par type, le trait d'action, l'invite du volet et le geste arrivent
-         au jalon 2. Le volet reste vide : ce qui s'y écrit n'a de sens qu'avec le geste. -->
-    <main class="pli" data-type="inv">
-      <header class="tete">
-        <p class="marque">Pli</p>
-      </header>
+    <!-- Les deux écrans que le document porte lui-même, parce qu'ils sont la vague 1 :
+         ils doivent s'afficher sans qu'une seule requête s'interpose
+         (docs/chargement.md#vague-1--le-document-se-suffit-à-lui-même). A2, qui dépend du
+         type et du contenu, se construit en vague 3 dans la couche du dessous.
 
-      <div class="corps">
-        <h1 class="titre">Tu es invitée</h1>
-        <div class="voix"><p>Mets la robe verte, celle du printemps.</p></div>
-        <ul class="faits">
-          <li>samedi 22 août · 20h00</li>
-          <li>Le Petit Comptoir</li>
-        </ul>
-        <p class="griffe">rien qu'à toi</p>
-        <p class="etiquette etiquette--fine">déposé par a.</p>
-      </div>
+         `.pli` est le cadre — 360 × 780, l'ombre, le coin, touch-action. Les deux couches
+         du geste vivent dedans : « dessus » et « dessous » sont les mots de l'algorithme du
+         dépliage (docs/design-system.md#le-mouvement). -->
+    <main class="pli">
+      <div class="pli__dessous" hidden></div>
 
-      <p class="cachet">014</p>
-      <div class="volet"></div>
+      <!-- A1 · l'attente. Commune aux quatre types ; seule l'étiquette de la tête change.
+           Le fond est le rideau, la seule image des états fermés — il ne dit rien du
+           contenu, c'est tout son intérêt (docs/parcours.md#a1--lattente). -->
+      <section class="pli__dessus pli--encre" id="a1">
+        <div class="image image--pleine image--rideau">
+          <img alt="" decoding="async" fetchpriority="low" />
+          <div class="image__fondu image__fondu--encre"></div>
+        </div>
+
+        <!-- Ni la tête ni le numéro ne portent le carmin, contrairement à la maquette :
+             sur A1 la seule chose qui agit est le volet, et « une seule couleur agit »
+             (docs/design-system.md#les-cinq-règles). Mesuré en plus, sur ce que le
+             navigateur peint vraiment : en rose, 19,7 % de la ligne du numéro tombait sous
+             4,5:1 sur les stries claires du rideau. -->
+        <header class="tete">
+          <p class="marque">Pli</p>
+          <p class="etiquette" data-type></p>
+        </header>
+
+        <!-- Seul l'invariant est écrit ici — la marque, la promesse, « déplier ». Les
+             emplacements que le lien remplit restent VIDES : `decoder()` traverse un
+             DecompressionStream, et pour un `#p=` c'est un aller-retour réseau complet.
+             Les remplir en dur ferait peindre « UNE INVITATION » sur une pensée, et
+             pendant tout le fetch sur un poème. Rien de faux n'est jamais peint. -->
+        <div class="corps">
+          <p class="etiquette" data-numero></p>
+          <h1 class="voix">Un pli t’attend.</h1>
+          <p class="voix voix--corps">
+            Il ne s’ouvre qu’une fois. Ensuite il reste dans tes plis.
+          </p>
+          <p class="etiquette etiquette--fine" data-signature></p>
+        </div>
+
+        <p class="cachet" data-cachet></p>
+
+        <!-- Le volet, et la seule action de l'écran. Le bouton est l'alternative au geste,
+             jamais un second chemin caché : il pose p = 1 directement
+             (docs/design-system.md#accessibilité). -->
+        <div class="volet">
+          <div class="invite">
+            <button class="deplier" type="button">
+              <span class="etiquette etiquette--forte">déplier</span>
+              <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-haut" /></svg>
+            </button>
+            <p class="etiquette etiquette--fine">glisser vers le haut</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- C4 · le lien abîmé. Le cas réel n'est pas l'expiration — il n'y en a plus — mais
+           le lien tronqué par la messagerie (docs/integration.md). Aucune image : le rideau
+           est celle des états FERMÉS, et un lien abîmé n'en est pas un. -->
+      <section class="pli__dessus" id="c4" hidden>
+        <header class="tete">
+          <p class="marque">Pli</p>
+        </header>
+
+        <div class="corps">
+          <h1 class="titre">lien abîmé</h1>
+          <p class="voix voix--corps">Il a dû être coupé en chemin. Redemande-le-moi.</p>
+        </div>
+      </section>
     </main>
 
     <script type="module" src="/src/lecteur/main.ts"></script>

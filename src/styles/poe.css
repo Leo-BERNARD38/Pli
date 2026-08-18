@@ -1,0 +1,19 @@
+/* LE POÈME — une strophe, un écran, sur encre, sans image. C'est le seul contenu long, le
+   seul qui pagine, et le seul où lire compte plus que regarder
+   (docs/design-system.md#les-trois-textures-de-type).
+
+   Au jalon 2 il ne montre que sa première strophe : la pagination strophe par strophe, au
+   même geste que le dépliage, est le jalon 6 (B2 · B3). Lui poser « la suite ↑ » alors que
+   rien ne suit encore serait un mensonge.
+
+   La strophe garde ses retours à la ligne : c'est de la poésie, pas un paragraphe. */
+[data-type='poe'] .voix {
+  font-size: 23px;
+  line-height: 1.32;
+  max-width: 18ch;
+  white-space: pre-line;
+}
+
+[data-type='poe'] .titre {
+  font-size: 52px;
+}

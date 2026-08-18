@@ -1,0 +1,53 @@
+/* LE SOUVENIR — titre haut, une ligne en bas, la peinture prend la page, sur crème
+   (docs/parcours.md#a2--la-découverte). Aucune action.
+
+   C'est le seul type dont le corps se répartit vraiment : le titre en haut, la ligne en
+   bas, et la peinture entre les deux. */
+/* Le voile du souvenir, et le seul écran de ce jalon dont aucune maquette n'existe.
+
+   Mesuré sur la toile elle-même, dans la bande 4–32 % où la tête et le titre se posent :
+   `voile-rose-touche` y porte un pixel **quasi blanc**, `#fffffb`. Conséquences, calculées
+   et non estimées — le carmin y est **impossible** quel que soit le voile (il lui faudrait
+   un fond plus clair que la toile n'en a de sombre), le rose demanderait `.93`, le crème
+   demande `.84`.
+
+   Donc : un voile tenu jusqu'au tiers, puis les arrêts de `.image__fondu` repris tels
+   quels — la toile se montre au milieu, le papier revient en bas. `.85` est le chiffre de
+   `.image__fondu--encre`, et il couvre le `.84` mesuré. C'est aussi la forme que le dégradé
+   du handoff cherchait : sombre en haut où l'on écrit, nu au milieu, papier en bas. */
+[data-type='sou'] .image--pleine .image__fondu {
+  background: linear-gradient(
+    180deg,
+    rgba(14, 12, 11, 0.85) 0%,
+    rgba(14, 12, 11, 0.85) 32%,
+    rgba(14, 12, 11, 0) 46%,
+    rgba(247, 242, 232, 0.05) 72%,
+    var(--creme) 100%
+  );
+}
+
+/* Le titre est sur le voile, donc sur de l'encre : il passe au crème. Le souvenir n'a
+   aucune action, et « une seule couleur agit » — le carmin n'avait rien à y faire
+   (docs/design-system.md#les-cinq-règles). La ligne du bas, elle, est sur le papier
+   revenu : elle garde l'encre. */
+/* Le corps commence juste sous la tête, et le titre venait toucher la marque. 22px est le
+   retrait que le gabarit donne déjà à `.corps--haut` : aucun chiffre nouveau. */
+[data-type='sou'] .corps {
+  padding-top: 22px;
+}
+
+[data-type='sou'] .titre {
+  font-size: 64px;
+  color: var(--creme);
+}
+
+[data-type='sou'] .tete,
+[data-type='sou'] .griffe {
+  color: var(--creme);
+}
+
+[data-type='sou'] .voix {
+  font-size: 23px;
+  line-height: 1.32;
+  max-width: 18ch;
+}
