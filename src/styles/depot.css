@@ -391,7 +391,6 @@
    depuis quand. La liste ne se scrolle pas à part : l'écran défile, comme les autres. */
 .deposes {
   list-style: none;
-  overflow-y: auto;
 }
 
 .depose {
@@ -416,33 +415,15 @@
   display: block;
 }
 
-.depose__nom {
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0.55;
+/* La ligne réemploie le vocabulaire de `pli.css` — `.etiquette`, `.voix voix--corps`,
+   `.etiquette--fine`, exactement comme le sommaire de C1. Seul l'espacement vertical est
+   à dire ici : les trois vivent dans un bloc, pas dans un corps. */
+.depose__texte > * {
+  display: block;
 }
 
-.depose__quoi {
-  display: block;
+.depose__texte > * + * {
   margin-top: 6px;
-  font-family: var(--plume);
-  font-style: italic;
-  font-weight: 300;
-  font-size: 17px;
-  line-height: 1.3;
-}
-
-.depose__quand {
-  display: block;
-  margin-top: 6px;
-  font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.4;
 }
 
 /* Le chemin discret de D1 vers les plis déposés : il ne crie pas, il attend d'être cherché. */
@@ -459,4 +440,18 @@
   opacity: 0.45;
   cursor: pointer;
   touch-action: manipulation;
+}
+
+/* Le filet de focus, rendu à ce que `all: unset` lui prend.
+   `pli.css` écrit `:focus-visible` en fin de feuille pour gagner à spécificité égale — mais
+   ce calcul ne vaut qu'à l'intérieur d'une feuille. `depot.css` est chargée APRÈS, donc à
+   égalité (`:focus-visible` et `.type` valent une classe chacun) c'est encore l'ordre qui
+   tranche, et c'est `all: unset` qui gagne. Les trois cibles de l'atelier tabulaient donc
+   sans filet visible (docs/integration.md#accessibilité--la-liste-à-cocher). Fond crème
+   partout ici : le filet est carmin. */
+.type:focus-visible,
+.depose:focus-visible,
+.passage:focus-visible {
+  outline: none;
+  box-shadow: inset 2px 0 0 var(--carmin);
 }

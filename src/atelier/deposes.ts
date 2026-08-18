@@ -57,11 +57,13 @@ function ligne(quoi: Depose, nom: string, maintenant: Date, choisir: () => void)
   bouton.className = 'depose'
   bouton.addEventListener('click', choisir)
 
+  // Le même vocabulaire que le sommaire de C1, et pas un jeu de classes de plus : une
+  // typographie recopiée à la main dérive au premier réglage (src/lecteur/plis.ts).
   const dedans = element('span', 'depose__texte')
   dedans.append(
-    element('span', 'depose__nom', `nº ${String(quoi.n).padStart(3, '0')} · ${PAPIERS[quoi.t].nom}`),
-    element('span', 'depose__quoi', nom),
-    element('span', 'depose__quand', quand(quoi, maintenant)),
+    element('span', 'etiquette', `nº ${String(quoi.n).padStart(3, '0')} · ${PAPIERS[quoi.t].nom}`),
+    element('span', 'voix voix--corps', nom),
+    element('span', 'etiquette etiquette--fine', quand(quoi, maintenant)),
   )
   bouton.append(dedans)
   item.append(bouton)

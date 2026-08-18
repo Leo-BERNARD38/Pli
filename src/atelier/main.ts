@@ -93,7 +93,7 @@ function conduireLeLien(depuisD5: boolean): void {
   const pas = d3?.querySelector<HTMLElement>('[data-lien="pas"]')
   if (retour) {
     retour.dataset['va'] = depuisD5 ? 'd5' : 'd2'
-    retour.textContent = depuisD5 ? '← les plis déposés' : '← modifier'
+    retour.textContent = depuisD5 ? '← les plis' : '← modifier'
   }
   if (pas) pas.textContent = depuisD5 ? 'déjà déposé' : '3 sur 3'
 }
@@ -151,7 +151,15 @@ document.addEventListener('click', (evenement) => {
     void poserLePassage()
   }
   if (va === 'd2') textes?.poser(type)
-  if (va === 'd5') void relireLesDeposes?.()
+  if (va === 'd5') {
+    // La liste se relit avant que l'écran s'ouvre : le décodage est asynchrone, et D5
+    // s'afficherait sinon une frame sans liste et sans son mot — le sommaire de C1 attend
+    // lui aussi d'être entier avant d'entrer.
+    void relireLesDeposes?.().then(() => {
+      montrer('d5')
+    })
+    return
+  }
   if (va === 'd3') {
     void deposer()
     return
