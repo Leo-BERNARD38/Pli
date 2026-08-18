@@ -98,6 +98,16 @@ Voici tout ce qui s'en déduit.
 | Papiers | « trois, plus un » / « jamais un quatrième » / quatre classes | **trois papiers + un traitement** |
 | Le lieu du dépôt | « studio » / « déposer » | **l'atelier** |
 | Chargement C5 | tous les plis | **le poème uniquement** |
+| Définition des textures | 720 × 1560, ~70 ko | **la définition native de la source** (1536 × 2752, ou 1296 × 2304 pour le drapé), servie telle quelle — [ressources.md](ressources.md) |
+| Les flèches | caractères `↑` `→` en Bodoni | **deux tracés SVG inline** — l'unique exception au « pas de SVG » |
+| Bodoni sur A1 | présent, par la flèche de la pliure | **absent** — trois familles au premier écran, sans arrangement |
+| L'aperçu du lien | un recadrage du papier froissé | **`og.png`**, dessiné : marque, phrase, pliure — 53 ko ([partage.md](partage.md#limage-daperçu)) |
+| `og:description` | « Une seule lecture, pas de compte. » | **« Il ne s'ouvre qu'une fois. »** — la première promesse n'est pas tenable |
+| Le bas de `og.png` | « UNE SEULE LECTURE · PAS DE COMPTE » | **« POUR TOI SEULE »** — corrigé |
+| `icon-512` en `maskable` | annoncé masquable | **`purpose: any`** ; le masquable est un fichier à part, lettre à 52 % de large |
+| La lettre sur la grille | `x = 30` dans le texte et les SVG, 29 dans les PNG | **29**, celui des tirages validés — SVG et PNG s'accordent |
+| `twitter:card` | présent dans les balises livrées | **retiré** — un pli ne se partage pas ailleurs qu'en conversation |
+| `mask-icon` | présent, avec un SVG à fond crème | **retiré** — l'onglet épinglé est une affaire de Safari de bureau |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
 
 ### Les cinq questions laissées ouvertes par le design

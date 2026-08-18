@@ -191,10 +191,21 @@ La présence de `deplieLe` est ce qui déclenche C3 sur un lien rouvert.
 | Clé | Contenu |
 |---|---|
 | `pli.v1.seuil` | `true` une fois la date d'officialisation saisie |
+| `pli.v1.reglages` | le tiroir : numéro de réponse `w`, signature `s`, rien d'autre |
 | `pli.v1.compteur` | dernier numéro attribué |
 | `pli.v1.deposes` | les plis déposés, pour relire et renvoyer |
 
+```json
+{ "w": "336XXXXXXXX", "s": "a." }
+```
+
 Sur mon téléphone uniquement. Il n'a rien à voir avec son journal et ne se synchronise pas.
+
+**Le numéro de réponse ne connaît que deux endroits** : ce tiroir, et le lien d'une
+invitation déjà envoyée. Jamais le dépôt, jamais un fichier de configuration, jamais une
+variable de build — tout ce qui est buildé est public
+([hebergement.md](hebergement.md#ce-que-pages-ne-donne-pas)). Il se saisit dans **D4 · le
+tiroir** ([parcours.md](parcours.md#d4--le-tiroir)).
 
 ## 6. La réponse WhatsApp
 

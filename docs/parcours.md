@@ -146,8 +146,9 @@ tronqué par l'application de messagerie. Le message le dit et propose de me le 
 # 2. Moi — `pli.re/atelier/`
 
 ```
-        D0  le seuil  ──▶  D1  le type  ──┬──▶  D2   les textes  ──▶  D3  le lien
-        (une seule fois)                  └──▶  D2p  quel poème   ──▶  D3  le lien
+        D0  le seuil  ──▶  D4  le tiroir  ──▶  D1  le type  ──┬──▶  D2   les textes  ──▶  D3  le lien
+        (une seule fois)   (au premier passage,               └──▶  D2p  quel poème   ──▶  D3  le lien
+                            puis à la demande)
 ```
 
 Trois questions, une par écran, comme le design l'impose. Le retour est en haut à gauche,
@@ -163,6 +164,24 @@ Une seule fois, puis mémorisé. Une question, une ligne, dans la voix du produi
 Faux → la ligne se vide, sans rien reprocher. Le lexique interdit « valider », « erreur »
 et « formulaire ». Le contrôle compare une empreinte, jamais la date en clair
 (voir [architecture.md](architecture.md#le-seuil-de-latelier)).
+
+## D4 · le tiroir
+
+Ce que je ne veux pas retaper, et qui n'a rien à faire dans le dépôt. Ouvert une fois juste
+après le seuil, puis seulement quand je le demande — la marque, en haut à gauche, y mène.
+
+| Ce qu'il garde | Pourquoi il le garde |
+|---|---|
+| **le numéro de réponse** (`w`) | il voyage dans le lien d'une invitation ; en clair dans un dépôt public, il se ferait moissonner |
+| **la signature** (`s`, « a. ») | elle est sur chaque pli, je ne la retape pas |
+| **le prochain numéro** (`n`) | affiché, et corrigeable à la main le jour où le stockage a été effacé |
+
+Trois lignes, la même écriture que D2, la même absence de « valider » : ce qui est écrit est
+gardé. Tant que le numéro de réponse est vide, D1 propose les trois autres types et **grise
+l'invitation** — elle est le seul type qui appelle une réponse.
+
+Rien de ce tiroir n'entre dans le dépôt : il vit dans `pli.v1.reglages`, sur mon téléphone
+([donnees.md](donnees.md#5-mon-historique)).
 
 ## D1 · le type
 
@@ -226,6 +245,7 @@ m'imprime le lien fini. Je pousse. Le contrat complet est dans
 | Écran | Pourquoi il manque |
 |---|---|
 | **D0 · le seuil** | Nouveau : l'atelier n'était pas protégé dans le design |
+| **D4 · le tiroir** | Nouveau : les constantes n'ont nulle part où vivre en dehors de mon téléphone |
 | **D2p · quel poème** | Nouveau : conséquence du poème-fichier |
 | **C1 à l'état vide** | Le journal existe, son écran vide non |
 | **C2, C3, C4, C5** | Inventoriés, jamais dessinés |
