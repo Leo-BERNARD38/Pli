@@ -132,6 +132,15 @@ tient encore est le poème, dont le fichier se réencode sans changer de lien : 
 le permet déjà, délibérément (voir [donnees.md](donnees.md#la-moulinette)). Rien à décider
 avant qu'un poème ait besoin d'une correction.
 
+### Ce qui reste à trancher avec A1
+
+**Le fond d'A1.** [parcours.md](parcours.md#a1--lattente) écrit « le fond est le rideau,
+la seule image des états fermés » ; la maquette, elle, montre un papier crème avec son
+grain et un volet carmin, sans aucune image. Les deux ne peuvent pas être vrais ensemble,
+et le choix emporte le fondu qui va avec — `.image__fondu` ramène au papier,
+`.image__fondu--encre` ramène à l'encre. Repéré au jalon 1 en faisant entrer les cinq
+peintures ; **se tranche en écrivant A1, au jalon 2**, pas avant.
+
 ### Écrans qui n'existaient pas
 
 **D0 · le seuil** (l'atelier n'était pas protégé), **D2p · quel poème**,

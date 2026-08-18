@@ -203,10 +203,14 @@ Contraintes de tracé, pour que ça reste le produit et pas une icône :
 
 ## À produire au jalon 1
 
-- [ ] trancher : servir le natif, ou régénérer les peintures ≥ 1800 de large
-- [ ] les cinq textures dans `src/`, ré-encodées q80 **seulement si un master existe**
+- [x] **tranché : on sert le natif.** Régénérer aurait demandé un nouveau tirage de chaque
+      toile, qui ne serait pas identique — et la définition en plus n'achète que de la
+      réserve, rien de visible sur son téléphone
+- [x] les cinq textures dans `src/`, copiées telles quelles : aucun master, donc aucun
+      ré-encodage
 - [ ] l'aperçu vérifié dans une vraie conversation ([partage.md](partage.md#vérifier-un-aperçu))
-- [ ] les quatre polices sous-ensemblées, poids réels notés dans
-      [chargement.md](chargement.md#le-budget-écran-par-écran)
-- [ ] les deux flèches tracées
-- [ ] `public/icones/` copié tel quel dans le build
+      — **à la main, personne ne peut le faire à ma place**
+- [x] les quatre polices sous-ensemblées, poids réels notés dans
+      [chargement.md](chargement.md#le-budget-écran-par-écran) — 52,6 ko pour les trois d'A1
+- [x] les deux flèches tracées
+- [x] `public/icones/` copié tel quel dans le build

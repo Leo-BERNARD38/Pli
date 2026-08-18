@@ -216,6 +216,7 @@ src/
     codec.ts               encode / décode — isomorphe Node + navigateur
     journal.ts             seul accès à localStorage
     dates.ts               formats français
+  fleches.html             les deux tracés, inline dans chaque document qui s'en sert
   styles/
     tokens.css             extrait de design/handoff/pli.css
     pli.css                le gabarit et les classes — inline dans le document
@@ -228,7 +229,10 @@ public/                    servi tel quel, noms stables
   404.html
   CNAME  .nojekyll
 plis-source/               les poèmes en clair — GITIGNORÉ
+polices-source/            les quatre familles, avec leurs OFL — jamais servies
 scripts/plier.mjs          la moulinette
+scripts/polices.py         les sous-ensembles — regénère src/fonts/
+scripts/fleches.py         les deux flèches — regénère src/fleches.html
 scripts/icones.py          la planche des icônes — regénère public/icones/
 plier.bat · plier.sh       les deux enveloppes
 design/                    l'archive figée du design — jamais dans le build
