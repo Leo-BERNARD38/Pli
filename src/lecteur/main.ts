@@ -10,7 +10,10 @@ import { lire, suivre, type Route } from '../lib/routeur.ts'
 // première instruction, avant de décoder quoi que ce soit. C'est la seule requête que
 // le réseau nous impose.
 const premiere = lire(window.location.hash)
-let dejaParti = premiere.ecran === 'poeme' ? fetch(`/plis/${premiere.nom}.txt`) : null
+let dejaDemande =
+  premiere.ecran === 'poeme'
+    ? { nom: premiere.nom, reponse: fetch(`/plis/${premiere.nom}.txt`) }
+    : null
 
 const pliDeLaPage = document.querySelector<HTMLElement>('.pli')
 
@@ -24,7 +27,10 @@ function poser(selecteur: string, texte: string): void {
 function ecrire(pli: Pli): void {
   // Le papier découle du type ; le crochet est posé dès maintenant, les papiers viennent
   // au jalon 1 (docs/design-system.md#les-cinq-règles).
-  if (pliDeLaPage) pliDeLaPage.dataset.type = pli.t
+  if (pliDeLaPage) {
+    pliDeLaPage.dataset.type = pli.t
+    pliDeLaPage.hidden = false
+  }
 
   poser('.cachet', `nº ${String(pli.n).padStart(3, '0')}`)
   poser('.titre', pli.ti)
@@ -57,11 +63,17 @@ function ecrire(pli: Pli): void {
   }
 }
 
-/** Le fichier d'un poème : celui déjà demandé au premier passage, sinon un nouveau. */
+/**
+ * Le fichier d'un poème : celui demandé en première instruction si c'est bien le sien,
+ * sinon un nouveau. La demande ne sert qu'une fois.
+ */
 function chercher(nom: string): Promise<Response> {
-  const reponse = dejaParti ?? fetch(`/plis/${nom}.txt`)
-  dejaParti = null
-  return reponse
+  const demande = dejaDemande
+  dejaDemande = null
+  if (demande?.nom === nom) return demande.reponse
+  // Une demande qu'on abandonne ne doit pas laisser un échec sans personne pour l'entendre.
+  demande?.reponse.catch(() => {})
+  return fetch(`/plis/${nom}.txt`)
 }
 
 async function deplier(route: Route): Promise<void> {
@@ -81,8 +93,16 @@ async function deplier(route: Route): Promise<void> {
   // (jalons 2 et 4) : la page garde le pli en dur.
 }
 
-// Un pli qui ne se décode pas laisse la page nue plutôt qu'un pli qui n'est pas le sien.
-// C4 · lien abîmé, avec ses mots, arrive au jalon 2 (docs/parcours.md#les-états).
+/**
+ * Un pli qui ne se décode pas laisse la page nue plutôt qu'un pli qui n'est pas le sien.
+ * On masque, on ne vide pas : le balisage reste en place pour le lien suivant, qui peut
+ * arriver sans rechargement. C4 · lien abîmé, avec ses mots, arrive au jalon 2
+ * (docs/parcours.md#les-états).
+ */
+function laisserNue(): void {
+  if (pliDeLaPage) pliDeLaPage.hidden = true
+}
+
 suivre((route) => {
-  deplier(route).catch(() => pliDeLaPage?.replaceChildren())
+  deplier(route).catch(laisserNue)
 })

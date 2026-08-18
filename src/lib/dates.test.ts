@@ -28,6 +28,8 @@ test('ce qui n’est pas un horodatage est refusé', () => {
     '2026-09-03T21:04:33',
     '2026-13-01T00:00',
     '2026-02-30T12:00',
+    // `new Date` mapperait 0 à 99 sur les années 1900 : on refuse plutôt que de deviner.
+    '0099-01-01T00:00',
     'hier',
   ]
   for (const abime of abimes) assert.throws(() => relire(abime), /date illisible/, abime)
@@ -73,4 +75,12 @@ test('le changement d’heure ne décale pas le compte', () => {
   // Le passage à l’heure d’hiver, en France, dans la nuit du 24 au 25 octobre 2026.
   assert.equal(depuis(new Date(2026, 9, 24, 12, 0), new Date(2026, 9, 25, 12, 0)), 'hier')
   assert.equal(depuis(new Date(2026, 9, 24, 12, 0), new Date(2026, 9, 26, 12, 0)), 'il y a deux jours')
+})
+
+test('aucune journée ne se raconte avec un trou', () => {
+  const maintenant = new Date(2026, 8, 3, 12, 0)
+  for (let n = 0; n <= 40; n += 1) {
+    const dit = depuis(new Date(2026, 8, 3 - n, 12, 0), maintenant)
+    assert.doesNotMatch(dit, /undefined|NaN/, `à ${n} jours`)
+  }
 })

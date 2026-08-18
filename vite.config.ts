@@ -6,11 +6,9 @@ export default defineConfig({
   base: '/',
   publicDir: 'public',
   build: {
-    // Deux appareils connus, iOS 26 et Android 16 : aucun préfixe, aucun polyfill
-    // (docs/architecture.md#compatibilité).
+    // Deux appareils connus, iOS 26 et Android 16 : aucun préfixe, aucun polyfill, pas
+    // même celui que Vite injecte pour modulepreload (docs/architecture.md#compatibilité).
     target: 'esnext',
-    // Vite injecte sinon un polyfill de modulepreload : aucun polyfill ici, les deux
-    // appareils sont connus (docs/architecture.md#compatibilité).
     modulePreload: { polyfill: false },
     rollupOptions: {
       input: {

@@ -25,8 +25,11 @@ const MOIS = [
 
 const LETTRES = ['', '', 'deux', 'trois', 'quatre', 'cinq', 'six'] as const
 
-/** Au-delà, on ne compte plus les jours : on nomme la date. */
-const BASCULE = 7
+/**
+ * Au-delà, on ne compte plus les jours : on nomme la date. La bascule suit la table —
+ * allonger l'une sans l'autre écrirait « il y a undefined jours ».
+ */
+const BASCULE = LETTRES.length
 
 function deuxChiffres(nombre: number): string {
   return String(nombre).padStart(2, '0')
@@ -53,8 +56,12 @@ export function relire(horodatage: string): Date {
     number,
     number,
   ]
+  // Le report fait le reste du contrôle : un 30 février ou une 25e heure changent le jour
+  // ou le mois. L'année, elle, ne reporte pas — et `new Date` mappe 0 à 99 sur 1900.
   const quand = new Date(annee, mois - 1, quantieme, heures, minutes)
-  if (quand.getMonth() !== mois - 1 || quand.getDate() !== quantieme) throw new Error('date illisible')
+  const intact =
+    quand.getFullYear() === annee && quand.getMonth() === mois - 1 && quand.getDate() === quantieme
+  if (!intact) throw new Error('date illisible')
   return quand
 }
 

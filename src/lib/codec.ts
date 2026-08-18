@@ -111,13 +111,15 @@ const TYPES: readonly Type[] = ['inv', 'pen', 'poe', 'sou']
 function estUnPli(relu: unknown): relu is Pli {
   if (typeof relu !== 'object' || relu === null) return false
   const pli = relu as Partial<Pli>
+  const texte = (valeur: unknown): boolean => typeof valeur === 'string'
   return (
+    typeof pli.v === 'number' &&
     typeof pli.t === 'string' &&
     TYPES.includes(pli.t as Type) &&
     typeof pli.n === 'number' &&
-    typeof pli.ti === 'string' &&
-    typeof pli.s === 'string' &&
-    (typeof pli.b === 'string' || Array.isArray(pli.b))
+    texte(pli.ti) &&
+    texte(pli.s) &&
+    (texte(pli.b) || (Array.isArray(pli.b) && pli.b.every(texte)))
   )
 }
 

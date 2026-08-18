@@ -131,6 +131,8 @@ test('un pli amputé de ce qui s’affiche toujours donne un lien abîmé', asyn
     { ...INVITATION, n: undefined },
     { ...INVITATION, b: undefined },
     { ...INVITATION, t: 'xxx' },
+    { ...INVITATION, v: undefined },
+    { ...POEME, b: ['une strophe', 42] },
   ]
   for (const ampute of amputes) {
     const lien = await encoder(ampute as unknown as Pli)
