@@ -5,7 +5,8 @@ allowed-tools: Bash(git log:*), Bash(git status:*), Bash(ls:*), Read, Glob
 
 Fais le point, court, en trois parties.
 
-1. **Ce qui existe vraiment.** Regarde le dépôt, pas le README : `package.json`, `src/`,
+1. **Ce qui existe vraiment.** Lis d'abord [`.claude/chantier.md`](.claude/chantier.md), qui
+   dit ce qui a atterri, puis vérifie sur le dépôt plutôt que sur le README : `package.json`, `src/`,
    `.github/workflows/`, `public/plis/`, `public/icones/` — présents ou pas. Le README annonce
    des commandes npm qui ne seront réelles qu'au jalon 0.
 
@@ -20,3 +21,6 @@ Fais le point, court, en trois parties.
    et ce qu'elles empêchent de trancher.
 
 Ne propose pas de les trancher à sa place. Termine par la prochaine chose à faire, une ligne.
+
+Si `.claude/chantier.md` a divergé de la réalité du dépôt, corrige-le — c'est lui qu'une autre
+session lira.

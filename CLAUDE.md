@@ -30,7 +30,12 @@ Les commandes npm annoncées par le README (`npm run dev`, `npm test`) décriven
 l'existant : les créer fait partie du jalon 0.
 
 Ce qui existe et sert : `docs/` (la spécification, elle fait foi), `design/` (l'archive figée
-du design), `public/icones/` (livré, à servir tel quel), `scripts/icones.py`.
+du design, **dont les cinq peintures** dans `design/handoff/assets/`), `public/icones/`
+(livré, à servir tel quel), `scripts/icones.py`. **Les polices ne sont pas dans le dépôt** :
+les faire entrer, sources et sous-ensembles, fait partie du jalon 1
+([docs/ressources.md](docs/ressources.md#les-polices)).
+
+L'état vivant de la construction est dans [`.claude/chantier.md`](.claude/chantier.md).
 
 Quatre mesures conditionnent des décisions et **ne se devinent pas** — plafond de longueur
 d'URL, survie de `localStorage`, bac de stockage du navigateur WhatsApp, journal partagé ou
@@ -215,8 +220,15 @@ règles, le gabarit, l'accessibilité), `gardien-lexique` (les mots visibles et 
 code), `garde-fluidite` (le geste et le chargement), `garde-invariants` (ce qui ne se rouvre
 pas : le codec, les noms de fichiers, le journal, les secrets, les tiers).
 
-**`.claude/commands/`** — `/revue` (la revue complète d'un écran), `/jalon` (cadrer un jalon
-avant d'écrire), `/seuil` (fabriquer l'empreinte), `/etat` (où en est le jalon courant).
+**`.claude/commands/`** — `/chantier` (le prompt unique : lire l'état, planifier, découper,
+écrire, relire, commiter, noter — se lance en mode plan d'abord), `/revue` (la revue complète
+d'un écran), `/jalon` (cadrer un jalon avant d'écrire), `/seuil` (fabriquer l'empreinte),
+`/etat` (où en est le jalon courant).
+
+**`.claude/chantier.md`** — l'**état** du chantier, à ne pas confondre avec le plan
+(`docs/roadmap.md`, qui ne bouge pas). Il dit ce qui a réellement atterri, ce que les mesures
+bloquent, et les décisions prises en chemin. **Une nouvelle session le lit en premier**, et
+toute étape terminée s'y coche.
 
 **`.claude/hooks/`** — deux gardes déterministes, parce qu'une règle écrite en prose se
 contourne sans le vouloir :
