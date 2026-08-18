@@ -59,15 +59,16 @@ nº 015 → https://pli.re/#p=015-vhtq
 
 ## Développement
 
-Rien de tout cela n'existe encore : c'est la cible du **jalon 0**
-([docs/roadmap.md](docs/roadmap.md)), à créer telle quelle.
-
 ```sh
 npm install
 npm run dev        # les deux entrées
 npm run build
-npm test           # codec.ts et dates.ts
+npm run types      # dont src/lib/ compilé sans la bibliothèque DOM
+npm test           # codec.ts, dates.ts, le routeur
 ```
+
+La moulinette et son `plier.sh` n'existent pas encore : c'est le **jalon 6**
+([docs/roadmap.md](docs/roadmap.md)).
 
 ## Documentation
 
@@ -81,8 +82,10 @@ Le travail de design est archivé dans [`design/`](design/README.md) : ouvrir
 
 ## Statut
 
-Brainstorm et cahier des charges terminés. Design importé et réconcilié. Code à venir —
-voir [`docs/roadmap.md`](docs/roadmap.md).
+Brainstorm et cahier des charges terminés. Design importé et réconcilié. **Le jalon 0 est
+posé** : les deux entrées, le codec, les dates, le routeur, les deux workflows, et un pli en
+dur qu'un lien remplace. Le style, le geste et les écrans viennent ensuite —
+voir [`docs/roadmap.md`](docs/roadmap.md) et [`.claude/chantier.md`](.claude/chantier.md).
 
 Quatre mesures à faire avant de s'engager, listées dans
 [`docs/README.md`](docs/README.md#les-mesures-à-faire-avant-de-sengager) : le plafond réel

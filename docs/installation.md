@@ -64,9 +64,15 @@ Les balises qui vont avec, à coller telles quelles dans les deux entrées :
 <link rel="icon" href="/icones/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icones/apple-touch-icon.png">
 <link rel="manifest" href="/icones/site.webmanifest">
-<meta name="theme-color" content="#C81E33">
+<meta name="theme-color" content="#E9E2D2">
 <meta name="robots" content="noindex, nofollow">
 ```
+
+La balise `theme-color` porte **le sable**, celui du plateau
+([appareils.md](appareils.md#les-réglages-de-page)) : dans le navigateur, la barre se confond
+avec la page et le pli reste le seul objet à l'écran. Le **carmin** reste le `theme_color` du
+manifeste, qui ne vaut que pour l'app installée. Les deux valeurs disaient la même balise ;
+c'est tranché ici ([integration.md](integration.md#structure)).
 
 Les balises `og:` s'ajoutent à celles-là, sur l'entrée d'elle seulement
 ([partage.md](partage.md#les-balises-écrites-une-fois-pour-toutes)).
