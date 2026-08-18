@@ -1,0 +1,11 @@
+{
+  // src/lib/ est isomorphe Node + navigateur : aucune API du DOM, sous peine de deux
+  // encodages qui divergent (docs/donnees.md#2-lencodage). Ce projet-là compile sans
+  // la bibliothèque DOM — la machine vérifie l'invariant, pas la relecture.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": ["node"]
+  },
+  "include": ["src/lib"]
+}
