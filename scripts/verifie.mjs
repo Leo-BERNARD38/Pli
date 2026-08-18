@@ -96,6 +96,9 @@ const NOMS_INTERDITS = new Set([
   'notif', 'notification', 'error', 'erreur', 'open', 'ouvrir',
 ])
 
+/** Les deux seuls modules qui ont le droit de toucher au stockage du navigateur. */
+const STOCKAGE = /lib[/\\](journal|tiroir)\.ts$/
+
 /** Les chaînes de caractères d’une ligne — ce que quelqu’un peut lire à l’écran. */
 function chaines(ligne) {
   const trouvees = []
@@ -157,10 +160,14 @@ for (const chemin of aRegarder) {
     }
 
     /* les invariants (CLAUDE.md#les-invariants) */
-    if (/\blocalStorage\s*\./.test(ligne) && !/lib\/journal\.ts$/.test(f))
-      refus(f, n, 'invariant — tout accès à `localStorage` passe par `journal.ts`')
-    if (/\bsessionStorage\s*\./.test(ligne) && !/lib\/journal\.ts$/.test(f))
-      regard(f, n, 'invariant — `garde-invariants` demande qu’aucun stockage ne vive hors de `journal.ts`')
+    // Deux modules de stockage, et deux seulement : `journal.ts` garde ses plis à elle,
+    // `tiroir.ts` garde mes réglages d'atelier. Ils ne se mélangent pas — le numéro de
+    // réponse n'a rien à faire dans le module que le lecteur importe
+    // (docs/donnees.md#5-mon-historique).
+    if (/\blocalStorage\s*\./.test(ligne) && !STOCKAGE.test(f))
+      refus(f, n, 'invariant — tout accès à `localStorage` passe par `journal.ts` ou `tiroir.ts`')
+    if (/\bsessionStorage\s*\./.test(ligne) && !STOCKAGE.test(f))
+      regard(f, n, 'invariant — `garde-invariants` demande qu’aucun stockage ne vive hors de `journal.ts` ou `tiroir.ts`')
     if (/history\.(pushState|replaceState)/.test(ligne))
       refus(f, n, 'invariant — routage par hash seulement : Pages ne réécrit aucune URL, une route profonde tombe en 404')
     // `wa.me` n'est pas un tiers au sens de la règle : rien n'en est chargé, c'est la

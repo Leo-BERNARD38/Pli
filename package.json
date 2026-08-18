@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --mode lecteur && vite build --mode atelier",
     "preview": "vite preview",
     "verifie": "node scripts/verifie.mjs",
     "types": "tsc --noEmit && tsc --noEmit -p tsconfig.isomorphe.json",

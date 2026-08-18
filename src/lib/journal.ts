@@ -85,7 +85,12 @@ export function entrees(): Entree[] {
   try {
     const relu: unknown = JSON.parse(range)
     if (!Array.isArray(relu)) return []
-    return relu.filter(estUneEntree).sort((a, b) => (a.deplieLe < b.deplieLe ? 1 : -1))
+    // Zéro sur une égalité : un comparateur qui n'en rend jamais est incohérent, et deux
+    // plis dépliés dans la même minute se rangeraient au hasard. Le tri est stable, donc
+    // l'ordre d'écriture tient lieu de départage — le dernier rangé est le premier lu.
+    return relu
+      .filter(estUneEntree)
+      .sort((a, b) => (a.deplieLe < b.deplieLe ? 1 : a.deplieLe > b.deplieLe ? -1 : 0))
   } catch {
     return []
   }
