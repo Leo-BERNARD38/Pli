@@ -164,4 +164,6 @@ Avant de considérer un écran fini :
 5. Le texte tient-il **aux deux extrêmes** — quatre mots et le maximum autorisé ?
 6. Les étiquettes sont-elles **en minuscules dans le code** ?
 7. Le lexique est-il respecté — aucun « valider », « champ », « erreur », « créer » ?
-8. Aucune icône, aucun SVG : les flèches sont des caractères Bodoni.
+8. Aucune icône, aucun SVG — **sauf les deux flèches**, devenues des tracés inline pour
+   retirer Bodoni du premier écran ([ressources.md](ressources.md#les-deux-flèches)). Le
+   dessin ne change pas, le moyen change. C'est l'unique exception, et elle est fermée.
