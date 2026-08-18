@@ -10,17 +10,20 @@ import '../styles/pli.css'
 import { decoder, type Pli } from '../lib/codec.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
 
-// Ordre imposé par docs/chargement.md : si le hash est un #p=, le fetch part avant qu'on
-// décode quoi que ce soit. C'est la seule requête que le réseau nous impose — et elle est
-// déjà partie, lancée par les cinq lignes inline du <head> : une feuille de style
-// bloquante gèle l'exécution d'un module, et attendre ici coûterait un aller-retour.
-// On la reprend si elle est là, on la lance sinon.
+// Ordre imposé par docs/chargement.md : si le hash est un #p=, le fetch part en TOUTE
+// première instruction, avant qu'on décode quoi que ce soit. C'est la seule requête que le
+// réseau nous impose, et c'est le seul écran d'attente du produit.
+//
+// Elle repart d'ici depuis que le document est inline. Au jalon 1, cinq lignes du <head> la
+// lançaient : une feuille de style bloquante gelait l'exécution d'un module, et la demande
+// partait 63 ms trop tard. Il n'y a plus de feuille à attendre — mesuré à 60 ms de latence,
+// cinq passes alternées : 75 ms d'ici contre 77 ms depuis le <head>. L'écart a disparu avec
+// sa cause, et le nom d'un poème redevient l'affaire du seul routeur.
 const premiere = lire(window.location.hash)
 let dejaDemande =
-  window.poemeDemande ??
-  (premiere.ecran === 'poeme'
+  premiere.ecran === 'poeme'
     ? { nom: premiere.nom, reponse: fetch(`/plis/${premiere.nom}.txt`) }
-    : null)
+    : null
 
 const pliDeLaPage = document.querySelector<HTMLElement>('.pli')
 
