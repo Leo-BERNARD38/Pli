@@ -36,7 +36,9 @@ function ecrire(pli: Pli): void {
     pliDeLaPage.hidden = false
   }
 
-  poser('.cachet', `nº ${String(pli.n).padStart(3, '0')}`)
+  // Le cachet porte le numéro seul : « nº 014 » ne tient pas dans une pastille de 38px
+  // composée à 10px. C'est ce que montre la maquette, et le « nº » reste dans la prose.
+  poser('.cachet', String(pli.n).padStart(3, '0'))
   poser('.titre', pli.ti)
   poser('.griffe', pli.g ?? '')
   poser('.etiquette--fine', `déposé par ${pli.s}`)
@@ -65,6 +67,19 @@ function ecrire(pli: Pli): void {
     )
     faits.hidden = !pli.f?.length
   }
+}
+
+/**
+ * Le repère du budget de chargement, posé une fois, quand le premier texte est à
+ * l'écran — que le lien l'ait remplacé ou non. Safari ne donne pas de LCP, et le premier
+ * rendu peint le plateau avant le texte : sans cette marque, la colonne « Mesuré le » de
+ * docs/chargement.md#le-budget-écran-par-écran reste vide pour toujours.
+ */
+let marquee = false
+function marquer(): void {
+  if (marquee) return
+  marquee = true
+  performance.mark('a1')
 }
 
 /**
@@ -122,6 +137,7 @@ suivre((route) => {
       if (mienne !== generation) return
       if (pli) ecrire(pli)
       else montrer()
+      marquer()
     },
     () => {
       if (mienne === generation) laisserNue()

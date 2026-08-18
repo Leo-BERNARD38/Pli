@@ -61,6 +61,14 @@ a:hover {
 /* ==========================================================================
    1. LE PLI — le contenant. Trois papiers possibles, jamais un quatrième.
    ========================================================================== */
+
+/* Le pli compose en flex, avec ses propres écarts. Les maquettes n'employaient que des
+   <div> ; le produit écrit un titre, des paragraphes et une liste, dont les marges par
+   défaut ajouteraient des écarts que personne n'a choisis. */
+.pli :is(h1, h2, p, ul, ol) {
+  margin: 0;
+}
+
 .pli {
   position: relative;
   width: var(--ecran-l);
@@ -302,6 +310,17 @@ a:hover {
   flex-direction: column;
   justify-content: flex-end;
   gap: 18px;
+}
+
+/* Le volet occupe les 34 % du bas : quand il est là, le corps s'arrête au-dessus de
+   lui, en gardant les 30px qu'il a déjà en pied (docs/design-system.md#le-gabarit).
+
+   Le pourcentage d'un padding se compte sur la LARGEUR, jamais sur la hauteur : réutiliser
+   --pliure tel quel réserverait 34 % de 360 au lieu de 34 % de 780, et le pied du corps
+   passerait sous le volet. On repasse donc par --ecran-h, la seule hauteur dont --pliure
+   parle. Le 0.34 est celui du jeton, à côté. */
+.pli:has(.volet) .corps {
+  padding-bottom: calc(var(--ecran-h) * 0.34 + 30px);
 }
 
 .corps--haut {

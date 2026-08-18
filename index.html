@@ -41,20 +41,31 @@
       <symbol id="fleche-droite" viewBox="0 0 1000 1000"><path d="M875.0 500.0L559.8 839.8L659.6 578.0L135.0 578.0L135.0 693.0L125.0 693.0L125.0 307.0L135.0 307.0L135.0 422.0L659.6 422.0L559.8 160.2Z"/></symbol>
     </defs></svg>
 
-    <!-- Jalon 0 : un pli en dur, sans style. Le lien en remplace le contenu ; le papier,
-         le volet et le geste arrivent aux jalons 1 et 2. -->
+    <!-- Le pli en dur, posé sur le gabarit : tête, corps, volet, et le cachet à cheval
+         sur la pliure (docs/design-system.md#le-gabarit). Un lien en remplace le
+         contenu ; c'est un échafaudage, pas un écran — A1 et sa promesse, A2 et sa
+         composition par type, le trait d'action, l'invite du volet et le geste arrivent
+         au jalon 2. Le volet reste vide : ce qui s'y écrit n'a de sens qu'avec le geste. -->
     <main class="pli" data-type="inv">
-      <p class="marque">Pli</p>
-      <p class="cachet">nº 014</p>
-      <h1 class="titre">Tu es invitée</h1>
-      <div class="voix"><p>Mets la robe verte, celle du printemps.</p></div>
-      <ul class="faits">
-        <li>samedi 22 août · 20h00</li>
-        <li>Le Petit Comptoir</li>
-      </ul>
-      <p class="griffe">rien qu'à toi</p>
-      <p class="etiquette etiquette--fine">déposé par a.</p>
+      <header class="tete">
+        <p class="marque">Pli</p>
+      </header>
+
+      <div class="corps">
+        <h1 class="titre">Tu es invitée</h1>
+        <div class="voix"><p>Mets la robe verte, celle du printemps.</p></div>
+        <ul class="faits">
+          <li>samedi 22 août · 20h00</li>
+          <li>Le Petit Comptoir</li>
+        </ul>
+        <p class="griffe">rien qu'à toi</p>
+        <p class="etiquette etiquette--fine">déposé par a.</p>
+      </div>
+
+      <div class="volet"></div>
+      <p class="cachet">014</p>
     </main>
+
     <script type="module" src="/src/lecteur/main.ts"></script>
   </body>
 </html>
