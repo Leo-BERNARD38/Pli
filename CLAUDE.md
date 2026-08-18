@@ -61,6 +61,10 @@ Et ce qui tourne à côté :
 # dépendances : fonttools, brotli
 python3 scripts/polices.py
 
+# les deux flèches — regénère src/fleches.html, et dit quel document est en retard
+# dépendances : freetype-py, numpy
+python3 scripts/fleches.py
+
 # la planche des icônes — regénère public/icones/ en entier
 # dépendances : freetype-py, pillow, numpy, fonttools + les deux Google Fonts
 python3 scripts/icones.py --pinyon PinyonScript-Regular.ttf \

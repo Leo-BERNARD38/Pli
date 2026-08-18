@@ -99,7 +99,7 @@ Voici tout ce qui s'en déduit.
 | Le lieu du dépôt | « studio » / « déposer » | **l'atelier** |
 | Chargement C5 | tous les plis | **le poème uniquement** |
 | Définition des textures | 720 × 1560, ~70 ko | **la définition native de la source** (1536 × 2752, ou 1296 × 2304 pour le drapé), servie telle quelle — [ressources.md](ressources.md) |
-| Les flèches | caractères `↑` `→` en Bodoni | **deux tracés SVG inline** — l'unique exception au « pas de SVG » |
+| Les flèches | caractères `↑` `→` en Bodoni | **deux tracés SVG inline** — l'unique exception au « pas de SVG ». Bodoni Moda n'a en fait ni l'un ni l'autre : le `↑` des maquettes venait de la police de secours du système, et les deux flèches sont dessinées ([ressources.md](ressources.md#les-deux-flèches)) |
 | Bodoni sur A1 | présent, par la flèche de la pliure | **absent** — trois familles au premier écran, sans arrangement |
 | L'aperçu du lien | un recadrage du papier froissé | **`og.png`**, dessiné : marque, phrase, pliure — 53 ko ([partage.md](partage.md#limage-daperçu)) |
 | `og:description` | « Une seule lecture, pas de compte. » | **« Il ne s'ouvre qu'une fois. »** — la première promesse n'est pas tenable |
