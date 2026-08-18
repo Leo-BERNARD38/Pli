@@ -36,14 +36,18 @@ function prechargerLesPolices(): Plugin {
 
         const empreintees = Object.keys(contexte.bundle)
         return POLICES_DU_PREMIER_ECRAN.map((famille) => {
-          const fichier = empreintees.find(
-            (nom) => nom.includes(`/${famille}-`) && nom.endsWith('.woff2'),
-          )
-          if (!fichier) {
+          // Une empreinte, un point, woff2 — et rien entre le nom de famille et elle :
+          // sans ça, « newsreader-italique » attraperait aussi un futur
+          // « newsreader-italique-latin », au hasard de l'ordre des clés.
+          const motif = new RegExp(`(^|/)${famille}-[A-Za-z0-9_-]+\\.woff2$`)
+          const trouves = empreintees.filter((nom) => motif.test(nom))
+          if (trouves.length !== 1) {
             throw new Error(
-              `${famille} est préchargée mais absente du paquet : scripts/polices.py l'a-t-il écrite ?`,
+              `${famille} : ${trouves.length} fichier(s) dans le paquet, il en faut un.` +
+                ` scripts/polices.py l'a-t-il écrite, et une seule fois ?`,
             )
           }
+          const [fichier] = trouves
           return {
             tag: 'link',
             injectTo: 'head' as const,

@@ -10,14 +10,17 @@ import '../styles/pli.css'
 import { decoder, type Pli } from '../lib/codec.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
 
-// Ordre imposé par docs/chargement.md : si le hash est un #p=, le fetch part en toute
-// première instruction, avant de décoder quoi que ce soit. C'est la seule requête que
-// le réseau nous impose.
+// Ordre imposé par docs/chargement.md : si le hash est un #p=, le fetch part avant qu'on
+// décode quoi que ce soit. C'est la seule requête que le réseau nous impose — et elle est
+// déjà partie, lancée par les cinq lignes inline du <head> : une feuille de style
+// bloquante gèle l'exécution d'un module, et attendre ici coûterait un aller-retour.
+// On la reprend si elle est là, on la lance sinon.
 const premiere = lire(window.location.hash)
 let dejaDemande =
-  premiere.ecran === 'poeme'
+  window.poemeDemande ??
+  (premiere.ecran === 'poeme'
     ? { nom: premiere.nom, reponse: fetch(`/plis/${premiere.nom}.txt`) }
-    : null
+    : null)
 
 const pliDeLaPage = document.querySelector<HTMLElement>('.pli')
 

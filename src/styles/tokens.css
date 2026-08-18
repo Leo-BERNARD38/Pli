@@ -80,7 +80,13 @@
   --ecran-l: 360px;
   --ecran-h: 780px;
   --marge: 26px;             /* marge intérieure du pli, jamais autre chose */
-  --pliure: 34%;             /* hauteur du volet fermé, en bas de l'écran */
+  /* La hauteur du volet, en deux formes. Le pourcentage est celui du handoff ; la part
+     sans unité existe parce qu'un padding en % se compte sur la LARGEUR, et que le corps
+     a besoin de s'arrêter au-dessus du volet. Un seul nombre, à un seul endroit
+     (docs/integration.md#corrections-à-appliquer). */
+  --pliure-part: 0.34;
+  --pliure: calc(var(--pliure-part) * 100%);
+  --corps-pied: 30px;        /* le pied du corps — le seul écart vertical du gabarit */
   --rayon: 36px;             /* coin du pli */
   --cachet: 38px;            /* pastille du numéro, à cheval sur la pliure */
   --ombre: 0 18px 40px rgba(20, 16, 14, 0.18);

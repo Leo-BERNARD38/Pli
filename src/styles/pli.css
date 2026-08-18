@@ -65,7 +65,7 @@ a:hover {
 /* Le pli compose en flex, avec ses propres écarts. Les maquettes n'employaient que des
    <div> ; le produit écrit un titre, des paragraphes et une liste, dont les marges par
    défaut ajouteraient des écarts que personne n'a choisis. */
-.pli :is(h1, h2, p, ul, ol) {
+.pli :where(h1, h2, p, ul, ol) {
   margin: 0;
 }
 
@@ -84,6 +84,21 @@ a:hover {
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* `display: flex` ci-dessus est une déclaration d'auteur : elle bat le `[hidden]` de la
+   feuille du navigateur, et un pli masqué restait à l'écran. Un lien abîmé montrait donc
+   un pli qui n'était pas le sien (docs/parcours.md#larrivée). */
+.pli[hidden] {
+  display: none;
+}
+
+/* Le texte se lit, donc il se sélectionne — `user-select: none` du cadre est là pour le
+   geste, pas pour la lecture (docs/design-system.md#accessibilité). Ce que le doigt
+   traîne au jalon 2 et ce qui reste sélectionnable pendant, c'est au geste de le dire. */
+.corps {
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 .pli--encre {
@@ -305,7 +320,7 @@ a:hover {
   position: relative;
   flex: 1;
   min-height: 0;
-  padding: 0 var(--marge) 30px;
+  padding: 0 var(--marge) var(--corps-pied);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -317,10 +332,10 @@ a:hover {
 
    Le pourcentage d'un padding se compte sur la LARGEUR, jamais sur la hauteur : réutiliser
    --pliure tel quel réserverait 34 % de 360 au lieu de 34 % de 780, et le pied du corps
-   passerait sous le volet. On repasse donc par --ecran-h, la seule hauteur dont --pliure
-   parle. Le 0.34 est celui du jeton, à côté. */
+   passerait sous le volet. On repasse donc par --pliure-part et --ecran-h, qui portent
+   déjà les deux nombres. */
 .pli:has(.volet) .corps {
-  padding-bottom: calc(var(--ecran-h) * 0.34 + 30px);
+  padding-bottom: calc(var(--ecran-h) * var(--pliure-part) + var(--corps-pied));
 }
 
 .corps--haut {

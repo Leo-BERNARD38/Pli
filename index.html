@@ -4,6 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#E9E2D2" />
+
+    <!-- La seule requête que le réseau nous impose, lancée ici et nulle part ailleurs.
+         Le module la lancerait en première instruction, mais une feuille de style
+         bloquante gèle l'exécution d'un module : le poème attendrait un aller-retour de
+         plus, sur le seul écran d'attente du produit (docs/chargement.md#le-poème-le-seul-cas-qui-dépend-du-réseau).
+         Cinq lignes, inline, avant tout le reste. Le jour où le CSS sera inline lui aussi,
+         au jalon 2, elles n'auront plus de raison d'être.
+         Le motif est celui du routeur, qui revalide derrière : se tromper ici ne coûte
+         qu'une demande abandonnée, jamais un mauvais fichier. -->
+    <script>
+      var nom = /^#p=([0-9]+-[a-z0-9]+)$/.exec(location.hash)
+      if (nom) {
+        window.poemeDemande = { nom: nom[1], reponse: fetch('/plis/' + nom[1] + '.txt') }
+        window.poemeDemande.reponse.catch(function () {})
+      }
+    </script>
     <meta name="color-scheme" content="light" />
     <title>Pli</title>
 
@@ -62,8 +78,8 @@
         <p class="etiquette etiquette--fine">déposé par a.</p>
       </div>
 
-      <div class="volet"></div>
       <p class="cachet">014</p>
+      <div class="volet"></div>
     </main>
 
     <script type="module" src="/src/lecteur/main.ts"></script>

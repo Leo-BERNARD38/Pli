@@ -34,7 +34,7 @@ Un seul objet pour les quatre types, à clés courtes pour tenir dans une URL.
 |---|---|---|---|
 | `v` | int | tous | Version du schéma. Permet de faire évoluer sans casser les vieux liens. |
 | `t` | `inv` \| `pen` \| `poe` \| `sou` | tous | Type de pli. Il détermine le papier, la composition et la présence d'une action. |
-| `n` | int | tous | Numéro, affiché sur le cachet (« nº 014 »). **Affichage seulement.** |
+| `n` | int | tous | Numéro, affiché sur le cachet — **le nombre seul, sur trois chiffres** : « nº 014 » ne tient pas dans une pastille de 38px composée à 10px. « nº 014 » reste la forme de la prose. **Affichage seulement.** |
 | `ti` | string | tous | Le titre. ~22 signes, deux lignes au maximum. |
 | `b` | string | tous | Le texte — la voix. Pour un poème, un tableau de strophes. |
 | `f` | string[] | `inv` | Jusqu'à trois faits : quand, où. Texte libre. |

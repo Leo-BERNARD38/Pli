@@ -108,6 +108,9 @@ Voici tout ce qui s'en déduit.
 | `icon-512` en `maskable` | annoncé masquable | **`purpose: any`** ; le masquable est un fichier à part, lettre à 52 % de large |
 | La lettre sur la grille | `x = 30` dans le texte et les SVG, 29 dans les PNG | **29**, celui des tirages validés — SVG et PNG s'accordent |
 | `.champ` | la classe des lignes de dépôt | **`.ligne`** — « champ » est sur la liste fermée du lexique, qui fait foi ; `.champ__nom` et `.champ--titre` suivent |
+| Le cachet | « nº 014 » dans `donnees.md`, `014` dans la maquette | **`014`** — six signes ne tiennent pas dans 38px à 10px. `donnees.md` est corrigé ; « nº 014 » reste la forme de la prose |
+| `--pliure` | `34%`, seul | **`--pliure-part: 0.34`** en plus, sans unité — un padding en pourcentage se compte sur la largeur, et le corps doit s'arrêter au-dessus du volet. Le nombre ne vit qu'à un endroit |
+| `--corps-pied` | le `30px` du pied de `.corps`, écrit deux fois | **un jeton** — même raison |
 | `twitter:card` | présent dans les balises livrées | **retiré** — un pli ne se partage pas ailleurs qu'en conversation |
 | `mask-icon` | présent, avec un SVG à fond crème | **retiré** — l'onglet épinglé est une affaire de Safari de bureau |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
@@ -133,6 +136,21 @@ le permet déjà, délibérément (voir [donnees.md](donnees.md#la-moulinette)).
 avant qu'un poème ait besoin d'une correction.
 
 ### Ce qui reste à trancher avec A1
+
+**Le débordement du gabarit.** `.corps` est `flex: 1` avec `justify-content: flex-end` :
+au maximum autorisé par [donnees.md](donnees.md), le contenu s'évacue **par le haut**, passe
+sur la marque et se fait couper par l'`overflow: hidden` du pli, sans un mot. L'échafaudage
+du jalon 1 empile titre, voix, faits, griffe et étiquette — une combinaison qu'aucun type
+réel ne compose — mais **la direction du débordement est une propriété du gabarit**, pas de
+l'écran. Se tranche avec A2, au jalon 2 : soit une garde dans le gabarit, soit un plafond
+réel écrit dans `donnees.md`.
+
+**Un pli de 780px sur un écran plus court.** [design-system.md](design-system.md#le-gabarit)
+dit « 360 × 780, jamais élargie », [appareils.md](appareils.md#les-réglages-de-page) dit que
+le plateau porte les retraits — ni l'un ni l'autre ne dit ce que devient le pli quand la
+hauteur visible est inférieure à 780. Mesuré à 390 × 664 : la page défile et le bas du volet
+sort du champ, ce qui contredit « un pli = un écran ». **Question ouverte**, à poser avant
+d'écrire A1.
 
 **Le fond d'A1.** [parcours.md](parcours.md#a1--lattente) écrit « le fond est le rideau,
 la seule image des états fermés » ; la maquette, elle, montre un papier crème avec son

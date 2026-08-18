@@ -70,6 +70,22 @@ La roadmap ne donne pas de phrase de fin au jalon 1, et on n'en invente pas. Le 
 fini quand cette liste est cochée : les fondations seules ne ferment pas un jalon dont la
 moitié s'appelle « mesures ».
 
+### Les trois refus de relecteurs, et ce qu'ils ont trouvé
+
+Aucun n'est resté debout, et deux valaient le détour :
+
+- **`.pli[hidden]` ne masquait rien.** `display: flex` est une déclaration d'auteur : elle
+  bat le `[hidden]` de la feuille du navigateur. Un lien abîmé affichait donc **un pli qui
+  n'était pas le sien** — l'inverse exact de ce que le jalon 0 croyait avoir vérifié, parce
+  qu'il avait regardé l'attribut et non le rendu.
+- **Le `fetch` d'un poème ne partait plus en première instruction.** Le module respectait la
+  lettre, mais une feuille de style bloquante gèle l'exécution d'un module : mesuré avec 60 ms
+  de latence, la demande partait à 153 ms au lieu de 90. Un aller-retour complet ajouté sur
+  le seul écran d'attente du produit. Réparé par cinq lignes inline dans le `<head>`, avant
+  la feuille — elles disparaîtront quand le CSS sera inline, au jalon 2.
+- **Le texte du pli n'était pas sélectionnable.** `user-select: none` du cadre cascadait
+  jusqu'à la voix. Il reste sur le cadre, pour le geste ; `.corps` le rend au texte.
+
 ### Ce qui est vérifié pour de bon
 
 Les 34 tests passent, `npm run types` compile deux fois, et dans Chromium en 390 × 844 à 3× :
@@ -185,14 +201,32 @@ avec sa date. Si elle contredit une doc, la doc se corrige et l'écart se note d
   l'ordre qui tranche, et tous les `all: unset` sont au-dessus : écrit avant, il n'existait
   pas. Il passe au rose sur encre et au crème sur carmin, sinon il serait invisible là où il
   compte.
-- **18/08/2026 — le cachet porte le numéro seul**, « 014 » et non « nº 014 » : la formule ne
-  tient pas dans une pastille de 38px composée à 10px. C'est ce que montre la maquette, et le
-  « nº » reste dans la prose.
+- **18/08/2026 — le cachet porte le numéro seul**, « 014 » et non « nº 014 » : six signes ne
+  tiennent pas dans une pastille de 38px composée à 10px. `donnees.md` écrivait « nº 014 » et
+  a été corrigé ; « nº 014 » reste la forme de la prose.
+- **18/08/2026 — `--pliure-part` et `--corps-pied` entrent dans les jetons.** Un padding en
+  pourcentage se compte sur la **largeur**, jamais sur la hauteur : le corps qui doit
+  s'arrêter au-dessus du volet ne peut pas réutiliser `--pliure` tel quel. Plutôt que de
+  recopier `0.34` et `30px` dans un `calc`, les deux nombres deviennent des jetons — ils ne
+  vivent qu'à un endroit. C'est un écart au « bloc `:root` repris tel quel », noté dans
+  [integration.md](../docs/integration.md#corrections-à-appliquer).
+- **18/08/2026 — le `fetch` d'un poème part du `<head>`, pas du module.** Cinq lignes inline
+  avant la feuille de style, parce qu'une feuille bloquante gèle l'exécution d'un module. Le
+  motif est celui du routeur, qui revalide derrière : se tromper ne coûte qu'une demande
+  abandonnée, jamais un mauvais fichier. **Ces lignes disparaissent au jalon 2**, quand le CSS
+  sera inline.
 - **18/08/2026 — le volet du pli en dur reste vide.** Ce qui s'y écrit — l'invite, « déplier »
   et sa flèche — n'a de sens qu'avec le geste. Le placer maintenant aurait demandé d'inventer
   la composition d'A1.
 
 ## Ce que les relecteurs demandent pour la suite
+
+**Au jalon 2, pour le gabarit** — deux choses ne peuvent pas rester silencieuses, elles sont
+écrites dans [integration.md](../docs/integration.md#ce-qui-reste-à-trancher-avec-a1) : le
+**débordement par le haut** (au maximum autorisé, le contenu passe sur la marque et se fait
+couper sans un mot), et **un pli de 780px sur un écran visible plus court** — mesuré à
+390 × 664, la page défile et le bas du volet sort du champ, ce qui contredit « un pli = un
+écran ». La seconde est une question à poser, pas à résoudre.
 
 **Au jalon 2, pour le geste** — `.pli` est la **couche du dessous** : le geste demande deux
 couches, une par `translate3d`. Le `<button>` « déplier » du clavier a maintenant un endroit
@@ -203,6 +237,18 @@ où vivre — le volet — mais il n'y est pas encore, faute de geste à déclen
 Vite posera un `modulepreload` dans le document **du lecteur** : une requête de plus avant le
 premier texte. Soit `manualChunks` garde une entrée = un fichier, soit le greffon d'inlining
 inline **le graphe entier**, pas seulement le fichier d'entrée.
+
+**Au jalon 2, pour l'invite et le mouvement** — l'invite du volet doit se **mettre en pause**
+au toucher, pas redémarrer ([fluidite.md](../docs/fluidite.md)) : une animation infinie
+composée promeut le volet en couche permanente, et si elle tourne pendant le geste
+l'inspecteur montrera **trois** couches bordées au lieu de deux. Et sous
+`prefers-reduced-motion`, l'ouverture tombe à **120 ms** — le bloc `@media` existe, la
+transition à régler n'existe pas encore.
+
+**Au jalon 2, pour la marque `a1`** — elle date aujourd'hui l'échafaudage déplié ; elle devra
+suivre le texte d'A1. Un lien abîmé ne marque rien : à trancher avec C4. Et pour un `#p=`,
+la marque inclut l'aller-retour réseau — **noter le type de lien à côté du chiffre**, sinon
+la ligne du budget ne veut rien dire.
 
 **Au jalon 2, pour A1 et A2** — trois choses restent en l'air, notées dans
 [integration.md](../docs/integration.md#ce-qui-reste-à-trancher-avec-a1) : le fond d'A1
