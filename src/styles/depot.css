@@ -323,3 +323,65 @@
   flex: 1;
   padding: 0 26px 30px;
 }
+
+/* la question à gauche, l'aperçu à droite — la seule composition en deux colonnes du produit */
+.entete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Le volet du mini est posé en absolu : il ne pousse rien, donc le corps réserve sa place
+   lui-même. Quand le type n'a pas d'action, le volet s'en va et le corps la reprend. */
+.mini .corps:has(~ .mini__volet:not([hidden])) {
+  padding-bottom: calc(var(--ecran-h) * var(--pliure-part) + var(--corps-pied));
+}
+
+/* Une ligne vide de l'aperçu ne laisse pas son écart derrière elle. */
+.mini [hidden] {
+  display: none;
+}
+
+/* les blocs de la vignette : les proportions d'un type, pas son contenu */
+.mini__bloc--carmin {
+  background: var(--carmin);
+}
+
+.mini__bloc--encre {
+  background: var(--encre);
+  opacity: 0.35;
+}
+
+.mini__bloc--clair {
+  background: var(--creme);
+  opacity: 0.7;
+}
+
+/* Une ligne de type qu'on ne peut pas encore choisir : le poème, qui passe par la
+   moulinette, et l'invitation tant que le numéro de réponse est vide
+   (docs/parcours.md#d4--le-tiroir). Elle reste lisible — elle n'est simplement pas offerte. */
+.type[disabled] {
+  opacity: 0.38;
+  cursor: default;
+}
+
+/* la seconde action de D3, sous la première : elle ne crie pas */
+.action--fine {
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+/* Les deux actions de D3 vivent hors du corps : elles reprennent sa marge, et rien d'autre
+   — `.action` ne dessine que son filet pointillé du haut. */
+.actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0 var(--marge) 34px;
+}

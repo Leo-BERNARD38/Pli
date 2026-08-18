@@ -54,11 +54,6 @@ export function tenirLeTiroir(ecran: HTMLElement): void {
     const nombre = Number(trois.n.value.replace(/\D/g, ''))
     if (nombre >= 1) fixerLeProchainNumero(nombre)
   })
-
-  // Le seuil vient de passer `inert` avec sa ligne, et le focus était dessus : sans ça il
-  // n'est plus nulle part, et au clavier on repart de la barre d'adresse
-  // (docs/design-system.md#accessibilité).
-  trois.w.focus()
 }
 
 /**
