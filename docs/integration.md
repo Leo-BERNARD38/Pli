@@ -46,7 +46,8 @@ Deux choses à retirer au passage :
 Elles sont normatives mais vivent dans les `<style>` de `lecteur.html` :
 
 - **`.oui`** — la liste des trois mots d'A3.
-- **`.invite`** + `@keyframes nudge` — le seul mouvement décoratif du produit.
+- **`.invite`** + ses images clés — le seul mouvement décoratif du produit. Le design les
+  appelait `nudge` ; le dépôt est en français, et la doc dit déjà « l'invite du volet ».
 
 ### Classes à ne pas emporter
 
@@ -106,6 +107,7 @@ Voici tout ce qui s'en déduit.
 | Le bas de `og.png` | « UNE SEULE LECTURE · PAS DE COMPTE » | **« POUR TOI SEULE »** — corrigé |
 | `icon-512` en `maskable` | annoncé masquable | **`purpose: any`** ; le masquable est un fichier à part, lettre à 52 % de large |
 | La lettre sur la grille | `x = 30` dans le texte et les SVG, 29 dans les PNG | **29**, celui des tirages validés — SVG et PNG s'accordent |
+| `.champ` | la classe des lignes de dépôt | **`.ligne`** — « champ » est sur la liste fermée du lexique, qui fait foi ; `.champ__nom` et `.champ--titre` suivent |
 | `twitter:card` | présent dans les balises livrées | **retiré** — un pli ne se partage pas ailleurs qu'en conversation |
 | `mask-icon` | présent, avec un SVG à fond crème | **retiré** — l'onglet épinglé est une affaire de Safari de bureau |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
@@ -142,7 +144,7 @@ Rien de tout cela n'est dans les prototypes. `PLI.md` §10 l'admet lui-même.
 
 - [ ] Un `<button>` « déplier » atteignable au clavier, qui pose `p = 1` directement.
 - [ ] `@media (prefers-reduced-motion: reduce)` : pas d'invite du volet, ouverture à 120 ms.
-- [ ] Focus visible partout — `.champ input { all: unset }` le supprime aujourd'hui.
+- [ ] Focus visible partout — `.ligne input { all: unset }` le supprime aujourd'hui.
       Un filet carmin de 2px à gauche sur `:focus-visible`.
 - [ ] Le texte reste sélectionnable et présent si une animation échoue.
 - [ ] `.etiquette--fine` à `.62`.

@@ -3,6 +3,10 @@
 // Jalon 0 : le pli en dur de la page cède la place au pli du lien, sans style. A1, le
 // geste, les papiers et les états C viennent aux jalons 1 et 2.
 
+// Les jetons d'abord, le gabarit ensuite : l'ordre est celui de la cascade.
+import '../styles/tokens.css'
+import '../styles/pli.css'
+
 import { decoder, type Pli } from '../lib/codec.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
 

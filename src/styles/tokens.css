@@ -1,0 +1,96 @@
+/* ==========================================================================
+   TOKENS — les encres, les mains, la géométrie, le mouvement.
+   Repris tel quel du bloc :root de design/handoff/pli.css, qui fait foi pour les
+   valeurs de la DA. Les écarts sont ceux, et seulement ceux, de
+   docs/integration.md#corrections-à-appliquer.
+   ========================================================================== */
+
+/* — les quatre mains ————————————————————————————————————————————————
+   Aucun tiers, jamais : pas d'@import Google Fonts, pas de CDN. Les woff2 sont
+   écrits par scripts/polices.py et empreintés par Vite.
+
+   font-display: block, et surtout pas swap — voir « Un pli t'attend » s'afficher en
+   Times puis sauter en Newsreader ruine l'instant que tout le produit prépare
+   (docs/chargement.md#les-polices). */
+
+@font-face {
+  font-family: 'Pinyon Script';
+  src: url('../fonts/pinyon-script.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Newsreader';
+  src: url('../fonts/newsreader-italique.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Space Mono';
+  src: url('../fonts/space-mono-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+/* Bodoni est la seule famille qui garde un axe : opsz, que le navigateur accorde tout
+   seul à la taille du texte. Les titres vont de 30 à 78px, la même graisse n'y a pas le
+   même dessin (docs/ressources.md#les-polices). */
+@font-face {
+  font-family: 'Bodoni Moda';
+  src: url('../fonts/bodoni-moda-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Bodoni Moda';
+  src: url('../fonts/bodoni-moda-800.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  /* — encres et papiers ————————————————————————————— */
+  --creme: #f7f2e8;        /* le papier du pli */
+  --sable: #e9e2d2;        /* le plateau, hors du pli */
+  --sable-2: #e4dcc9;      /* plateau du bureau, un ton plus bas */
+  --encre: #14100e;        /* le noir, jamais #000 */
+  --carmin: #c81e33;       /* la seule couleur d'action */
+  --rose: #efa9a0;         /* carmin éclairci, uniquement sur fond encre */
+
+  --trait: rgba(20, 16, 14, 0.16);        /* séparateur discret */
+  --trait-fort: #14100e;                  /* séparateur de section, 2px */
+  --carmin-pointille: rgba(200, 30, 51, 0.55);
+  --grain: repeating-linear-gradient(0deg, rgba(20, 16, 14, 0.022) 0 1px, transparent 1px 4px);
+
+  /* — mains ————————————————————————————————————————— */
+  --main: 'Pinyon Script', cursive;    /* le mot « Pli », rien d'autre */
+  --serif: 'Bodoni Moda', serif;       /* les titres */
+  --plume: 'Newsreader', serif;        /* la voix de celui qui écrit */
+  --mono: 'Space Mono', monospace;     /* tout le reste de l'interface */
+
+  /* — géométrie ————————————————————————————————————— */
+  --ecran-l: 360px;
+  --ecran-h: 780px;
+  --marge: 26px;             /* marge intérieure du pli, jamais autre chose */
+  --pliure: 34%;             /* hauteur du volet fermé, en bas de l'écran */
+  --rayon: 36px;             /* coin du pli */
+  --cachet: 38px;            /* pastille du numéro, à cheval sur la pliure */
+  --ombre: 0 18px 40px rgba(20, 16, 14, 0.18);
+
+  /* — mouvement —————————————————————————————————————— */
+  --courbe: cubic-bezier(0.32, 0.72, 0, 1);  /* la seule courbe du produit */
+  --ouvre: 460ms;                            /* le pli s'ouvre */
+  --referme: 340ms;                          /* le pli retombe */
+  --seuil: 0.32;                             /* course à franchir pour que le pli s'ouvre */
+  --elan: 0.55;                              /* px/ms : le coup sec suffit */
+  --caoutchouc: 0.1;                         /* résistance dans le mauvais sens */
+  --entree: 0.09;                            /* la page dessous monte de 9 % */
+}

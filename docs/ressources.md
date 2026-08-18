@@ -156,7 +156,7 @@ Quatre familles, un seul style chacune, sous-ensemblées en woff2.
 pyftsubset Newsreader-Italic.ttf \
   --unicodes="U+0020-007E,U+00A0-00FF,U+0152-0153,U+0178,U+2013-2014,U+2018-201D,U+2026,U+202F" \
   --layout-features="kern,liga,ccmp" --flavor=woff2 \
-  --output-file=newsreader-italic.woff2
+  --output-file=newsreader-italique.woff2
 ```
 
 Bodoni est variable : instancier `wght` aux deux valeurs utiles et **ne garder que l'axe

@@ -1,0 +1,690 @@
+/* ==========================================================================
+   PLI — le gabarit et les classes. Sections 1 à 6 de design/handoff/pli.css.
+   Le pli est TOUJOURS pensé à 360 × 780. Sur grand écran on ne l'élargit pas,
+   on l'entoure.
+
+   Ce qui est resté dehors, et pourquoi (docs/integration.md#reprendre-plicss) :
+   - l'@import Google Fonts — aucun tiers, et un @import sérialise ce qu'il charge ;
+   - la section 7, « le plateau » — elle n'existe que pour les planches de doc ;
+   - .pli--plein — c'est .pli--encre + .image--pleine ;
+   - .rembobine, .scene, .couche, .cartouche, .mesure, .pas, .cadre, .fenetre,
+     .chrome — l'échafaudage des prototypes.
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--sable);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;    /* le « tirer pour rafraîchir » de Chrome */
+}
+
+/* Le plateau, c'est le corps de la page : tout ce qui entoure le pli sans jamais
+   l'élargir. La classe .plateau de la section 7 ne servait qu'aux planches de
+   documentation (docs/integration.md#reprendre-plicss) ; les réglages, eux, viennent
+   de docs/appareils.md#les-réglages-de-page.
+
+   Le pli ne touche aucun bord, donc aucune encoche ne le concerne : c'est le plateau
+   qui porte les retraits de sécurité. Et 100dvh, jamais 100vh — la barre d'URL se
+   rétracte au premier mouvement et change la hauteur. */
+body {
+  font-family: var(--mono);
+  color: var(--encre);
+  min-height: 100dvh;
+  padding:
+    env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  color: var(--carmin);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--encre);
+}
+
+::selection {
+  background: var(--carmin);
+  color: var(--creme);
+}
+
+/* ==========================================================================
+   1. LE PLI — le contenant. Trois papiers possibles, jamais un quatrième.
+   ========================================================================== */
+.pli {
+  position: relative;
+  width: var(--ecran-l);
+  height: var(--ecran-h);
+  overflow: hidden;
+  border-radius: var(--rayon);
+  background: var(--creme);
+  background-image: var(--grain);
+  box-shadow: var(--ombre);
+  display: flex;
+  flex-direction: column;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pli--encre {
+  background: var(--encre);
+  background-image: none;
+  color: var(--creme);
+}
+
+.pli--carmin {
+  background: var(--carmin);
+  background-image: none;
+  color: var(--creme);
+}
+
+/* sur fond sombre, le carmin devient rose */
+.pli--encre .carmin,
+.pli--carmin .carmin {
+  color: var(--rose);
+}
+
+.pli--carmin .carmin {
+  color: var(--creme);
+}
+
+/* ==========================================================================
+   2. TÊTE DE PLI — présente sur tous les écrans du lecteur.
+   ========================================================================== */
+.tete {
+  padding: 34px var(--marge) 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex: 0 0 auto;
+}
+
+.marque {
+  font-family: var(--main);
+  font-size: 52px;
+  line-height: 0.86;
+}
+
+.marque--petite {
+  font-size: 44px;
+}
+
+/* ==========================================================================
+   3. TYPOGRAPHIE — quatre voix, aucune autre.
+   ========================================================================== */
+.titre {                     /* Bodoni 800, capitales, très serré */
+  font-family: var(--serif);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 56px;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  color: var(--carmin);
+}
+
+.titre--geant {
+  font-size: 78px;
+  line-height: 0.92;         /* les capitales accentuées ont besoin d'air */
+  letter-spacing: -0.04em;
+}
+
+.titre--section {            /* titres de documentation, casse normale */
+  font-family: var(--serif);
+  font-weight: 700;
+  text-transform: none;
+  font-size: 34px;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--encre);
+}
+
+.voix {                      /* ce que la personne a écrit */
+  font-family: var(--plume);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 31px;
+  line-height: 1.28;
+  max-width: 15ch;
+  text-wrap: pretty;
+}
+
+.voix--corps {
+  font-size: 23px;
+  line-height: 1.32;
+  max-width: 18ch;
+}
+
+.griffe {                    /* la ligne manuscrite, une seule par pli */
+  font-family: var(--main);
+  font-size: 48px;
+  line-height: 1;
+  transform: rotate(-4deg);
+  white-space: nowrap;
+}
+
+.etiquette {                 /* toute étiquette d'interface */
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+/* .62 et non .5 : elle porte « déposé par a. », et passe de 3,5:1 à 5,1:1
+   (docs/integration.md#corrections-à-appliquer). */
+.etiquette--fine {
+  font-weight: 400;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  opacity: 0.62;
+}
+
+.etiquette--forte {
+  font-size: 14px;
+  letter-spacing: 0.3em;
+}
+
+.carmin {
+  color: var(--carmin);
+}
+
+.attenue {
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   4. LA PLIURE — le volet fermé, la pastille, le trait d'action.
+   ========================================================================== */
+.volet {                     /* bande carmin, bas de l'écran d'attente */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--pliure);
+  background: var(--carmin);
+  color: var(--creme);
+}
+
+.volet__ombre {              /* le papier qui passe devant projette un fil d'ombre */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--pliure);
+  height: 18px;
+  background: linear-gradient(0deg, rgba(20, 16, 14, 0.13), rgba(20, 16, 14, 0));
+  pointer-events: none;
+}
+
+.cachet {                    /* le numéro, à cheval sur la pliure */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--pliure) - (var(--cachet) / 2));
+  width: var(--cachet);
+  height: var(--cachet);
+  border-radius: 50%;
+  background: var(--creme);
+  border: 1.5px solid rgba(200, 30, 51, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--carmin);
+  z-index: 3;
+}
+
+.action {                    /* « répondre », « déplier », « déposer » */
+  border-top: 2px dashed var(--carmin-pointille);
+  padding-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.action .fleche {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.pli--encre .action,
+.pli--carmin .action {
+  border-top-color: rgba(239, 169, 160, 0.5);
+}
+
+.pli--carmin .action {
+  border-top-color: rgba(247, 242, 232, 0.6);
+}
+
+/* L'invite du volet, le seul mouvement décoratif du produit — remontée de
+   design/handoff/lecteur.html, où elle vivait dans un <style> et s'appelait « nudge »
+   (docs/integration.md#classes-à-faire-remonter-des-prototypes). */
+@keyframes invite {
+  0%,
+  62%,
+  100% {
+    transform: translateY(0);
+  }
+
+  76% {
+    transform: translateY(-9px);
+  }
+}
+
+.invite {
+  animation: invite 2.6s var(--courbe) infinite;
+}
+
+/* ==========================================================================
+   5. CORPS — la zone de contenu entre tête et pliure.
+   ========================================================================== */
+.corps {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  padding: 0 var(--marge) 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 18px;
+}
+
+.corps--haut {
+  justify-content: flex-start;
+  padding-top: 22px;
+}
+
+.corps--reparti {
+  justify-content: space-between;
+}
+
+/* Les faits d'une invitation. Une liste porte une puce et un retrait par défaut :
+   les deux partent, et rien de plus — la seule marge du pli est --marge, et elle est
+   déjà posée par .corps. Leur composition se décide avec A2, au jalon 2. */
+.faits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* une image dans le pli : jamais nue, toujours un dégradé vers le papier */
+.image {
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image--haute {
+  height: 46%;
+}
+
+/* le pendant de .image--haute : la peinture prend la page — la pensée sur encre, le
+   souvenir sur crème (docs/design-system.md#les-trois-textures-de-type). C'est une
+   hauteur, pas une couche : l'empilement avec le texte se décide avec A2, au jalon 2.
+   (docs/integration.md#corrections-à-appliquer) */
+.image--pleine {
+  height: 100%;
+}
+
+.image__fondu {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(14, 12, 11, 0.5) 0%,
+    rgba(14, 12, 11, 0) 34%,
+    rgba(247, 242, 232, 0.05) 72%,
+    var(--creme) 100%
+  );
+}
+
+.image__fondu--encre {
+  background: linear-gradient(
+    180deg,
+    rgba(14, 12, 11, 0.62) 0%,
+    rgba(14, 12, 11, 0.38) 34%,
+    rgba(14, 12, 11, 0.55) 66%,
+    rgba(14, 12, 11, 0.85) 100%
+  );
+}
+
+/* ==========================================================================
+   6. LE DÉPÔT — trois questions : le type, les textes, le lien.
+   Aucun réglage de style, aucune image à déposer : le type fait la mise en page.
+   ========================================================================== */
+
+/* barre de conduite : où j'en suis, comment je reviens */
+.conduite {
+  flex: 0 0 auto;
+  padding: 22px var(--marge) 14px;
+  border-bottom: 1px solid var(--trait);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.conduite__retour {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.conduite__pas {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}
+
+/* la question de l'écran, en français, une par écran */
+.question {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+}
+
+.aide {
+  font-family: var(--plume);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.4;
+  opacity: 0.6;
+}
+
+/* le choix du type : grande cible (min 70px), nom + glose + le layout en petit */
+.type {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px var(--marge);
+  border-top: 1px solid var(--trait);
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 76px;
+  text-align: left;
+}
+
+.type:last-of-type {
+  border-bottom: 1px solid var(--trait);
+}
+
+.type[aria-selected='true'] {
+  background: rgba(200, 30, 51, 0.05);
+}
+
+.type[aria-selected='true'] .type__nom {
+  color: var(--carmin);
+}
+
+.type__nom {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.type__glose {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--plume);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.3;
+  opacity: 0.55;
+}
+
+/* le layout vu en petit : un vrai pli 360×780 réduit par transform, jamais un dessin à part */
+.apercu {
+  position: relative;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.apercu--vignette {
+  width: 62px;
+  height: 134px;             /* échelle .1722 */
+}
+
+.apercu--tete {
+  width: 96px;
+  height: 208px;             /* échelle .2667 */
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(20, 16, 14, 0.16);
+}
+
+.mini {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--ecran-l);
+  height: var(--ecran-h);
+  transform-origin: top left;
+  background: var(--creme);
+  background-image: var(--grain);
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.apercu--vignette .mini {
+  transform: scale(0.1722);
+}
+
+.apercu--tete .mini {
+  transform: scale(0.2667);
+}
+
+.mini__volet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--pliure);
+  background: var(--carmin);
+}
+
+/* remplir : des lignes nommées, pas un pli à deviner. Le design les appelait .champ ;
+   « champ » est sur la liste fermée du lexique, et le lexique fait foi
+   (docs/integration.md#ce-qui-a-changé-depuis-le-design). */
+.ligne {
+  padding: 15px var(--marge);
+  border-top: 1px solid var(--trait);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ligne__nom {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.ligne:focus-within {
+  background: rgba(200, 30, 51, 0.05);
+}
+
+.ligne:focus-within .ligne__nom {
+  opacity: 1;
+  color: var(--carmin);
+}
+
+.ligne input,
+.ligne textarea {
+  all: unset;
+  width: 100%;
+  font-family: var(--plume);
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.35;
+  color: var(--encre);
+  caret-color: var(--carmin);
+}
+
+.ligne textarea {
+  font-style: italic;
+  resize: none;
+  min-height: 64px;
+}
+
+.ligne input::placeholder,
+.ligne textarea::placeholder {
+  color: rgba(20, 16, 14, 0.32);
+}
+
+.ligne--titre input {
+  font-family: var(--serif);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+}
+
+.facultatif {
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  opacity: 0.6;
+}
+
+.reste {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+.reste[data-trop='1'] {
+  color: var(--carmin);
+  opacity: 1;
+}
+
+/* les trois mots d'A3 — remontés de design/handoff/lecteur.html */
+.oui {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 var(--marge);
+}
+
+.oui button {
+  all: unset;
+  padding: 18px 0;
+  border-top: 1px solid var(--trait);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.pli--encre .oui button {
+  border-top-color: rgba(247, 242, 232, 0.22);
+}
+
+/* une seule action, pleine largeur, toujours en bas */
+.bouton {
+  all: unset;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--carmin);
+  color: var(--creme);
+  padding: 22px;
+  cursor: pointer;
+  touch-action: manipulation;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.bouton[disabled] {
+  background: rgba(20, 16, 14, 0.12);
+  color: rgba(20, 16, 14, 0.4);
+  cursor: default;
+}
+
+/* ==========================================================================
+   LES DEUX FLÈCHES — l'unique exception au « pas de SVG », nommée et fermée
+   (docs/ressources.md#les-deux-flèches). Les tracés sont écrits par
+   scripts/fleches.py et vivent inline dans le document.
+   ========================================================================== */
+.fleche {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+/* ==========================================================================
+   CE QUI NE BOUGE PAS QUAND ELLE NE VEUT PAS QUE ÇA BOUGE
+   (docs/design-system.md#accessibilité).
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .invite {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   LE FOCUS — visible partout, y compris là où `all: unset` l'avait effacé.
+   Écrit en fin de feuille exprès : .bouton, .type, .oui button et .ligne input
+   ont la même spécificité, et remettraient box-shadow à zéro s'ils venaient après
+   (docs/integration.md#accessibilité--la-liste-à-cocher).
+   ========================================================================== */
+:focus-visible {
+  outline: none;
+  box-shadow: inset 2px 0 0 var(--carmin);
+}
+
+/* Sur encre, ce qui serait carmin devient rose ; sur carmin, il devient crème
+   (docs/design-system.md#encres). Un filet carmin sur fond carmin ne se voit pas. */
+.pli--encre :focus-visible {
+  box-shadow: inset 2px 0 0 var(--rose);
+}
+
+.pli--carmin :focus-visible,
+.bouton:focus-visible {
+  box-shadow: inset 2px 0 0 var(--creme);
+}
