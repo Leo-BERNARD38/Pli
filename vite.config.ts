@@ -207,7 +207,15 @@ function inlinerLeDocument(): Plugin {
 
         // Le module inliné vit désormais à l'adresse du document, et non dans /assets/ :
         // un `import()` relatif y pointerait à côté. Les imports dynamiques de la vague 3
-        // doivent donc être absolus.
+        // deviennent donc absolus, à partir du dossier où l'entrée vivait — et le contrôle
+        // qui suit vérifie qu'il n'en reste pas un seul.
+        const dossier = entree.fileName.slice(0, entree.fileName.lastIndexOf('/') + 1)
+        sortie = sortie.replace(
+          /import\((["'`])\.\/([^"'`]+)\1\)/g,
+          (_tout: string, guillemet: string, nom: string) =>
+            `import(${guillemet}/${dossier}${nom}${guillemet})`,
+        )
+
         const relatif = sortie.match(/import\(["'`]\.\/[^"'`]+["'`]\)/g)
         if (relatif) {
           throw new Error(
@@ -218,6 +226,9 @@ function inlinerLeDocument(): Plugin {
 
         document.source = sortie
 
+        /** Ce qui a réellement quitté le paquet — ce que plus personne ne doit attendre. */
+        const partis = new Set<string>()
+
         const documents = Object.values(paquet).flatMap((f) =>
           f.type === 'asset' && f.fileName.endsWith('.html') ? [f] : [],
         )
@@ -226,7 +237,29 @@ function inlinerLeDocument(): Plugin {
           // reprendra pli.css, Rollup n'émettra qu'une feuille : le lecteur en garde une
           // copie inline, l'atelier garde son lien, et le fichier reste servi. Le supprimer
           // donnerait un build vert et un atelier entièrement nu, sans un mot.
-          if (!documents.some((d) => String(d.source).includes(nom))) delete paquet[nom]
+          if (!documents.some((d) => String(d.source).includes(nom))) {
+            delete paquet[nom]
+            partis.add(nom)
+          }
+        }
+
+        // Ce qui reste ne doit plus rien attendre de ce qui vient de partir. Un chunk de la
+        // vague 3 qui partagerait ne serait-ce qu'une fonction avec le module d'ouverture
+        // se met à importer le chunk d'entrée — inliné, puis supprimé. Le build reste vert,
+        // la vague 3 tombe au moment du geste, et rien ne le dit. C'est arrivé : deux
+        // fonctions de A2 réemployées par la réponse ont suffi.
+        //
+        // On lit le CODE, pas la liste d'imports de Rollup : celle-ci nomme encore les
+        // chunks purement CSS que Vite vient de dissoudre, et n'accuserait que du vide.
+        for (const chunk of Object.values(paquet)) {
+          if (chunk.type !== 'chunk') continue
+          const disparus = [...partis].filter((nom) => String(chunk.code).includes(nom))
+          if (disparus.length) {
+            throw new Error(
+              `${chunk.fileName} attend ${disparus.join(', ')}, qui vient d'être inliné` +
+                ` dans le document. La vague 3 ne partage rien avec le module d'ouverture.`,
+            )
+          }
         }
 
         // Le budget de la vague 1, tenu par la machine. 14 ko n'est pas un chiffre rond :

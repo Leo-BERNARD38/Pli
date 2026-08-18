@@ -137,6 +137,46 @@ a:hover {
   z-index: 1;
 }
 
+/* LES DEUX COUCHES QUI MONTENT — A3 la réponse, A4 le mot. Elles ne sont pas des couches du
+   geste : elles arrivent APRÈS lui, au tap, et une seule bouge à la fois. Le `overflow:
+   hidden` du pli les garde hors de vue tant qu'elles sont posées à 100 %, et `inert` les
+   sort de l'ordre de tabulation en même temps — sans lui, trois liens hors champ se
+   ramassent au clavier depuis A2.
+
+   `translate3d` et `transform` seuls : c'est la même règle que le dépliage
+   (docs/fluidite.md#ce-qui-a-le-droit-de-bouger). */
+.pli__monte {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  background: var(--creme);
+  background-image: var(--grain);
+  transform: translate3d(0, 100%, 0);
+  transition: transform var(--ouvre) var(--courbe);
+}
+
+/* A4 passe par-dessus A3 : elle arrive du même bas, et A3 reste dessous sans bouger. */
+.pli__monte--mot {
+  z-index: 4;
+}
+
+.pli__monte[data-posee] {
+  transform: translate3d(0, 0, 0);
+}
+
+.pli__monte[hidden] {
+  display: none;
+}
+
+/* Leur contenu part du haut du corps, et non contre la tête : 22px, l'écart que
+   `.corps--haut` pose déjà pour la même raison. Sans lui, « TU RÉPONDS » en 52px touchait
+   la marque. */
+.pli__monte .corps {
+  padding-top: 22px;
+}
+
 /* Le texte se lit, donc il se sélectionne — `user-select: none` du cadre est là pour le
    geste, pas pour la lecture (docs/design-system.md#accessibilité). Ce que le doigt
    traîne au jalon 2 et ce qui reste sélectionnable pendant, c'est au geste de le dire. */
@@ -166,6 +206,12 @@ a:hover {
 /* Le titre porte le carmin dans sa propre règle, pas par la classe `.carmin` : sur encre,
    il lui faut la même bascule. Mesuré : carmin sur encre vaut 3,2:1, rose 9,7:1
    (docs/design-system.md#encres). */
+/* Et sur carmin, crème : le carmin sur carmin ne se voit pas. Vu, capturé — A4 affichait
+   son mot en 78px, entièrement invisible. */
+.pli--carmin .titre {
+  color: var(--creme);
+}
+
 .pli--encre .titre {
   color: var(--rose);
 }
@@ -350,6 +396,22 @@ a:hover {
   cursor: pointer;
 }
 
+/* « répondre » agit : c'est un vrai bouton, pas un mot cliquable. Le retrait ne touche que
+   les trois côtés que `.action` ne dessine pas — son filet pointillé du haut est sa
+   composition, il survit. */
+button.action {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border-inline: 0;
+  border-bottom: 0;
+  width: 100%;
+  padding-inline: 0;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+}
+
 .action .fleche {
   font-size: 22px;
   line-height: 1;
@@ -458,6 +520,15 @@ a:hover {
 
 .corps--reparti {
   justify-content: space-between;
+}
+
+/* Un groupe qui monte ensemble sur un corps réparti — le titre et la voix d'A3, le mot et
+   la sienne sur A4. Son écart intérieur est celui du corps, 18px : sans lui, la voix se
+   colle sous le titre. A2 s'en passe exprès, sa griffe touche son titre. */
+.groupe {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 /* Les faits d'une invitation. Une liste porte une puce et un retrait par défaut : les deux
@@ -590,6 +661,7 @@ a:hover {
   margin: 0 var(--marge);
 }
 
+.oui a,
 .oui button {
   all: unset;
   padding: 18px 0;
@@ -600,6 +672,7 @@ a:hover {
   cursor: pointer;
 }
 
+.pli--encre .oui a,
 .pli--encre .oui button {
   border-top-color: rgba(247, 242, 232, 0.22);
 }
@@ -624,6 +697,12 @@ a:hover {
     animation: none;
   }
 
+  /* Les 120 ms de docs/fluidite.md. Le dépliage les pose en ligne, depuis geste.ts, parce
+     que sa durée se calcule ; A3 et A4 n'ont que cette transition, elle tient ici. */
+  .pli__monte {
+    transition-duration: 120ms;
+  }
+
   /* Les docs ne nomment que l'invite et les 120 ms d'ouverture. Le fondu d'arrivée d'une
      peinture est du même ordre : elle se pose, elle n'apparaît pas. */
   .image img {
@@ -641,6 +720,19 @@ a:hover {
    pour sa raison, à la taille où la raison vaut. */
 #c4 .titre {
   line-height: 0.92;
+}
+
+/* A3 · la réponse. 52px est la quatrième taille du titre, celle de la maquette : « Tu
+   réponds » tient sur deux lignes, et les trois mots ont besoin de la place du bas
+   (docs/design-system.md#les-mains). */
+#a3 .titre {
+  font-size: 52px;
+}
+
+/* A4 · le mot. L'action « tes plis ↑ » est posée mais muette — C1, le journal, est le
+   jalon 5. Elle ne se donne donc pas l'air d'agir. */
+#a4 .action {
+  cursor: default;
 }
 
 /* ==========================================================================

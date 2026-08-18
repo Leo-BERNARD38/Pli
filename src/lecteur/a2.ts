@@ -157,9 +157,11 @@ export function construire(
   }
 
   if (c.action) {
-    // Elle est posée mais **muette** : A3 est le jalon 3. Recomposer le bas d'A2 dans une
-    // semaine coûterait plus qu'une action qui attend.
-    const action = element('div', 'action')
+    // La seule action du lecteur, et elle agit : un vrai bouton, atteignable au clavier.
+    // Le geste ne le lui prend pas — `pointerdown` laisse tout ce qui est dans un
+    // `<button>` se débrouiller seul (src/lecteur/geste.ts).
+    const action = element('button', 'action')
+    action.setAttribute('type', 'button')
     action.append(element('span', 'etiquette carmin', c.action), fleche())
     corps.append(action)
   }

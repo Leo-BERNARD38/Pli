@@ -10,7 +10,7 @@ import '../styles/tokens.css'
 import '../styles/pli.css'
 
 import { decoder, type Pli } from '../lib/codec.ts'
-import { empreinte, noterLeDepliage } from '../lib/journal.ts'
+import { empreinte, noterLaReponse, noterLeDepliage, trouver } from '../lib/journal.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
 import { tenirDansLecran } from './plateau.ts'
 import { ecrire, oublierLaPeinture, ETIQUETTES } from './a1.ts'
@@ -52,6 +52,25 @@ function montrer(ecran: HTMLElement | null): void {
   for (const autre of [a1, c4]) {
     if (autre) autre.hidden = autre !== ecran
   }
+}
+
+/**
+ * Le pli visible, mais ni A1 ni C4 : A4 se pose par-dessus et couvre tout le cadre. C'est
+ * le retour de WhatsApp par rechargement, et lui seul.
+ */
+function montrerLeCadreSeul(): void {
+  if (cadre) cadre.hidden = false
+  for (const autre of [a1, c4]) {
+    if (autre) autre.hidden = true
+  }
+}
+
+/**
+ * A3 et A4 partent avec leur pli. Elles sont ajoutées au cadre, pas au document : un
+ * second lien dans la même page en trouverait deux, dont une avec le mauvais numéro.
+ */
+function retirerLesCouchesQuiMontent(): void {
+  for (const vieille of cadre?.querySelectorAll('.pli__monte') ?? []) vieille.remove()
 }
 
 /**
@@ -197,7 +216,38 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
       oublierLaPeinture()
     },
   })
+
+  // A3 et A4 arrivent APRÈS le geste, et pour l'invitation seulement : elles ne servent
+  // qu'une fois le pli déplié, un pli sur quatre les demande, et rien ne les attend avant
+  // (docs/parcours.md#a3--la-réponse--invitation-seulement).
+  if (pli.t === 'inv') {
+    const { armerLaReponse } = await import('./reponse.ts')
+    if (mienne !== generation) return mienne
+    armerLaReponse({
+      cadre,
+      dessous,
+      pli,
+      noter: (mot) => noterLaReponse(h, payload, mot),
+    })
+  }
   return mienne
+}
+
+/**
+ * Elle revient de WhatsApp par un rechargement : le hash `#c=` est toujours dans la barre,
+ * et l'arrivée doit retomber sur A4, jamais sur A1 (docs/partage.md#le-retour). Par le
+ * bfcache, rien de tout ceci ne joue — la page est restaurée telle quelle, et c'est très
+ * bien : on ne dépend jamais d'un rechargement.
+ */
+async function retomberSurLeMot(pli: Pli, payload: string, mot: string): Promise<void> {
+  if (!cadre) return
+  const mienne = generation
+  const { armerLaReponse } = await import('./reponse.ts')
+  if (mienne !== generation) return
+  // Rien à noter : le mot est déjà au journal, c'est même lui qui nous amène ici.
+  const reponse = armerLaReponse({ cadre, dessous: null, pli, noter: () => {} })
+  montrerLeCadreSeul()
+  reponse.poserLeMot(mot)
 }
 
 suivre((route) => {
@@ -214,6 +264,17 @@ suivre((route) => {
   pliDe(route).then(
     ({ pli, payload }) => {
       if (mienne !== generation) return
+      retirerLesCouchesQuiMontent()
+
+      // L'arrivée décide l'écran d'après le journal, jamais d'après le seul lien. Ce jalon
+      // n'en tient qu'une moitié : le mot déjà noté ramène sur A4. C3 — le pli déjà déplié
+      // — et C2 sont le jalon 5, et ils passeront devant celui-ci le jour où ils existent.
+      const dejaRepondu = trouver(payload)?.reponse
+      if (dejaRepondu) {
+        void retomberSurLeMot(pli, payload, dejaRepondu.mot)
+        return
+      }
+
       ecrire(pli)
       montrer(a1)
       marquer(route.ecran === 'poeme' ? 'p' : 'c')
