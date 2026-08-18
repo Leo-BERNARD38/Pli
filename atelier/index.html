@@ -18,9 +18,82 @@
          (docs/partage.md#les-balises-écrites-une-fois-pour-toutes). -->
     <meta name="robots" content="noindex, nofollow" />
   </head>
-  <body>
-    <!-- L'atelier n'a pas encore d'écran : D0 · le seuil ouvre le jalon 5. L'entrée existe
-         dès maintenant pour que les deux bundles soient réellement distincts. -->
+  <body class="atelier">
+    <!-- La flèche de l'atelier — le seul → du produit
+         (docs/ressources.md#les-deux-flèches). Écrite par scripts/fleches.py, jamais
+         retouchée : on regénère. -->
+    <svg class="fleches" width="0" height="0" aria-hidden="true" focusable="false"><defs>
+      <symbol id="fleche-droite" viewBox="0 0 1000 1000"><path d="M875.0 500.0L559.8 839.8L659.6 578.0L135.0 578.0L135.0 693.0L125.0 693.0L125.0 307.0L135.0 307.0L135.0 422.0L659.6 422.0L559.8 160.2Z"/></symbol>
+    </defs></svg>
+
+    <!-- D0 · le seuil. Une seule fois, puis mémorisé. Une question, une ligne
+         (docs/parcours.md#d0--le-seuil). La comparaison porte sur une empreinte, jamais
+         sur la date en clair (docs/architecture.md#le-seuil-de-latelier). -->
+    <section class="ecran" id="d0">
+      <div class="corps corps--reparti">
+        <p class="marque">Pli</p>
+        <div class="groupe">
+          <h1 class="question">Depuis quand ?</h1>
+          <label class="ligne ligne--seule">
+            <span class="ligne__nom">jj/mm/aaaa</span>
+            <input
+              id="seuil"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="jj/mm/aaaa"
+            />
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- D4 · le tiroir. Ce que je ne veux pas retaper, et qui n'a rien à faire dans le
+         dépôt (docs/parcours.md#d4--le-tiroir). Ce qui est écrit est gardé : aucune
+         action ne l'enregistre, la ligne suffit. -->
+    <section class="ecran" id="d4" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d1" hidden>← le type</button>
+        <p class="conduite__pas">le tiroir</p>
+      </div>
+
+      <div class="corps">
+        <div class="groupe">
+          <h1 class="question">Ce que tu ne retapes pas.</h1>
+          <p class="aide">Trois lignes, gardées sur ce téléphone seul. Rien n'en sort.</p>
+        </div>
+      </div>
+
+      <div class="lignes">
+        <label class="ligne">
+          <span class="ligne__nom">le numéro de réponse</span>
+          <input
+            id="w"
+            type="text"
+            inputmode="tel"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="336XXXXXXXX"
+          />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">la signature</span>
+          <input id="s" type="text" autocomplete="off" placeholder="a." />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">le prochain numéro</span>
+          <input id="n" type="text" inputmode="numeric" autocomplete="off" />
+        </label>
+      </div>
+
+      <button class="bouton" type="button" data-va="d1">
+        <span>continuer</span>
+        <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-droite" /></svg>
+      </button>
+    </section>
+
     <script type="module" src="/src/atelier/main.ts"></script>
   </body>
 </html>

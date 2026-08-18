@@ -17,6 +17,50 @@
    Aucun réglage de style, aucune image à déposer : le type fait la mise en page.
    ========================================================================== */
 
+/* ==========================================================================
+   L'ÉCRAN DE L'ATELIER — un outil, pas un pli.
+
+   Il n'a ni pliure ni volet, et il a le droit de défiler : « un pli = un écran » parle des
+   plis, et l'atelier n'en montre qu'en petit, dans .apercu (docs/design-system.md#le-gabarit).
+   Il garde en revanche la largeur du pli — 360, jamais élargie : c'est la seule forme dans
+   laquelle ce que j'écris sera lu (docs/parcours.md#e1--latelier-au-bureau).
+   ========================================================================== */
+.ecran {
+  position: relative;
+  width: 100%;
+  max-width: var(--ecran-l);
+  min-height: 100dvh;
+  margin-inline: auto;
+  background: var(--creme);
+  background-image: var(--grain);
+  display: flex;
+  flex-direction: column;
+}
+
+/* `display: flex` est une déclaration d'auteur : elle bat le `[hidden]` de la feuille du
+   navigateur, et l'écran masqué resterait à l'écran. La faute est déjà arrivée sur `.pli`
+   au jalon 1 — elle ne se refait pas ici. */
+.ecran[hidden] {
+  display: none;
+}
+
+/* Le corps du pli n'a pas de retrait en haut : dans un pli c'est la tête qui le porte, et
+   l'atelier n'en a pas. */
+.ecran > .corps {
+  padding-top: 34px;
+}
+
+/* Les lignes se suivent, collées au bas de l'écran, au-dessus de l'action. */
+.lignes {
+  flex: 0 0 auto;
+}
+
+/* La ligne seule de D0 : rien au-dessus, rien en dessous, pas de trait à partager. */
+.ligne--seule {
+  padding-inline: 0;
+  border-top: 0;
+}
+
 /* barre de conduite : où j'en suis, comment je reviens */
 .conduite {
   flex: 0 0 auto;
@@ -263,4 +307,19 @@
   background: rgba(20, 16, 14, 0.12);
   color: rgba(20, 16, 14, 0.4);
   cursor: default;
+}
+
+/* le layout en petit : des blocs, pas un dessin — les proportions du type, et rien de plus */
+.mini__bloc {
+  display: block;
+  border-radius: 2px;
+}
+
+.mini__pile {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1;
+  padding: 0 26px 30px;
 }
