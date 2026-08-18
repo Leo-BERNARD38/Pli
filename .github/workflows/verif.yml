@@ -1,0 +1,23 @@
+# La vérification, sur chaque pull request (docs/hebergement.md#ce-qui-est-déployé).
+name: verif
+
+on:
+  pull_request:
+
+jobs:
+  verif:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # La version de Node fait partie du contrat du codec : la même que dans
+      # package.json (engines), des deux côtés.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run types
+      - run: npm run build

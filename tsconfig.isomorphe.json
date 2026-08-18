@@ -1,0 +1,19 @@
+{
+  // Les modules qui tournent des deux côtés — sous Node comme dans le navigateur.
+  // Ils compilent sans la bibliothèque DOM : un `document.` ou un `localStorage.` qui
+  // s'y glisserait est refusé par la machine, pas seulement par la relecture. C'est
+  // l'invariant du codec (docs/donnees.md#2-lencodage), et il vaut aussi pour les dates.
+  //
+  // Le routeur et le journal, eux, touchent la page : ils restent dans tsconfig.json.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": ["node"]
+  },
+  "include": [
+    "src/lib/codec.ts",
+    "src/lib/codec.test.ts",
+    "src/lib/dates.ts",
+    "src/lib/dates.test.ts"
+  ]
+}

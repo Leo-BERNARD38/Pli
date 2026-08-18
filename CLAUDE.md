@@ -24,14 +24,15 @@ dépôt dont le lien ne porte que le numéro (`#p=015-vhtq`).
 
 ## État du dépôt
 
-**Documentation et design terminés, code non commencé.** Il n'y a ni `package.json`, ni
-`src/`, ni workflow GitHub — le jalon 0 de [docs/roadmap.md](docs/roadmap.md) reste à faire.
-Les commandes npm annoncées par le README (`npm run dev`, `npm test`) décrivent la cible, pas
-l'existant : les créer fait partie du jalon 0.
+**Documentation et design terminés, jalon 0 posé.** Il y a un `package.json`, deux entrées
+Vite, `src/lib/` (codec, dates, routeur) avec ses tests, les deux workflows, et un pli en dur
+qu'un lien remplace. Aucun style, aucune police, aucune peinture, aucun geste : c'est le
+jalon 1 et le jalon 2 de [docs/roadmap.md](docs/roadmap.md).
 
 Ce qui existe et sert : `docs/` (la spécification, elle fait foi), `design/` (l'archive figée
 du design, **dont les cinq peintures** dans `design/handoff/assets/`), `public/icones/`
-(livré, à servir tel quel), `scripts/icones.py`. **Les polices ne sont pas dans le dépôt** :
+(livré, à servir tel quel), `public/CNAME` · `.nojekyll` · `404.html`, `scripts/icones.py`.
+**Les polices ne sont pas dans le dépôt** :
 les faire entrer, sources et sous-ensembles, fait partie du jalon 1
 ([docs/ressources.md](docs/ressources.md#les-polices)).
 
@@ -45,7 +46,15 @@ place : si une tâche en dépend, le dire.
 
 ## Commandes
 
-Rien à builder aujourd'hui. Ce qui tourne :
+```sh
+npm install
+npm run dev        # les deux entrées
+npm run build
+npm run types      # deux passes : tout le projet, puis src/lib/ sans la bibliothèque DOM
+npm test           # codec.ts, dates.ts, le routeur — rien d'autre
+```
+
+Et ce qui tourne à côté :
 
 ```sh
 # la planche des icônes — regénère public/icones/ en entier
@@ -66,8 +75,9 @@ node -e 'crypto.subtle.digest("SHA-256", new TextEncoder().encode("pli.seuil."+p
 curl -sSI -H 'Accept-Encoding: br, gzip' https://pli.re/ | grep -i 'cache-control\|content-encoding'
 ```
 
-Cible du jalon 0, à créer telle quelle : `npm install`, `npm run dev` (les deux entrées),
-`npm run build`, `npm test` (`codec.ts` et `dates.ts` uniquement — pas de tests généralisés).
+Pas de lanceur de tests en dépendance : `node --test` lit les `.ts` sans compilation
+(Node 22.18+, épinglé dans `engines` et dans les deux workflows). Les tests restent ceux de
+`codec.ts`, `dates.ts` et du routeur — **pas de tests généralisés, pas de tests d'écran**.
 
 ## L'architecture, en dix lignes
 

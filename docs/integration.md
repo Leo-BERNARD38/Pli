@@ -109,6 +109,7 @@ Voici tout ce qui s'en déduit.
 | `twitter:card` | présent dans les balises livrées | **retiré** — un pli ne se partage pas ailleurs qu'en conversation |
 | `mask-icon` | présent, avec un SVG à fond crème | **retiré** — l'onglet épinglé est une affaire de Safari de bureau |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
+| `theme-color` | `#C81E33` dans installation.md, `#E9E2D2` dans appareils.md | **`#E9E2D2`**, le sable, dans les deux entrées ; le carmin reste le `theme_color` du manifeste |
 
 ### Les cinq questions laissées ouvertes par le design
 
