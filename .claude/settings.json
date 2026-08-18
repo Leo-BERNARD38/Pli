@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(find:*)",
+      "Bash(rg:*)",
+      "Bash(grep:*)",
+      "Bash(python3 scripts/icones.py:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(npm ci:*)",
+      "Bash(npx vite:*)",
+      "Bash(gzip -c:*)",
+      "Bash(du -h:*)"
+    ],
+    "deny": [
+      "Edit(design/**)",
+      "Write(design/**)",
+      "Read(plis-source/**)",
+      "Bash(git add:*plis-source*)",
+      "Bash(git commit:*plis-source*)",
+      "Bash(git add -f:*)",
+      "Bash(git push --force:*)"
+    ],
+    "ask": [
+      "Edit(public/plis/**)",
+      "Edit(public/icones/**)",
+      "Bash(git push:*)"
+    ]
+  }
+}
