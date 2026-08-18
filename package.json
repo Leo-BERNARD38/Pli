@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "types": "tsc --noEmit && tsc --noEmit -p tsconfig.lib.json",
+    "types": "tsc --noEmit && tsc --noEmit -p tsconfig.isomorphe.json",
     "test": "node --test 'src/lib/*.test.ts'"
   },
   "devDependencies": {
