@@ -116,9 +116,8 @@ vers des adresses qui doivent rester valables.
 ## L'aperçu du lien et les icônes
 
 Ils ne se produisent plus à la main : ils sont **regénérés** depuis le tracé du P par
-[`scripts/icones.py`](../scripts/icones.py), qui écrit `public/icones/` en entier — les
-quatre SVG, les sept tirages PNG, l'`.ico`, le manifeste, les balises du `<head>` et
-l'aperçu du lien.
+[`scripts/icones.py`](../scripts/icones.py), qui écrit `public/icones/` en entier — huit
+fichiers, 88 ko : l'onglet, l'écran d'accueil, le manifeste et l'aperçu du lien.
 
 ```sh
 python3 scripts/icones.py --pinyon PinyonScript-Regular.ttf \
@@ -131,10 +130,10 @@ python3 scripts/icones.py --pinyon PinyonScript-Regular.ttf \
 | Fichier | Format | Poids |
 |---|---|---|
 | `og.png` | 1200 × 630 | 30 ko |
-| `icon-512.png` · `icon-1024.png` | palette, sans perte | 12,8 · 27 ko |
-| `icon-512-masque.png` | la variante masquable | 9,9 ko |
-| `apple-touch-icon.png` · `icon-192.png` | 180 · 192 | 4,2 · 4,6 ko |
-| `favicon.ico` + les quatre SVG | l'onglet | 3,7 ko + 2,2 ko pièce |
+| `icon-512.png` | palette, sans perte | 12,5 ko |
+| `icon-512-masque.png` | la variante masquable | 9,6 ko |
+| `apple-touch-icon.png` · `icon-192.png` | 180 · 192 | 4,2 · 4,5 ko |
+| `favicon.ico` · `favicon.svg` | l'onglet | 3,7 · 2,1 ko |
 
 Le détail des trois corrections apportées aux fichiers livrés est dans
 [installation.md](installation.md#ce-qui-a-été-corrigé-sur-les-fichiers-livrés).

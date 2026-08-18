@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Fabrique les icônes de Pli depuis une seule source : le P de Pinyon Script.
 
+Écrit exactement ce qui est servi, et rien de plus : l'onglet, l'écran d'accueil, le
+manifeste, l'aperçu du lien. Les balises du <head> qui vont avec sont dans
+docs/installation.md.
+
     python3 scripts/icones.py --pinyon PinyonScript-Regular.ttf \
                              --space-mono SpaceMono-Bold.ttf \
                              --og design/handoff/icones/og.png \
@@ -180,16 +184,9 @@ SVG = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" h
        '  <title>Pli</title>\n{corps}\n</svg>\n')
 
 
-def svg_carre(d, fond, trait, contour=0.0):
-    rect = f'  <rect width="64" height="64" fill="{fond}"/>'
-    trait_attr = (f' stroke="{trait}" stroke-width="{contour}" stroke-linejoin="round"'
-                  if contour else "")
-    return SVG.format(corps=f'{rect}\n  <path d="{d}" fill="{trait}"{trait_attr}/>')
-
-
-def svg_masque(d):
-    """Pour `mask-icon` : une forme noire sur rien. Safari pose la couleur."""
-    return SVG.format(corps=f'  <path d="{d}" fill="black"/>')
+def svg_carre(d, fond, trait):
+    return SVG.format(corps=f'  <rect width="64" height="64" fill="{fond}"/>\n'
+                            f'  <path d="{d}" fill="{trait}"/>')
 
 
 # — l'aperçu du lien ————————————————————————————————————————————————
@@ -275,25 +272,6 @@ MANIFESTE = """{
 }
 """
 
-TETE = """<!-- à coller dans <head> · les fichiers sont servis depuis /icones/ -->
-<link rel="icon" href="/icones/favicon.ico" sizes="16x16 32x32 48x48">
-<link rel="icon" href="/icones/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/icones/apple-touch-icon.png">
-<link rel="mask-icon" href="/icones/masque-safari.svg" color="#C81E33">
-<link rel="manifest" href="/icones/site.webmanifest">
-<meta name="theme-color" content="#C81E33">
-<meta name="robots" content="noindex, nofollow">
-<meta property="og:title" content="Un pli t'attend.">
-<meta property="og:description" content="Il ne s'ouvre qu'une fois.">
-<meta property="og:image" content="https://pli.re/icones/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="https://pli.re/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Pli">
-<meta property="og:locale" content="fr_FR">
-"""
-
 
 def main():
     a = argparse.ArgumentParser(description=__doc__)
@@ -322,17 +300,10 @@ def main():
         ecrits.append((nom, chemin.stat().st_size))
 
     ecrire("favicon.svg", svg_carre(d, "#C81E33", "#F7F2E8"))
-    ecrire("favicon-petite.svg", svg_carre(d, "#C81E33", "#F7F2E8", contour=1.25))
-    ecrire("marque-encre.svg", svg_carre(d, "#F7F2E8", "#14100E"))
-    ecrire("masque-safari.svg", svg_masque(d))
-
-    petites = [carre(o.pinyon, t) for t in (16, 32, 48)]
-    for t, im in zip((16, 32, 48), petites):
-        ecrire(f"favicon-{t}.png", im)
-    ecrire("favicon.ico", ico(petites))
-
+    # les trois grades du petit ne sortent pas en fichiers : ils vivent dans l'ico
+    ecrire("favicon.ico", ico([carre(o.pinyon, t) for t in (16, 32, 48)]))
     ecrire("apple-touch-icon.png", carre(o.pinyon, 180))
-    for t in (192, 512, 1024):
+    for t in (192, 512):
         ecrire(f"icon-{t}.png", carre(o.pinyon, t))
 
     masque, echelle, part = carre_masque(o.pinyon, 512)
@@ -344,7 +315,6 @@ def main():
         ecrire("og.png", og(o.og, o.space_mono))
 
     ecrire("site.webmanifest", MANIFESTE)
-    ecrire("tete.html", TETE)
 
     for nom, poids in ecrits:
         print(f"  {nom:24} {poids/1024:7.1f} ko")

@@ -68,7 +68,8 @@ désormais **« PLI.RE · POUR TOI SEULE »**, qui est du lexique et qui est vra
 bande de treize pixels a bougé ; le reste de l'image est intact, au pixel près.
 
 La même phrase était dans `og:description` — c'est « Il ne s'ouvre qu'une fois. » qui fait
-foi, et les balises de `public/icones/tete.html` sont à jour.
+foi — la liste des balises est ci-dessus, celle du `<head>` est dans
+[installation.md](installation.md#le-manifeste-et-les-icônes).
 
 `twitter:card` est écarté : personne ne partage un pli ailleurs que dans une conversation, et
 une balise de plus est une balise de plus à maintenir juste.

@@ -31,16 +31,18 @@ icône inventée. Le handoff est archivé dans
 dans `public/icones/`**, regénérés depuis le tracé par
 [`scripts/icones.py`](../scripts/icones.py).
 
+**Huit fichiers, 88 ko, et rien de plus** — tout ce qui n'était appelé par personne a été
+retiré.
+
 | Fichier | Emploi | Poids |
 |---|---|---|
-| `favicon.ico` (16 · 32 · 48) | l'onglet — trois tirages, pas un redimensionnement | 3,7 ko |
-| `favicon.svg` · `favicon-petite.svg` | l'onglet, en vectoriel | 2,2 ko |
+| `favicon.ico` (16 · 32 · 48) | l'onglet — trois tirages gradés, pas un redimensionnement | 3,7 ko |
+| `favicon.svg` | l'onglet, en vectoriel | 2,1 ko |
 | `apple-touch-icon.png` 180 | l'écran d'accueil iOS | 4,2 ko |
-| `icon-192.png` · `icon-512.png` · `icon-1024.png` | le manifeste et la réserve | 4,5 · 12,8 · 27 ko |
-| **`icon-512-masque.png`** | le seul déclaré `maskable` | 9,9 ko |
-| `masque-safari.svg` | `mask-icon` — forme noire sur fond transparent | 2,1 ko |
-| `marque-encre.svg` | encre sur crème — impression, tampon | 2,2 ko |
+| `icon-192.png` · `icon-512.png` | le manifeste | 4,5 · 12,5 ko |
+| **`icon-512-masque.png`** | le seul déclaré `maskable` | 9,6 ko |
 | `og.png` 1200 × 630 | l'aperçu du lien ([partage.md](partage.md)) | 30 ko |
+| `site.webmanifest` | le manifeste | 0,6 ko |
 
 Noms **stables**, jamais empreintés
 ([mises-a-jour.md](mises-a-jour.md#les-fichiers-stables-un-par-un)) : une icône posée sur son
@@ -55,7 +57,19 @@ valables.
 | `background_color: #F7F2E8` | le **crème** du papier : l'écran de lancement est une feuille, pas un rectangle blanc |
 | `theme_color: #C81E33` | le **carmin**, la seule couleur d'action, pour la barre système d'Android |
 
-Les balises du `<head>` sont dans `public/icones/tete.html`, à coller telles quelles.
+Les balises qui vont avec, à coller telles quelles dans les deux entrées :
+
+```html
+<link rel="icon" href="/icones/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/icones/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icones/apple-touch-icon.png">
+<link rel="manifest" href="/icones/site.webmanifest">
+<meta name="theme-color" content="#C81E33">
+<meta name="robots" content="noindex, nofollow">
+```
+
+Les balises `og:` s'ajoutent à celles-là, sur l'entrée d'elle seulement
+([partage.md](partage.md#les-balises-écrites-une-fois-pour-toutes)).
 
 ### Ce qui a été corrigé sur les fichiers livrés
 
@@ -66,7 +80,7 @@ Trois défauts mesurés, trois corrections faites — c'est ce qui sépare
 |---|---|---|
 | Le `maskable` débordait | la lettre occupait **70 % de la largeur**, 10 % de marge à droite contre 19,7 % à gauche : le masque circulaire d'Android l'aurait rognée | `icon-512-masque.png`, lettre **centrée à 52 % de la largeur**, toute l'encre dans le disque de 66 % — les autres tirages restent `purpose: any` |
 | Les SVG appelaient une police | `font-family: Pinyon Script`, qu'un SVG n'embarque pas : partout où la police manque, le navigateur dessine un `P` de secours | **lettre vectorisée** — 2,2 ko, plus aucune police appelée à l'affichage |
-| `mask-icon` avait un fond | Safari attend une forme monochrome sur transparent ; l'aplat crème aurait donné un carré plein | **`masque-safari.svg`**, la forme seule. `marque-encre.svg` reste le tampon encre sur crème |
+| `mask-icon` avait un fond | Safari attend une forme monochrome sur transparent ; l'aplat crème aurait donné un carré plein | **la balise est retirée** — l'onglet épinglé est une affaire de Safari de bureau, et nos deux appareils sont un iPhone et un Android |
 
 Deux détails réglés au passage :
 
@@ -75,7 +89,11 @@ Deux détails réglés au passage :
   On suit les PNG : le tirage regénéré recouvre le livré à **98,6 %**, et les deux familles
   de fichiers s'accordent enfin.
 - **Les PNG sont passés en palette** : deux encres et leurs fondus tiennent en 256 teintes,
-  sans rien perdre. `icon-512` tombe de 17 à 12,8 ko, `icon-1024` de 45 à 27.
+  sans rien perdre. `icon-512` tombe de 17 à 12,5 ko.
+- **Six fichiers du handoff ne sont pas servis** : les trois tirages unitaires du petit
+  (l'`.ico` les porte déjà), la variante gradée en SVG, le 1024 de réserve et le tampon
+  encre. Aucune balise ne les appelait. Ils restent dans l'archive, et une ligne du script
+  les fait revenir le jour où ils servent.
 
 Les grades optiques du handoff — l'épaisseur ajoutée au tracé sous 64 px — sont repris tels
 quels, taille par taille, et comparés aux tirages livrés à l'œil : à 16 px, un grade plus

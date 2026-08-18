@@ -30,6 +30,9 @@ Comme le reste du dossier, ils ne bougent plus : **les fichiers servis vivent da
 corrigés — est dans
 [`docs/installation.md`](../docs/installation.md#ce-qui-a-été-corrigé-sur-les-fichiers-livrés).
 
+De ce dossier, un seul fichier sert encore à quelque chose : **`og.png`**, que le script
+reprend pour n'en réécrire que le pied. Les autres sont l'archive de ce qui a été livré.
+
 Les images vivent dans [handoff/assets/](handoff/assets/README.md) — cinq peintures, leur
 emploi et leurs cadrages. Elles, contrairement au reste du dossier, ont bougé depuis
 l'import : quatre se sont ajoutées et toutes ont été nommées.
