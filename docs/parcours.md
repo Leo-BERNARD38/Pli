@@ -68,12 +68,15 @@ la maquette, « Il ne se lira qu'une fois », devient fausse dès que le journal
 | Type | La promesse |
 |---|---|
 | invitation | Il ne s'ouvre qu'une fois. Ensuite il reste dans tes plis. |
-| pensée | Deux lignes, rien à répondre. Tu peux les lire debout. |
+| pensée | Rien à répondre. Tu peux la lire debout. |
 | poème | Prends le temps. Il n'y a rien à répondre. |
 | souvenir | Une image, une ligne. Tu sauras tout de suite quel jour c'était. |
 
 Elles viennent des écrans d'attente du design — A1 et B0a-c — débarrassées de ce qu'elles
-comptaient : une maquette sait qu'il y a quatre strophes, un gabarit ne le sait pas. Une
+comptaient : une maquette sait qu'il y a quatre strophes, un gabarit ne le sait pas. **Aucune
+ne chiffre**, et la pensée pas davantage que les autres : son plafond est en signes, pas en
+lignes ([donnees.md](donnees.md#ce-que-le-papier-peut-porter)), et « deux lignes au plus »
+en laisse parfois une seule. Une
 promesse dit ce qui attend et ce qu'on attend d'elle, **jamais ce que le pli contient** — le
 rideau ne dit rien du contenu, elle non plus.
 

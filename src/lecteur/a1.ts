@@ -37,7 +37,7 @@ export const ETIQUETTES: Record<Type, string> = {
  */
 export const PROMESSES: Record<Type, string> = {
   inv: 'Il ne s’ouvre qu’une fois. Ensuite il reste dans tes plis.',
-  pen: 'Deux lignes, rien à répondre. Tu peux les lire debout.',
+  pen: 'Rien à répondre. Tu peux la lire debout.',
   poe: 'Prends le temps. Il n’y a rien à répondre.',
   sou: 'Une image, une ligne. Tu sauras tout de suite quel jour c’était.',
 }
