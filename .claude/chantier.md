@@ -600,6 +600,54 @@ et `garde-fluidite`, mesuré au navigateur, commité.
 
 Le document du lecteur passe de **13 131 à 13 471 octets** gzip, plafond 14 336.
 
+### Les gestes — le sens dit ce que le doigt fait
+
+Le dépliage était le **seul** geste du produit ; tout le reste se tapait. Vérifié au doigt
+dans un navigateur, sur le build : la couche suit le doigt au pixel (50px de doigt → 50px de
+couche), et **un seul élément porte `will-change` pendant un rabat**.
+
+- [x] **A2, vers le haut** → l'action que l'écran dessine avec sa flèche : A3 ou A5 monte,
+      et elle **suit le doigt** comme la pliure — ce n'est pas un déclencheur, c'est la même
+      physique
+- [x] **A3 et A5, vers le bas** → elles redescendent, A2 revient. Réversible autant de fois
+      qu'on veut
+- [x] **A4 ne se rabat pas.** Sans cette garde, le doigt tombait sur la pliure et repliait A1
+      et A2 **sous** un écran qui les recouvre entièrement, sans que rien ne se voie
+- [x] **la piste se choisit au premier mouvement franc**, 6px, jamais au `pointerdown` : le
+      sens n'y est pas connu. Tant qu'elle n'est pas choisie, rien n'est capturé et rien
+      n'est promu — un tap coûte donc moins qu'avant ce lot, pas plus
+- [x] **le seuil devient relatif pour une couche qu'on rabat.** `--seuil` est une position ;
+      franchir 32 % par en dessous demandait de traîner la couche sur **68 %** de l'écran.
+      Mesuré : 500px sur 844 ne suffisaient pas. La pliure, elle, ne bouge pas d'un chiffre —
+      c'est l'algorithme mesuré de `design-system.md`
+- [x] **le poème reste hors gestes**, et c'est délibéré : son corps défile, le doigt lui
+      appartient, et son « c'est lu ↑ » est au bout du texte
+- [x] `will-change` est nettoyé même quand rien ne bouge — la même garde que `poser()`, et
+      elle vaut ici pour la même raison
+- [x] **une transition en vol se coupe au contact.** `pointerdown` ne coupe plus rien de
+      lui-même : une couche qu'on retouchait pendant son retour continuait sa courbe pendant
+      les six pixels d'indécision, **puis sautait**. Et couper, ce n'est pas `transition = ''`
+      — la déclaration en ligne s'efface et la feuille reprend la sienne, la couche continue
+      de voler. Mesuré : 810px au lieu de 844. C'est `transition: none`
+- [x] **un second contact ne vole plus le premier.** Entre le contact et le sixième pixel,
+      `doigt` est encore nul : un doigt parasite écrasait `pose` sans avoir capturé le
+      premier, qui devenait orphelin. Une main qui frôle l'écran suffisait
+- [x] la référence à la couche est relâchée au relâchement — `armer()` ne s'instancie qu'une
+      fois par session, et elle aurait retenu un nœud déjà sorti du document
+
+Le document passe de 13 471 à **13 945 octets** gzip, plafond 14 336. La marge est de **391** :
+c'est la moitié de ce qui restait avant ce lot, et le prochain qui touche `geste.ts` devra
+rouvrir la question du budget avant d'écrire.
+
+- [ ] **à trancher : la pliure se referme-t-elle trop dur ?** Rabattre A2 vers A1 demande de
+      descendre sous 32 % de la hauteur, soit 68 % de course — c'est l'algorithme écrit et
+      mesuré de `design-system.md#le-mouvement`, et je ne l'ai pas touché. Les couches qui
+      montent, elles, se rabattent à 32 % de course. Les deux ne se ressemblent donc pas
+- [ ] **à la main, sur les deux téléphones** : les six pixels du mouvement franc. Trop peu,
+      un tap glisse ; trop, le geste part en retard. Aucun émulateur ne le dira
+- [ ] **à la main, sur les deux téléphones** : compter les couches à l'inspecteur pendant la
+      montée d'A5, et vérifier qu'un doigt posé sans bouger ne promeut toujours rien
+
 - [ ] **deux contrastes de l'atelier restent sous le seuil**, mesurés à 360 de large sur ce
       que le navigateur peint, et **non corrigés** : `.conduite__retour` à **4,06:1** et
       `.conduite__pas` à **2,98:1**. Ils ne sont pas dans ce lot ; ils ferment une partie de

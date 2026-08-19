@@ -127,6 +127,15 @@ la même seconde que les polices que le texte attend.
 | invite du volet | `translateY(-9px)`, `2,6 s` — **arrêtée** au toucher, pas mise en pause |
 | `prefers-reduced-motion` | pas d'invite, ouverture à `120 ms`, pas de respiration sur C5, aucun écran ne se pose |
 
+**Deux gestes depuis le 19/08/2026, et un seul principe** — le sens dit ce que le doigt
+fait. Vers le haut, l'action que l'écran dessine avec sa flèche : A1 se déplie, A2 fait
+monter A3 ou A5. Vers le bas, on revient d'un cran : A3 et A5 redescendent, A2 se referme.
+**A4 ne se rabat pas** — le mot est dit. **Le poème reste hors gestes**, exception nommée.
+La piste se choisit au premier mouvement franc (**6px**), jamais au `pointerdown` : le sens
+n'y est pas connu, et un tap ne doit rien promouvoir. **Le seuil est absolu pour la pliure,
+relatif pour une couche qu'on rabat** — sinon il aurait fallu la traîner sur 68 % de l'écran
+(mesuré). Une seule couche promue pendant un rabat, deux pendant un dépliage.
+
 **On n'anime pas pour animer.** Trois emplois, et pas un quatrième : les deux couches suivent
 le doigt · l'écran se pose en `160 ms` **quand un tap l'a demandé**, jamais au chargement ·
 ce qui se touche répond en `120 ms` d'opacité. Plus deux mouvements décoratifs nommés,

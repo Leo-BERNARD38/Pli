@@ -106,9 +106,14 @@ function adresse(w: string | undefined, message: string): string {
   return w ? `https://wa.me/${w}?text=${texte}` : `whatsapp://send?text=${texte}`
 }
 
-function couche(id: string, classes: string): HTMLElement {
+/**
+ * Une couche qui monte. `data-glisse` dit au geste qu'elle se tire au doigt : A3 et A5 le
+ * portent, A4 non — on ne défait pas une réponse en la rabattant (src/lecteur/geste.ts).
+ */
+function couche(id: string, classes: string, glisse = true): HTMLElement {
   const e = element('section', classes)
   e.id = id
+  if (glisse) e.dataset.glisse = ''
   // Posée hors du champ, elle reste dans l'ordre de tabulation : trois liens se ramassent
   // au clavier depuis A2 sans que rien ne se voie. `inert` les en sort.
   e.inert = true
@@ -225,7 +230,7 @@ export function armerLaReponse(a: Attaches): void {
 
   // A4 · le mot. Elle affiche ce qu'elle a choisi et **n'affirme rien de plus** : rien ne
   // garantit qu'elle a appuyé sur envoyer dans WhatsApp (docs/parcours.md#a4--le-mot).
-  const a4 = couche('a4', 'pli__monte pli__monte--mot pli--carmin')
+  const a4 = couche('a4', 'pli__monte pli__monte--mot pli--carmin', false)
   const corps4 = element('div', 'corps corps--reparti')
   const haut4 = element('div', 'groupe')
   const leMot = element('h1', 'titre titre--geant')
@@ -243,6 +248,9 @@ export function armerLaReponse(a: Attaches): void {
   function montrerLeMot(mot: string): void {
     leMot.textContent = mot
     couvrir(a3)
+    // A3 cesse de se tirer au doigt : rabattre A4 la redécouvrirait, et elle laisserait
+    // répondre une seconde fois. Le mot est dit, il ne se reprend pas.
+    delete a3.dataset.glisse
     monter(a4)
   }
 

@@ -108,6 +108,12 @@ Le geste, ses réglages et son algorithme sont dans
 - **Une alternative existe toujours.** Un `<button>` « déplier » atteignable au clavier pose
   `p = 1` directement. Le geste est le chemin, jamais le seul chemin.
 
+**Le dépliage n'est plus le seul geste** (19/08/2026). Le sens dit ce que le doigt fait :
+vers le haut, l'action que l'écran dessine avec sa flèche — A2 fait monter A3 ou A5 ; vers
+le bas, on revient d'un cran — A3 et A5 redescendent, A2 se referme. A4 ne se rabat pas : le
+mot est dit. Le poème reste hors gestes. Le détail et les seuils sont dans
+[design-system.md](design-system.md#le-sens-dit-ce-que-le-doigt-fait--19082026).
+
 ## A2 · la découverte
 
 La composition suit le type — le papier, l'image et la présence d'une action en découlent.

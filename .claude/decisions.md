@@ -635,3 +635,15 @@ n'était visible dans un diff, aucun relecteur ne les avait vues, et `npm run ve
   principal ne doit déplacer que deux couches. Les deux moments sont donc séparés : la
   demande à la construction d'A2, la pose à la fin de la transition, exactement comme le
   journal s'écrit à `transitionend` et pour la même raison.
+- **19/08/2026 — le sens dit ce que le doigt fait.** Le dépliage était le seul geste du
+  produit ; tout le reste se tapait, sur un objet dont la règle nº 3 dit « la pliure est
+  physique ». Un seul principe, celui de tous les téléphones et celui que le produit
+  dessinait déjà avec ses flèches : **vers le haut, l'action de l'écran ; vers le bas, on
+  revient d'un cran.** Les couches qui montent suivent le doigt comme la pliure — un
+  déclencheur aurait été le seul mouvement non physique du produit.
+  Trois choix qui ne se devinent pas : la piste se choisit au **premier mouvement franc** et
+  non au `pointerdown`, où le sens n'est pas connu — donc un doigt posé ne capture rien et ne
+  promeut rien ; **A4 ne se rabat pas**, sans quoi le doigt tombait sur la pliure et repliait
+  A1 et A2 sous un écran qui les recouvre ; et le **seuil devient relatif** pour une couche
+  qu'on rabat, parce que franchir 32 % par en dessous demandait 68 % de course. La pliure,
+  elle, garde son algorithme mesuré au chiffre près.

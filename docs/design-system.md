@@ -190,6 +190,44 @@ s'arrêter, revenir, repartir.
 Deux couches, un `translate3d` chacune. Pas de flou, pas d'ombre animée, rien à repeindre.
 `touch-action: none` sur le cadre, `will-change: transform` sur les deux couches.
 
+### Le sens dit ce que le doigt fait — 19/08/2026
+
+Le dépliage était le seul geste du produit ; tout le reste se tapait. Il y en a deux
+maintenant, et un seul principe, celui de tous les téléphones — que le produit dessinait
+déjà, puisque **chaque action porte une flèche vers le haut** :
+
+| | vers le haut | vers le bas |
+|---|---|---|
+| **A1** | le pli se déplie | *(résiste — le caoutchouc)* |
+| **A2** | l'action de l'écran : A3 ou A5 monte | le pli se referme en A1 |
+| **A3 · A5** | *(rien : elles sont l'écran)* | elles redescendent, A2 revient |
+| **A4** | — | **rien.** Le mot est dit, il ne se reprend pas |
+| **le poème** | — | — · exception nommée, voir plus bas |
+
+**Un seul propriétaire du pointeur.** Deux écouteurs sur le même cadre se voleraient le
+doigt : le cadre garde les siens, et il choisit la piste au **premier mouvement franc**, six
+pixels — pas au `pointerdown`, où le sens n'est pas encore connu. Tant que la piste n'est
+pas choisie, rien n'est capturé, rien n'est promu, et un tap qui tremble ne coûte donc pas
+plus qu'avant. Chaque piste ne déplace ensuite que ce qui lui appartient — la pliure ses
+deux couches, une couche qui monte la sienne seule. On ne dépasse jamais deux couches
+composées ([fluidite.md](fluidite.md#les-couches-et-ce-quelles-coûtent)).
+
+**Le seuil est absolu pour la pliure, relatif pour une couche qu'on rabat.** `--seuil` est
+une **position** — 32 % de la hauteur — et c'est juste pour le dépliage : une feuille tirée
+à plus d'un tiers est ouverte. Mais rabattre une couche posée, c'est franchir ce même point
+par en dessous : il aurait fallu la traîner sur **68 %** de l'écran. Mesuré, un rabat de
+500px sur 844 ne suffisait pas. Une couche qui monte est une feuille qu'on pousse, pas une
+pliure qu'on tire : son seuil se compte **depuis là où elle est**, 32 % de course, et elle
+descend. L'élan de 0,55 px/ms vaut pour les deux, sans changement.
+
+**Le poème reste hors gestes**, et c'est la même exception que « un pli = un écran » : son
+corps défile, le doigt lui appartient entièrement, et son « c'est lu ↑ » est **au bout du
+texte**, là où la maquette B3 le met. On ne referme pas un poème en tirant, et on ne le
+referme pas non plus en poussant.
+
+**Le tap reste le chemin, jamais le seul chemin** — c'est la règle du bouton « déplier », et
+elle vaut pour les deux gestes : « répondre » et « c'est lu » se touchent aussi.
+
 Le premier des deux mouvements décoratifs est l'invite du volet : `translateY(-9px)` à 76 %
 d'un cycle de 2,6 s. Le second est la respiration de C5, `2,4 s` en opacité, pendant que le
 fichier d'un poème arrive. Elle **s'arrête** dès que le doigt touche — `animation: none`, et non
