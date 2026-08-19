@@ -19,6 +19,11 @@
  *   node scripts/verifie.mjs                  tout le dépôt
  *   node scripts/verifie.mjs --fichier <p>    un seul fichier
  *   node scripts/verifie.mjs --hook           sortie JSON pour un hook, jamais d'échec
+ *
+ * Ce qu'il ne regarde pas, et c'est voulu : `scripts/`. La moulinette écrit dans un terminal,
+ * pour moi — pas un écran, pas un mot qu'elle lira. Ses invariants à elle (réutiliser le
+ * jeton d'un numéro connu, ne jamais supprimer) ne sont pas des expressions régulières : ils
+ * ont des tests, et `garde-invariants` les relit.
  */
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs'
@@ -90,17 +95,26 @@ const segments = (nom) =>
     .filter(Boolean)
     .map((s) => s.toLowerCase())
 
+// « compte » et « erreur » ne sont PAS ici, alors qu'ils sont dans le lexique visible :
+// « compter » et un `catch (erreur)` sont du français interne, que personne ne lit à l'écran.
+// Un nom de code ne trahit le lexique que s'il nomme une chose que le produit a retirée.
 const NOMS_INTERDITS = new Set([
   'card', 'cards', 'carte', 'cartes', 'form', 'forms', 'formulaire', 'champ', 'champs',
-  'valid', 'valider', 'validate', 'create', 'creer', 'createur', 'studio', 'compte',
-  'notif', 'notification', 'error', 'erreur', 'open', 'ouvrir',
+  'valid', 'valider', 'validate', 'create', 'creer', 'createur', 'studio',
+  'notif', 'notification', 'open', 'ouvrir',
 ])
+
+/** Le seul module qui a le droit de toucher au stockage — et son fichier de tests. */
+const JOURNAL = /lib\/journal(\.test)?\.ts$/
 
 /** Les chaînes de caractères d’une ligne — ce que quelqu’un peut lire à l’écran. */
 function chaines(ligne) {
   const trouvees = []
-  for (const m of ligne.matchAll(/'([^'\\]*)'|"([^"\\]*)"|`([^`\\$]*)`/g)) {
-    trouvees.push(m[1] ?? m[2] ?? m[3] ?? '')
+  for (const m of ligne.matchAll(/'([^'\\]*)'|"([^"\\]*)"|`([^`\\]*)`/g)) {
+    // Une interpolation n'est pas du texte : `nº ${n}` porte « nº », pas « n ». Sans ce
+    // retrait il fallait exclure `$` du motif, et toute chaîne interpolée — donc tout
+    // message qui porte un numéro — échappait en silence à la relecture.
+    trouvees.push((m[1] ?? m[2] ?? m[3] ?? '').replace(/\$\{[^{}]*\}/g, ' '))
   }
   return trouvees.filter((c) => /[A-Za-zÀ-ÿ]/.test(c))
 }
@@ -114,14 +128,14 @@ for (const chemin of aRegarder) {
   const propre = sansCommentaires(brut, ext)
   const lignes = propre.split('\n')
   const lignesBrutes = brut.split('\n')
-  const test = !/\.test\.ts$/.test(f)
+  const lisible = !/\.test\.ts$/.test(f)
 
   lignes.forEach((ligne, i) => {
     const n = i + 1
     const exempte = /lexique-ok/.test(lignesBrutes[i])
 
     /* les mots visibles */
-    if (test && !exempte) {
+    if (lisible && !exempte) {
       const visibles =
         ext === '.html'
           ? [...ligne.matchAll(/>([^<>]{2,})</g)].map((m) => m[1]).concat(
@@ -157,9 +171,9 @@ for (const chemin of aRegarder) {
     }
 
     /* les invariants (CLAUDE.md#les-invariants) */
-    if (/\blocalStorage\s*\./.test(ligne) && !/lib\/journal\.ts$/.test(f))
+    if (/\blocalStorage\s*\./.test(ligne) && !JOURNAL.test(f))
       refus(f, n, 'invariant — tout accès à `localStorage` passe par `journal.ts`')
-    if (/\bsessionStorage\s*\./.test(ligne) && !/lib\/journal\.ts$/.test(f))
+    if (/\bsessionStorage\s*\./.test(ligne) && !JOURNAL.test(f))
       regard(f, n, 'invariant — `garde-invariants` demande qu’aucun stockage ne vive hors de `journal.ts`')
     if (/history\.(pushState|replaceState)/.test(ligne))
       refus(f, n, 'invariant — routage par hash seulement : Pages ne réécrit aucune URL, une route profonde tombe en 404')

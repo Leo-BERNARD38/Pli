@@ -266,3 +266,32 @@ si la mesure sur les deux téléphones le rend visible.
   Surtout, la roadmap dit maintenant **où on lance** : à la fin du jalon 3, quand elle a
   répondu. Tout ce qui suit est du confort — précieux, mais du confort. Réversible en une
   ligne si le poème compte plus que le journal.
+
+### Ce que la revue de la configuration a trouvé
+
+`garde-invariants`, lancé seul sur le diff — les deux autres relecteurs n'avaient aucun écran
+ni aucun geste à lire. Zéro refus, quatre choses à regarder, toutes réelles :
+
+- **18/08/2026 — la fiche mentait le jour de sa naissance.** `memo.md` annonçait **5,86 ko**
+  pour le document d'A1, recopiés de `chantier.md` ; `chargement.md` dit **9,56 ko** depuis
+  que le jalon 2 y a mis A1, A2, C4, le geste et la vague 3. La fiche énonce elle-même la
+  règle — « si une valeur contredit `docs/`, c'est `docs/` qui gagne » — et ne se l'était pas
+  appliquée. Corrigée, et complétée : 1 requête bloquante, 4 avant le texte lisible, 5 avant
+  A1 complet. C'est exactement la panne contre laquelle la fiche existe : elle vaut ce que
+  vaut sa dernière relecture.
+- **18/08/2026 — `verifie.mjs` refusait `journal.test.ts`.** L'exemption ne couvrait que le
+  fichier exact ; un `localStorage.clear()` dans un test du journal — inévitable au jalon 3 —
+  aurait bloqué la CI. L'exemption couvre le module **et** son fichier de tests.
+- **18/08/2026 — « compte » et « erreur » sortent des noms de code interdits.** Ils restent
+  interdits **à l'écran**, où le lexique s'applique. Mais « compter » et un `catch (erreur)`
+  sont du français interne que personne ne lit, et le compteur de signes de l'atelier serait
+  tombé dans le piège. Un nom de code ne trahit le lexique que s'il nomme une chose que le
+  produit a retirée — carte, formulaire, champ, studio.
+- **18/08/2026 — une chaîne interpolée échappait entièrement à la relecture.** Le motif des
+  gabarits excluait `$`, donc `` `nº ${n} !` `` n'était jamais lu : ni l'exclamation, ni
+  l'emoji, ni les capitales. Le trou inverse de ce qu'on cherchait, et il touchait tout écran
+  qui interpole un numéro — A3, C1. L'interpolation est maintenant retirée du texte, et le
+  texte relu.
+- **18/08/2026 — `scripts/` reste hors de portée du script, et c'est écrit.** La moulinette
+  écrit dans un terminal, pour moi : pas un écran, pas un mot qu'elle lira. Ses invariants à
+  elle ont des tests et un relecteur.

@@ -103,9 +103,11 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 
 ## Le chargement (chargement.md, hebergement.md)
 
-- **A1 en 5 requêtes** : le document, trois polices préchargées, une peinture.
-- Vague 1 **≤ 14 ko gzip** — le build échoue au-delà. Mesuré aujourd'hui : **5,86 ko**.
-- Les trois polices d'A1 : **52,6 ko** mesurés, cible 90.
+- Les requêtes d'A1 : **1** bloquante avant le premier rendu (le document, et lui seul),
+  **4** avant le texte lisible (les trois polices), **5** avant A1 complet (le rideau).
+- Le document d'A1 : cible **≤ 14 ko gzip**, mesuré **9,56 ko** — le build échoue au-delà.
+- Les trois polices d'A1 : cible **≤ 90 ko**, mesuré **52,6 ko**.
+- A2 après le geste : **0 requête**.
 - Un `#p=` lance son `fetch` **en toute première instruction**.
 - Budgets comptés **en gzip** (Pages ne sert pas de brotli) et **cache vide**
   (`max-age=600` : chaque visite est presque froide).

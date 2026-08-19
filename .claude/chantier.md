@@ -114,13 +114,17 @@ leurs cibles de 14 et 90 ko. Les cinq woff2 sont reproductibles **au bit près**
 
 En revanche : **2 requêtes avant le premier texte au lieu d'une**, et **6 avant A1 complet au
 lieu de 5** — parce que le CSS et le module n'étaient pas encore inline. **Réglé au jalon 2**,
-première étape : c'est une requête avant le premier texte, et le document pèse 5,86 ko gzip.
+première étape : c'est une requête avant le premier texte, et le document pesait alors
+5,86 ko gzip — 9,56 aujourd'hui, une fois tout le jalon 2 dedans.
 
 ## Jalon 2 — le pli et le geste
 
 - [x] le document du lecteur se suffit à lui-même — gabarit et module inline, par le greffon
       `pli-inliner-le-document` de `vite.config.ts` ; **1 requête** avant le premier texte,
-      **5,86 ko gzip**, plafond de 14 ko tenu par le build
+      plafond de 14 ko tenu par le build. Le document pesait 5,86 ko à cette étape ; il en
+      pèse **9,56** une fois A1, A2, C4, le geste et la vague 3 dedans
+      ([chargement.md](../docs/chargement.md#le-budget-écran-par-écran)) — c'est ce
+      chiffre-là qui fait foi
 - [x] le pli tient dans l'écran — `--echelle` sur le pli, vérifié de 320 × 568 à 1440 × 900 :
       la page ne défile jamais et la composition ne bouge pas
 - [x] A1 · l'attente, pour les quatre types — le rideau, la promesse, le volet, l'invite
