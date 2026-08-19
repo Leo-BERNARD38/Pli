@@ -342,6 +342,14 @@
   gap: 6px;
 }
 
+/* `display: flex` ci-dessus est une déclaration d'auteur : elle bat le `[hidden]` de la
+   feuille du navigateur, et les lignes que le type ne demande pas restaient à l'écran —
+   un titre, une date et un lieu sur une pensée, vus le 19/08/2026. Même oubli que
+   `.ecran[hidden]` et `.pli[hidden]` : la règle se réécrit ici. */
+.ligne[hidden] {
+  display: none;
+}
+
 .ligne__nom {
   font-family: var(--mono);
   font-weight: 700;
