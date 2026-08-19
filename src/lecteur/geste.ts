@@ -15,8 +15,6 @@
 // entre deux événements, et `pointermove` est passif — `touch-action: none` a déjà fait le
 // travail, et un écouteur non passif oblige le navigateur à attendre notre code.
 
-import type { Echelle } from './plateau.ts'
-
 /** Sous `prefers-reduced-motion`, l'ouverture tombe à 120 ms (docs/fluidite.md). */
 const CALME = window.matchMedia('(prefers-reduced-motion: reduce)')
 const OUVERTURE_CALME = 120
@@ -46,8 +44,6 @@ export interface Pieces {
   invite: HTMLElement | null
   /** L'alternative au geste, atteignable au clavier. */
   bouton: HTMLElement | null
-  /** L'échelle du plateau, à figer le temps du geste. */
-  echelle: Echelle
   /**
    * Le seuil vient d'être franchi : l'entrée du journal est **décidée**, pas encore écrite.
    * C'est le moment que docs/parcours.md#le-dépliage nomme, et il tombe avant l'animation
@@ -90,8 +86,8 @@ export function armer(p: Pieces): Geste {
 
   /**
    * Les deux seules écritures de tout le geste. En **pourcentages** : un `translate` en %
-   * se rapporte à l'élément lui-même, donc plus rien ne dépend de la hauteur ici, et la
-   * mise à l'échelle du plateau ne fausse rien.
+   * se rapporte à l'élément lui-même, donc plus rien ne dépend de la hauteur ici — ni de
+   * la taille du cadre, qui vaut désormais celle de l'écran.
    */
   function placer(course: number): void {
     p.dessus.style.transform = `translate3d(0,${-course * 100}%,0)`
@@ -108,7 +104,6 @@ export function armer(p: Pieces): Geste {
 
   function finir(): void {
     for (const couche of couches) couche.style.willChange = ''
-    p.echelle.relacher()
     // L'invite ne revient qu'une fois le pli refermé : la faire repartir pendant qu'il
     // retombe, ça se voit (docs/fluidite.md#le-mouvement-décoratif).
     if (p.invite && !ouvert) p.invite.style.animation = ''
@@ -190,9 +185,6 @@ export function armer(p: Pieces): Geste {
     p0 = ouvert ? 1 : 0
     // Le doigt qui sort du cadre continue le geste.
     p.cadre.setPointerCapture(doigt)
-    // La barre d'URL se rétracte au premier mouvement : sans ça, un `resize` changerait la
-    // taille d'une couche qui porte l'ombre et le grain, et la re-rastériserait.
-    p.echelle.figer()
     preparer()
     demandeImage = requestAnimationFrame(aChaqueImage)
   })
@@ -225,7 +217,6 @@ export function armer(p: Pieces): Geste {
   // Le geste est le chemin, jamais le seul chemin (docs/parcours.md#le-dépliage).
   p.bouton?.addEventListener('click', () => {
     if (ouvert) return
-    p.echelle.figer()
     preparer()
     // Deux images de battement, le temps que la couche existe avant qu'on la déplace.
     requestAnimationFrame(() => requestAnimationFrame(() => poser(true)))
