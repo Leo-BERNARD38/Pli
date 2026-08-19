@@ -61,7 +61,10 @@ function tete(etiquette: string, classe = 'etiquette'): HTMLElement {
 export function chemin(ou: ParentNode): void {
   for (const marque of ou.querySelectorAll<HTMLElement>('p.marque')) {
     const lien = document.createElement('a')
-    lien.className = 'marque'
+    // Les classes se recopient toutes, pas seulement `marque` : la marque de C5 porte aussi
+    // sa respiration, et un `className = 'marque'` la lui prenait en la transformant en
+    // chemin — l'attente ne respirait plus, sans que rien ne le dise.
+    lien.className = marque.className
     lien.href = '#/'
     lien.textContent = marque.textContent
     marque.replaceWith(lien)

@@ -197,6 +197,20 @@ toujours qu'un fichier déjà archivé soit modifié, supprimé ou renommé. Le 
 projet design est identique **bit pour bit** à `design/handoff/` : rien à reprendre de ce
 côté, l'archive du dépôt était à jour.
 
+**La maquette disait déjà que le poème défile — c'est `docs/` qui avait inventé la
+pagination.** Trouvé le 19/08/2026, en allant y chercher C5 : l'annotation du canevas
+**Pli — Maquettes** écrit, sur les nouveaux types, « **Le poème (B2–B3) passe au fond encre.
+C'est le seul type qui défile**, donc le seul qui garde un repère de progression en haut ».
+Six documents de `docs/` décrivaient pourtant une pagination strophe par strophe et « la
+suite ↑ », que rien dans `design/` ne demande. C'est l'inverse du cas habituel : ici ce n'est
+pas l'archive qui se trompe, c'est la spécification qui s'était éloignée d'elle sans le
+noter. Corrigé le même jour, dans les deux sens — le produit défile, et `docs/` le dit.
+
+**Un repère de progression n'a pas été repris.** La même annotation en demande un, « en
+haut ». Le produit n'en a pas : ce serait un élément de plus sur le seul écran qui n'a rien
+d'autre que le texte, et la barre du navigateur en donne déjà un. À rouvrir si la lecture
+d'un long poème se perd, sur les deux téléphones.
+
 Ce que les canevas ajoutent, écran par écran :
 
 | Écran | Ce que la maquette montre | Ce que le produit en retient |
@@ -205,12 +219,23 @@ Ce que les canevas ajoutent, écran par écran :
 | **C2** | un écran de synthèse : « Tu as dit oui », la griffe, « relire le pli », « tes plis ↑ » | le produit réaffiche le pli entier et rappelle le mot — deux formes différentes |
 | **C3** | « Ce pli s'est refermé », Bodoni **400** sur encre, « tes plis » | le fond encre et le chemin vers le journal sont tenus |
 | **C4** | « Il n'y a rien ici », Bodoni 400, et une action « voir tes plis ↑ » | le produit dit « lien abîmé » et n'a que la marque comme chemin |
-| **C5** | la marque seule en 64px, un filet pointillé carmin, « un pli arrive » | écran encore à écrire — il vient avec le poème |
+| **C5** | la marque seule en 64px, un filet pointillé carmin, « un pli arrive » | **suivi**, et l'écran est écrit (19/08/2026). Deux écarts, plus bas |
 | **l'atelier** | un choix de **style** (crème · encre · carmin · drapé), une image, une date | **écarté** : « le papier découle du type, jamais un choix offert au dépôt » (règle nº 4) |
 | **D4 de la maquette** | un aperçu **plein écran** — « tu vois ce qu'elle verra » | le produit n'a que l'aperçu en petit de D2 ; aucune décision prise |
 
 Deux numéros ne se correspondent pas : le **D5 de la maquette** est l'écran du lien prêt,
 c'est-à-dire notre **D3** ; et le D4 de la maquette est un aperçu, pas le tiroir.
+
+**Les deux écarts de C5** (19/08/2026, l'écran est écrit) :
+
+- **Il centre verticalement**, ce qu'aucun autre écran du produit ne fait et que la liste à
+  cocher plus bas interdit. C'est la maquette qui le compose ainsi, et elle a raison ici :
+  C5 n'a pas de contenu, il n'a rien à aligner en bas. L'exception s'arrête à cet écran.
+- **« Deux secondes maximum, sinon C4 » n'est pas repris.** La maquette l'annote ; le
+  produit ne le fait pas, et c'est délibéré. Un réseau lent n'est pas un lien abîmé — c'est
+  exactement la confusion que « hors ligne ≠ introuvable » vient de défaire
+  ([parcours.md](parcours.md#les-états)). C5 attend aussi longtemps que le réseau met, et
+  ne rend la main qu'au fichier ou au refus.
 
 **La promesse d'A1 contredit son gabarit.** [parcours.md](parcours.md#a1--lattente) écrit
 « Commune aux quatre types ; seule la promesse change », puis donne **une** phrase de
@@ -251,10 +276,12 @@ Rien de tout cela n'est dans les prototypes. `PLI.md` §10 l'admet lui-même.
 Avant de considérer un écran fini :
 
 1. **Les cinq règles** de [design-system.md](design-system.md#les-cinq-règles) tiennent-elles ?
-2. Le contenu s'aligne-t-il **en bas** ? On ne centre jamais verticalement. Deux exceptions,
-   et elles seules : un corps **réparti** (le souvenir), et le **poème**, aligné en haut
-   parce qu'il défile — sous `flex-end`, ce qui dépasse sort par le haut et ne se rattrape
-   pas au défilement.
+2. Le contenu s'aligne-t-il **en bas** ? On ne centre jamais verticalement. **Trois
+   exceptions, et elles seules** : un corps **réparti** (le souvenir) ; le **poème**, aligné
+   en haut parce qu'il défile — sous `flex-end`, ce qui dépasse sort par le haut et ne se
+   rattrape pas au défilement ; et **C5**, l'attente, le seul écran du produit qui centre —
+   il n'a pas de contenu, donc rien à aligner en bas. Un quatrième écran qui centrerait est
+   à refaire, pas à discuter.
 3. Une seule marge, **26px**. Aucun autre retrait horizontal.
 4. **Un seul titre**, **une seule griffe**, **une seule action** par pli.
 5. Le texte tient-il **aux deux extrêmes** — quatre mots et le maximum autorisé ?

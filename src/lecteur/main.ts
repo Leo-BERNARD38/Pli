@@ -55,7 +55,13 @@ const cadre = document.querySelector<HTMLElement>('.pli')
 if (cadre) chemin(cadre)
 const a1 = document.querySelector<HTMLElement>('#a1')
 const c4 = document.querySelector<HTMLElement>('#c4')
+const c5 = document.querySelector<HTMLElement>('#c5')
+const horsLigne = document.querySelector<HTMLElement>('#hors-ligne')
 const dessous = document.querySelector<HTMLElement>('.pli__dessous')
+
+// « réessayer » recharge la page : le hash n'a pas bougé, donc la demande du fichier
+// repart en première instruction, comme au premier passage. Rien à remonter à la main.
+document.querySelector('#reessayer')?.addEventListener('click', () => location.reload())
 
 /**
  * Un seul écran à la fois, et jamais deux. `hidden` seul ne suffit pas : les couches sont
@@ -119,6 +125,17 @@ function marquer(lien: 'c' | 'p'): void {
 }
 
 /**
+ * Le temps qu'on laisse au réseau avant de montrer C5.
+ *
+ * **Ce chiffre n'est pas mesuré, et `docs/` n'en donne aucun** — il dit seulement que C5
+ * « ne s'affiche que s'il dure » (chargement.md#le-poème-le-seul-cas-qui-dépend-du-réseau).
+ * Il est ici pour que l'écran d'attente ne clignote pas sur un aller-retour ordinaire, et
+ * il attend d'être vérifié sur les deux téléphones, en 4G — c'est noté au chantier. Trop
+ * court, C5 clignote ; trop long, elle regarde un écran vide.
+ */
+const AVANT_C5 = 300
+
+/**
  * Le fichier d'un poème : celui demandé en première instruction si c'est bien le sien,
  * sinon un nouveau. La demande ne sert qu'une fois.
  */
@@ -139,6 +156,18 @@ interface Apport {
 }
 
 /**
+ * HORS LIGNE N'EST PAS INTROUVABLE, et c'est toute la raison d'être de cette classe.
+ *
+ * Un fichier absent et un réseau coupé arrivaient au même endroit — « lien abîmé ». Or l'un
+ * est définitif et l'autre passe : le second mérite « réessayer », et le dire autrement
+ * serait mentir sur ce qui est arrivé (docs/roadmap.md#le-poème).
+ *
+ * Seul le `fetch` qui LÈVE est un réseau coupé. Une réponse qui arrive et dit non — 404,
+ * 500 — est un fichier qu'on n'a pas : le réseau a marché.
+ */
+class ReseauCoupe extends Error {}
+
+/**
  * Le pli que cette route demande. Cette fonction n'écrit pas — un seul endroit écrit, plus
  * bas. Un hash qu'on ne sait pas lire est un lien abîmé : c'est exactement ce que le
  * routeur appelle « inconnu », et il n'y a rien d'autre à en dire.
@@ -147,11 +176,24 @@ async function pliDe(route: Route): Promise<Apport> {
   if (route.ecran === 'pli') return { pli: await decoder(route.payload), payload: route.payload }
 
   if (route.ecran === 'poeme') {
-    const reponse = await chercher(route.nom)
+    let reponse: Response
+    try {
+      reponse = await chercher(route.nom)
+    } catch (cause) {
+      throw new ReseauCoupe('pas de réseau', { cause })
+    }
     if (!reponse.ok) throw new Error('lien abîmé')
     // Le contenu récupéré est recopié dans l'entrée : un fichier supprimé ne doit pas faire
     // disparaître un pli de son archive (docs/donnees.md#4-son-journal).
-    const payload = (await reponse.text()).trim()
+    let texte: string
+    try {
+      texte = await reponse.text()
+    } catch (cause) {
+      // La réponse a commencé puis s'est interrompue : le fichier existe, c'est le réseau
+      // qui a lâché en route.
+      throw new ReseauCoupe('pas de réseau', { cause })
+    }
+    const payload = texte.trim()
     return { pli: await decoder(payload), payload }
   }
 
@@ -360,8 +402,19 @@ suivre((route) => {
     return
   }
 
+  // C5 · L'ATTENTE, et elle ne se montre que si elle dure. Le poème est le seul écran du
+  // produit qui dépende du réseau ; sur un aller-retour ordinaire, C5 ne se voit jamais.
+  // Le compte est annulé dès que le pli arrive, quelle que soit l'issue.
+  const attente =
+    route.ecran === 'poeme' && c5
+      ? setTimeout(() => {
+          if (mienne === generation) montrer(c5)
+        }, AVANT_C5)
+      : null
+
   pliDe(route).then(
     ({ pli, payload }) => {
+      if (attente !== null) clearTimeout(attente)
       if (mienne !== generation) return
       retirerLesCouchesQuiMontent()
 
@@ -385,8 +438,12 @@ suivre((route) => {
       marquer(route.ecran === 'poeme' ? 'p' : 'c')
       void preparerLeGeste(pli, payload)
     },
-    () => {
-      if (mienne === generation) montrer(c4)
+    (cause: unknown) => {
+      if (attente !== null) clearTimeout(attente)
+      if (mienne !== generation) return
+      // Hors ligne n'est pas introuvable : l'un passe, l'autre est définitif
+      // (docs/roadmap.md#le-poème). Le seul endroit du produit où la distinction existe.
+      montrer(cause instanceof ReseauCoupe ? (horsLigne ?? c4) : c4)
     },
   )
 })

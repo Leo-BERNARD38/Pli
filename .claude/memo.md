@@ -24,6 +24,10 @@ l'atelier · nº 014 · « Un pli t'attend. » · « pour toi seule » · « dé
 **On ne dit pas** — ouvrir · envoyer un message · créer · valider · champ · formulaire ·
 compte · notification · erreur · studio · créateur · carte · expiré.
 
+**« ligne » a deux sens, et les deux sont bons** : *la ligne* de saisie de l'atelier, qui
+remplace « champ » ; et *hors ligne*, l'écran du réseau coupé. Le second est un idiome, pas
+un emploi du premier.
+
 La règle vaut **aussi pour les noms du code**. Français, minuscules, tutoiement, phrases
 courtes. Pas d'exclamation, pas d'emoji — seule exception nommée, le cœur du message WhatsApp
 d'A3. Étiquettes en minuscules dans le code, capitales par `text-transform`.
@@ -39,6 +43,7 @@ le cadre         remplit le viewport — 100 % × 100dvh, ni coin ni ombre
 --pliure 34%     hauteur du volet fermé, en bas
 tête    padding 34px + encoche, 26px + encoche, 0
 corps   flex:1, padding 0 26px 30px + encoche, contenu ALIGNÉ EN BAS
+        trois exceptions : réparti (souvenir) · en haut et défilant (poème) · centré (C5)
 volet   34 % de la hauteur, fond carmin
 ```
 

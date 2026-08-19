@@ -45,8 +45,9 @@ enchaînent, ce qui les déclenche, et ce qui se range où.
 À l'ouverture du lien, dans cet ordre :
 
 1. **Décoder.** `#c=` se décode sur place. `#p=` demande un `fetch` — c'est le seul cas
-   où **C5** s'affiche, et le seul qui exige le réseau. Un décodage ou un fetch qui échoue
-   donne **C4**.
+   où **C5** s'affiche, et le seul qui exige le réseau. Un décodage qui échoue, ou un
+   fichier introuvable, donnent **C4** ; un réseau coupé donne l'écran **hors ligne**, qui
+   propose « réessayer ».
 2. **Chercher dans le journal**, sur l'empreinte du payload — jamais sur le numéro
    (voir [donnees.md](donnees.md#4-son-journal)). Trouvé et déjà déplié → **C3**.
 3. Sinon → **A1**.
@@ -163,8 +164,16 @@ d'une invitation à laquelle elle a déjà répondu.
 | **C1** | le journal, y compris vide | crème |
 | **C2** | relecture d'une invitation déjà répondue — depuis le journal, ou au retour de WhatsApp | crème |
 | **C3** | lien déjà déplié — mène au journal | encre |
-| **C4** | payload illisible, ou fichier de poème introuvable | crème |
+| **C4** | payload illisible, ou fichier de poème **introuvable** | crème |
+| **hors ligne** | le réseau a lâché — **poème uniquement** | crème |
 | **C5** | attente du fichier — **poème uniquement** | crème |
+
+**Hors ligne n'est pas introuvable.** C4 confondait les deux, et ce sont deux choses
+opposées : un fichier absent est définitif, un réseau coupé passe. Le second porte donc son
+propre écran et une action, « réessayer » — dire « lien abîmé » à quelqu'un dont le pli
+l'attend serait un mensonge. La distinction se fait sur ce que le `fetch` a fait : seul
+celui qui **lève** est un réseau coupé ; une réponse qui arrive et dit non — 404 — est un
+fichier qu'on n'a pas, et le réseau a marché.
 
 **C2 est un rappel, pas le pli.** Sa maquette (`design/canevas/`) en fait un écran de
 synthèse, et c'est ce qu'on suit : ce qu'elle a répondu, quand, la griffe, et les faits —

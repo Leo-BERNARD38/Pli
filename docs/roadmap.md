@@ -20,7 +20,6 @@ jalon 3, et tout ce qui suit est du confort.
 | Point | Ce qui manque | Quand |
 |---|---|---|
 | **Le numéro `n` des plis courts** | il vient de `pli.v1.compteur`, sur mon téléphone seul. Le tiroir l'affiche et permet de le corriger — reste à décider ce qui se passe si je ne m'en aperçois pas | jalon 4 |
-| **Hors ligne ≠ introuvable** | pour un poème, C4 confond un fichier absent et un réseau coupé. Le second mérite « réessayer », pas « lien abîmé » ([parcours.md](parcours.md#les-états)) | avec le poème |
 
 Les écrans qui ne sont pas encore maquettés sont listés à part, en fin de
 [parcours.md](parcours.md#3-ce-qui-nest-pas-encore-maquetté).
@@ -136,9 +135,6 @@ le jour où il manque vraiment.
 - `plis-source/` gitignoré, garde-fou avant commit
 - C5 l'attente du fichier
 - D2p : la liste des poèmes dans l'atelier
-- **Hors ligne ≠ introuvable** : pour un poème, C4 confond un fichier absent et un réseau
-  coupé. Le second mérite « réessayer », pas « lien abîmé »
-  ([parcours.md](parcours.md#les-états))
 
 ### Le bureau
 
