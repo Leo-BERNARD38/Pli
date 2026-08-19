@@ -348,8 +348,21 @@ listait comme jamais dessinés : **C2 à C5**, **B0a-c**, **B2 · B3**, et l'ate
       l'archive était à jour, il n'y avait rien à reprendre de ce côté
 - [ ] **C4 reste nu, et c'est tranché** : la maquette lui donne « voir tes plis ↑ » en bas,
       l'auteur a choisi de n'en rien faire — un lien abîmé n'invite pas à aller ailleurs
-- [ ] **C2 part vers la maquette** : elle en fait un écran de synthèse, le code réaffiche le
-      pli entier. Tranché le 19/08/2026 — voir le lot en cours
+- [x] **A1 · la promesse suit le type.** `parcours.md` disait « seule la promesse change »
+      puis n'en donnait qu'une ; le gabarit l'écrivait en dur pour les quatre. Les quatre
+      promesses viennent des écrans d'attente du design, débarrassées de ce qu'elles
+      comptaient — **aucune ne chiffre** : le plafond d'une pensée est en signes, pas en
+      lignes, et `revue-ecran` a refusé la première version qui promettait « deux lignes ».
+      Celle de l'invitation reste en dur, les trois autres la remplacent au décodage, dans
+      la même frame que le numéro et la signature. **+379 octets gzip** : le document passe
+      de 11 609 à 11 988, plafond 14 336
+- [x] **C2 · le rappel va vers la maquette** : un écran de synthèse — ce qu'elle a répondu,
+      quand, de quoi il s'agissait — et « relire le pli » pour le pli entier, qui est ce
+      que le code faisait jusqu'ici. Trois écarts assumés à cette maquette : on écrit
+      « répondu le … » et non « réponse envoyée », parce que rien ne garantit qu'elle a
+      appuyé sur envoyer ; une seule action, la marque menant déjà au journal ; et sa phrase
+      « Le pli reste lisible. Onze jours. » n'est pas reprise — elle promet une durée que
+      **la mesure 2** n'a pas rendue
 
 Le §11 du `PLI.md` du projet design décrit l'icône et laisse un « reste à faire » —
 vectoriser la lettre. **Il est déjà fait** : `scripts/icones.py` sort des `<path>`, aucun

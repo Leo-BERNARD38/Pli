@@ -150,10 +150,23 @@ d'une invitation à laquelle elle a déjà répondu.
 | Code | Quand | Papier |
 |---|---|---|
 | **C1** | le journal, y compris vide | crème |
-| **C2** | relecture d'une invitation déjà répondue, **depuis le journal** | crème |
+| **C2** | relecture d'une invitation déjà répondue — depuis le journal, ou au retour de WhatsApp | crème |
 | **C3** | lien déjà déplié — mène au journal | encre |
 | **C4** | payload illisible, ou fichier de poème introuvable | crème |
 | **C5** | attente du fichier — **poème uniquement** | crème |
+
+**C2 est un rappel, pas le pli.** Sa maquette (`design/canevas/`) en fait un écran de
+synthèse, et c'est ce qu'on suit : ce qu'elle a répondu, quand, la griffe, et les faits —
+le jour, l'heure, le lieu. Le pli entier est à un tap, sous « relire le pli », et c'est là
+seulement que le mot remplace « répondre » : on ne répond pas deux fois. Trois écarts à cette
+maquette :
+
+- elle écrit « réponse envoyée le … ». **On n'affirme pas** : rien ne garantit qu'elle a
+  appuyé sur envoyer, c'est la correction d'A4. Le journal sait quand elle a répondu, pas ce
+  que WhatsApp en a fait ;
+- elle porte deux actions. Une seule par écran — la marque mène déjà au journal ;
+- sa phrase « Le pli reste lisible. Onze jours. » promet une durée que **la mesure 2** n'a pas
+  rendue. Elle n'est pas reprise.
 
 **C4 n'est plus « lien mort ».** Il n'y a plus d'expiration ; le cas réel est le lien
 tronqué par l'application de messagerie. Le message le dit et propose de me le redemander.

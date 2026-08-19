@@ -143,7 +143,7 @@ s'il dure ([parcours.md](parcours.md#larrivée)).
 
 | Poste | Cible | Mesuré | Le |
 |---|---|---|---|
-| document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 ko** | **11,99 ko** — un seul fichier : A1, C4, le gabarit, le geste et la vague 3. 9,56 ko le 18/08 ; le journal du jalon 5 puis les quatre promesses d'A1 (+379 o) l'ont porté là | 19/08/2026, en local |
+| document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 ko** | **12,26 ko** — un seul fichier : A1, C4, le gabarit, le geste et la vague 3. 9,56 ko le 18/08 ; le journal du jalon 5, les quatre promesses d'A1 (+379 o) puis C2 le rappel l'ont porté là | 19/08/2026, en local |
 | les trois polices d'A1 | **≤ 90 ko** | **52,6 ko** — Pinyon 24,6 · Newsreader 20,8 · Space Mono 7,2 | 18/08/2026, en local |
 | une texture | définition native, **600 ko à 1,15 Mo** | 600 ko à 1,15 Mo | 17/08/2026 |
 | requêtes **bloquantes** avant le premier rendu | **1** | **1** — le document, et lui seul | 18/08/2026, en local |
