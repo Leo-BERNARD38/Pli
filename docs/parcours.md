@@ -251,8 +251,12 @@ m'imprime le lien fini. Je pousse. Le contrat complet est dans
 | **D4 · le tiroir** | Nouveau : les constantes n'ont nulle part où vivre en dehors de mon téléphone |
 | **D2p · quel poème** | Nouveau : conséquence du poème-fichier |
 | **C1 à l'état vide** | Le journal existe, son écran vide non |
-| **C2, C3, C4, C5** | Inventoriés, jamais dessinés |
-| **B0a-c** | Les trois autres écrans d'attente |
-| **B2 · B3** | Le poème et sa pagination |
 | **`#/installer`** | Nouveau, et il porte la survie du journal — voir [architecture.md](architecture.md#le-journal-peut-être-effacé) |
-| **L'historique de l'atelier** | Relire et renvoyer ce que j'ai déposé |
+| **L'historique de l'atelier** | Relire et renvoyer ce que j'ai déposé. La maquette qui porte le numéro D5 est **l'écran du lien** — notre D3 — et pas celui-là |
+
+**Corrigé le 19/08/2026 : quatre lignes sont sorties de ce tableau.** **C2, C3, C4, C5**,
+**B0a-c** et **B2 · B3** y figuraient comme « inventoriés, jamais dessinés » ; ils **sont
+dessinés**, dans les canevas du projet design que `design/handoff/` n'avait pas transportés.
+Les écrans concernés ont donc été codés d'après cette liste, c'est-à-dire sans leur maquette.
+Ce qu'elles montrent, et ce que le produit en retient, est relevé dans
+[integration.md](integration.md#les-maquettes-que-le-handoff-navait-pas-transportées).
