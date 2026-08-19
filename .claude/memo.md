@@ -137,6 +137,9 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 | `pli.v1.journal` | son téléphone | `{ h, c, deplieLe, reponse? }`, du plus récent au plus ancien |
 | `pli.v1.reglages` · `pli.v1.compteur` · `pli.v1.deposes` · `pli.v1.seuil` | mon téléphone | le tiroir, et rien de commun avec son journal |
 
+Le compteur se cale sur l'index des poèmes à l'ouverture de D2p, et **ne recule jamais** : un
+poème écrit hors atelier consomme un numéro que le tiroir ignore.
+
 `h` est un **sha-256 tronqué à 8 octets** du payload — 16 signes hexadécimaux. Le
 dédoublonnage se fait sur `h`, **jamais sur `n`**. Son journal passe par `journal.ts`, mon
 tiroir par `tiroir.ts`, et rien d'autre ne touche le stockage.

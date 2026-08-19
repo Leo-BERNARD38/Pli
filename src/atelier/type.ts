@@ -27,7 +27,8 @@ export interface Papier {
   voix: number | null
   /** les deux faits — l'invitation seulement */
   faits: boolean
-  /** ce que l'atelier ne sait pas encore fabriquer */
+  /** ce que l'atelier sait fabriquer. Aucun type n'est à `false` aujourd'hui : le drapeau
+   *  reste parce qu'un type qui arriverait sans son écran doit pouvoir se montrer sans agir. */
   ici: boolean
 }
 
@@ -68,7 +69,7 @@ export const PAPIERS: Record<Type, Papier> = {
     titre: null,
     voix: null,
     faits: false,
-    ici: false,
+    ici: true,
   },
   sou: {
     nom: 'un souvenir',

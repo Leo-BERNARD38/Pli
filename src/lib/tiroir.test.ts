@@ -6,6 +6,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import {
+  calerLeCompteur,
   deposes,
   empreinteDuSeuil,
   fixerLeProchainNumero,
@@ -105,4 +106,25 @@ test('l’historique dédoublonne sur le payload, pas sur le numéro', () => {
   const liste = deposes()
   assert.equal(liste.length, 2)
   assert.equal(liste[0]?.c, '2aaa')
+})
+
+// ── le compteur calé sur l'index des poèmes ───────────────────────────────────────────
+
+test('le compteur se cale sur un numéro pris ailleurs, et ne recule jamais', () => {
+  bacNeuf()
+  // Un poème écrit hors atelier a consommé le nº 015 : sans calage, le prochain pli le
+  // reprendrait, et deux plis porteraient le même numéro (docs/donnees.md#lindex).
+  assert.equal(prochainNumero(), 1)
+  calerLeCompteur(15)
+  assert.equal(prochainNumero(), 16)
+
+  // Il n'avance que vers le haut : un index en retard sur le tiroir ne doit pas rendre un
+  // numéro déjà parti dans une conversation.
+  calerLeCompteur(3)
+  assert.equal(prochainNumero(), 16)
+
+  // Et il compose avec la reprise à la main du tiroir.
+  fixerLeProchainNumero(40)
+  calerLeCompteur(12)
+  assert.equal(prochainNumero(), 40)
 })

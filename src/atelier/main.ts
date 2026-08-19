@@ -24,11 +24,12 @@ import '../styles/pen.css'
 import '../styles/sou.css'
 
 import type { Type } from '../lib/codec.ts'
-import { prochainNumero, seuilFranchi, type Depose } from '../lib/tiroir.ts'
+import { calerLeCompteur, prochainNumero, seuilFranchi, type Depose } from '../lib/tiroir.ts'
 
 import { poserLapercu } from './apercu.ts'
 import { tenirLesDeposes } from './deposes.ts'
-import { adresseDuPayload, deposerLePli, tenirLeLien, type Depot } from './lien.ts'
+import { adresseDuPayload, adresseDuPoeme, deposerLePli, tenirLeLien, type Depot } from './lien.ts'
+import { nomDe, tenirLesPoemes } from './poemes.ts'
 import { laReponseEstPossible, tenirLeTiroir } from './reglages.ts'
 import { tenirLeSeuil } from './seuil.ts'
 import { fabriquer, tenirLesTextes } from './textes.ts'
@@ -37,10 +38,10 @@ import { suivreLaVue } from './vue.ts'
 
 /** Les écrans de l'atelier, dans l'ordre où on les traverse. D5 est à part : on n'y passe
  * pas, on y va — c'est une salle, pas une étape. */
-type Ecran = 'd0' | 'd4' | 'd1' | 'd2' | 'd3' | 'd5'
+type Ecran = 'd0' | 'd4' | 'd1' | 'd2' | 'd2p' | 'd3' | 'd5'
 
 const ecrans = new Map<Ecran, HTMLElement>()
-for (const nom of ['d0', 'd4', 'd1', 'd2', 'd3', 'd5'] as const) {
+for (const nom of ['d0', 'd4', 'd1', 'd2', 'd2p', 'd3', 'd5'] as const) {
   const element = document.getElementById(nom)
   if (element) ecrans.set(nom, element)
 }
@@ -89,18 +90,30 @@ const textes = ecrans.get('d2')
 const lien = ecrans.get('d3') ? tenirLeLien(ecrans.get('d3') as HTMLElement) : null
 
 /**
- * D3 sert deux fois : à la fin d'un dépôt, et au renvoi d'un pli déjà déposé. L'écran ne
- * change pas — seule sa conduite dit d'où l'on vient, et où le retour ramène.
+ * D3 sert TROIS fois : à la fin d'un dépôt, au renvoi d'un pli déjà déposé, et au choix
+ * d'un poème. L'écran ne change pas — seule sa conduite dit d'où l'on vient, et où le
+ * retour ramène.
+ *
+ * Un poème n'est pas modifiable ici : son texte est à mon bureau. Le retour ramène donc à
+ * la liste, comme pour un pli déjà déposé, et non à des textes qui n'existent pas.
  */
-function conduireLeLien(depuisD5: boolean): void {
+type Venue = 'depot' | 'd5' | 'd2p'
+
+function conduireLeLien(depuis: Venue): void {
   const d3 = ecrans.get('d3')
   const retour = d3?.querySelector<HTMLElement>('[data-lien="retour"]')
   const pas = d3?.querySelector<HTMLElement>('[data-lien="pas"]')
-  if (retour) {
-    retour.dataset['va'] = depuisD5 ? 'd5' : 'd2'
-    retour.textContent = depuisD5 ? '← les plis' : '← modifier'
+  const mots: Record<Venue, { va: Ecran; retour: string; pas: string }> = {
+    depot: { va: 'd2', retour: '← modifier', pas: '3 sur 3' },
+    d5: { va: 'd5', retour: '← les plis', pas: 'déjà déposé' },
+    d2p: { va: 'd2p', retour: '← les poèmes', pas: '3 sur 3' },
   }
-  if (pas) pas.textContent = depuisD5 ? 'déjà déposé' : '3 sur 3'
+  const dit = mots[depuis]
+  if (retour) {
+    retour.dataset['va'] = dit.va
+    retour.textContent = dit.retour
+  }
+  if (pas) pas.textContent = dit.pas
 }
 
 /**
@@ -110,8 +123,25 @@ function conduireLeLien(depuisD5: boolean): void {
  */
 const relireLesDeposes = ecrans.get('d5')
   ? tenirLesDeposes(ecrans.get('d5') as HTMLElement, (quoi: Depose) => {
-      lien?.({ adresse: adresseDuPayload(quoi.c), payload: quoi.c }, quoi.n)
-      conduireLeLien(true)
+      lien?.(adresseDuPayload(quoi.c), quoi.n)
+      conduireLeLien('d5')
+      montrer('d3')
+    })
+  : null
+
+/**
+ * D2p · quel poème. Un poème n'est pas *déposé* depuis l'atelier — il est poussé par git,
+ * et son lien ne porte que le nom de son fichier. Choisir un poème se conduit donc comme le
+ * renvoi d'un pli de D5 : **aucun dépôt noté, le compteur n'avance pas.**
+ *
+ * Ce qui cale le compteur, c'est l'index — et c'est sa seconde raison d'être
+ * (docs/donnees.md#lindex) : un poème écrit hors atelier consomme un numéro que le tiroir
+ * ignore, et sans ce calage deux plis finiraient par porter le nº 015.
+ */
+const relireLesPoemes = ecrans.get('d2p')
+  ? tenirLesPoemes(ecrans.get('d2p') as HTMLElement, (quoi) => {
+      lien?.(adresseDuPoeme(nomDe(quoi)), quoi.n)
+      conduireLeLien('d2p')
       montrer('d3')
     })
   : null
@@ -138,8 +168,8 @@ async function deposer(): Promise<void> {
   if (!textes || !lien) return
   numero = prochainNumero()
   const depot: Depot = await deposerLePli(fabriquer(type, textes.lire(), numero))
-  lien(depot, numero)
-  conduireLeLien(false)
+  lien(depot.adresse, numero)
+  conduireLeLien('depot')
   montrer('d3')
 }
 
@@ -154,6 +184,19 @@ document.addEventListener('click', (evenement) => {
   if (va === 'd1') {
     relireLesTypes?.()
     void poserLePassage()
+  }
+  // Le poème ne passe pas par D2 : son texte est à mon bureau, on le CHOISIT. C'est le
+  // seul type dont l'atelier ne compose pas les mots (docs/parcours.md#d2p--quel-poème).
+  if (va === 'd2' && type === 'poe') {
+    void relireLesPoemes?.().then((liste) => {
+      // Le compteur se cale sur ce que l'index porte, jamais l'inverse — et jamais sur un
+      // index qu'on n'a pas pu lire.
+      if (!liste.coupe && liste.poemes.length > 0) {
+        calerLeCompteur(Math.max(...liste.poemes.map((p) => p.n)))
+      }
+      montrer('d2p')
+    })
+    return
   }
   if (va === 'd2') textes?.poser(type)
   if (va === 'd5') {
