@@ -77,9 +77,24 @@
   --mono: 'Space Mono', monospace;     /* tout le reste de l'interface */
 
   /* — géométrie ————————————————————————————————————— */
+  /* La taille de RÉFÉRENCE de la composition, pas la taille rendue : le pli remplit le
+     viewport depuis le socle plein cadre (.claude/decisions.md, 19/08/2026). Les deux
+     nombres gardent un consommateur réel — `.mini`, le vrai pli réduit par scale() de
+     l'atelier, qui n'a pas de viewport à remplir. */
   --ecran-l: 360px;
   --ecran-h: 780px;
   --marge: 26px;             /* marge intérieure du pli, jamais autre chose */
+  /* L'encoche. Tant que le pli était une carte posée au milieu du plateau, elle ne le
+     concernait pas : c'est le plateau qui portait les retraits (docs/appareils.md). En
+     plein cadre le pli touche les bords, et la règle s'inverse — le FOND va jusqu'au bord,
+     seul le TEXTE se retire. D'où deux marges horizontales dérivées, et jamais un second
+     chiffre : --marge reste le seul retrait du pli, l'encoche s'y ajoute. */
+  --encoche-haut: env(safe-area-inset-top, 0px);
+  --encoche-bas: env(safe-area-inset-bottom, 0px);
+  --encoche-gauche: env(safe-area-inset-left, 0px);
+  --encoche-droite: env(safe-area-inset-right, 0px);
+  --marge-gauche: calc(var(--marge) + var(--encoche-gauche));
+  --marge-droite: calc(var(--marge) + var(--encoche-droite));
   /* La hauteur du volet, en deux formes. Le pourcentage est celui du handoff ; la part
      sans unité existe parce qu'un padding en % se compte sur la LARGEUR, et que le corps
      a besoin de s'arrêter au-dessus du volet. Un seul nombre, à un seul endroit
@@ -87,6 +102,10 @@
   --pliure-part: 0.34;
   --pliure: calc(var(--pliure-part) * 100%);
   --corps-pied: 30px;        /* le pied du corps — le seul écart vertical du gabarit */
+  /* Le coin et l'ombre d'une CARTE. En plein cadre le pli n'en est plus une, et ils ne
+     s'appliquent plus à rien : un coin arrondi et une ombre n'ont pas de sens bord à bord.
+     Ils restent déclarés parce que docs/design-system.md#le-gabarit les nomme et que E1, le
+     bureau, les retrouvera — comme --sable-2, déjà là pour la même raison. */
   --rayon: 36px;             /* coin du pli */
   --cachet: 38px;            /* pastille du numéro, à cheval sur la pliure */
   --ombre: 0 18px 40px rgba(20, 16, 14, 0.18);

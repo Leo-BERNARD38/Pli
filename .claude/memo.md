@@ -32,13 +32,19 @@ d'A3. Étiquettes en minuscules dans le code, capitales par `text-transform`.
 ## Le gabarit (design-system.md#le-gabarit)
 
 ```
-360 × 780        taille de référence, jamais élargie
---marge  26px    seul retrait horizontal existant dans un pli
+le cadre         remplit le viewport — 100 % × 100dvh, ni coin ni ombre
+360 × 780        PROPORTION de référence : la composition s'y mesure, et .mini la montre
+--marge  26px    seul retrait horizontal, PLUS l'encoche de l'appareil
 --pliure 34%     hauteur du volet fermé, en bas
-tête    padding 34px 26px 0      marque à gauche, type à droite
-corps   flex:1, padding 0 26px 30px, contenu ALIGNÉ EN BAS
+tête    padding 34px + encoche, 26px + encoche, 0
+corps   flex:1, padding 0 26px 30px + encoche, contenu ALIGNÉ EN BAS
 volet   34 % de la hauteur, fond carmin
 ```
+
+Le fond va jusqu'au bord, seul le texte se retire. Quatre jetons — `--encoche-haut`,
+`--encoche-bas`, `--encoche-gauche`, `--encoche-droite` — et deux marges dérivées,
+`--marge-gauche` et `--marge-droite`. Remis à zéro dans `.mini` : un aperçu montre le
+gabarit, pas un appareil.
 
 Un titre, une voix, jusqu'à trois faits, une action. Au-delà, c'est un autre type de pli.
 

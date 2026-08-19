@@ -111,7 +111,17 @@ function ligne(entree: Entree, pli: Pli, maintenant: Date): HTMLElement {
   return item
 }
 
-/** L'écran vide : le papier froissé, et une phrase qui n'attend rien. */
+/**
+ * L'écran vide : le papier froissé, et une phrase qui n'attend rien.
+ *
+ * Il compose en CRÈME sur l'encre, comme A1 et comme la pensée. Il a longtemps composé en
+ * encre sur un `.image__fondu` nu — le voile du papier, qui assombrit son premier tiers de
+ * `.5` avant de revenir au crème. Du texte presque noir sur un fond assombri : c'était le
+ * seul couple fond/texte du produit qu'aucune mesure ne couvrait, et il ne se lisait pas.
+ *
+ * Le voile est celui de `.image--pleine` : `.68`, mesuré pour tenir 4,5:1 en crème
+ * (pli.css). On ne remesure pas ce qui l'est déjà, on cesse de s'en passer.
+ */
 function vide(): HTMLElement {
   const image = element('div', 'image image--pleine')
   const toile = new Image()
@@ -123,7 +133,7 @@ function vide(): HTMLElement {
     () => toile.setAttribute('data-peinte', ''),
     () => {},
   )
-  image.append(toile, element('div', 'image__fondu'))
+  image.append(toile, element('div', 'image__fondu image__fondu--encre'))
   return image
 }
 
@@ -144,6 +154,9 @@ export async function journal(cadre: HTMLElement): Promise<HTMLElement> {
   const corps = element('div', 'corps corps--haut')
 
   if (liste.length === 0) {
+    // La seule branche du journal qui porte une peinture, donc la seule qui compose en
+    // crème. Le sommaire, lui, reste sur le papier.
+    ecran.className = 'pli__dessus pli--encre'
     corps.append(
       element('h1', 'voix', 'Rien encore.'),
       element('p', 'voix voix--corps', 'Le premier pli déposé pour toi restera ici.'),

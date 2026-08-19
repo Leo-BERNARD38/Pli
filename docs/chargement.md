@@ -194,7 +194,7 @@ find dist -name '*.js' -o -name '*.css' -o -name '*.html' \
 - **Mon Android** — `chrome://inspect`, Performance, throttling « Slow 4G ».
 
 Le repère qui compte est un `performance.mark('a1')` posé juste après l'écriture du texte
-d'A1 : Safari ne donne pas de LCP, et le premier rendu peint le plateau avant le texte.
+d'A1 : Safari ne donne pas de LCP, et le premier rendu peint le papier avant le texte.
 
 ## Ce qui fait échouer la revue d'un écran
 

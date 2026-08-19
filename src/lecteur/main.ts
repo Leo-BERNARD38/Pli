@@ -16,7 +16,6 @@ import '../styles/pli.css'
 import { decoder, type Pli } from '../lib/codec.ts'
 import { empreinte, entrees, noterLaReponse, noterLeDepliage, trouver } from '../lib/journal.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
-import { tenirDansLecran } from './plateau.ts'
 import { ecrire, oublierLaPeinture, ETIQUETTES } from './a1.ts'
 import { preparer } from './fond.ts'
 import { armer, type Geste } from './geste.ts'
@@ -43,11 +42,6 @@ let dejaDemande =
     : null
 
 const cadre = document.querySelector<HTMLElement>('.pli')
-
-// Le pli tient dans l'écran avant d'être peint : posée après coup, l'échelle se verrait
-// changer. On mesure le plateau — c'est lui qui porte les retraits de sécurité
-// (docs/appareils.md#les-réglages-de-page) — et on écrit sur le pli, son seul consommateur.
-export const echelle = cadre ? tenirDansLecran(document.body, cadre) : null
 
 // La marque « Pli » mène au journal, sur A1 comme sur C4. Elle est déjà dans le gabarit :
 // le chemin ne coûte que son `href` (docs/parcours.md#a2--la-découverte).
@@ -183,7 +177,7 @@ let geste: Geste | null = null
  */
 async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
   const mienne = generation
-  if (!cadre || !a1 || !dessous || !echelle) return mienne
+  if (!cadre || !a1 || !dessous) return mienne
 
   // Un pli qui s'en va sans que sa transition soit finie se range quand même : il a été
   // déplié, et c'est le dépliage qui décide, pas l'animation.
@@ -213,7 +207,6 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
     dessous,
     invite: a1.querySelector('.invite'),
     bouton: a1.querySelector('.deplier'),
-    echelle,
     // Le geste s'arme une seule fois pour tous les plis de la session : ces deux fonctions
     // lisent l'entrée du pli à l'écran, elles ne la capturent pas.
     auSeuil: () => {

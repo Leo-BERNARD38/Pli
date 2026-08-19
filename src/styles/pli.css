@@ -18,35 +18,51 @@
 html,
 body {
   margin: 0;
-  background: var(--sable);
+  background: var(--creme);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;    /* le « tirer pour rafraîchir » de Chrome */
 }
 
-/* Le plateau, c'est le corps de la page : tout ce qui entoure le pli sans jamais
-   l'élargir. La classe .plateau de la section 7 ne servait qu'aux planches de
-   documentation (docs/integration.md#reprendre-plicss) ; les réglages, eux, viennent
-   de docs/appareils.md#les-réglages-de-page.
+/* Il n'y a plus de plateau. Le pli remplit le viewport, donc le corps de page n'entoure
+   plus rien : il ne centre plus, et il ne porte plus les retraits de sécurité — l'encoche
+   est passée au pli, qui touche les bords maintenant (tokens.css). Les autres réglages
+   viennent toujours de docs/appareils.md#les-réglages-de-page.
 
-   Le pli ne touche aucun bord, donc aucune encoche ne le concerne : c'est le plateau
-   qui porte les retraits de sécurité. Et 100dvh, jamais 100vh — la barre d'URL se
-   rétracte au premier mouvement et change la hauteur. */
+   Son fond ne se voit jamais ; il reste en crème pour qu'un pixel d'arrondi n'ouvre pas
+   une bande d'une autre couleur. --sable ne quitte pas le produit pour autant : c'est
+   theme-color, la teinte des barres du navigateur, et non celle d'un écran. */
 body {
   font-family: var(--mono);
   color: var(--encre);
   min-height: 100dvh;
-  padding:
-    env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Les deux tracés vivent dans le document, mais ne composent rien. Sans cette ligne le
+   <svg> reste EN LIGNE : il ouvre une boîte de ligne avant le pli, le document fait
+   100dvh + une ligne, et la page défile — le défaut même qu'on répare ici. Tant que le
+   corps de page était flex, le <svg> en devenait un élément de 0 × 0 et le cachait.
+   `display: none` est exclu : il casserait le <use> sur WebKit (voir index.html). */
+.fleches {
+  display: block;
 }
 
 a {
   color: var(--carmin);
   text-decoration: none;
+}
+
+/* La marque et l'action sont des CHEMINS, pas des liens : elles ne changent pas d'aspect en
+   le devenant — c'est tout leur intérêt (docs/parcours.md#a2--la-découverte).
+
+   Ces deux lignes vivaient dans plis.css, la feuille du journal, demandée à la volée. Or
+   `chemin()` transforme la marque en `<a>` dès A1, où cette feuille n'est jamais chargée :
+   la marque tombait donc sur le `color: var(--carmin)` ci-dessus, et se retrouvait en
+   carmin sur le rideau — mesuré à 1,4:1 le 19/08/2026, aux trois largeurs. Elle appartient
+   au gabarit, pas au journal. */
+a.marque,
+a.action {
+  color: inherit;
 }
 
 a:hover {
@@ -69,39 +85,37 @@ a:hover {
   margin: 0;
 }
 
+/* Le pli EST l'écran. 360 × 780 était la taille de référence des planches du design
+   system ; recopiée comme une taille réelle, elle faisait flotter une carte au milieu d'une
+   bande de sable, sur un téléphone qui n'attend pas une carte
+   (.claude/decisions.md, 19/08/2026).
+
+   100dvh, jamais 100vh ni 100% : dvh suit la hauteur visible, et comme la page ne défile
+   plus jamais, la barre d'URL ne se rétracte pas — la valeur ne bouge donc pas pendant un
+   geste. C'est ce que src/lecteur/plateau.ts s'échinait à garantir à la main, et c'est
+   pourquoi il n'existe plus.
+
+   Ni coin arrondi ni ombre : ils dessinaient une carte, et il n'y a plus de carte.
+
+   `container-type: size` ouvre les unités de conteneur à ce qui vit dedans (voir .corps,
+   plus bas). Il est sans conséquence ici : les enfants du pli sont tous en
+   `position: absolute; inset: 0`, aucun ne dicte sa taille, et le confinement de
+   disposition n'ajoute rien que `position: relative` et `overflow: hidden` ne fassent
+   déjà. */
 .pli {
   position: relative;
-  width: var(--ecran-l);
-  height: var(--ecran-h);
+  width: 100%;
+  height: 100dvh;
+  container-type: size;
   overflow: hidden;
-  border-radius: var(--rayon);
   background: var(--creme);
   background-image: var(--grain);
-  box-shadow: var(--ombre);
   display: flex;
   flex-direction: column;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
-}
-
-/* Le pli tient dans l'écran, quelle qu'en soit la hauteur visible. `--echelle` est écrite
-   par src/lecteur/plateau.ts **sur le pli lui-même**, son seul consommateur : sur le corps
-   de page elle aurait invalidé le style de tout le sous-arbre, c'est-à-dire de l'arbre —
-   la règle de docs/fluidite.md#ce-qui-a-le-droit-de-bouger aurait été tenue à la lettre et
-   pas dans sa raison.
-
-   `transform: scale()` et non une recomposition : le gabarit reste littéralement 360 × 780,
-   et c'est déjà l'idiome du produit (.mini, plus bas, réduit un vrai pli de la même façon).
-
-   Les marges négatives ramènent la boîte de disposition à la taille peinte. Sans elles, le
-   pli occuperait toujours 780px de haut, la page défilerait, et on n'aurait rien corrigé :
-   c'est le défilement qui contredisait « un pli = un écran », pas la taille peinte. */
-.pli {
-  transform: scale(var(--echelle, 1));
-  margin-block: calc(var(--ecran-h) * (var(--echelle, 1) - 1) / 2);
-  margin-inline: calc(var(--ecran-l) * (var(--echelle, 1) - 1) / 2);
 }
 
 /* `display: flex` ci-dessus est une déclaration d'auteur : elle bat le `[hidden]` de la
@@ -227,7 +241,7 @@ a:hover {
    fond positionnée, et un élément statique passerait dessous (docs/integration.md). */
 .tete {
   position: relative;
-  padding: 34px var(--marge) 0;
+  padding: calc(34px + var(--encoche-haut)) var(--marge-droite) 0 var(--marge-gauche);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -449,7 +463,7 @@ button.action {
    reprend les 34px de la tête — le gabarit ne nomme pas d'autre écart vertical en haut,
    et en inventer un second serait un chiffre de plus à ne pouvoir citer. */
 .volet .invite {
-  padding: 34px var(--marge) 0;
+  padding: 34px var(--marge-droite) 0 var(--marge-gauche);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -478,7 +492,7 @@ button.action {
   position: relative;
   flex: 1;
   min-height: 0;
-  padding: 0 var(--marge) var(--corps-pied);
+  padding: 0 var(--marge-droite) calc(var(--corps-pied) + var(--encoche-bas)) var(--marge-gauche);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -502,15 +516,25 @@ button.action {
    lui, en gardant les 30px qu'il a déjà en pied (docs/design-system.md#le-gabarit).
 
    Le pourcentage d'un padding se compte sur la LARGEUR, jamais sur la hauteur : réutiliser
-   --pliure tel quel réserverait 34 % de 360 au lieu de 34 % de 780, et le pied du corps
-   passerait sous le volet. On repasse donc par --pliure-part et --ecran-h, qui portent
-   déjà les deux nombres.
+   --pliure tel quel réserverait 34 % de la largeur, et le pied du corps passerait sous le
+   volet. D'où 100cqh — la hauteur du CONTENEUR, c'est-à-dire du pli.
+
+   Cette règle citait --ecran-h, 780px, du temps où le pli faisait littéralement cette
+   hauteur. Le jour où il a rempli le viewport, elle est devenue fausse en silence : c'est
+   exactement le défaut qu'une unité de conteneur ne peut plus avoir, puisqu'elle mesure la
+   boîte au lieu de la supposer. 100dvh donnerait le même nombre aujourd'hui — il le
+   suppose, lui aussi.
+
+   Elle n'atteint pas le `.corps` de `.mini`, dans l'atelier : son volet s'appelle
+   `.mini__volet`, et le sélecteur regarde `.volet`.
 
    La règle regarde le FRÈRE, pas l'ancêtre : depuis qu'il y a deux couches dans un même
    pli, `.pli:has(.volet)` réservait la place du volet d'A1 dans le corps d'A2, qui n'en a
-   pas. Un `~` scope la règle à sa propre couche, sans lui donner de nom. */
+   pas. Un `~` scope la règle à sa propre couche, sans lui donner de nom.
+
+   L'encoche du bas n'y est pas : sous un volet, c'est le volet qui touche le bord. */
 .corps:has(~ .volet) {
-  padding-bottom: calc(var(--ecran-h) * var(--pliure-part) + var(--corps-pied));
+  padding-bottom: calc(var(--pliure-part) * 100cqh + var(--corps-pied));
 }
 
 .corps--haut {

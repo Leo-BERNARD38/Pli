@@ -51,6 +51,15 @@ clés s'y disputent la même place : un titre long vole ses lignes à la voix. M
 18/08/2026 dans Chromium, un vrai pli déplié, chaque clé poussée par dichotomie pendant que
 les autres tiennent l'exemple ci-dessus.
 
+**Ce que le plein cadre déplace, et qui n'est pas encore mesuré.** Ces plafonds datent du
+temps où un pli de 780px était mis à l'échelle : 780px de composition étaient donc
+*toujours* montrés en entier. Depuis le 19/08/2026, le cadre vaut la hauteur visible. Plus
+haute que 780, les plafonds sont conservateurs et rien ne déborde. **Plus courte** — un
+iPhone SE, ou n'importe quel téléphone barre d'URL déployée — la composition n'a plus la
+place qu'ils lui supposent, et `.corps { overflow: hidden }` coupe sans un mot. La mesure
+est à refaire à la hauteur visible la plus courte qu'on serve, sur les deux téléphones ; le
+tableau ci-dessous vaut jusque-là, et pas au-delà.
+
 | Type | `ti` | `b` | `f` |
 |---|---|---|---|
 | invitation | **16** | **46** | trois faits d'une ligne |
