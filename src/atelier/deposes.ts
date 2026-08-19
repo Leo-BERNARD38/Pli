@@ -12,7 +12,7 @@
 
 import { decoder } from '../lib/codec.ts'
 import { depuis, relire } from '../lib/dates.ts'
-import { deposes, type Depose } from '../lib/tiroir.ts'
+import { deposes, viderLesDeposes, type Depose } from '../lib/tiroir.ts'
 
 import { PAPIERS } from './type.ts'
 
@@ -81,8 +81,33 @@ export function tenirLesDeposes(
 ): () => Promise<number> {
   const liste = ecran.querySelector<HTMLElement>('[data-deposes="liste"]')
   const rien = ecran.querySelector<HTMLElement>('[data-deposes="rien"]')
+  const vider = ecran.querySelector<HTMLButtonElement>('[data-vider]')
 
-  return async () => {
+  let refaire: () => Promise<number>
+
+  // Deux touches, et la première ne fait que prévenir : l'historique ne se rattrape pas.
+  // Le mot revient à ce qu'il était dès qu'on quitte le bouton — on ne laisse pas un écran
+  // armé derrière soi.
+  const REPOS = 'vider l’historique'
+  const PRET = 'touche encore pour vider'
+  let arme = false
+  const desarmer = (): void => {
+    arme = false
+    if (vider) vider.textContent = REPOS
+  }
+  vider?.addEventListener('click', () => {
+    if (!arme) {
+      arme = true
+      vider.textContent = PRET
+      return
+    }
+    desarmer()
+    viderLesDeposes()
+    void refaire()
+  })
+  vider?.addEventListener('blur', desarmer)
+
+  refaire = async () => {
     const gardes = deposes()
     const maintenant = new Date()
     const noms = await Promise.all(gardes.map((quoi) => nommer(quoi)))
@@ -97,6 +122,10 @@ export function tenirLesDeposes(
     liste?.replaceChildren(...lignes)
     if (liste) liste.hidden = lignes.length === 0
     if (rien) rien.hidden = lignes.length > 0
+    if (vider) vider.hidden = lignes.length === 0
+    desarmer()
     return lignes.length
   }
+
+  return () => refaire()
 }

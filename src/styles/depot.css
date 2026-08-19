@@ -342,6 +342,14 @@
   gap: 6px;
 }
 
+/* `display: flex` ci-dessus est une déclaration d'auteur : elle bat le `[hidden]` de la
+   feuille du navigateur, et les lignes que le type ne demande pas restaient à l'écran —
+   un titre, une date et un lieu sur une pensée, vus le 19/08/2026. Même oubli que
+   `.ecran[hidden]` et `.pli[hidden]` : la règle se réécrit ici. */
+.ligne[hidden] {
+  display: none;
+}
+
 .ligne__nom {
   font-family: var(--mono);
   font-weight: 700;
@@ -608,6 +616,25 @@
   opacity: 0.45;
   cursor: pointer;
   touch-action: manipulation;
+}
+
+/* `display: block` ci-dessus est une déclaration d'auteur, et elle bat le `[hidden]` du
+   navigateur : sans cette règle, le chemin vers les plis déposés se montre aussi quand il
+   ne mène nulle part. Même oubli que `.ecran[hidden]`, `.pli[hidden]` et `.ligne[hidden]`. */
+.passage[hidden] {
+  display: none;
+}
+
+/* Vider l'historique : le même chemin discret, mais en carmin — c'est la seule chose de
+   l'atelier qui ne se rattrape pas. Il ne crie qu'une fois armé. */
+.passage--vider {
+  color: var(--carmin);
+  border-top: 1px solid var(--trait);
+}
+
+.passage--vider:focus-visible,
+.passage--vider:active {
+  opacity: 1;
 }
 
 /* Le filet de focus, rendu à ce que `all: unset` lui prend.

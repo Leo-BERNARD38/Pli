@@ -348,6 +348,13 @@
       </div>
 
       <ul class="lignes deposes" data-deposes="liste" hidden></ul>
+
+      <!-- Vider l'historique demande deux touches : la première prévient, la seconde
+           efface. Rien ne se rattrape ici, et une liste qui s'en va sur un frôlement se
+           serait rattrapée nulle part. Il ne se montre que s'il y a quelque chose à vider. -->
+      <button class="passage passage--vider" type="button" data-vider hidden>
+        vider l’historique
+      </button>
     </section>
 
     <script type="module" src="/src/atelier/main.ts"></script>

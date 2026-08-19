@@ -148,6 +148,17 @@ export function calerLeCompteur(dernierPris: number): void {
   if (pris > actuel) ranger(COMPTEUR, pris)
 }
 
+/**
+ * L'historique s'en va, et lui seul.
+ *
+ * Le compteur reste où il est : les numéros déjà partis sont dans une conversation, et un
+ * compteur ramené à 1 les ferait porter deux fois. C'est D4 qui le reprend à la main, quand
+ * c'est vraiment ce qu'on veut (docs/parcours.md#d4--le-tiroir).
+ */
+export function viderLesDeposes(): void {
+  ranger(DEPOSES, [])
+}
+
 function estUnDepose(relu: unknown): relu is Depose {
   if (typeof relu !== 'object' || relu === null) return false
   const d = relu as Partial<Depose>
