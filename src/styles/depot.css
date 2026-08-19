@@ -194,16 +194,40 @@
   overflow: hidden;
 }
 
+/* LE FILET DE L'APERÇU. Un pli en crème posé sur une page en crème n'a pas de bord : la
+   vignette d'une invitation et celle d'un souvenir se confondaient avec le fond, et il ne
+   restait qu'un peu de texte qui flottait. Mesuré : `#F7F2E8` sur `#F7F2E8`, aucune bordure,
+   aucune ombre — donc rien du tout.
+
+   Le filet est une ombre posée À L'EXTÉRIEUR, ni `border` ni `inset`, et les deux exclusions
+   sont mesurées :
+   · une `border` décalerait la boîte de contenu d'un pixel — la boîte est en `overflow:
+     hidden` et le `.mini` y est posé en absolu à `top: 0; left: 0` — et rognerait le pli ;
+   · une ombre `inset` se peint sous les enfants, et le `.mini` couvre toute la boîte avec
+     son propre fond : elle était invisible, mesurée à **1,12:1**, c'est-à-dire rien.
+   Une ombre externe ne déplace rien et ne se fait recouvrir par personne.
+
+   Il ne sert que sur les deux papiers crème — sur l'encre d'une pensée ou d'un poème, le pli
+   se détache déjà tout seul, et le filet s'y ajoute sans gêner. */
 .apercu--vignette {
   width: 62px;
   height: 134px;             /* échelle .1722 */
+  border-radius: 5px;
+  /* Le filet ET l'ombre, comme l'aperçu de D2 : c'est l'ombre qui fait lire une vignette
+     comme du papier posé, le filet seul ne donne qu'un trait. Elle est plus courte que celle
+     de D2, à l'échelle de la vignette. */
+  box-shadow:
+    0 0 0 1px var(--trait-fort),
+    0 3px 8px rgba(20, 16, 14, 0.14);
 }
 
 .apercu--tete {
   width: 96px;
   height: 208px;             /* échelle .2667 */
   border-radius: 10px;
-  box-shadow: 0 6px 14px rgba(20, 16, 14, 0.16);
+  box-shadow:
+    0 0 0 1px var(--trait-fort),
+    0 6px 14px rgba(20, 16, 14, 0.16);
 }
 
 /* L'aperçu montre le GABARIT, pas l'appareil : il n'a ni encoche ni barre d'accueil, et il
@@ -226,6 +250,26 @@
   display: flex;
   flex-direction: column;
   pointer-events: none;
+}
+
+/* L'ENCRE DE L'APERÇU, ET LE PIÈGE QUI L'AVAIT MANGÉE. `.mini` pose `background:
+   var(--creme)` ci-dessus ; `.pli--encre` pose l'encre dans `pli.css`. Les deux valent une
+   classe, et `depot.css` est chargée APRÈS : à spécificité égale c'est l'ordre qui tranche,
+   et c'est le crème qui gagnait.
+
+   Conséquence mesurée : la vignette d'une pensée et celle d'un poème étaient en crème, et
+   leurs blocs sont en `--clair`, c'est-à-dire du crème à 70 % — **du crème sur du crème,
+   entièrement blanc, depuis le jalon 4**. L'aperçu de D2 tombait dans le même trou, car
+   `apercu.ts` pose la même classe.
+
+   C'est la TROISIÈME fois que ce piège mord dans ce dépôt — le filet de focus de l'atelier
+   et le D3 en crème sur crème l'avaient déjà fait, et pour la même raison : le calcul de
+   spécificité de `pli.css` ne vaut qu'à l'intérieur de `pli.css`. Deux classes, et l'ordre
+   ne décide plus. */
+.mini.pli--encre {
+  background: var(--encre);
+  background-image: none;
+  color: var(--creme);
 }
 
 .apercu--vignette .mini {
@@ -286,9 +330,14 @@
   caret-color: var(--carmin);
 }
 
+/* La hauteur est écrite par le module, qui la cale sur ce qu'on tape (src/atelier/textes.ts).
+   `resize: none` reste : la poignée du navigateur donnerait une seconde façon de régler la
+   même chose, et une seule main tient une hauteur. `overflow: hidden` empêche la barre de
+   défilement d'apparaître pendant la frame où la boîte se remesure. */
 .ligne textarea {
   font-style: italic;
   resize: none;
+  overflow: hidden;
   min-height: 64px;
 }
 

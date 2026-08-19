@@ -34,6 +34,11 @@ d'A3. Étiquettes en minuscules dans le code, capitales par `text-transform`.
 
 `scripts/verifie.mjs` contrôle tout ce paragraphe. Ne pas le refaire à la main.
 
+**Une règle de cascade, apprise trois fois** : le calcul de spécificité d'une feuille ne vaut
+qu'à l'intérieur d'elle. `depot.css` charge après `pli.css`, donc à spécificité égale c'est
+l'ordre qui tranche — et il a déjà mangé le filet de focus de l'atelier, le D3 en crème sur
+crème, et les vignettes de la pensée et du poème. **Deux classes, et l'ordre ne décide plus.**
+
 ## Le gabarit (design-system.md#le-gabarit)
 
 ```

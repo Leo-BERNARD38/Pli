@@ -453,3 +453,25 @@ si la mesure sur les deux téléphones le rend visible.
   `geste.ts` le lisent. Le corps passe aussi en `justify-content: flex-start` : sous
   `flex-end`, un contenu trop haut déborde par le **haut**, et ce qui déborde par le haut ne
   se rattrape pas au défilement — les premières strophes auraient été perdues.
+- **19/08/2026 — l'aperçu de l'atelier a un bord, et deux vignettes sur quatre étaient
+  blanches.** Signalé à l'usage : « les miniatures ont le même fond que la page, c'est un peu
+  illisible ». Mesuré, c'était vrai au pixel — `#F7F2E8` sur `#F7F2E8`, sans bordure ni
+  ombre. Le filet demandé est une **ombre externe**, ni `border` ni `inset`, et les deux
+  exclusions sont mesurées : une bordure décalerait le `.mini` posé en absolu dans une boîte
+  en `overflow: hidden` et rognerait le pli ; une ombre `inset` se peint sous les enfants, et
+  le `.mini` couvre toute la boîte — essayée, mesurée à **1,12:1**, c'est-à-dire rien. Une
+  ombre externe en `--trait-fort` donne **16,5:1** sur la page, et le pli se lit comme une
+  page posée.
+  En cherchant, un défaut bien pire : `.mini` pose `background: var(--creme)` et `pli--encre`
+  pose l'encre — une classe chacun, et `depot.css` charge après `pli.css`. Le crème gagnait.
+  Les vignettes de la **pensée** et du **poème** étaient donc en crème avec des blocs
+  `--clair`, c'est-à-dire du crème à 70 % sur du crème : **entièrement blanches depuis le
+  jalon 4**, et l'aperçu de D2 avec elles. C'est la **troisième fois** que ce piège mord —
+  après le filet de focus de l'atelier et le D3 en crème sur crème. La règle qui en sort
+  n'est plus « écrire en fin de feuille » mais **« deux classes, et l'ordre ne décide plus »**.
+- **19/08/2026 — la ligne du mot suit ce qu'on y écrit.** Elle valait 64px et `resize: none` :
+  mesuré, 288 signes en réclament 162, et le texte défilait DANS la boîte — on écrivait un
+  souvenir par une fenêtre de deux lignes. Le plafond du papier va pourtant jusqu'à 312. La
+  hauteur est maintenant écrite par le module à chaque frappe, `height: auto` d'abord pour
+  qu'elle redescende quand on efface. `resize: none` reste : la poignée du navigateur
+  donnerait une seconde façon de régler la même chose.
