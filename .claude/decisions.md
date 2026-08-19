@@ -428,3 +428,12 @@ si la mesure sur les deux téléphones le rend visible.
   `.passage` — pas aux deux seules cibles où l'on tape, et
   `docs/integration.md#accessibilité--la-liste-à-cocher` le demandait depuis le jalon 1, case
   non cochée.
+- **19/08/2026 — le paysage n'existe pas, et on ne le rattrape pas.** Un téléphone couché
+  offre ~390px de haut pour une composition dessinée pour 780 ; la mise à l'échelle réglait
+  ce cas sans qu'on le sache, le plein cadre coupe. Trois voies étaient ouvertes — une invite
+  à redresser, un pli qui défile en paysage, ou rien. C'est **rien** : on ne sert que du
+  portrait mobile, aucune règle d'orientation n'entre dans les feuilles, et le manifeste dit
+  déjà `orientation: "portrait"`. Un pli qui défile aurait cassé la première des cinq règles ;
+  une invite à redresser aurait ajouté un écran qu'aucune maquette ne dessine, pour un cas que
+  ces deux téléphones ne rencontrent pas. Noté dans
+  [docs/installation.md](../docs/installation.md#le-manifeste-et-les-icônes), qui fait foi.

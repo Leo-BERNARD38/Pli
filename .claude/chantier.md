@@ -314,14 +314,21 @@ cadre, l'atelier et son clavier, le contraste, la doc.
       navigateur intégré de WhatsApp est le cas où elle peut tomber
 - [ ] **à la main** : refaire les plafonds du papier à la hauteur visible la plus courte
       qu'on serve ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé))
-- [ ] **à trancher** : `theme-color` vaut le sable, qui n'entoure plus rien. Au-dessus d'un
-      A1 devenu le rideau plein cadre, la barre du navigateur fait une couture claire que
-      le plateau cachait. Toucher la balise touche aussi le manifeste — ce n'est pas une
-      décision de mise en page
-- [ ] **à trancher** : le paysage. Un téléphone couché offre ~390px de haut pour une
-      composition dessinée pour 780 ; la mise à l'échelle réglait ce cas sans qu'on le
-      sache, le plein cadre coupera. Le plein cadre partout interdit les media queries de
-      **largeur** ; l'orientation est un autre axe, et c'est une décision d'auteur
+- [ ] **à trancher, et ça attend les maquettes** : `theme-color` vaut le sable, qui
+      n'entoure plus rien. Au-dessus d'un A1 devenu le rideau plein cadre, la barre du
+      navigateur fait une couture claire que le plateau cachait. Toucher la balise touche
+      aussi le manifeste — ce n'est pas une décision de mise en page. Aucune valeur unique
+      ne convient à tous les écrans (le rideau sombre d'A1, le crème d'A2 et du journal),
+      donc la réponse est un choix d'auteur qui doit se rapprocher des maquettes
+      **Pli — Maquettes** de Claude Design. Elles n'ont pas pu être lues le 19/08/2026 : le
+      serveur de Claude Design demande `/design-login`, qui exige un terminal interactif que
+      la session distante n'a pas. À reprendre depuis une session locale, ou après un « Send
+      to Claude Code Web » qui sème le projet dans l'espace de travail
+- [x] **le paysage, tranché le 19/08/2026 : il n'existe pas.** On ne sert que du portrait
+      mobile. Aucune règle d'orientation n'entre dans les feuilles, le manifeste disait déjà
+      `orientation: "portrait"`, et une composition coupée sur un téléphone couché est
+      acceptée — c'est écrit dans
+      [installation.md](../docs/installation.md#le-manifeste-et-les-icônes)
 
 ## Les mesures — aucune ne se devine
 
