@@ -69,9 +69,10 @@ re-rastérisée à chaque image.
 
 ## Les couches, et ce qu'elles coûtent
 
-Une couche de 360 × 780 sur un écran à 3× pèse environ **2,5 Mo de mémoire GPU**. Deux
-couches, c'est confortable ; dix, c'est un téléphone qui chauffe et une animation qui
-saccade.
+Une couche plein écran sur une dalle à 3× pèse environ **3,4 Mo de mémoire GPU** — 412 × 915
+points, la taille du plus grand des deux téléphones (c'était 2,5 Mo du temps où le pli
+faisait 360 × 780). Deux couches, c'est confortable ; dix, c'est un téléphone qui chauffe et
+une animation qui saccade.
 
 La peinture qu'elle contient, elle, est une autre dépense : une image de 1536 × 2752 occupe
 **17 Mo une fois décodée**, quelle que soit la taille à laquelle on l'affiche. D'où la règle

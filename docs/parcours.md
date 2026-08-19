@@ -186,7 +186,8 @@ Rien de ce tiroir n'entre dans le dépôt : il vit dans `pli.v1.reglages`, sur m
 ## D1 · le type
 
 Quatre lignes, chacune avec son nom, sa glose et **le layout vu en petit** — un vrai pli
-360 × 780 réduit par `transform: scale()`, jamais un dessin séparé. Le type fixe la mise
+360 × 780 réduit par `transform: scale()`, jamais un dessin séparé. Il montre le **gabarit**,
+pas l'écran de celle qui lira : le pli, lui, remplit le sien depuis le 19/08/2026. Le type fixe la mise
 en page : après lui, il n'y a plus que du texte.
 
 ## D2 · les textes
@@ -219,8 +220,10 @@ Identique pour les quatre types. Deux corrections à la maquette :
 ## E1 · l'atelier au bureau
 
 Les mêmes questions sur un écran de 1440 × 900 : type et textes en colonne à gauche, le pli
-fermé et le pli ouvert côte à côte au centre. **Le pli ne s'élargit jamais** — 360 de large,
-parce que c'est la seule forme dans laquelle il sera lu.
+fermé et le pli ouvert côte à côte au centre. ~~**Le pli ne s'élargit jamais** — 360 de
+large.~~ Depuis le 19/08/2026 le pli remplit l'écran, au bureau comme ailleurs : à
+1440 × 900 il fait 1440 × 900. C'est le cas le plus étrange du plein cadre, et E1 n'est pas
+construit — **sa forme se reprendra le jour où il s'écrira**, pas avant.
 
 ## Le poème, hors atelier
 

@@ -48,10 +48,10 @@ journal se lit.
       leurs tests
 - [x] les deux entrées — `index.html`, `atelier/index.html`
 - [x] `src/lecteur/` — `main.ts`, `a1.ts`, `a2.ts`, `reponse.ts`, `geste.ts`, `fond.ts`,
-      `plateau.ts`, `plis.ts`
+      `plis.ts` (`plateau.ts` est parti avec le plein cadre, 19/08/2026)
 - [x] `polices-source/` et `src/fonts/` — les quatre familles, sources et sous-ensembles
 - [x] `src/atelier/` — `main.ts`, `seuil.ts`, `reglages.ts`, `type.ts`, `textes.ts`,
-      `apercu.ts`, `lien.ts`
+      `apercu.ts`, `lien.ts`, `deposes.ts`, `vue.ts`
 - [x] `src/styles/` — `tokens.css`, `pli.css`, `depot.css` et les feuilles des types
 - [x] `src/textures/` — les cinq peintures, en définition native
 - [x] `src/fleches.html` — les deux tracés
@@ -142,8 +142,9 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
       `pli-inliner-le-document` de `vite.config.ts` ; **1 requête** avant le premier texte,
       **5,86 ko gzip** à l'époque, **10,5 ko** une fois A2, le geste, la réponse et le
       journal dedans — plafond de 14 ko tenu par le build, à chaque commit
-- [x] le pli tient dans l'écran — `--echelle` sur le pli, vérifié de 320 × 568 à 1440 × 900 :
-      la page ne défile jamais et la composition ne bouge pas
+- [x] ~~le pli tient dans l'écran — `--echelle` sur le pli~~ **remplacé le 19/08/2026** :
+      le pli **remplit** l'écran, vérifié de 360 × 780 à 1440 × 900 — la page ne défile
+      jamais ([decisions.md](decisions.md))
 - [x] A1 · l'attente, pour les quatre types — le rideau, la promesse, le volet, l'invite
 - [x] A2 · la découverte — invitation, pensée, souvenir, et la première strophe d'un poème
 - [x] la vague 3 — la texture du type, son décodage, la feuille du type, Bodoni, puis le DOM
@@ -288,6 +289,33 @@ Vraie dès que l'empreinte du seuil est posée.
 **Fin du jalon :** son journal existe et survit à deux semaines de silence. La première
 moitié est vraie ; la seconde se mesure, elle ne se code pas.
 
+## Le socle de mise en page — 19/08/2026
+
+Le pli et l'atelier remplissent le viewport. Écrit, relu et commité en quatre lots : le
+cadre, l'atelier et son clavier, le contraste, la doc.
+
+- [x] `.pli` et `.ecran` en plein cadre, `plateau.ts` et `--echelle` supprimés
+- [x] l'encoche portée par le contenu, remise à zéro dans `.mini`
+- [x] le clavier réduit la vue, l'action reste collée en bas ; le zoom est bloqué
+- [x] le contraste mesuré sur ce que le navigateur peint, aux trois largeurs — au pire
+      4,84:1, et deux défauts corrigés : C1 vide, et la marque en carmin sur le rideau
+- [ ] **à la main, sur les deux téléphones** : compter les couches à l'inspecteur pendant
+      un dépliage — `container-type: size` sur `.pli` est une propriété de confinement que
+      ce dépôt n'a jamais mesurée, et un coût de couche se mesure
+- [ ] **à la main, sur les deux téléphones** : `100dvh` ne bouge pas pendant un geste
+      parce que la page ne défile plus. C'est une **déduction**, pas une mesure — et le
+      navigateur intégré de WhatsApp est le cas où elle peut tomber
+- [ ] **à la main** : refaire les plafonds du papier à la hauteur visible la plus courte
+      qu'on serve ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé))
+- [ ] **à trancher** : `theme-color` vaut le sable, qui n'entoure plus rien. Au-dessus d'un
+      A1 devenu le rideau plein cadre, la barre du navigateur fait une couture claire que
+      le plateau cachait. Toucher la balise touche aussi le manifeste — ce n'est pas une
+      décision de mise en page
+- [ ] **à trancher** : le paysage. Un téléphone couché offre ~390px de haut pour une
+      composition dessinée pour 780 ; la mise à l'échelle réglait ce cas sans qu'on le
+      sache, le plein cadre coupera. Le plein cadre partout interdit les media queries de
+      **largeur** ; l'orientation est un autre axe, et c'est une décision d'auteur
+
 ## Les mesures — aucune ne se devine
 
 Elles sont décrites dans [docs/README.md](../docs/README.md#les-mesures-à-faire-avant-de-sengager).
@@ -310,12 +338,13 @@ décision, on ne relit pas le fichier en entier.
 
 ## Ce que les relecteurs demandent pour la suite
 
-**Au jalon 2, pour le gabarit** — deux choses ne peuvent pas rester silencieuses, elles sont
-écrites dans [integration.md](../docs/integration.md#ce-qui-reste-à-trancher-avec-a1) : le
-**débordement par le haut** (au maximum autorisé, le contenu passe sur la marque et se fait
-couper sans un mot), et **un pli de 780px sur un écran visible plus court** — mesuré à
-390 × 664, la page défile et le bas du volet sort du champ, ce qui contredit « un pli = un
-écran ». La seconde est une question à poser, pas à résoudre.
+**Au jalon 2, pour le gabarit** — le **débordement par le haut** reste ouvert (au maximum
+autorisé, le contenu passe sur la marque et se fait couper sans un mot). ~~Un pli de 780px
+sur un écran visible plus court.~~ **Refermé le 19/08/2026**, mais pas par la mise à
+l'échelle : par le plein cadre. Ce qui reste de la question a changé de forme et vit
+maintenant dans [donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé)
+— sur une hauteur visible **plus courte que 780**, les plafonds du papier supposent une
+place que la composition n'a plus.
 
 **Au jalon 2, pour le geste** — `.pli` est la **couche du dessous** : le geste demande deux
 couches, une par `translate3d`. Le `<button>` « déplier » du clavier a maintenant un endroit

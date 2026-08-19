@@ -60,23 +60,33 @@ partout.
 
 ## Les réglages de page
 
+Chez elle :
+
 ```html
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,
+      user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#E9E2D2">
 ```
 
+À l'atelier, la même, plus `interactive-widget=resizes-content` — c'est le seul écran avec
+un clavier.
+
 | Réglage | Rôle |
 |---|---|
-| `viewport-fit=cover` + `env(safe-area-inset-*)` | encoche et barre d'accueil — portés par **le plateau**, jamais par le pli |
-| `100dvh` et jamais `100vh` | la barre d'URL se rétracte au premier mouvement et change la hauteur |
+| `viewport-fit=cover` + `env(safe-area-inset-*)` | encoche et barre d'accueil — portés par **la tête, le corps et l'invite du volet**, les seuls à toucher un bord. Quatre jetons dans `tokens.css`, remis à zéro dans `.mini` |
+| `maximum-scale=1, user-scalable=no` | le produit n'a pas d'usage du zoom. Honoré par Chrome ; **iOS l'ignore depuis iOS 10** — chez elle c'est le `touch-action: none` du cadre, qui couvre maintenant tout l'écran, qui fait le travail |
+| `interactive-widget=resizes-content` (atelier seul) | le clavier **réduit la vue** au lieu de pousser la page. Chrome ≥ 108 ; `--vue-h` est le repli pour Safari |
+| `100dvh` et jamais `100vh` | `dvh` est la hauteur visible. Le pli ne défile jamais, donc la barre d'URL ne se rétracte pas et la valeur ne bouge pas — **à confirmer sur les deux téléphones**, navigateur intégré de WhatsApp compris : c'est une déduction, pas une mesure |
 | `-webkit-text-size-adjust: 100%` | iOS regrossit le texte à la rotation sans ça |
 | `-webkit-tap-highlight-color: transparent` | le rectangle gris au tap n'existe pas dans ce produit |
 | `touch-action: manipulation` sur les actions | supprime l'attente du double-tap |
 | `color-scheme: light` | Pli a ses encres ; il n'a pas de thème sombre |
 | `overscroll-behavior: none` | le « tirer pour rafraîchir » de Chrome ([fluidite.md](fluidite.md#les-entrées)) |
 
-Le pli fait 360 × 780 et ne s'élargit jamais : il ne touche aucun bord, donc **aucune encoche
-ne le concerne**. C'est le plateau autour de lui qui porte les retraits de sécurité.
+Le pli **est** l'écran : il touche les quatre bords, et il n'y a plus de plateau autour de
+lui. L'encoche le concerne donc, et la règle est simple — **le fond va jusqu'au bord, seul le
+texte se retire**. 360 × 780 reste la proportion de référence : celle où les plafonds du
+papier se mesurent, et celle que `.mini` continue de montrer.
 
 ## L'atelier, sur mon téléphone
 
@@ -85,8 +95,11 @@ C'est le seul endroit avec un clavier, donc le seul avec des pièges de saisie.
 - `inputmode` et `enterkeyhint` sur chaque champ — la touche de validation doit dire ce
   qu'elle fait.
 - `autocapitalize="sentences"`, `autocorrect` laissé actif : j'écris du français.
-- **Le clavier recouvre le champ** : suivre `visualViewport` et remonter la zone active.
-  C'est le seul cas du produit où la hauteur visible n'est pas la hauteur de la fenêtre.
+- **Le clavier réduit la vue**, il ne remonte pas la page. `interactive-widget=resizes-content`
+  le fait sur Chrome ; `src/atelier/vue.ts` suit `visualViewport` et écrit `--vue-h` sur les
+  écrans pour Safari, qui ne connaît pas le réglage. L'écran défile sous une action collée en
+  bas : une action qu'on ne voit pas n'existe pas. C'est le seul cas du produit où la hauteur
+  visible n'est pas la hauteur de la fenêtre.
 - Aucun `autocomplete` : rien de ce que j'écris ne ressemble à un formulaire.
 
 ## Le bureau

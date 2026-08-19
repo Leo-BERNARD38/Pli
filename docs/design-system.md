@@ -120,13 +120,17 @@ Bodoni Moda est une police variable : n'en prendre que l'axe `opsz`.
 ## Le gabarit
 
 ```
-360 × 780        taille de référence, jamais élargie (même sur 1440)
+360 × 780        PROPORTION de référence — la composition s'y mesure, le cadre
+                 rendu remplit l'écran (.claude/decisions.md, 19/08/2026)
 --marge:  26px   seul retrait horizontal existant dans un pli
 --pliure: 34%    hauteur du volet fermé, en bas
 --cachet: 38px   pastille du numéro, à cheval sur la pliure, centrée
---rayon:  36px   coin du pli
---ombre:  0 18px 40px rgba(20,16,14,.18)
+--rayon:  36px   coin du pli   — ne s'applique plus : un cadre plein n'a pas de coin
+--ombre:  0 18px 40px rgba(20,16,14,.18)   — ni d'ombre, il n'y a plus de plateau
 ```
+
+Les deux derniers restent déclarés pour E1, le bureau, où un pli redeviendra peut-être un
+objet posé. Aujourd'hui rien ne les lit.
 
 Quatre zones, de haut en bas :
 
@@ -136,7 +140,9 @@ Quatre zones, de haut en bas :
 3. **Pliure** — le trait d'action : `border-top: 2px dashed`, étiquette à gauche, flèche `↑` à droite.
 4. **Volet** — 34 % de la hauteur, fond carmin.
 
-Ce que le gabarit impose : **une seule marge**, 26px, aucun autre retrait horizontal.
+Ce que le gabarit impose : **une seule marge**, 26px, aucun autre retrait horizontal — à
+quoi s'ajoute le retrait de sécurité de l'appareil quand il y en a un, et lui seul. Le fond
+va jusqu'au bord, seul le texte se retire ([appareils.md](appareils.md#les-réglages-de-page)).
 Le contenu pousse vers la pliure. **Un titre, une voix, jusqu'à trois faits, une action** —
 au-delà, c'est un autre type de pli.
 

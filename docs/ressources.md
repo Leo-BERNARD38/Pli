@@ -38,9 +38,12 @@ contrainte technique :
 
 ### Le plafond que l'écran impose
 
-Son iPhone est en **3×**, le pli fait **360 × 780** CSS et ne s'élargit jamais
-([design-system.md](design-system.md#le-gabarit)). L'image est donc affichée sur
-**1080 × 2340 pixels réels**, au maximum, quoi qu'on serve.
+Son iPhone est en **3×**, et le pli remplit l'écran depuis le 19/08/2026
+([design-system.md](design-system.md#le-gabarit)) : ce n'est donc plus 360 × 780 CSS qu'il
+faut compter, mais la largeur réelle de l'appareil. Les deux téléphones connus font 390 et
+412 points de large ; les plus larges vendus, 430. À 3×, cela donne **1290 pixels réels**
+au plus — l'image est donc toujours affichée en deçà des **1536** de la source, et la
+conclusion du tableau ci-dessous ne bouge pas. Elle tenait par sa marge, pas par le 360.
 
 | Source | Rapport à l'écran |
 |---|---|

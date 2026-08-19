@@ -368,3 +368,50 @@ si la mesure sur les deux téléphones le rend visible.
   « une `reponse` déjà notée mène à C2 ». Le pli relu porte son mot rappelé à la place de
   « répondre » — on ne répond pas deux fois. `poserLeMot` disparaît de `reponse.ts` : A4
   reste ce qu'elle est, l'écran qui suit le tap, dans la même page.
+
+### Le socle en plein cadre
+
+- **19/08/2026 — le pli remplit le viewport.** ~~Un pli plus haut que l'écran se met à
+  l'échelle (18/08/2026), `--echelle` sur le plateau et `transform: scale()` sur le
+  pli.~~ **Renversé.** 360 × 780 était la taille de référence des planches du design
+  system ; recopiée comme une taille réelle, elle faisait flotter une carte au milieu
+  d'une bande de sable sur un téléphone qui n'attend pas une carte. Le cadre devient
+  l'écran — `.pli` et `.ecran` en 100 % × 100dvh, plus de `max-width`, plus de coin, plus
+  d'ombre : il n'y a plus de plateau sur lequel se poser. La typographie reste en px ;
+  360 × 780 reste la **proportion** de référence, celle où les plafonds du papier se
+  mesurent, et celle que `.mini` continue de montrer. `plateau.ts` disparaît avec
+  `--echelle`, et `figer()` / `relacher()` avec lui : une page qui ne défile jamais n'a
+  plus de barre d'URL qui se rétracte, donc plus de `resize` à redouter pendant le geste.
+  **Plein cadre partout, aucune media query de largeur** — y compris au bureau, où E1
+  n'est de toute façon pas construit.
+- **19/08/2026 — une seule règle citait la constante 780, elle passe en unité de
+  conteneur.** `.corps:has(~ .volet)` réservait `--ecran-h × 0,34`. Un padding en
+  pourcentage se compte sur la largeur, d'où le calcul ; mais le calcul **supposait** la
+  hauteur au lieu de la mesurer, et le jour où le pli a rempli l'écran il est devenu faux
+  en silence. `100cqh` interroge la boîte. `100dvh` aurait donné le même nombre — en le
+  supposant lui aussi.
+- **19/08/2026 — les retraits de sécurité passent du plateau au contenu.** Le pli touche
+  les quatre bords : le fond va jusqu'au bord, seul le texte se retire. Quatre jetons
+  `--encoche-*`, deux marges dérivées, portés par la tête, le corps, l'invite du volet et
+  les cibles de l'atelier — et **remis à zéro dans `.mini`**, parce qu'un aperçu montre le
+  gabarit et n'a pas d'encoche.
+- **19/08/2026 — le clavier de l'atelier réduit la vue, il ne pousse plus la page.**
+  `interactive-widget=resizes-content` sur l'entrée de l'atelier (Chrome ≥ 108, mon
+  téléphone, le seul qui voie l'atelier), et `--vue-h` écrite par `src/atelier/vue.ts` en
+  repli pour Safari. Sur les six écrans, jamais sur `:root` : la règle de `fluidite.md` ne
+  change pas de raison parce qu'on change d'entrée, et `verifie.mjs` refuse la ligne — il a
+  raison. L'écran défile, l'action est collante en bas : une action qu'on ne voit pas
+  n'existe pas.
+- **19/08/2026 — le zoom se bloque, et il faut dire ce que ça vaut.** `maximum-scale=1,
+  user-scalable=no` dans les deux entrées. Honoré par Chrome ; **iOS l'ignore depuis
+  iOS 10**, et chez elle c'est le `touch-action: none` du cadre — qui couvre maintenant
+  tout l'écran — qui fait le travail. L'auto-zoom à la mise au point n'a jamais eu lieu :
+  les lignes de saisie sont à 20 et 26px, au-dessus des 16 qui l'appellent. C'est donc un
+  recul d'accessibilité pour mon seul Android, dans l'atelier, et il est assumé.
+- **19/08/2026 — `a.marque` et `a.action` remontent de `plis.css` vers `pli.css`.**
+  Elles y sont depuis le jalon 5, dans la feuille du journal, demandée à la volée. Or
+  `chemin()` fait de la marque un `<a>` **dès A1**, où cette feuille n'est jamais chargée :
+  la marque tombait sur le `a { color: carmin }` du socle et se peignait en carmin sur le
+  rideau sombre — 1,4:1, mesuré aux trois largeurs. Le chemin discret appartient au
+  gabarit, pas au journal. La faute date du jalon 5 ; le plein cadre ne l'a pas causée, il
+  l'a fait trouver.

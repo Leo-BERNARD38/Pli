@@ -114,10 +114,10 @@ Voici tout ce qui s'en déduit.
 | `twitter:card` | présent dans les balises livrées | **retiré** — un pli ne se partage pas ailleurs qu'en conversation |
 | `mask-icon` | présent, avec un SVG à fond crème | **retiré** — l'onglet épinglé est une affaire de Safari de bureau |
 | Écran C2 | atteint par le lien | atteint **depuis le journal** |
-| `.pli` | le pli et son papier | **le cadre** : 360 × 780, l'ombre, le coin, `touch-action`. Le papier passe aux deux couches, `.pli__dessus` et `.pli__dessous` — les mots de l'algorithme du dépliage |
+| `.pli` | le pli et son papier | **le cadre** : l'écran visible entier, `touch-action`. Ni ombre ni coin — il n'y a plus de plateau sur lequel se poser. Le papier passe aux deux couches, `.pli__dessus` et `.pli__dessous` — les mots de l'algorithme du dépliage |
 | `.pli:has(.volet) .corps` | — | **`.corps:has(~ .volet)`** — la règle regarde le frère, sinon le volet d'A1 réserve sa place dans le corps d'A2, qui n'en a pas |
 | `.tete` | statique | **`position: relative`** — une image pleine page est une couche de fond positionnée, un élément statique passerait dessous |
-| Un pli plus haut que l'écran | non traité | **il se met à l'échelle** — `--echelle`, écrite sur le plateau, `transform: scale()` sur le pli. La composition ne bouge jamais |
+| Un pli plus haut que l'écran | non traité | **il n'y en a plus** : le cadre est l'écran. Un pli trop long est coupé par `.corps { overflow: hidden }`, et c'est le plafond du dépôt qui l'en empêche (19/08/2026 — remplace la mise à l'échelle du 18/08) |
 | `.image--pleine` | absente | **une couche de fond** (`inset: 0`), le texte par-dessus — et elle **s'arrête à la pliure** quand un volet couvre le bas |
 | Le voile d'une image pleine page | non spécifié | **`.image--pleine .image__fondu--encre`**, ses propres arrêts : `.68` mesuré, `.85` et `66 %` repris de `.image__fondu--encre`. Celui d'un bandeau retombe à `.38` au tiers, pile sous la tête et le numéro |
 | `.etiquette--fine` sur carmin | `.62` partout | **opacité pleine sur carmin** — crème sur carmin vaut déjà 5,1:1, le `.62` le ramenait à 2,7:1 |
@@ -166,8 +166,12 @@ maximums que `donnees.md` documentait**. Elle porte trois de ses quatre élémen
 22 signes font une troisième ligne de capitales et coûtent 92px d'un coup. Son plafond
 descend donc à **16**.
 
-**Un pli de 780px sur un écran plus court** : il se met à l'échelle. Mesuré de 320 × 568 à
-1440 × 900, la page ne défile plus jamais et la composition ne bouge pas d'un pixel.
+~~**Un pli de 780px sur un écran plus court** : il se met à l'échelle.~~ **Renversé le
+19/08/2026** : le cadre remplit l'écran, il n'y a plus de pli de 780px. Ce que la mise à
+l'échelle réglait — la page qui défile — reste réglé, mesuré de 360 × 780 à 1440 × 900.
+Ce qu'elle cachait apparaît : sur une hauteur visible plus courte que 780, la composition
+n'a plus la place que les plafonds du papier lui supposaient
+([.claude/decisions.md](../.claude/decisions.md)).
 
 **L'empilement de `.image--pleine`** : c'est une couche de fond, le texte se compose
 par-dessus, le fondu entre les deux.
