@@ -65,7 +65,11 @@ tableau ci-dessous vaut jusque-là, et pas au-delà.
 | invitation | **16** | **46** | trois faits d'une ligne |
 | pensée | — (elle n'en montre pas) | **256** | — |
 | souvenir | **70** | **312** | — |
-| poème | **88** | **358** par strophe | — |
+| poème | — | **aucun** : il défile | — |
+
+**Le poème n'a pas de plafond**, et c'est la seule exception : il défile, donc aucune
+hauteur d'écran ne le borne (design-system.md#les-cinq-règles). Les trois autres tiennent
+dans leur écran, et c'est ce tableau qui les y tient.
 
 **L'invitation est le cas serré**, et c'est le seul : elle empile un titre à 64px, une
 griffe, une voix, jusqu'à trois faits et une action. Mesuré, elle porte **trois de ces
@@ -161,8 +165,9 @@ première strophe, ligne deux
 seconde strophe...
 ```
 
-**La ligne vide est la page.** La convention markdown du paragraphe devient la règle de
-pagination : une strophe, un écran, dans l'ordre du fichier. Aucune syntaxe à apprendre.
+**La ligne vide sépare deux strophes.** La convention markdown du paragraphe, et rien de
+plus : aucune syntaxe à apprendre. Le lecteur les affiche toutes, à la suite, dans l'ordre du
+fichier — le poème défile, il ne pagine pas (parcours.md#a2--la-découverte).
 
 ### La moulinette
 

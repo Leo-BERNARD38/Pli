@@ -129,12 +129,11 @@ Ce qui fait qu'un pli reste un pli, et pas un message.
 ### Le poème
 
 Le quatrième type, et de loin le plus de machinerie : une moulinette, un format de fichier
-public pour toujours, une pagination, deux écrans de plus. Trois types de plis partent sans
-lui. Il remonte le jour où il manque vraiment.
+public pour toujours, un écran d'attente. Trois types de plis partent sans lui. Il remonte
+le jour où il manque vraiment.
 
 - `scripts/plier.mjs`, `plier.bat`, `plier.sh`
 - `plis-source/` gitignoré, garde-fou avant commit
-- B2 · B3 : la pagination strophe par strophe, au même geste
 - C5 l'attente du fichier
 - D2p : la liste des poèmes dans l'atelier
 - **Hors ligne ≠ introuvable** : pour un poème, C4 confond un fichier absent et un réseau

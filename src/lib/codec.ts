@@ -128,11 +128,29 @@ function estUnPli(relu: unknown): relu is Pli {
   )
 }
 
-/** Le pli devient le payload d'un lien : `#c=<payload>`. */
-export async function encoder(pli: Pli): Promise<string> {
-  const octets = new TextEncoder().encode(JSON.stringify(pli))
+/**
+ * Un texte devient un payload versionné. C'est la moitié basse du codec, et elle sert deux
+ * transports : le pli d'un lien, et l'index des poèmes — qui n'est pas un pli, ne voyage
+ * dans aucune conversation, et n'a pourtant aucune raison d'avoir son propre encodage
+ * (docs/donnees.md#lindex).
+ */
+export async function serrer(texte: string): Promise<string> {
+  const octets = new TextEncoder().encode(texte)
   const serre = await traverser(octets, new CompressionStream('deflate-raw'))
   return VERSION + enBase64url(serre)
+}
+
+/** Le chemin inverse. Il ne juge pas ce qu'il rend : c'est à l'appelant de le reconnaître. */
+export async function detendre(payload: string): Promise<string> {
+  if (!LUES.includes(payload.slice(0, 1))) throw new Error('lien abîmé')
+  const octets = deBase64url(payload.slice(1))
+  const detendu = await traverser(octets, new DecompressionStream('deflate-raw'))
+  return new TextDecoder().decode(detendu)
+}
+
+/** Le pli devient le payload d'un lien : `#c=<payload>`. */
+export async function encoder(pli: Pli): Promise<string> {
+  return serrer(JSON.stringify(pli))
 }
 
 /**
@@ -140,13 +158,8 @@ export async function encoder(pli: Pli): Promise<string> {
  * JSON abîmé — donne le même refus : c'est l'état C4, « lien abîmé ».
  */
 export async function decoder(payload: string): Promise<Pli> {
-  if (!LUES.includes(payload.slice(0, 1))) {
-    throw new Error('lien abîmé')
-  }
   try {
-    const octets = deBase64url(payload.slice(1))
-    const detendu = await traverser(octets, new DecompressionStream('deflate-raw'))
-    const relu: unknown = JSON.parse(new TextDecoder().decode(detendu))
+    const relu: unknown = JSON.parse(await detendre(payload))
     if (!estUnPli(relu)) throw new Error('ce n’est pas un pli')
     return relu
   } catch (cause) {

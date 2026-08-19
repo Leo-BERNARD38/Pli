@@ -14,6 +14,7 @@
     "src/lib/codec.ts",
     "src/lib/codec.test.ts",
     "src/lib/dates.ts",
-    "src/lib/dates.test.ts"
+    "src/lib/dates.test.ts",
+    "src/lib/poeme.ts"
   ]
 }

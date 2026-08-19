@@ -81,6 +81,28 @@ function retirerLesCouchesQuiMontent(): void {
 }
 
 /**
+ * Le doigt rendu au défilement — **le poème, et lui seul** (docs/design-system.md#les-cinq-règles).
+ *
+ * Le cadre porte `touch-action: none`, sans quoi il n'y aurait pas de geste. Comme
+ * `touch-action` se croise le long des ancêtres, aucune feuille de type ne peut rendre la
+ * permission depuis le corps : elle se rend sur le cadre, et donc d'ici. `pli.css` et
+ * `geste.ts` lisent tous deux cet attribut — l'un rend `touch-action`, l'autre laisse
+ * passer le `pointerdown`. Poser l'un sans l'autre ne ferait rien de bon.
+ *
+ * Le moment compte : **une fois le poème ouvert, jamais avant**. Pendant le dépliage, c'est
+ * le geste qui a le doigt. À la relecture il n'y a pas de geste du tout, et l'attribut se
+ * pose tout de suite.
+ */
+function rendreLeDefilement(): void {
+  if (cadre && dessous?.dataset.type === 'poe') cadre.dataset.defile = ''
+}
+
+/** Un autre pli arrive : le cadre reprend le doigt tant que rien ne défile. */
+function reprendreLeDefilement(): void {
+  if (cadre) delete cadre.dataset.defile
+}
+
+/**
  * Le repère du budget de chargement, posé une fois, quand le texte d'A1 est à l'écran.
  * Safari ne donne pas de LCP, et le premier rendu peint le plateau avant le texte : sans
  * cette marque, la colonne « Mesuré le » de docs/chargement.md reste vide pour toujours.
@@ -224,6 +246,7 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
     auDepliage: () => {
       rangerAuJournal()
       oublierLaPeinture()
+      rendreLeDefilement()
     },
   })
 
@@ -266,6 +289,8 @@ async function relireLePli(pli: Pli, mot: string | null): Promise<void> {
   dessous.style.transform = 'none'
   dessous.inert = false
   dessous.hidden = false
+  // Un poème relu défile comme un poème déplié : il n'y a ici aucun geste à attendre.
+  rendreLeDefilement()
 }
 
 /**
@@ -294,6 +319,7 @@ async function montrerLeJournal(): Promise<void> {
 
 suivre((route) => {
   rangerAuJournal()
+  reprendreLeDefilement()
   const mienne = ++generation
 
   if (route.ecran === 'journal') {

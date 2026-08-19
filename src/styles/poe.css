@@ -1,17 +1,62 @@
-/* LE POÈME — une strophe, un écran, sur encre, sans image. C'est le seul contenu long, le
-   seul qui pagine, et le seul où lire compte plus que regarder
-   (docs/design-system.md#les-trois-textures-de-type).
+/* LE POÈME — sur encre, sans image. C'est le seul contenu long, et le seul où lire compte
+   plus que regarder (docs/design-system.md#les-trois-textures-de-type).
 
-   Au jalon 2 il ne montre que sa première strophe : la pagination strophe par strophe, au
-   même geste que le dépliage, est le jalon 6 (B2 · B3). Lui poser « la suite ↑ » alors que
-   rien ne suit encore serait un mensonge.
+   **C'est aussi le seul pli qui défile**, et c'est l'exception nommée à la première des cinq
+   règles (docs/design-system.md#les-cinq-règles). Un poème ne se découpe pas en pages : il
+   se lit d'un bout à l'autre, dans l'ordre du fichier, strophes séparées par une ligne
+   vide. La strophe garde ses retours à la ligne — c'est de la poésie, pas un paragraphe.
 
-   La strophe garde ses retours à la ligne : c'est de la poésie, pas un paragraphe. */
+   Trois déclarations font ce défilement, et aucune n'est décorative :
+
+   · `justify-content: flex-start` — le corps aligne son contenu EN BAS partout ailleurs
+     (`pli.css`, § 5). Sous un contenu plus haut que la boîte, un conteneur flex en
+     `flex-end` fait déborder par le HAUT, et ce qui déborde par le haut n'est pas
+     atteignable au défilement : les premières strophes seraient perdues.
+   · `overflow-y: auto` — il ne reprend que l'axe vertical de l'`overflow: hidden` du corps.
+     L'horizontal reste fermé : la garde qui empêche un pli de recouvrir la marque tient
+     toujours.
+   · `overscroll-behavior: contain` — arrivé au bout, le défilement s'arrête là. Sans lui il
+     se propage au document, qui ne défile pas, et le geste de refermeture du navigateur
+     s'en mêle.
+
+   Ce que cette feuille ne peut PAS faire : rendre le doigt au défilement. `touch-action` se
+   croise le long des ancêtres, et `.pli` porte `touch-action: none` pour le geste — un
+   `pan-y` posé ici serait annulé par lui. C'est `.pli[data-defile]` qui le rend, et c'est le
+   module qui le pose, une fois le poème ouvert et pas avant. */
 [data-type='poe'] .voix {
   font-size: 23px;
   line-height: 1.32;
   max-width: 18ch;
   white-space: pre-line;
+}
+
+[data-type='poe'] .corps {
+  justify-content: flex-start;
+  /* Le contenu part du haut du corps, et non contre la tête : 22px, l'écart que
+     `.corps--haut` et `.pli__monte .corps` posent déjà pour la même raison. Sans lui, le
+     titre en 52px s'imprime par-dessus la marque — vu, capturé. */
+  padding-top: 22px;
+}
+
+/* LE DÉFILEMENT N'ARRIVE QU'UNE FOIS LE PLI OUVERT, et c'est une précaution de fluidité,
+   pas une commodité. Un conteneur qui défile se fait promouvoir en couche par le
+   compositeur, et celui-ci vit sous une couche que `will-change: transform` promeut déjà
+   pendant le geste : le rendre scrollable dès la construction d'A2 ferait **trois** couches
+   bordées pendant le dépliage au lieu des deux que le produit s'autorise
+   (docs/fluidite.md#les-couches-et-ce-quelles-coûtent).
+
+   Le même jeton porte donc les deux choses — le doigt rendu au navigateur, et le conteneur
+   de défilement —, et il est posé à `transitionend`, quand le fil principal n'a plus rien
+   à tenir. */
+.pli[data-defile] [data-type='poe'] .corps {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Les strophes se suivent, séparées par le blanc du corps et rien d'autre : pas de filet,
+   pas de puce. `.voix` porte déjà l'écart entre les lignes d'une même strophe. */
+[data-type='poe'] .voix p + p {
+  margin-top: 1.32em;
 }
 
 [data-type='poe'] .titre {

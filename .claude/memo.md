@@ -9,7 +9,8 @@ dans le même commit.
 
 ## Les cinq règles (design-system.md)
 
-1. **Un pli = un écran.** Jamais de défilement dans un pli.
+1. **Un pli = un écran.** Jamais de défilement dans un pli — **sauf le poème**, seul
+   contenu long du produit, qui se lit d'un bout à l'autre (exception nommée, 19/08/2026).
 2. **Le carmin est l'action.** Une seule couleur agit.
 3. **La pliure est physique.** Elle suit le doigt, résiste dans le mauvais sens, retombe.
 4. **Le papier découle du type**, jamais un choix offert au dépôt.

@@ -103,12 +103,17 @@ La composition suit le type — le papier, l'image et la présence d'une action 
 |---|---|---|
 | invitation | titre 64px, griffe, jusqu'à 3 faits | « répondre ↑ » |
 | pensée | une phrase, deux lignes au plus, image pleine | aucune |
-| poème | strophe par strophe, encre, sans image | « la suite ↑ » puis rien |
+| poème | le texte entier, encre, sans image — il défile | aucune |
 | souvenir | titre haut, une ligne en bas, image pleine | aucune |
 
-**Le poème pagine, il ne défile jamais.** La règle « un pli = un écran » l'impose, et le
-geste est le même que le dépliage. Une strophe = un écran, dans l'ordre du fichier ; la
-dernière n'a plus de pliure.
+**Le poème défile, et il est le seul.** C'est l'exception nommée à la première des cinq
+règles (design-system.md#les-cinq-règles) : un poème est le seul contenu long du produit, il
+se lit d'un bout à l'autre, dans l'ordre du fichier. Les strophes se suivent, séparées par un
+blanc — la ligne vide de la source. Il n'y a ni pagination, ni « la suite ↑ », ni second
+geste : le dépliage ouvre le pli, et ensuite c'est le pouce qui lit.
+
+Le geste rend donc le doigt au corps une fois le poème ouvert, et on ne referme pas un poème
+en tirant. Comme pour la pensée et le souvenir, la marque mène au journal.
 
 Pour les trois types sans action, le parcours s'arrête là : le pli est lu, il est archivé,
 et **la marque « Pli » en haut à gauche mène au journal**. C'est le geste discret que le

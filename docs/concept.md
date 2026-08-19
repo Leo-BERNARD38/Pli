@@ -46,7 +46,7 @@ paillasson, pas une serrure : ça écarte le curieux, pas quelqu'un qui lit les 
 |---|---|---|---|
 | **invitation** | titre, mot, quand, où | crème + bandeau | oui / peut-être / non → WhatsApp |
 | **pensée** | une phrase, deux lignes au plus | encre + image pleine | aucune |
-| **poème** | plusieurs strophes, paginées | encre, sans image | aucune |
+| **poème** | plusieurs strophes, à la suite — il défile | encre, sans image | aucune |
 | **souvenir** | un titre, une ligne | crème + image pleine | aucune |
 
 Le papier n'est jamais un choix : il découle du type. **Seule l'invitation appelle une

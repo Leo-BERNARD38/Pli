@@ -171,8 +171,14 @@ Sous `prefers-reduced-motion: reduce`, elle n'existe pas et l'ouverture tombe à
   et un `img.decode()` terminé avant le geste, toujours.
 - **La barre d'URL se rétracte au premier mouvement** et change la hauteur : `100dvh`, pas
   `100vh` ([appareils.md](appareils.md)).
-- **Le pli ne défile pas.** Il n'y a rien de scrollable dans un pli — c'est la règle 1 du
-  design system, et c'est aussi ce qui supprime toute une famille de saccades.
+- **Le pli ne défile pas — sauf le poème.** C'est la règle 1 du design system et son
+  exception nommée, et c'est aussi ce qui supprime toute une famille de saccades. Le poème
+  paie cette exception avec précaution : son corps ne devient un conteneur de défilement
+  qu'**une fois le pli ouvert**, jamais pendant le geste. Un conteneur qui défile se fait
+  promouvoir en couche par le compositeur, et il vit sous une couche que `will-change:
+  transform` promeut déjà — le rendre scrollable trop tôt ferait **trois** couches bordées
+  pendant le dépliage au lieu de deux. C'est le jeton `data-defile` du cadre qui décide, et
+  il n'est posé qu'à `transitionend` (src/lecteur/main.ts).
 
 ## Comment on mesure
 

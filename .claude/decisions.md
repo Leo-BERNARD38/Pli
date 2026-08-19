@@ -437,3 +437,19 @@ si la mesure sur les deux téléphones le rend visible.
   une invite à redresser aurait ajouté un écran qu'aucune maquette ne dessine, pour un cas que
   ces deux téléphones ne rencontrent pas. Noté dans
   [docs/installation.md](../docs/installation.md#le-manifeste-et-les-icônes), qui fait foi.
+- **19/08/2026 — le poème défile, et il est le seul.** La spécification décrivait une
+  pagination strophe par strophe, au même geste que le dépliage (B2 · B3, « la suite ↑ »).
+  Elle n'a jamais été construite, et l'auteur l'écarte : un poème est un texte, il se lit
+  d'un bout à l'autre. La conséquence dépasse le poème — c'est **la première des cinq règles**
+  qui gagne une exception nommée, et elle est nommée pour rester une exception : tout écran
+  qui défile sans être un poème casse toujours la règle. À rapprocher de la décision du
+  paysage, deux lignes plus haut, où « un pli qui défile » avait justement été refusé : ce
+  qui était refusé là, c'était de faire défiler une composition **dessinée pour tenir** parce
+  que l'écran était trop court. Ici c'est l'inverse : le contenu est long par nature, et
+  aucune hauteur d'écran ne le ferait tenir.
+  Techniquement, le doigt ne se rend pas depuis la feuille du type : `touch-action` se croise
+  le long des ancêtres, et `.pli` porte `none` pour le geste. C'est le module qui pose
+  `data-defile` sur le cadre, **une fois le poème ouvert et pas avant**, et `pli.css` comme
+  `geste.ts` le lisent. Le corps passe aussi en `justify-content: flex-start` : sous
+  `flex-end`, un contenu trop haut déborde par le **haut**, et ce qui déborde par le haut ne
+  se rattrape pas au défilement — les premières strophes auraient été perdues.
