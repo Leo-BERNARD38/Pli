@@ -24,18 +24,26 @@ le journal est l'objet qui a de la valeur.
 **Moi** j'ouvre l'**atelier**, je choisis un type, je remplis trois lignes, je copie
 le lien, je l'envoie. Sauf pour le poème, que j'écris à mon bureau dans un fichier.
 
-Ce sont deux personnes, pas deux rôles ouverts au public. Pli n'est pas un produit
-publiable : pas de comptes, pas de modération, pas d'inscription.
+**Et depuis le 19/08/2026, chacun a les deux.** Le journal mène à l'atelier par une ligne
+discrète, l'atelier revient au journal par la même — le relais que le design demandait et
+que ce document avait fermé ([integration.md](integration.md)). Ce ne sont plus deux rôles,
+ce sont deux personnes qui s'écrivent : elle dépose aussi, je reçois aussi.
+
+**Rien de ce qui tient le produit ne bouge pour autant.** Il n'y a toujours ni serveur ni
+synchronisation : le journal de chaque téléphone est celui de son téléphone, et l'atelier
+reste derrière son seuil. Ce sont deux personnes, pas deux rôles ouverts au public. Pli
+n'est pas un produit publiable : pas de comptes, pas de modération, pas d'inscription.
 
 ## Les deux entrées
 
 | Entrée | Pour qui | Rôle |
 |---|---|---|
-| `leo-bernard38.github.io/Pli/` | elle | Les plis reçus, et le journal |
-| `leo-bernard38.github.io/Pli/atelier/` | moi | Déposer un pli, fabriquer le lien |
+| `leo-bernard38.github.io/Pli/` | l'un comme l'autre | Les plis reçus, et le journal |
+| `leo-bernard38.github.io/Pli/atelier/` | l'un comme l'autre | Déposer un pli, fabriquer le lien |
 
-Deux points d'entrée, deux bundles distincts. L'atelier ne se charge jamais sur son
-téléphone. Le détail des routes est dans [architecture.md](architecture.md#routage).
+Deux points d'entrée, deux bundles distincts. L'atelier **ne se charge que si l'on touche la
+ligne qui y mène** : le chemin est un `<a href>` ordinaire vers l'autre entrée, jamais un
+import, et le premier écran de celle qui ne fait que lire ne porte pas un octet d'atelier. Le détail des routes est dans [architecture.md](architecture.md#routage).
 
 L'atelier demande une fois **notre date d'officialisation** avant de s'ouvrir. C'est un
 paillasson, pas une serrure : ça écarte le curieux, pas quelqu'un qui lit les sources.

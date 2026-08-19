@@ -609,3 +609,29 @@ n'était visible dans un diff, aucun relecteur ne les avait vues, et `npm run ve
   survol. Sur C3, qui est en encre, la marque passait donc de crème à encre — invisible.
   Corrigé en `:not(.marque, .action)` plutôt qu'en déplaçant la règle : l'ordre ne doit plus
   décider, c'est la troisième fois que ce piège mord dans ce dépôt.
+- **19/08/2026 — le relais existe, et le design avait raison.** `docs/` l'avait fermé en
+  toutes lettres : « elle n'a pas d'atelier ; le relais n'existe pas dans un produit à deux »
+  (`parcours.md`), et « **Il n'existe pas** » dans le tableau des cinq questions du design
+  (`integration.md`). Le design, lui, nommait l'écran « A4 · le relais » et écrivait
+  « écrire à ton tour ↑ ». Renversé par l'auteur : chacun a les deux entrées, sur son
+  téléphone. Le relais n'est pas en A4 — une seule action par écran — mais **en bas du
+  journal**, une ligne discrète « l'atelier → », et l'atelier gagne « les plis reçus → » en
+  face. Ce qui rendait la décision d'origine défendable ne bouge pas : pas de serveur, pas de
+  synchronisation, deux `localStorage`, deux bundles, et le seuil tient toujours la porte.
+- **19/08/2026 — « l'atelier », et non « déposer un pli ».** Le libellé validé par l'auteur
+  écrivait « pli » sur l'écran dont la marque dit « Pli » et l'étiquette « tes plis ».
+  `revue-ecran` l'a refusé au nom de la règle de fréquence, née d'un comptage à 26
+  occurrences sur 187 mots. L'auteur a tranché pour le nom de la destination : il est
+  symétrique de « les plis reçus » de l'autre côté, et chaque chemin nomme où il mène.
+- **19/08/2026 — un écran de fermeture plutôt qu'un pied de page.** La maquette donnait aux
+  trois types sans réponse un pied à deux membres — un état à gauche, « tes plis ↑ » à
+  droite. Le produit leur donne A5, un écran carmin qui reprend la composition d'A4 : le pli
+  s'est ouvert en montant, il se referme du même mouvement, et `.pli__monte` existait déjà.
+  L'état de gauche n'est pas repris — il compte ce que l'écran montre déjà.
+- **19/08/2026 — le chunk part pendant A1, les couches se posent à `transitionend`.** Un
+  `await import()` placé après `armer()` se résout **pendant le dépliage** : `armer()` rend
+  le `pointerdown` vivant de façon synchrone, et la résolution insère une section dans un
+  cadre en `container-type: size` — un recalcul de mise en page dans la fenêtre où le fil
+  principal ne doit déplacer que deux couches. Les deux moments sont donc séparés : la
+  demande à la construction d'A2, la pose à la fin de la transition, exactement comme le
+  journal s'écrit à `transitionend` et pour la même raison.

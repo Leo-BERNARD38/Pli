@@ -98,9 +98,14 @@ function versLatelier(): HTMLElement {
   const vers = document.createElement('a')
   vers.className = 'passage'
   vers.href = `${import.meta.env.BASE_URL}atelier/`
+  // « l'atelier », et non « déposer un pli » : la règle de fréquence du mémo veut que le mot
+  // ne s'écrive pas là où la marque est — et elle est juste au-dessus, avec « tes plis » en
+  // face d'elle. Le mot nomme la destination, comme « les plis reçus » nomme la sienne de
+  // l'autre côté : les deux chemins se répondent (docs/design-system.md#ton-et-vocabulaire).
+  //
   // La flèche DROITE, et c'est ce qui la distingue des actions du lecteur : « tes plis ↑ »
   // remonte dans la page, celle-ci mène ailleurs — l'autre entrée, l'autre bundle.
-  vers.append(element('span', 'etiquette', 'déposer un pli'), fleche('droite'))
+  vers.append(element('span', 'etiquette', 'l’atelier'), fleche('droite'))
   return vers
 }
 

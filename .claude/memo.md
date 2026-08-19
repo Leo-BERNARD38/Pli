@@ -78,7 +78,9 @@ Un titre, une voix, jusqu'à trois faits, une action. Au-delà, c'est un autre t
 | `--carmin-pointille` | `rgba(200,30,51,.55)` |
 
 `.etiquette--fine` à **`.62`**, pas `.5` — mais **opacité pleine sur carmin**, où `.62`
-tombe à 2,7:1. Aplat mesuré du drapé : `#944850` / `#904a53`. Voiles d'image : pleine page
+tombe à 2,7:1. **`.passage` est à `.62` des deux côtés** (19/08/2026) : à `.45`, celui de
+l'atelier mesurait 2,98:1 sur ce que le navigateur peint. Restent deux valeurs de l'atelier
+mesurées et **non corrigées** — `.conduite__retour` à 4,06:1 et `.conduite__pas` à 2,98:1. Aplat mesuré du drapé : `#944850` / `#904a53`. Voiles d'image : pleine page
 sur encre `.68`, bandeau `.82`, souvenir `.85`.
 
 ## La typographie (design-system.md)
@@ -93,6 +95,13 @@ sur encre `.68`, bandeau `.82`, souvenir `.85`.
 
 A1 n'appelle que **trois familles** — Pinyon, Newsreader, Space Mono. **Bodoni commence à
 A2.** `font-display: block`, jamais `swap`.
+
+**Les quatre types ont une action en bas d'A2** (19/08/2026) : « répondre ↑ » pour
+l'invitation, **« c'est lu ↑ »** pour les trois autres, qui fait monter **A5 · la
+fermeture** — carmin, la composition d'A4, « refermé » / « Il est à toi maintenant. » /
+« tes plis ↑ ». Son titre est à **56px** et non 78 : « REFERMÉ » demande 368px à 78, la
+colonne en fait 308. La maquette dessinait ce pied de page sur B1, B3 et B4 ; le produit
+l'avait perdu.
 
 Sur A1 le titre est commun — « Il n'attendait que toi. » — et **la promesse suit le type** :
 celle de l'invitation est en dur dans le document, les trois autres la remplacent au
@@ -163,6 +172,11 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 |---|---|---|
 | `pli.v1.journal` | son téléphone | `{ h, c, deplieLe, reponse? }`, du plus récent au plus ancien |
 | `pli.v1.reglages` · `pli.v1.compteur` · `pli.v1.deposes` · `pli.v1.seuil` | mon téléphone | le tiroir, et rien de commun avec son journal |
+
+**Le relais est rouvert** (19/08/2026) : chacun a les deux entrées sur son téléphone. C1
+finit par « l'atelier → », D1 et D5 par « les plis reçus → ». **Rien ne se synchronise pour
+autant** — deux `localStorage`, deux bundles, aucun compte, et le seuil tient toujours la
+porte de l'atelier. Le chemin est un `<a href>` vers l'autre entrée, jamais un import.
 
 Le compteur se cale sur l'index des poèmes à l'ouverture de D2p, et **ne recule jamais** : un
 poème écrit hors atelier consomme un numéro que le tiroir ignore.
