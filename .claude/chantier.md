@@ -223,8 +223,15 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
 - [x] D3 · le lien — le lien ne s'affiche pas, deux actions à la place : envoyer (partage
       natif) et copier. Le dépôt est noté avant le partage
 - [x] mon historique des plis déposés — `pli.v1.deposes`, dédoublonné sur le payload, jamais
-      sur le numéro. L'**écran** qui le relit n'existe pas encore : la roadmap ne le
-      demandait pas, et rien ne le décrit dans `parcours.md`
+      sur le numéro
+- [x] D5 · les plis déposés — l'écran qui relit le tiroir. La roadmap le demandait bien
+      (« mon historique des plis déposés ») ; `parcours.md` ne le dessine pas et n'en dit
+      qu'une ligne, « relire et renvoyer ce que j'ai déposé ». Les deux trous ont été
+      comblés avec l'auteur, pas devinés : la ligne reprend la grammaire du sommaire de C1,
+      et l'accès est une ligne discrète sur D1, qui ne se montre que si elle mène quelque
+      part. **Renvoyer n'est pas déposer** : le lien se refabrique depuis le payload gardé,
+      sans réencoder, sans noter un dépôt et sans avancer le compteur — c'est le pli qui est
+      parti la première fois, à l'identique. D3 sert les deux fois, seule sa conduite change
 - [ ] **à la main, chez moi** : fabriquer l'empreinte du seuil avec `/seuil` et la recopier
       dans la constante `EMPREINTE` de `src/atelier/seuil.ts`. Tant qu'elle est vide, **rien
       ne passe la porte** — un seuil sans empreinte serait une porte ouverte, une empreinte
@@ -235,9 +242,27 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
       mesurés, eux
 - [ ] **à la main, sur les deux téléphones** : composer un pli de chaque type et l'ouvrir
       chez elle — c'est le seul endroit où l'on verra le partage natif et le presse-papier
+- [ ] **à la main, sur mon téléphone** : sur D5, la conduite à 360px (« ← les plis » et
+      « déjà déposé » côte à côte), et la ligne discrète de D1, volontairement sous les 76px
+      que `.type` et `.depose` s'imposent — reste-t-elle franchissable au pouce ?
 
 **Fin du jalon :** je compose et j'envoie depuis mon téléphone, sans passer par le code.
 Vraie dès que l'empreinte du seuil est posée.
+
+### Ce que la revue de D5 a trouvé
+
+- **Le filet de focus de l'atelier n'existait pas.** `pli.css` écrit `:focus-visible` en fin
+  de feuille pour gagner à spécificité égale — mais ce calcul ne vaut qu'à l'intérieur d'une
+  feuille. `depot.css` est chargée **après**, donc à égalité c'est encore l'ordre qui tranche,
+  et c'est `all: unset` qui gagnait. `.type` tabulait sans filet visible **depuis le jalon 4**,
+  et personne ne l'avait vu : la faute n'était pas dans le lot, elle y a seulement été
+  trouvée. Les trois cibles — `.type`, `.depose`, `.passage` — ont maintenant leur règle.
+- **La typographie recopiée dérive.** Les trois classes `.depose__*` réinventaient des valeurs
+  proches de `.etiquette`, `.voix voix--corps` et `.etiquette--fine` — le mémo garde
+  justement la trace d'une de ces valeurs corrigée après coup. La ligne réemploie désormais
+  le vocabulaire de `pli.css`, comme le sommaire de C1.
+- **D5 s'ouvrait avant sa liste.** Le décodage est asynchrone ; l'écran s'affichait une frame
+  sans liste et sans son mot. Il attend maintenant d'être entier, comme C1.
 
 ## Jalon 5 — la durée
 

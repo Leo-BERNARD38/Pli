@@ -20,6 +20,11 @@ export interface Depot {
   payload: string
 }
 
+/** L'adresse d'un pli, depuis son seul payload — la même règle des deux côtés. */
+export function adresseDuPayload(payload: string): string {
+  return `${ADRESSE}#c=${payload}`
+}
+
 /**
  * Fabrique le lien, et le note dans mon historique.
  *
@@ -29,7 +34,7 @@ export interface Depot {
 export async function deposerLePli(pli: Pli): Promise<Depot> {
   const payload = await encoder(pli)
   noterUnDepot({ n: pli.n, t: pli.t, ti: pli.ti, c: payload })
-  return { adresse: `${ADRESSE}#c=${payload}`, payload }
+  return { adresse: adresseDuPayload(payload), payload }
 }
 
 /**

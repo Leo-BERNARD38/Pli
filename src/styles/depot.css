@@ -385,3 +385,73 @@
   gap: 18px;
   padding: 0 var(--marge) 34px;
 }
+
+/* D5 · les plis déposés. La même cible qu'une ligne de type — 76px, tout le côté du
+   pouce — et la même grammaire que le sommaire de C1 : ce qu'il est, ce qu'il dit,
+   depuis quand. La liste ne se scrolle pas à part : l'écran défile, comme les autres. */
+.deposes {
+  list-style: none;
+}
+
+.depose {
+  all: unset;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px var(--marge);
+  border-top: 1px solid var(--trait);
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 76px;
+  text-align: left;
+}
+
+.deposes > li:last-child .depose {
+  border-bottom: 1px solid var(--trait);
+}
+
+.depose__texte {
+  display: block;
+}
+
+/* La ligne réemploie le vocabulaire de `pli.css` — `.etiquette`, `.voix voix--corps`,
+   `.etiquette--fine`, exactement comme le sommaire de C1. Seul l'espacement vertical est
+   à dire ici : les trois vivent dans un bloc, pas dans un corps. */
+.depose__texte > * {
+  display: block;
+}
+
+.depose__texte > * + * {
+  margin-top: 6px;
+}
+
+/* Le chemin discret de D1 vers les plis déposés : il ne crie pas, il attend d'être cherché. */
+.passage {
+  all: unset;
+  display: block;
+  flex: 0 0 auto;
+  padding: 20px var(--marge);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Le filet de focus, rendu à ce que `all: unset` lui prend.
+   `pli.css` écrit `:focus-visible` en fin de feuille pour gagner à spécificité égale — mais
+   ce calcul ne vaut qu'à l'intérieur d'une feuille. `depot.css` est chargée APRÈS, donc à
+   égalité (`:focus-visible` et `.type` valent une classe chacun) c'est encore l'ordre qui
+   tranche, et c'est `all: unset` qui gagne. Les trois cibles de l'atelier tabulaient donc
+   sans filet visible (docs/integration.md#accessibilité--la-liste-à-cocher). Fond crème
+   partout ici : le filet est carmin. */
+.type:focus-visible,
+.depose:focus-visible,
+.passage:focus-visible {
+  outline: none;
+  box-shadow: inset 2px 0 0 var(--carmin);
+}
