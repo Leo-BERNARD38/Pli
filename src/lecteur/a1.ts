@@ -36,10 +36,10 @@ export const ETIQUETTES: Record<Type, string> = {
  * le décodage, et les trois autres la remplacent quand le lien a livré son type.
  */
 export const PROMESSES: Record<Type, string> = {
-  inv: 'Il ne s’ouvre qu’une fois. Ensuite il reste dans tes plis.',
-  pen: 'Rien à répondre. Tu peux la lire debout.',
-  poe: 'Prends le temps. Il n’y a rien à répondre.',
-  sou: 'Une image, une ligne. Tu sauras tout de suite quel jour c’était.',
+  inv: 'Il ne s’ouvre qu’une fois. Ensuite il est à toi.',
+  pen: 'Rien à répondre. Lis-la où tu veux.',
+  poe: 'Prends ton temps. Celui-là se lit lentement.',
+  sou: 'Une image, une ligne. Tu sauras tout de suite.',
 }
 
 const ecran = document.querySelector<HTMLElement>('#a1')

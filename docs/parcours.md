@@ -21,7 +21,7 @@ enchaînent, ce qui les déclenche, et ce qui se range où.
                       │ non
                       ▼
                  A1  l'attente
-                      │  ⟵ le geste : glisser vers le haut
+                      │  ⟵ le geste : tirer la pliure vers le haut
                       ▼
               ✎ écrire au journal
                       │
@@ -69,15 +69,21 @@ les trois polices que le texte, lui, attend vraiment
 [chargement.md](chargement.md#vague-2--ce-qui-est-préchargé-et-rien-dautre)). Les peintures
 commencent à A2, quand le pli est ouvert.
 
-Le titre est commun — **« Un pli t'attend. »** — et la promesse suit le type. La phrase de
-la maquette, « Il ne se lira qu'une fois », devient fausse dès que le journal existe :
+Le titre est commun — **« Il n'attendait que toi. »** — et la promesse suit le type.
+
+Il a dit « Un pli t'attend. » du jalon 2 au 19/08/2026, et cette phrase-là n'a pas disparu :
+elle est passée **dans l'aperçu du lien** ([partage.md](partage.md)), le seul endroit où la
+marque n'est pas à l'écran et où le mot « pli » gagne donc sa place. Sur A1 elle disait au
+lecteur le nom du produit, écrit trois centimètres au-dessus, et le titre ne s'adressait pas
+à elle. La phrase de la maquette, « Il ne se lira qu'une fois », est fausse depuis que le
+journal existe :
 
 | Type | La promesse |
 |---|---|
-| invitation | Il ne s'ouvre qu'une fois. Ensuite il reste dans tes plis. |
-| pensée | Rien à répondre. Tu peux la lire debout. |
-| poème | Prends le temps. Il n'y a rien à répondre. |
-| souvenir | Une image, une ligne. Tu sauras tout de suite quel jour c'était. |
+| invitation | Il ne s'ouvre qu'une fois. Ensuite il est à toi. |
+| pensée | Rien à répondre. Lis-la où tu veux. |
+| poème | Prends ton temps. Celui-là se lit lentement. |
+| souvenir | Une image, une ligne. Tu sauras tout de suite. |
 
 Elles viennent des écrans d'attente du design — A1 et B0a-c — débarrassées de ce qu'elles
 comptaient : une maquette sait qu'il y a quatre strophes, un gabarit ne le sait pas. **Aucune
@@ -130,8 +136,8 @@ brief demandait — elle est déjà dans le gabarit, elle ne coûte rien.
 
 Trois mots, un seul tap : *oui, j'y serai* · *peut-être* · *je ne peux pas*.
 
-**La ligne libre se tape dans WhatsApp**, pas ici — l'écran le dit (« un seul mot suffit ·
-tu pourras ajouter une ligne juste après ») et le message part avec son curseur au bout. Le
+**La ligne libre se tape dans WhatsApp**, pas ici — l'écran le dit (« un mot suffit · le
+reste, tu l'écriras toi-même ») et le message part avec son curseur au bout. Le
 produit n'a pas de ligne de saisie sur A3, et n'en aura pas : ce serait un second choix sur
 un écran qui n'en veut qu'un, et une chose de plus à écrire avant de répondre. Le champ
 `ligne` du journal existe donc, et **vaut toujours `null`** — voir
@@ -183,7 +189,7 @@ fichier qu'on n'a pas, et le réseau a marché.
 
 **C2 est un rappel, pas le pli.** Sa maquette (`design/canevas/`) en fait un écran de
 synthèse, et c'est ce qu'on suit : ce qu'elle a répondu, quand, la griffe, et les faits —
-le jour, l'heure, le lieu. Le pli entier est à un tap, sous « relire le pli », et c'est là
+le jour, l'heure, le lieu. Le pli entier est à un tap, sous « le relire », et c'est là
 seulement que le mot remplace « répondre » : on ne répond pas deux fois. Trois écarts à cette
 maquette :
 

@@ -114,7 +114,7 @@ export function armerLaReponse(a: Attaches): void {
     element(
       'p',
       'voix voix--corps',
-      'Le mot s’écrit tout seul dans votre conversation ; c’est toi qui l’envoies.',
+      'Le mot s’écrit tout seul. C’est toi qui l’envoies.',
     ),
   )
 
@@ -138,7 +138,7 @@ export function armerLaReponse(a: Attaches): void {
     element(
       'p',
       'etiquette etiquette--fine',
-      'un seul mot suffit · tu pourras ajouter une ligne juste après',
+      'un mot suffit · le reste, tu l’écriras toi-même',
     ),
   )
   a3.append(tete('la réponse'), corps3)
@@ -149,7 +149,7 @@ export function armerLaReponse(a: Attaches): void {
   const corps4 = element('div', 'corps corps--reparti')
   const haut4 = element('div', 'groupe')
   const leMot = element('h1', 'titre titre--geant')
-  haut4.append(leMot, element('p', 'voix voix--corps', 'Le pli se referme derrière toi.'))
+  haut4.append(leMot, element('p', 'voix voix--corps', 'Il se referme derrière toi.'))
 
   // « tes plis ↑ », et non « écrire à ton tour » : elle n'a pas d'atelier, le relais
   // n'existe pas dans un produit à deux (docs/integration.md). Elle mène au journal

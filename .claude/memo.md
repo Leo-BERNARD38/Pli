@@ -19,7 +19,12 @@ dans le même commit.
 ## Le lexique — fermé et normatif (design-system.md#ton-et-vocabulaire)
 
 **On dit** — déplier · déposer · répondre · refermer · un pli · le volet · la pliure ·
-l'atelier · nº 014 · « Un pli t'attend. » · « pour toi seule » · « déposé par a. »
+l'atelier · nº 014 · « pour toi seule » · « déposé par a. » · « Un pli t'attend. », **dans
+l'aperçu du lien et là seulement**.
+
+**Le lexique fixe quel mot, pas à quelle fréquence.** La marque écrit « Pli » sur chaque
+écran : le texte, lui, dit **« il »**. Le mot ne s'écrit que là où la marque n'est pas
+(19/08/2026 — il était à 26 occurrences sur 187 mots visibles, il en reste 2).
 
 **On ne dit pas** — ouvrir · envoyer un message · créer · valider · champ · formulaire ·
 compte · notification · erreur · studio · créateur · carte · expiré.
@@ -89,8 +94,9 @@ sur encre `.68`, bandeau `.82`, souvenir `.85`.
 A1 n'appelle que **trois familles** — Pinyon, Newsreader, Space Mono. **Bodoni commence à
 A2.** `font-display: block`, jamais `swap`.
 
-Sur A1 le titre est commun — « Un pli t'attend. » — et **la promesse suit le type** : celle
-de l'invitation est en dur dans le document, les trois autres la remplacent au décodage.
+Sur A1 le titre est commun — « Il n'attendait que toi. » — et **la promesse suit le type** :
+celle de l'invitation est en dur dans le document, les trois autres la remplacent au
+décodage.
 Aucune ne chiffre quoi que ce soit. Les quatre phrases sont dans
 [parcours.md](../docs/parcours.md#a1--lattente).
 

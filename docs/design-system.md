@@ -224,7 +224,14 @@ Le lexique est **normatif et fermé**. Un seul ajout depuis le design : **atelie
 où je dépose — le mot « studio » est retiré partout.
 
 **On dit** — déplier · déposer · répondre · refermer · un pli · le volet · la pliure ·
-l'atelier · nº 014 · « Un pli t'attend. » · « pour toi seule » · « déposé par a. »
+l'atelier · nº 014 · « pour toi seule » · « déposé par a. » · « Un pli t'attend. », **dans
+l'aperçu du lien et là seulement**.
+
+**Le lexique fixe QUEL mot, pas À QUELLE FRÉQUENCE.** La nuance a coûté cher : le produit a
+lu « on dit un pli » comme une obligation de le dire, et l'a dit **26 fois sur 187 mots** —
+un mot sur sept, sous une marque qui l'écrit déjà sur chaque écran (compté le 19/08/2026).
+La règle qui en sort : **la marque le dit, le texte dit « il »**. Le mot « pli » ne
+s'écrit que là où la marque n'est pas — l'aperçu du lien, et la prose de `docs/`.
 
 **On ne dit pas** — ouvrir · envoyer un message · créer · valider · champ · formulaire ·
 compte · notification · erreur.

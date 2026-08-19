@@ -546,3 +546,32 @@ n'était visible dans un diff, aucun relecteur ne les avait vues, et `npm run ve
   et se tait à l'endroit nommé ; le second lit le commentaire avant de parler. Trois lignes
   de bruit à chaque `npm run verifie`, c'est trois lignes derrière lesquelles un vrai grief
   se cache.
+
+### Les phrases, révisées — 19/08/2026
+
+- **19/08/2026 — la marque dit « Pli », le texte dit « il ».** Compté avant de toucher à
+  quoi que ce soit : « pli » ou « plis » revenait **26 fois sur 187 mots visibles**, un mot
+  sur sept. Douze fois la marque — elle a le droit, c'est son travail ; quatorze fois le
+  texte, qui répétait à quelqu'un le nom du produit écrit trois centimètres au-dessus. C3
+  cumulait quatre occurrences en trois lignes, dont « Ce **pli** est dans tes **plis** »
+  dans la même phrase. La cause n'était pas de la négligence : le lexique dit « on dit un
+  pli », et le produit l'avait lu comme une obligation de le dire. **Le lexique fixe quel
+  mot, pas à quelle fréquence** — c'est maintenant écrit dans `design-system.md`. Reste
+  deux occurrences, et une seule dans le produit : l'aperçu du lien, seul endroit où la
+  marque n'est pas à l'écran.
+- **19/08/2026 — « Un pli t'attend. » quitte A1 pour l'aperçu du lien.** La phrase est
+  normative depuis le design, et elle le reste — mais à l'endroit où elle travaille. Sur
+  A1 elle nommait le produit sous sa propre marque et ne s'adressait pas à elle ; dans une
+  conversation WhatsApp, elle est tout ce qu'il y a. A1 dit désormais **« Il n'attendait
+  que toi. »**
+- **19/08/2026 — les écrans s'enchaînent au lieu de s'étiqueter.** Une fois les répétitions
+  tombées, un arc apparaît sans qu'on l'ait écrit : *il n'attendait que toi* (A1) → *il se
+  referme derrière toi* (A4) → *il est rangé, avec les autres* (C3) → *ce que je t'enverrai
+  restera ici* (C1). Et les trois écrans d'accident deviennent trois états d'un même
+  voyage : **il arrive** (C5), **il n'a juste pas pu arriver** (hors ligne), **il a dû être
+  coupé en chemin** (C4). C'est la même métaphore, tenue sur trois écrans qui ne se voient
+  jamais ensemble.
+- **19/08/2026 — l'atelier a la même passe, sans la douceur.** C'est un outil, il ne parle
+  qu'à moi : « déposer le pli » → « déposer », « Envoie ce lien à la personne » →
+  « Envoie-le-lui », « Touche un pli pour le renvoyer » → « Touche-en un ». Aucune
+  tentative de ton — les mots servent à ne pas se tromper d'écran.

@@ -77,7 +77,7 @@ Voici tout ce qui s'en déduit.
 
 | Où | La maquette dit | À écrire |
 |---|---|---|
-| A1 | « Il ne se lira qu'une fois. » | « Il ne s'ouvre qu'une fois. Ensuite il reste dans tes plis. » |
+| A1 | « Il ne se lira qu'une fois. » | « Il ne s'ouvre qu'une fois. Ensuite il est à toi. » |
 | A3 | « Elle le saura tout de suite, sans notification et sans compte. » | À réécrire : rien ne remonte automatiquement |
 | A4 | « C'est parti chez a. Le pli se referme derrière toi. » | Faux — on affiche le mot, on n'affirme rien |
 | A4 | « écrire à ton tour ↑ » | « tes plis ↑ » — elle n'a pas d'atelier |
@@ -225,10 +225,10 @@ Ce que les canevas ajoutent, écran par écran :
 | Écran | Ce que la maquette montre | Ce que le produit en retient |
 |---|---|---|
 | **B0a-c** | une promesse **par type** — « Deux lignes t'attendent », « Quatre strophes t'attendent » | **suivi** (19/08/2026), débarrassé de ce que ces phrases comptaient : aucune promesse ne chiffre |
-| **C2** | un écran de synthèse : « Tu as dit oui », la griffe, « relire le pli », « tes plis ↑ » | le produit réaffiche le pli entier et rappelle le mot — deux formes différentes |
+| **C2** | un écran de synthèse : « Tu as dit oui », la griffe, « relire le pli », « tes plis ↑ » | **suivi**, à deux mots près : l'action dit « le relire » — la marque nomme déjà le produit |
 | **C3** | « Ce pli s'est refermé », Bodoni **400** sur encre, « tes plis » | le fond encre et le chemin vers le journal sont tenus |
 | **C4** | « Il n'y a rien ici », Bodoni 400, et une action « voir tes plis ↑ » | le produit dit « lien abîmé » et n'a que la marque comme chemin |
-| **C5** | la marque seule en 64px, un filet pointillé carmin, « un pli arrive » | **suivi**, et l'écran est écrit (19/08/2026). Deux écarts, plus bas |
+| **C5** | la marque seule en 64px, un filet pointillé carmin, « un pli arrive » | **suivi**, et l'écran est écrit (19/08/2026). L'écran dit « il arrive » — voir le lexique. Deux écarts, plus bas |
 | **l'atelier** | un choix de **style** (crème · encre · carmin · drapé), une image, une date | **écarté** : « le papier découle du type, jamais un choix offert au dépôt » (règle nº 4) |
 | **D4 de la maquette** | un aperçu **plein écran** — « tu vois ce qu'elle verra » | le produit n'a que l'aperçu en petit de D2 ; aucune décision prise |
 
@@ -307,3 +307,47 @@ Avant de considérer un écran fini :
 8. Aucune icône, aucun SVG — **sauf les deux flèches**, devenues des tracés inline pour
    retirer Bodoni du premier écran ([ressources.md](ressources.md#les-deux-flèches)). Le
    dessin ne change pas, le moyen change. C'est l'unique exception, et elle est fermée.
+
+## Les phrases, révisées — 19/08/2026
+
+Une passe sur **tout ce qu'elle lit**, à trois exigences : moins redondant, plus doux, et
+qui **raconte une histoire** plutôt que d'étiqueter des états.
+
+**Ce qui l'a déclenchée, c'est un compte.** « pli » ou « plis » revenait **26 fois sur
+187 mots visibles** — un mot sur sept. Douze fois la marque, qui a le droit ; quatorze fois
+le texte, qui répétait à quelqu'un le nom du produit écrit trois centimètres au-dessus. Le
+pire tenait en un écran : C3 disait « Ce **pli** est dans tes **plis**, avec les autres. »,
+sous la marque, à côté d'une action « tes **plis** ↑ ». Quatre fois, en trois lignes.
+
+La cause n'était pas de la négligence mais une **lecture trop littérale du lexique** :
+« on dit un pli » fixe quel mot employer quand on nomme la chose, pas combien de fois la
+nommer. La règle est maintenant écrite dans
+[design-system.md](design-system.md#ton-et-vocabulaire) : **la marque le dit, le texte dit
+« il »**. Deux occasions restent, et une seule est dans le produit — l'aperçu du lien, où la
+marque n'est pas à l'écran.
+
+**L'arc**, une fois les répétitions tombées, se tient sans qu'on ait eu à l'écrire :
+
+| | |
+|---|---|
+| A1 · l'attente | Il n'attendait que toi. |
+| A4 · le mot | Il se referme derrière toi. |
+| C3 · refermé | Il est rangé, avec les autres. |
+| C1 · le journal vide | Ce que je t'enverrai restera ici. |
+
+Et les trois écrans d'accident cessent d'être des messages système pour devenir **trois
+états d'un même voyage** : « il arrive » (C5), « il n'a juste pas pu arriver » (hors ligne),
+« il a dû être coupé en chemin » (C4).
+
+Ce qui **n'a pas bougé**, et pourquoi :
+
+- **l'aperçu du lien** garde « Un pli t'attend. » et « Il ne s'ouvre qu'une fois. » C'est le
+  seul endroit où la marque n'est pas à l'écran, où la phrase ouvre une conversation, et où
+  le mot « pli » gagne donc sa place ([partage.md](partage.md)) ;
+- **C4** garde « Il a dû être coupé en chemin. Redemande-le-moi. » — première personne, aucune
+  excuse, aucun jargon : c'était déjà à la bonne température ;
+- **le lexique lui-même** : aucun mot n'entre, aucun ne sort. Seule sa portée est précisée.
+
+L'atelier a eu la même passe, **sans la douceur** : c'est un outil, il ne parle qu'à moi.
+« déposer le pli » → « déposer », « Envoie ce lien à la personne » → « Envoie-le-lui »,
+« Touche un pli pour le renvoyer » → « Touche-en un ».

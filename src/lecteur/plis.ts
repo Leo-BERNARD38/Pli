@@ -162,7 +162,7 @@ export async function journal(cadre: HTMLElement): Promise<HTMLElement> {
     ecran.className = 'pli__dessus pli--encre'
     corps.append(
       element('h1', 'voix', 'Rien encore.'),
-      element('p', 'voix voix--corps', 'Le premier pli déposé pour toi restera ici.'),
+      element('p', 'voix voix--corps', 'Ce que je t’enverrai restera ici.'),
     )
     ecran.replaceChildren(vide(), tete('tes plis'), corps)
     return ecran
@@ -202,7 +202,7 @@ export async function refermer(cadre: HTMLElement, pli: Pli): Promise<HTMLElemen
   vers.append(element('span', 'etiquette etiquette--forte', 'tes plis'), fleche())
   corps.append(
     element('h1', 'titre', 'déjà déplié'),
-    element('p', 'voix voix--corps', 'Ce pli est dans tes plis, avec les autres.'),
+    element('p', 'voix voix--corps', 'Il est rangé, avec les autres.'),
     vers,
   )
 
@@ -269,7 +269,7 @@ export async function rappel(
 
   const action = element('button', 'action')
   action.setAttribute('type', 'button')
-  action.append(element('span', 'etiquette carmin', 'relire le pli'), fleche())
+  action.append(element('span', 'etiquette carmin', 'le relire'), fleche())
   action.addEventListener('click', relireLePli)
   corps.append(action)
 
