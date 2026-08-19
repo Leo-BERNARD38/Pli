@@ -52,6 +52,19 @@ a {
   text-decoration: none;
 }
 
+/* La marque et l'action sont des CHEMINS, pas des liens : elles ne changent pas d'aspect en
+   le devenant — c'est tout leur intérêt (docs/parcours.md#a2--la-découverte).
+
+   Ces deux lignes vivaient dans plis.css, la feuille du journal, demandée à la volée. Or
+   `chemin()` transforme la marque en `<a>` dès A1, où cette feuille n'est jamais chargée :
+   la marque tombait donc sur le `color: var(--carmin)` ci-dessus, et se retrouvait en
+   carmin sur le rideau — mesuré à 1,4:1 le 19/08/2026, aux trois largeurs. Elle appartient
+   au gabarit, pas au journal. */
+a.marque,
+a.action {
+  color: inherit;
+}
+
 a:hover {
   color: var(--encre);
 }

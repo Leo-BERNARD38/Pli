@@ -11,20 +11,6 @@
    (docs/parcours.md#le-journal). Le défilement est enfermé dans la liste : le pli, lui,
    ne défile toujours pas. */
 
-/* La marque devient un chemin — elle mène au journal, depuis A1, A2, C3 et C4
-   (docs/parcours.md#a2--la-découverte). Elle ne change pas d'aspect : le geste est
-   discret, c'est tout son intérêt. */
-a.marque {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* « tes plis ↑ » sur C3 et A4 : la même composition que « répondre », en lien. */
-a.action {
-  color: inherit;
-  text-decoration: none;
-}
-
 /* Le sommaire. Une liste porte une puce et un retrait par défaut : les deux partent,
    comme pour les faits. */
 .plis {
