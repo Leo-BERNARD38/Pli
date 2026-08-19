@@ -29,7 +29,7 @@ interface Composition {
     /** Le dégradé qui la ramène au papier, ou à l'encre. Jamais une peinture nue. */
     fondu: 'papier' | 'encre'
   }
-  /** L'unique action du pli, en bas. Absente pour trois types sur quatre. */
+  /** L'unique action du pli, en bas. Les quatre types en ont une. */
   action?: string
   /** Le corps se répartit — titre en haut, ligne en bas. Le souvenir, et lui seul. */
   reparti?: true
@@ -48,15 +48,17 @@ const COMPOSITIONS: Record<Type, Composition> = {
     encre: true,
     toile: { adresse: remous, forme: 'pleine', cadrage: '50% 70%', fondu: 'encre' },
     sansTitre: true,
+    action: 'c’est lu',
   },
   sou: {
     toile: { adresse: voile, forme: 'pleine', cadrage: '50% 50%', fondu: 'papier' },
     reparti: true,
+    action: 'c’est lu',
   },
-  // Le poème n'a ni image ni action : il se lit d'un bout à l'autre, et son corps défile
-  // s'il le faut (src/styles/poe.css). Rien en bas — la marque mène au journal, comme pour
-  // la pensée et le souvenir.
-  poe: { encre: true, defile: true },
+  // Le poème n'a pas d'image : il se lit d'un bout à l'autre, et son corps défile s'il le
+  // faut (src/styles/poe.css). Son action arrive donc AU BOUT du texte, sous la dernière
+  // strophe — c'est exactement ce que la maquette B3 dessine (« fin · nº 011 · tes plis ↑ »).
+  poe: { encre: true, defile: true, action: 'c’est lu' },
 }
 
 /** L'adresse de la toile d'un type, pour que la vague 3 sache quoi charger avant A2. */
@@ -172,9 +174,12 @@ export function construire(
   }
 
   if (c.action) {
-    // La seule action du lecteur, et elle agit : un vrai bouton, atteignable au clavier.
-    // Le geste ne le lui prend pas — `pointerdown` laisse tout ce qui est dans un
-    // `<button>` se débrouiller seul (src/lecteur/geste.ts).
+    // La seule action du pli, et elle agit : un vrai bouton, atteignable au clavier. Le
+    // geste ne le lui prend pas — `pointerdown` laisse tout ce qui est dans un `<button>`
+    // se débrouiller seul (src/lecteur/geste.ts).
+    //
+    // Elle mène à A3 pour l'invitation, à A5 · la fermeture pour les trois autres : les
+    // deux se branchent dessus depuis `monte.ts`, et cet endroit n'a pas à savoir lequel.
     const action = element('button', 'action')
     action.setAttribute('type', 'button')
     action.append(element('span', 'etiquette carmin', c.action), fleche())

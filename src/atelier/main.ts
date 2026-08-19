@@ -164,8 +164,16 @@ const relireLesPoemes = ecrans.get('d2p')
     })
   : null
 
-/** Le chemin vers D5, sur D1 : il ne s'ouvre que s'il mène quelque part. */
-const passage = document.querySelector<HTMLElement>('.passage')
+/**
+ * Le chemin vers D5, sur D1 : il ne s'ouvre que s'il mène quelque part.
+ *
+ * Il se désigne par sa DESTINATION, pas par sa classe. `.passage` en attrapait le premier du
+ * document, ce qui marchait tant qu'il n'y en avait qu'un ; ils sont quatre depuis que
+ * l'atelier a son retour vers les plis reçus, et un `.passage` nu aurait fini par masquer
+ * « vider l'historique » le jour où une section change de place. Le sélecteur ne dépend plus
+ * de l'ordre du document.
+ */
+const passage = document.querySelector<HTMLElement>('#d1 .passage[data-va="d5"]')
 async function poserLePassage(): Promise<void> {
   const combien = (await relireLesDeposes?.()) ?? 0
   if (passage) passage.hidden = combien === 0

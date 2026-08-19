@@ -29,9 +29,9 @@ enchaînent, ce qui les déclenche, et ce qui se range où.
                  A2  la découverte        (selon le type)
                       │
           invitation  │  pensée · poème · souvenir
-                      │                   └──▶ fin — la marque mène au journal
-                      ▼
-                 A3  la réponse
+                      │  « répondre ↑ »   │  « c'est lu ↑ »
+                      ▼                   ▼
+                 A3  la réponse      A5  la fermeture ──▶ « tes plis ↑ »
                       │  un mot choisi
                       ▼
               ✎ noter la réponse   ──▶ ouvrir WhatsApp pré-rempli
@@ -108,6 +108,12 @@ Le geste, ses réglages et son algorithme sont dans
 - **Une alternative existe toujours.** Un `<button>` « déplier » atteignable au clavier pose
   `p = 1` directement. Le geste est le chemin, jamais le seul chemin.
 
+**Le dépliage n'est plus le seul geste** (19/08/2026). Le sens dit ce que le doigt fait :
+vers le haut, l'action que l'écran dessine avec sa flèche — A2 fait monter A3 ou A5 ; vers
+le bas, on revient d'un cran — A3 et A5 redescendent, A2 se referme. A4 ne se rabat pas : le
+mot est dit. Le poème reste hors gestes. Le détail et les seuils sont dans
+[design-system.md](design-system.md#le-sens-dit-ce-que-le-doigt-fait--19082026).
+
 ## A2 · la découverte
 
 La composition suit le type — le papier, l'image et la présence d'une action en découlent.
@@ -115,9 +121,18 @@ La composition suit le type — le papier, l'image et la présence d'une action 
 | Type | Composition | Action en bas |
 |---|---|---|
 | invitation | titre 64px, griffe, jusqu'à 3 faits | « répondre ↑ » |
-| pensée | une phrase, deux lignes au plus, image pleine | aucune |
-| poème | le texte entier, encre, sans image — il défile | aucune |
-| souvenir | titre haut, une ligne en bas, image pleine | aucune |
+| pensée | une phrase, deux lignes au plus, image pleine | « c'est lu ↑ » |
+| poème | le texte entier, encre, sans image — il défile | « c'est lu ↑ » |
+| souvenir | titre haut, une ligne en bas, image pleine | « c'est lu ↑ » |
+
+**Les quatre types ont une action, depuis le 19/08/2026.** Les trois qui n'appellent pas de
+réponse n'avaient rien : le parcours s'arrêtait là, et la marque en haut à gauche était la
+seule sortie. C'était trop discret pour être trouvé. La maquette, elle, dessinait bien un
+pied de page sur **B1**, **B3** et **B4** — un filet, un état à gauche, « tes plis ↑ » à
+droite — et cet écart n'avait jamais été relevé
+([integration.md](integration.md#les-maquettes-que-le-handoff-navait-pas-transportées)).
+
+Le produit lui donne un écran plutôt qu'un pied : « c'est lu ↑ » fait monter **A5**.
 
 **Le poème défile, et il est le seul.** C'est l'exception nommée à la première des cinq
 règles (design-system.md#les-cinq-règles) : un poème est le seul contenu long du produit, il
@@ -126,11 +141,39 @@ blanc — la ligne vide de la source. Il n'y a ni pagination, ni « la suite ↑
 geste : le dépliage ouvre le pli, et ensuite c'est le pouce qui lit.
 
 Le geste rend donc le doigt au corps une fois le poème ouvert, et on ne referme pas un poème
-en tirant. Comme pour la pensée et le souvenir, la marque mène au journal.
+en tirant. Son « c'est lu ↑ » est **au bout du texte**, sous la dernière strophe : c'est là
+qu'on arrive quand on a fini de lire, et c'est ce que la maquette B3 montre
+(« fin · nº 011 · tes plis ↑ »).
 
-Pour les trois types sans action, le parcours s'arrête là : le pli est lu, il est archivé,
-et **la marque « Pli » en haut à gauche mène au journal**. C'est le geste discret que le
-brief demandait — elle est déjà dans le gabarit, elle ne coûte rien.
+**La marque « Pli » en haut à gauche mène au journal**, sur A2 comme partout ailleurs. Elle
+reste le raccourci discret que le brief demandait ; elle n'est plus le dernier recours.
+
+## A5 · la fermeture — les trois types sans réponse
+
+Elle monte quand « c'est lu » est touché, du bas, comme A3 et A4 : c'est la même couche.
+
+Carmin, et la composition d'A4 au mot près — la tête porte l'étiquette du type, comme C3,
+puis le titre, une voix, et l'action :
+
+> **refermé**
+> *Il est à toi maintenant.*
+> « tes plis ↑ »
+
+Le titre est à **56px**, la taille de base, et non aux 78px d'A4 : « REFERMÉ » demande 368px
+à 78, pour une colonne qui en fait 308 à 360 de large. Le mot d'A4 est court par
+construction — « Oui », « Non » —, celui-ci ne l'est pas.
+
+**Elle ne note rien et ne ferme rien pour de bon.** Le dépliage est déjà au journal depuis le
+seuil, et le pli reste relisible : c'est un écran de sortie, pas un état de plus. Il n'entre
+donc pas dans le tableau des états plus bas.
+
+## La relecture d'un pli — sa sortie
+
+Un pli relu depuis le journal n'a ni geste ni couche qui monte : ni A3, ni A5. L'action d'A2
+s'en va donc — « répondre » parce qu'on ne répond pas deux fois, « c'est lu » parce qu'elle
+ne mène nulle part ici — et elle est **remplacée par « tes plis ↑ »**, jamais seulement
+retirée. Retirée seule, elle laissait un écran relu sans aucune sortie visible, sur les
+quatre types.
 
 ## A3 · la réponse — invitation seulement
 
@@ -169,11 +212,25 @@ Aucun mot secret, aucun seuil. Il se lit comme un sommaire de revue, pas comme u
 Depuis une entrée, elle relit le pli entier — et c'est le seul chemin vers **C2**, le rappel
 d'une invitation à laquelle elle a déjà répondu.
 
+**En bas, une ligne discrète mène à l'atelier — « l'atelier → ».** C'est le relais, et il est
+rouvert depuis le 19/08/2026 : le design le demandait (« écrire à ton tour ↑ », canevas
+« A4 · le relais »), `docs/` l'avait fermé. Elle a un atelier — le même, sur son téléphone,
+derrière le même seuil. Ce qui ne change pas : rien ne se synchronise, son journal est à
+elle, le mien est à moi, et l'atelier ne se charge que si elle touche la ligne.
+
+Elle est là **aussi quand le journal est vide** : c'est le seul écran qu'elle verra tant
+qu'elle n'a rien reçu, et déposer ne demande pas d'avoir reçu.
+
+Le libellé dit « l'atelier » et non « déposer un pli » : le mot « pli » ne s'écrit pas là où
+la marque est, et elle est juste au-dessus, avec « tes plis » en face d'elle
+([design-system.md](design-system.md#ton-et-vocabulaire)). Il nomme sa destination, comme
+« les plis reçus » nomme la sienne de l'autre côté.
+
 ## Les états
 
 | Code | Quand | Papier |
 |---|---|---|
-| **C1** | le journal, y compris vide | crème |
+| **C1** | le journal, y compris vide — et il mène à l'atelier | crème |
 | **C2** | relecture d'une invitation déjà répondue — depuis le journal, ou au retour de WhatsApp | crème |
 | **C3** | lien déjà déplié — mène au journal | encre |
 | **C4** | payload illisible, ou fichier de poème **introuvable** | crème |
@@ -313,6 +370,14 @@ Sa forme a donc été arrêtée avec son auteur, et la voici :
   déposé se relit comme un pli reçu.
 - **L'accès est une ligne discrète sur D1**, et elle ne se montre que si elle mène quelque
   part : rien de déposé, rien à afficher.
+- **En bas, « les plis reçus → »**, qui mène à la racine du site — la liste de ce que j'ai
+  reçu, sur mon téléphone. C'est le miroir exact de la ligne vers l'atelier en bas de C1 :
+  chaque liste finit par celle d'en face. La même ligne est **aussi sur D1**, et là elle est
+  toujours visible : sans elle, un atelier où rien n'a été déposé n'aurait aucune sortie,
+  puisque D5 est alors inatteignable.
+- **Une ligne de D5 dit « déposé hier »**, et pas « hier » tout court. Les deux listes
+  partagent la même grammaire et se trouvent désormais à un tap l'une de l'autre : sans le
+  verbe, la même place dit chez elle quand un pli s'est déplié, et ici quand il est parti.
 - **Renvoyer n'est pas déposer.** Le lien se refabrique depuis le payload gardé, sans
   réencoder, sans noter un dépôt et sans avancer le compteur — c'est le pli qui est parti la
   première fois, à l'identique. D3 sert les deux fois, seule sa conduite change.

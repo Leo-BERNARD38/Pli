@@ -53,11 +53,12 @@ journal se lit.
 - [x] `src/lib/` — `codec.ts`, `dates.ts`, `routeur.ts`, `journal.ts`, `tiroir.ts`,
       `poeme.ts`, avec leurs six tests
 - [x] les deux entrées — `index.html`, `atelier/index.html`
-- [x] `src/lecteur/` — `main.ts`, `a1.ts`, `a2.ts`, `reponse.ts`, `geste.ts`, `fond.ts`,
-      `plis.ts` (`plateau.ts` est parti avec le plein cadre, 19/08/2026)
+- [x] `src/lecteur/` — `main.ts`, `a1.ts`, `a2.ts`, `monte.ts`, `geste.ts`, `fond.ts`,
+      `plis.ts` (`plateau.ts` est parti avec le plein cadre, et `reponse.ts` est devenu
+      `monte.ts` en gagnant A5, 19/08/2026)
 - [x] `polices-source/` et `src/fonts/` — les quatre familles, sources et sous-ensembles
 - [x] `src/atelier/` — `main.ts`, `seuil.ts`, `reglages.ts`, `type.ts`, `textes.ts`,
-      `apercu.ts`, `lien.ts`, `deposes.ts`, `poemes.ts`, `vue.ts`
+      `apercu.ts`, `lien.ts`, `deposes.ts`, `poemes.ts`, `liste.ts`, `vue.ts`
 - [x] `src/styles/` — `tokens.css`, `pli.css`, `depot.css` et les feuilles des types
 - [x] `src/textures/` — les cinq peintures, en définition native. **Quatre sont servies** :
       le rideau est sorti du build avec l'image d'A1 (19/08/2026)
@@ -497,12 +498,11 @@ ne marque rien, et le type de lien voyage avec elle (`main.ts`, `performance.mar
 (`parcours.md` dit le rideau, la maquette montre un papier crème), l'empilement de
 `.image--pleine` avec le texte, et la composition des faits.
 
-**Au jalon 4, pour l'atelier** — `index.html` embarque `#fleche-droite` sans s'en servir :
-l'atelier a sa propre copie du tracé, celle du lecteur ne sert à rien. 219 octets gzip dans
-le document qui part chez elle. **Le budget serre maintenant** — 13 266 sur 14 336 depuis
-C5 et l'écran hors ligne : c'est la première réserve à prendre le jour où il faudra de la
-place. Le fragment reste monolithique pour n'avoir qu'une
-chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip gênent.
+~~**Au jalon 4, pour l'atelier** — `index.html` embarque `#fleche-droite` sans s'en
+servir.~~ **Périmé le 19/08/2026** : le chemin de C1 vers l'atelier le porte, et c'est la
+seule flèche du produit qui mène ailleurs plutôt que de remonter dans la page. La réserve de
+219 octets n'en est plus une. **Le budget serre** — 13 471 sur 14 336. Le fragment reste
+monolithique pour n'avoir qu'une chose à recopier et une seule à comparer.
 
 ## La revue de tout, au navigateur — 19/08/2026
 
@@ -551,6 +551,116 @@ Ce que la passe a **regardé sans y toucher**, et qui appartient à l'auteur :
 - [ ] **le compteur de D2 se lit mal** : il affiche « 3 signes » pour dire qu'il en reste
       trois, et « 16 signes » sur une ligne vide. Ce qui reste et ce qui est écrit se lisent
       pareil
+
+## Les parcours — les sorties, et le relais rouvert — 19/08/2026
+
+Trois culs-de-sac, trouvés en traversant le produit à l'écran. Écrit, relu par `revue-ecran`
+et `garde-fluidite`, mesuré au navigateur, commité.
+
+- [x] **les trois types sans réponse ont une sortie.** « c'est lu ↑ » en bas d'A2 fait monter
+      **A5 · la fermeture** — carmin, la composition d'A4. La maquette dessinait ce pied de
+      page sur B1, B3 et B4 et le tableau des écarts sautait justement ces quatre écrans :
+      l'écart n'avait jamais été ni repris ni écarté, il avait été perdu
+- [x] **A3 n'était sortable par rien.** Sa marque était un `<p>`, pas un chemin : qui ouvrait
+      « répondre » sans vouloir répondre n'avait que trois liens WhatsApp. A3 et A4 écrivent
+      maintenant leur marque en `<a>` — elles ne peuvent pas appeler `chemin()`, qui vit dans
+      le chunk d'entrée
+- [x] **la relecture aussi.** `rappeler()` retirait l'action d'A2 sans rien mettre à la
+      place : un pli relu n'avait plus de sortie visible, sur les quatre types. Elle est
+      **remplacée** par « tes plis ↑ ». Défaut trouvé en écrivant le reste, pas en le lisant
+- [x] **le relais est rouvert**, et le design avait raison depuis le début (« A4 · le
+      relais », « écrire à ton tour ↑ »). C1 finit par « l'atelier → », D1 et D5 par « les
+      plis reçus → ». Chacun a les deux entrées sur son téléphone, et **rien ne se
+      synchronise** : deux `localStorage`, deux bundles, le seuil tient toujours
+- [x] **C1 et D5 ne se confondent pas.** Elles partagent leur grammaire et se touchent
+      désormais : les lignes de D5 disent « déposé hier », là où « hier » seul disait deux
+      choses selon l'écran
+- [x] **le titre d'A5 est à 56px**, mesuré : « REFERMÉ » demandait 368px pour une colonne de
+      308. Trouvé à l'œil, sur le build — aucun relecteur ne l'avait vu
+- [x] **le module part pendant A1, les couches se posent à `transitionend`.** `armer()` rend
+      le `pointerdown` vivant de façon synchrone : un `await import()` juste après se
+      résolvait **en plein dépliage** et insérait une section dans un cadre en
+      `container-type: size`. Le défaut existait pour l'invitation seule ; il passait à
+      quatre types sur quatre. Trouvé par `garde-fluidite`
+- [x] **`poserLesCouches` vit hors d'`armer()`.** Le geste ne s'arme qu'une fois par session :
+      un `auDepliage` qui aurait appelé la fonction du premier pli l'aurait gardée pour
+      toujours. Même mécanique qu'`entreeDuPli`
+- [x] **le chemin de C1 était invisible sur l'écran vide.** `.passage` sans `position`
+      passait **sous** le papier froissé — une image pleine page est une couche positionnée.
+      Il restait dans l'ordre du Tab. Trouvé par `revue-ecran` ; c'est le même oubli que
+      `.tete` et `.corps` ont chacune réparé de leur côté
+- [x] **`.passage` remonté à `.62` des deux côtés** — celui de l'atelier mesurait **2,98:1**
+      à `.45`. Celui de C1 tient 5,11:1 sur le sommaire, 6,94 sur l'écran vide
+- [x] **le sélecteur du chemin vers D5** se désigne par sa destination : `.passage` nu
+      prenait le premier du document, et ils sont quatre depuis ce lot
+- [x] la grammaire de liste de l'atelier est partagée (`liste.ts`) au lieu d'être recopiée
+      dans `deposes.ts` et `poemes.ts` — le bundle de l'atelier perd 230 octets au passage
+- [x] `#fleche-droite` **sert enfin** dans le document du lecteur : il l'embarquait sans
+      l'employer depuis le jalon 4, et c'était la première réserve de budget nommée
+
+Le document du lecteur passe de **13 131 à 13 471 octets** gzip, plafond 14 336.
+
+### Les gestes — le sens dit ce que le doigt fait
+
+Le dépliage était le **seul** geste du produit ; tout le reste se tapait. Vérifié au doigt
+dans un navigateur, sur le build : la couche suit le doigt au pixel (50px de doigt → 50px de
+couche), et **un seul élément porte `will-change` pendant un rabat**.
+
+- [x] **A2, vers le haut** → l'action que l'écran dessine avec sa flèche : A3 ou A5 monte,
+      et elle **suit le doigt** comme la pliure — ce n'est pas un déclencheur, c'est la même
+      physique
+- [x] **A3 et A5, vers le bas** → elles redescendent, A2 revient. Réversible autant de fois
+      qu'on veut
+- [x] **A4 ne se rabat pas.** Sans cette garde, le doigt tombait sur la pliure et repliait A1
+      et A2 **sous** un écran qui les recouvre entièrement, sans que rien ne se voie
+- [x] **la piste se choisit au premier mouvement franc**, 6px, jamais au `pointerdown` : le
+      sens n'y est pas connu. Tant qu'elle n'est pas choisie, rien n'est capturé et rien
+      n'est promu — un tap coûte donc moins qu'avant ce lot, pas plus
+- [x] **le seuil devient relatif pour une couche qu'on rabat.** `--seuil` est une position ;
+      franchir 32 % par en dessous demandait de traîner la couche sur **68 %** de l'écran.
+      Mesuré : 500px sur 844 ne suffisaient pas. La pliure, elle, ne bouge pas d'un chiffre —
+      c'est l'algorithme mesuré de `design-system.md`
+- [x] **le poème reste hors gestes**, et c'est délibéré : son corps défile, le doigt lui
+      appartient, et son « c'est lu ↑ » est au bout du texte
+- [x] `will-change` est nettoyé même quand rien ne bouge — la même garde que `poser()`, et
+      elle vaut ici pour la même raison
+- [x] **une transition en vol se coupe au contact.** `pointerdown` ne coupe plus rien de
+      lui-même : une couche qu'on retouchait pendant son retour continuait sa courbe pendant
+      les six pixels d'indécision, **puis sautait**. Et couper, ce n'est pas `transition = ''`
+      — la déclaration en ligne s'efface et la feuille reprend la sienne, la couche continue
+      de voler. Mesuré : 810px au lieu de 844. C'est `transition: none`
+- [x] **un second contact ne vole plus le premier.** Entre le contact et le sixième pixel,
+      `doigt` est encore nul : un doigt parasite écrasait `pose` sans avoir capturé le
+      premier, qui devenait orphelin. Une main qui frôle l'écran suffisait
+- [x] la référence à la couche est relâchée au relâchement — `armer()` ne s'instancie qu'une
+      fois par session, et elle aurait retenu un nœud déjà sorti du document
+
+Le document passe de 13 471 à **13 945 octets** gzip, plafond 14 336. La marge est de **391** :
+c'est la moitié de ce qui restait avant ce lot, et le prochain qui touche `geste.ts` devra
+rouvrir la question du budget avant d'écrire.
+
+- [ ] **à trancher : la pliure se referme-t-elle trop dur ?** Rabattre A2 vers A1 demande de
+      descendre sous 32 % de la hauteur, soit 68 % de course — c'est l'algorithme écrit et
+      mesuré de `design-system.md#le-mouvement`, et je ne l'ai pas touché. Les couches qui
+      montent, elles, se rabattent à 32 % de course. Les deux ne se ressemblent donc pas
+- [ ] **à la main, sur les deux téléphones** : les six pixels du mouvement franc. Trop peu,
+      un tap glisse ; trop, le geste part en retard. Aucun émulateur ne le dira
+- [ ] **à la main, sur les deux téléphones** : compter les couches à l'inspecteur pendant la
+      montée d'A5, et vérifier qu'un doigt posé sans bouger ne promeut toujours rien
+
+- [ ] **deux contrastes de l'atelier restent sous le seuil**, mesurés à 360 de large sur ce
+      que le navigateur peint, et **non corrigés** : `.conduite__retour` à **4,06:1** et
+      `.conduite__pas` à **2,98:1**. Ils ne sont pas dans ce lot ; ils ferment une partie de
+      la case « le contraste de l'atelier n'est pas mesuré » plus haut
+- [ ] **le corps de D5 se compose en bas**, alors qu'il porte `corps--haut`. Vérifié : ce
+      n'est pas ce lot — `plis.css` n'est jamais chargée par l'atelier, et la règle
+      `.corps:has(~ .passage)` ne peut pas l'atteindre. À regarder pour lui-même
+- [ ] **l'accent d'A4 est coupé** quand le mot passe à la ligne — « ÊTRE » de « PEUT-ÊTRE »
+      perd son circonflexe sous la ligne du dessus, à 78px. Vu sur le build, hors lot
+- [ ] **à la main, sur les deux téléphones** : un tap immédiat après l'arrivée d'A1, avant
+      que `monte.ts` soit chargé, et le compte des couches pendant la montée d'A5 —
+      `garde-fluidite` ne peut pas trancher si `.pli__monte` est réellement promue par son
+      seul `translate3d` statique
 
 ## Les mouvements, révisés — 19/08/2026
 

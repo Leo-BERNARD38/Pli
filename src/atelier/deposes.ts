@@ -14,14 +14,8 @@ import { decoder } from '../lib/codec.ts'
 import { depuis, relire } from '../lib/dates.ts'
 import { deposes, viderLesDeposes, type Depose } from '../lib/tiroir.ts'
 
+import { ligne, numero } from './liste.ts'
 import { PAPIERS } from './type.ts'
-
-function element(nom: string, classe: string, texte?: string): HTMLElement {
-  const e = document.createElement(nom)
-  e.className = classe
-  if (texte !== undefined) e.textContent = texte
-  return e
-}
 
 /**
  * Ce qui nomme un pli dans la liste — son titre, ou sa première ligne quand il n'en a pas.
@@ -40,34 +34,21 @@ async function nommer(quoi: Depose): Promise<string | null> {
   }
 }
 
-/** « hier », « il y a trois jours », puis la date nommée. Un horodatage abîmé se tait. */
+/**
+ * « déposé hier », « déposé il y a trois jours », puis la date nommée. Un horodatage abîmé
+ * se tait.
+ *
+ * Le verbe est là pour que cette liste ne se confonde pas avec le sommaire de C1, qui porte
+ * la même grammaire et se trouve désormais à un tap d'ici : chez elle une date dit quand un
+ * pli s'est déplié, ici quand il est parti. Sans le mot, les deux écrans écrivent « hier »
+ * au même endroit et disent deux choses différentes.
+ */
 function quand(quoi: Depose, maintenant: Date): string {
   try {
-    return depuis(relire(quoi.le), maintenant)
+    return `déposé ${depuis(relire(quoi.le), maintenant)}`
   } catch {
     return ''
   }
-}
-
-/** Une ligne : le numéro et le type, ce qui est écrit, et depuis quand. */
-function ligne(quoi: Depose, nom: string, maintenant: Date, choisir: () => void): HTMLElement {
-  const item = document.createElement('li')
-  const bouton = document.createElement('button')
-  bouton.type = 'button'
-  bouton.className = 'depose'
-  bouton.addEventListener('click', choisir)
-
-  // Le même vocabulaire que le sommaire de C1, et pas un jeu de classes de plus : une
-  // typographie recopiée à la main dérive au premier réglage (src/lecteur/plis.ts).
-  const dedans = element('span', 'depose__texte')
-  dedans.append(
-    element('span', 'etiquette', `nº ${String(quoi.n).padStart(3, '0')} · ${PAPIERS[quoi.t].nom}`),
-    element('span', 'voix voix--corps', nom),
-    element('span', 'etiquette etiquette--fine', quand(quoi, maintenant)),
-  )
-  bouton.append(dedans)
-  item.append(bouton)
-  return item
 }
 
 /**
@@ -116,7 +97,14 @@ export function tenirLesDeposes(
     for (const [rang, quoi] of gardes.entries()) {
       const nom = noms[rang]
       if (nom === null || nom === undefined) continue
-      lignes.push(ligne(quoi, nom, maintenant, () => renvoyer(quoi)))
+      lignes.push(
+        ligne({
+          etiquette: `nº ${numero(quoi.n)} · ${PAPIERS[quoi.t].nom}`,
+          nom,
+          quand: quand(quoi, maintenant),
+          choisir: () => renvoyer(quoi),
+        }),
+      )
     }
 
     liste?.replaceChildren(...lignes)

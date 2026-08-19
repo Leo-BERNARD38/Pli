@@ -29,21 +29,28 @@ function element(nom: string, classe: string, texte?: string): HTMLElement {
   return e
 }
 
-/** La flèche du produit — un `<use>` vers le tracé déjà dans le document, zéro requête. */
-function fleche(): SVGSVGElement {
+/**
+ * Une des deux flèches du produit — un `<use>` vers le tracé déjà dans le document, zéro
+ * requête. Le haut remonte dans la page, la droite mène ailleurs.
+ */
+function fleche(vers: 'haut' | 'droite' = 'haut'): SVGSVGElement {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-  svg.setAttribute('class', 'fleche carmin')
+  // `carmin` sur la flèche du haut, parce que `fill: currentColor` la prend de la couleur du
+  // texte et qu'elle accompagne une étiquette carmin. Celle de droite suit son chemin, qui
+  // est discret.
+  svg.setAttribute('class', vers === 'haut' ? 'fleche carmin' : 'fleche')
   svg.setAttribute('aria-hidden', 'true')
   svg.setAttribute('focusable', 'false')
   const use = document.createElementNS('http://www.w3.org/2000/svg', 'use')
-  use.setAttribute('href', '#fleche-haut')
+  use.setAttribute('href', `#fleche-${vers}`)
   svg.append(use)
   return svg
 }
 
 /**
  * La tête d'un écran du journal. La marque n'y est pas un chemin : on est déjà arrivée.
- * Ailleurs — A1, A2, C3, C4 — elle en est un, et c'est `chemin()` qui le pose.
+ * Partout ailleurs elle en est un — A1, A2, C2, C3, C4, C5, hors ligne par `chemin()`, et
+ * A3 comme A4 qui l'écrivent elles-mêmes (src/lecteur/monte.ts).
  */
 function tete(etiquette: string, classe = 'etiquette'): HTMLElement {
   const e = element('header', 'tete')
@@ -69,6 +76,37 @@ export function chemin(ou: ParentNode): void {
     lien.textContent = marque.textContent
     marque.replaceWith(lien)
   }
+}
+
+/**
+ * Le chemin vers l'atelier, en bas du journal — **le relais**, rouvert le 19/08/2026.
+ *
+ * Le design le demandait depuis le début (« écrire à ton tour ↑ », canevas « A4 · le
+ * relais ») et `docs/` l'avait fermé : « elle n'a pas d'atelier ». Elle en a un — le même,
+ * sur son téléphone, derrière le même seuil. Ce qui reste vrai, et qui ne bouge pas : rien
+ * ne se synchronise, son journal est à elle, le mien est à moi.
+ *
+ * Il est ici et non sur A4 : une seule action par écran, et le journal est l'endroit d'où
+ * l'on repart. Discret comme la ligne de D1 vers les plis déposés — il attend d'être
+ * cherché, il ne recouvre pas le sommaire.
+ *
+ * Un `<a href>` ordinaire vers l'autre entrée, jamais un import : les deux bundles restent
+ * étanches, et l'atelier ne se charge que si elle touche la ligne
+ * (docs/architecture.md#deux-entrées).
+ */
+function versLatelier(): HTMLElement {
+  const vers = document.createElement('a')
+  vers.className = 'passage'
+  vers.href = `${import.meta.env.BASE_URL}atelier/`
+  // « l'atelier », et non « déposer un pli » : la règle de fréquence du mémo veut que le mot
+  // ne s'écrive pas là où la marque est — et elle est juste au-dessus, avec « tes plis » en
+  // face d'elle. Le mot nomme la destination, comme « les plis reçus » nomme la sienne de
+  // l'autre côté : les deux chemins se répondent (docs/design-system.md#ton-et-vocabulaire).
+  //
+  // La flèche DROITE, et c'est ce qui la distingue des actions du lecteur : « tes plis ↑ »
+  // remonte dans la page, celle-ci mène ailleurs — l'autre entrée, l'autre bundle.
+  vers.append(element('span', 'etiquette', 'l’atelier'), fleche('droite'))
+  return vers
 }
 
 /** La feuille du journal, demandée à la volée : le premier texte ne l'attend jamais. */
@@ -164,7 +202,10 @@ export async function journal(cadre: HTMLElement): Promise<HTMLElement> {
       element('h1', 'voix', 'Rien encore.'),
       element('p', 'voix voix--corps', 'Ce que je t’enverrai restera ici.'),
     )
-    ecran.replaceChildren(vide(), tete('tes plis'), corps)
+    // Le chemin vers l'atelier est là AUSSI quand rien n'est arrivé, et c'est voulu : c'est
+    // le seul écran qu'elle verra tant qu'elle n'a rien reçu, et déposer ne demande pas
+    // d'avoir reçu.
+    ecran.replaceChildren(vide(), tete('tes plis'), corps, versLatelier())
     return ecran
   }
 
@@ -180,7 +221,7 @@ export async function journal(cadre: HTMLElement): Promise<HTMLElement> {
     if (lue) sommaire.append(ligne(lue.entree, lue.pli, maintenant))
   }
   corps.append(sommaire)
-  ecran.replaceChildren(tete('tes plis'), corps)
+  ecran.replaceChildren(tete('tes plis'), corps, versLatelier())
   return ecran
 }
 
@@ -293,13 +334,29 @@ function quandRepondu(reponse: Reponse): string {
 }
 
 /**
- * Le pli entier, relu — ce que « relire le pli » donne depuis C2. Pour une invitation déjà
- * répondue, le mot remplace « répondre » : on ne répond pas deux fois.
+ * Le pli entier, relu — ce que « relire le pli » donne depuis C2, et ce qu'une entrée du
+ * journal ouvre. Pour une invitation déjà répondue, le mot remplace « répondre » : on ne
+ * répond pas deux fois.
+ *
+ * L'action d'A2 s'en va dans tous les cas — « répondre » parce qu'on a déjà répondu,
+ * « c'est lu » parce qu'il fait monter A5, et A5 n'est pas armée sur ce chemin : il n'y a
+ * pas de geste ici, donc pas de `auDepliage` pour la poser (src/lecteur/main.ts).
+ *
+ * **Elle est remplacée, jamais seulement retirée.** Retirée seule, elle laissait un écran
+ * relu sans aucune sortie visible, sur les quatre types : c'est le cul-de-sac que ce lot
+ * ferme partout ailleurs, et il se serait rouvert ici. « tes plis ↑ », comme sur C3 et A4.
  */
 export function rappeler(dessous: HTMLElement, mot: string | null): void {
   chemin(dessous)
   const corps = dessous.querySelector('.corps')
-  dessous.querySelector('button.action')?.remove()
-  if (!mot || !corps) return
-  corps.append(element('p', 'etiquette etiquette--fine', `tu as répondu ${mot.toLowerCase()}`))
+  const action = dessous.querySelector('button.action')
+  if (mot && corps) {
+    corps.append(element('p', 'etiquette etiquette--fine', `tu as répondu ${mot.toLowerCase()}`))
+  }
+  if (!action) return
+  const vers = document.createElement('a')
+  vers.className = 'action'
+  vers.href = '#/'
+  vers.append(element('span', 'etiquette etiquette--forte', 'tes plis'), fleche())
+  action.replaceWith(vers)
 }

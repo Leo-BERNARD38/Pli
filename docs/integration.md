@@ -80,7 +80,7 @@ Voici tout ce qui s'en déduit.
 | A1 | « Il ne se lira qu'une fois. » | « Il ne s'ouvre qu'une fois. Ensuite il est à toi. » |
 | A3 | « Elle le saura tout de suite, sans notification et sans compte. » | À réécrire : rien ne remonte automatiquement |
 | A4 | « C'est parti chez a. Le pli se referme derrière toi. » | Faux — on affiche le mot, on n'affirme rien |
-| A4 | « écrire à ton tour ↑ » | « tes plis ↑ » — elle n'a pas d'atelier |
+| A4 | « écrire à ton tour ↑ » | « tes plis ↑ » — **une seule action par écran**. Le relais existe depuis le 19/08/2026, mais il passe par le journal, un tap plus loin |
 | D3 | `pli.re/015-vhtq` affiché en clair | Le lien ne s'affiche pas : **envoyer** et **copier le lien** |
 | E1 | « lien valable 30 jours » | Supprimé — il n'y a plus d'expiration |
 | E1 | `pli.re/deposer` dans le chrome | `leo-bernard38.github.io/Pli/atelier/` |
@@ -94,7 +94,7 @@ Voici tout ce qui s'en déduit.
 | Qui répond | tous les types | **l'invitation seulement** |
 | Usage unique | garanti par le serveur | **convention locale**, sur son navigateur |
 | Expiration | 30 jours | **aucune** |
-| Historique C1 | côté créateur | **deux écrans distincts** : son journal, mon historique |
+| Historique C1 | côté créateur | **deux écrans distincts** : son journal, mon historique. Ils partagent leur grammaire de liste et se touchent désormais par une ligne discrète chacun — d'où « déposé hier » sur D5, contre « hier » chez elle |
 | Papier du souvenir | crème (§3) *et* image pleine (§7) | **crème + image pleine**, la contradiction est tranchée |
 | Images | une seule, partagée | **cinq peintures** : une par type sauf le poème, deux au produit |
 | Le poème | déposé dans D2 | **fichier écrit à la main**, D2p ne fait que choisir |
@@ -136,7 +136,7 @@ Voici tout ce qui s'en déduit.
 | Question du design | Tranchée |
 |---|---|
 | Modifier un pli après dépôt ? | **Non tranchée** — voir ci-dessous |
-| Le relais en A4 : jusqu'où ? | **Il n'existe pas.** À deux, elle n'a pas d'atelier ; A4 mène à ses plis |
+| Le relais en A4 : jusqu'où ? | ~~**Il n'existe pas.**~~ **Renversé le 19/08/2026 — et le design avait raison.** Elle a un atelier : le même, sur son téléphone, derrière le même seuil. Le relais n'est pas en A4 mais **en bas du journal**, une ligne discrète « l'atelier → » : une seule action par écran, et le journal est l'endroit d'où l'on repart. En face, l'atelier gagne « les plis reçus → ». Ce qui reste vrai, et qui tient tout le reste : **rien ne se synchronise**, deux `localStorage`, deux bundles, aucun compte |
 | Le poème : défiler ou paginer ? | **Défiler** (19/08/2026, renverse la réponse d'origine). Un poème est un texte, il se lit d'un bout à l'autre ; la pagination n'a jamais été construite. C'est l'exception nommée à la règle 1 ([design-system.md](design-system.md#les-cinq-règles)) |
 | Les faits : texte libre ou sélecteur ? | **Texte libre.** Un sélecteur ajouterait un contrôle là où il n'y a qu'une ligne |
 | Les images reviennent-elles ? | **Oui, comme conséquence du type** — jamais un emplacement à remplir |
@@ -224,6 +224,7 @@ Ce que les canevas ajoutent, écran par écran :
 
 | Écran | Ce que la maquette montre | Ce que le produit en retient |
 |---|---|---|
+| **B1 · B3 · B4** | un pied de page sur les trois types sans réponse : un filet, un état à gauche (« mardi · 22h14 », « fin · nº 011 », « une image · une ligne »), **« tes plis ↑ » à droite** | **relevé le 19/08/2026, et il manquait.** Le tableau sautait B1 à B4, et le produit avait écrit « aucune action » pour ces trois écrans : la seule sortie était la marque, trop discrète pour être trouvée. Le produit leur donne **un écran** plutôt qu'un pied — « c'est lu ↑ » fait monter **A5 · la fermeture**, qui porte le « tes plis ↑ » de la maquette. L'état de gauche n'est pas repris : il compte ce que l'écran montre déjà |
 | **B0a-c** | une promesse **par type** — « Deux lignes t'attendent », « Quatre strophes t'attendent » | **suivi** (19/08/2026), débarrassé de ce que ces phrases comptaient : aucune promesse ne chiffre |
 | **C2** | un écran de synthèse : « Tu as dit oui », la griffe, « relire le pli », « tes plis ↑ » | **suivi**, à deux mots près : l'action dit « le relire » — la marque nomme déjà le produit |
 | **C3** | « Ce pli s'est refermé », Bodoni **400** sur encre, « tes plis » | le fond encre et le chemin vers le journal sont tenus |

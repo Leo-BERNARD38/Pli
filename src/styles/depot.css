@@ -613,7 +613,11 @@
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  opacity: 0.45;
+  /* .62, la valeur de `.etiquette--fine`, et pour la même raison qu'elle : à .45 l'encre sur
+     le crème mesurait **2,98:1** sur ce que le navigateur peint — très loin des 4,5:1 d'un
+     texte de 11px. Discret ne veut pas dire illisible, et c'est le seul chemin de l'atelier
+     vers ses deux listes. Mesuré le 19/08/2026, à 360 de large. */
+  opacity: 0.62;
   cursor: pointer;
   touch-action: manipulation;
 }

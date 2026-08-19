@@ -188,9 +188,20 @@
         </button>
       </div>
 
-      <!-- Le chemin discret vers ce que j'ai déjà déposé. Il ne se montre que s'il mène
-           quelque part : une ligne vers une liste vide n'est pas discrète, elle est vide. -->
+      <!-- Les deux chemins discrets de l'atelier, empilés : ce que j'ai déposé, et ce que
+           j'ai reçu. Ils se lisent l'un sous l'autre, et chacun nomme sa liste — c'est là
+           que la différence entre les deux se voit le mieux.
+
+           Celui de D5 ne se montre que s'il mène quelque part : une ligne vers une liste
+           vide n'est pas discrète, elle est vide. Celui des plis reçus, lui, est TOUJOURS
+           là : c'est la seule sortie de l'atelier tant que rien n'a été déposé, et D5 est
+           alors inatteignable.
+
+           L'adresse s'écrit à la main, comme les icônes du <head> : le build de l'atelier
+           tourne sans publicDir, et BASE_URL n'est substitué que dans les modules
+           (docs/hebergement.md#ladresse). -->
       <button class="passage" type="button" data-va="d5" hidden>les plis déposés</button>
+      <a class="passage" href="/Pli/">les plis reçus</a>
 
       <button class="bouton" type="button" data-va="d2" disabled>
         <span>continuer</span>
@@ -298,11 +309,6 @@
       </div>
     </section>
 
-    <!-- D5 · les plis déposés. « Relire et renvoyer ce que j'ai déposé »
-         (docs/parcours.md#3-ce-qui-nest-pas-encore-maquetté) — la seule ligne que la
-         spécification en donne. La liste reprend la grammaire du sommaire de C1, chez
-         elle : le numéro, le type, ce qui est écrit, depuis quand. Une ligne se touche et
-         le lien revient, avec ses deux actions. -->
     <!-- D2p · QUEL POÈME. Il remplace D2 pour le poème : le texte ne s'écrit pas ici, il
          s'écrit à mon bureau et passe par la moulinette
          (docs/parcours.md#d2p--quel-poème). C'est le seul écran de l'atelier qui demande le
@@ -333,6 +339,11 @@
       <ul class="lignes deposes" data-poemes="liste" hidden></ul>
     </section>
 
+    <!-- D5 · les plis déposés. « Relire et renvoyer ce que j'ai déposé »
+         (docs/parcours.md#3-ce-qui-nest-pas-encore-maquetté) — la seule ligne que la
+         spécification en donne. La liste reprend la grammaire du sommaire de C1, chez
+         elle : le numéro, le type, ce qui est écrit, depuis quand. Une ligne se touche et
+         le lien revient, avec ses deux actions. -->
     <section class="ecran" id="d5" hidden>
       <div class="conduite">
         <button class="conduite__retour" type="button" data-va="d1">← le type</button>
@@ -348,6 +359,11 @@
       </div>
 
       <ul class="lignes deposes" data-deposes="liste" hidden></ul>
+
+      <!-- Le retour vers ce que j'ai reçu, en bas de la liste de ce que j'ai déposé —
+           exactement là où le journal met son chemin vers l'atelier. Chaque liste finit par
+           celle d'en face (src/lecteur/plis.ts, docs/parcours.md#le-journal). -->
+      <a class="passage" href="/Pli/">les plis reçus</a>
 
       <!-- Vider l'historique demande deux touches : la première prévient, la seconde
            efface. Rien ne se rattrape ici, et une liste qui s'en va sur un frôlement se
