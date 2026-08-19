@@ -15,13 +15,6 @@ const POLICES_DU_PREMIER_ECRAN = [
   'space-mono-700',      // les étiquettes, « déposé par a. »
 ]
 
-// Et le rideau, en priorité BASSE : il passe après le texte, sans exception, mais il doit
-// être **découvert tôt**. Posé seulement par le module, son adresse n'existe que dans la
-// chaîne d'un script : le scanner de préchargement ne la voit pas, et pour un `#p=` la
-// peinture attendait la fin de l'aller-retour réseau du poème — deux requêtes sérialisées
-// qui n'ont aucune dépendance entre elles.
-const TOILE_DU_PREMIER_ECRAN = 'rideau-carmin-nuit'
-
 // Le sous-chemin où le site est servi. Le dépôt s'appelle `Pli` : GitHub Pages en fait un
 // **site de projet**, servi sous `leo-bernard38.github.io/Pli/` et non à la racine de l'hôte
 // (docs/hebergement.md#ladresse). Tout ce qui s'écrit en absolu dans le produit part d'ici,
@@ -61,7 +54,12 @@ function empreinte(paquet: Record<string, unknown>, famille: string, ext: string
 
 /**
  * Pose le préchargement de la vague 2 dans le document du lecteur : les trois polices du
- * premier écran, puis le rideau.
+ * premier écran, **et rien d'autre**.
+ *
+ * Aucune image n'y est plus : A1 n'en porte plus, et le rideau qui y vivait coûtait 614 ko
+ * lancés en même temps que les trois polices que le texte, lui, attend vraiment
+ * (19/08/2026, .claude/decisions.md). Les peintures des types partent en vague 3, quand le
+ * premier écran est peint.
  *
  * Les noms sont empreintés, donc inconnus avant le build : le lien ne peut pas s'écrire
  * à la main dans index.html. Écrit ici plutôt que pris d'un greffon tiers — aucune
@@ -91,20 +89,7 @@ function prechargerLaVague2(): Plugin {
           },
         }))
 
-        return [
-          ...polices,
-          {
-            tag: 'link',
-            injectTo: 'head' as const,
-            attrs: {
-              rel: 'preload',
-              as: 'image',
-              // Le texte ne l'attend jamais : elle est découverte tôt, servie tard.
-              fetchpriority: 'low',
-              href: `${BASE}${empreinte(paquet, TOILE_DU_PREMIER_ECRAN, 'webp')}`,
-            },
-          },
-        ]
+        return polices
       },
     },
   }

@@ -12,10 +12,30 @@
    section 6, ce sont les trois mots d'A3 — `.oui` — parce qu'ils sont chez elle.
    ========================================================================== */
 
-/* ==========================================================================
-   6. LE DÉPÔT — trois questions : le type, les textes, le lien.
-   Aucun réglage de style, aucune image à déposer : le type fait la mise en page.
-   ========================================================================== */
+/* CE QUI SE TOUCHE RÉPOND AU DOIGT — la même règle que chez elle (pli.css), avec les deux
+   sens qu'elle prescrit : ce qui est plein s'atténue, ce qui est déjà discret s'allume.
+   `.conduite__retour` et `.passage` vivent à .55 et .45 ; les atténuer davantage les ferait
+   disparaître au moment précis où on les touche. */
+.type,
+.depose,
+.bouton,
+.action,
+.passage,
+.conduite__retour {
+  transition: opacity 120ms var(--courbe);
+}
+
+.type:active,
+.depose:active,
+.bouton:not([disabled]):active,
+.action:active {
+  opacity: 0.55;
+}
+
+.passage:active,
+.conduite__retour:active {
+  opacity: 1;
+}
 
 /* ==========================================================================
    L'ÉCRAN DE L'ATELIER — un outil, pas un pli.
@@ -68,6 +88,11 @@
    aligné en fin — ou réparti — coupe le DÉBUT de son contenu quand il déborde, et le rend
    inatteignable : l'alignement sûr retombe sur le début plutôt que de perdre une ligne. */
 .ecran > .corps {
+  /* `safe` : un corps aligné en fin — ou réparti — coupe le DÉBUT de son contenu quand il
+     déborde, et le rend inatteignable. L'alignement sûr retombe sur le début plutôt que de
+     perdre une ligne. Le commentaire ci-dessous le décrivait depuis le jalon 4 ; la
+     déclaration, elle, n'avait jamais été écrite. */
+  justify-content: safe flex-end;
   padding-top: calc(34px + var(--encoche-haut));
   /* `1 0 auto` et non `flex: 1` : il prend la place qui reste — donc l'action tombe en bas
      quand il y en a — mais il ne rétrécit jamais sous son contenu. Le pli coupe (« un pli =
@@ -104,7 +129,15 @@
   justify-content: space-between;
 }
 
+/* `all: unset` comme les cinq autres cibles de l'atelier, et c'est une réparation : sans
+   lui, un `<button>` garde le fond gris et la bordure en relief du navigateur. Les six
+   écrans portaient donc une petite boîte système en haut à gauche, là où la conduite ne
+   veut qu'un mot (mesuré le 19/08/2026 : `background: rgb(239,239,239)`,
+   `border: 2px outset`). C'est le même oubli que `.champ` → `.ligne` : une cible que le
+   dépôt a écrite en `<button>` sans lui retirer sa peau. */
 .conduite__retour {
+  all: unset;
+  cursor: pointer;
   touch-action: manipulation;
   font-family: var(--mono);
   font-weight: 700;
@@ -112,7 +145,13 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   opacity: 0.55;
-  cursor: pointer;
+}
+
+/* Quand la conduite n'a pas de retour — D0 et D4, où « continuer » ramène —, le pas reste
+   à droite : `space-between` le collerait à gauche, et l'œil chercherait l'étape au mauvais
+   bout de l'écran. */
+.conduite__pas:only-child {
+  margin-left: auto;
 }
 
 .conduite__pas {
@@ -130,6 +169,9 @@
   font-size: 30px;
   line-height: 1.06;
   letter-spacing: -0.01em;
+  /* Le même réglage que `.voix` : sans lui, « Qu'est-ce que tu envoies ? » laissait son
+     point d'interrogation seul sur une seconde ligne. */
+  text-wrap: pretty;
 }
 
 .aide {
@@ -373,7 +415,6 @@
   opacity: 1;
 }
 
-/* les trois mots d'A3 — remontés de design/handoff/lecteur.html */
 /* une seule action, pleine largeur, toujours en bas.
 
    `sticky` : l'écran défile sous elle, elle ne s'en va pas. Une action qu'on ne voit pas
@@ -442,6 +483,16 @@
   padding-bottom: calc(var(--ecran-h) * var(--pliure-part) + var(--corps-pied));
 }
 
+/* ET RIEN NE SE COUPE PAR LE HAUT. L'aperçu réserve la place du volet et aligne en bas : une
+   invitation remplie — titre, voix, deux faits, signature — dépassait par le haut, et
+   `.corps { overflow: hidden }` mangeait le titre sans un mot. Vu, mesuré le 19/08/2026 :
+   « Tu es invitée » à 9px au-dessus du corps, invisible, alors que l'aperçu est la moitié
+   de D2 et que le titre en est la première ligne. `safe` retombe sur le début plutôt que de
+   perdre ce qu'on ne peut plus atteindre. */
+.mini .corps {
+  justify-content: safe flex-end;
+}
+
 /* Une ligne vide de l'aperçu ne laisse pas son écart derrière elle. */
 .mini [hidden] {
   display: none;
@@ -480,9 +531,8 @@
   opacity: 0.75;
 }
 
-/* Les deux actions de D3 vivent hors du corps : elles reprennent sa marge, et rien d'autre
-   — `.action` ne dessine que son filet pointillé du haut. */
-/* Les deux actions de D3, même travail que `.bouton`. Le fond est NOMMÉ et non hérité :
+/* Les deux actions de D3 vivent hors du corps et reprennent sa marge — `.action` ne dessine
+   que son filet pointillé du haut. Même travail que `.bouton`. Le fond est NOMMÉ et non hérité :
    collée au-dessus d'un écran qui défile, une barre transparente laisserait passer le
    texte. D3 est toujours en carmin. */
 .actions {
@@ -500,7 +550,14 @@
 /* D5 · les plis déposés. La même cible qu'une ligne de type — 76px, tout le côté du
    pouce — et la même grammaire que le sommaire de C1 : ce qu'il est, ce qu'il dit,
    depuis quand. La liste ne se scrolle pas à part : l'écran défile, comme les autres. */
+/* Une `<ul>` porte une puce, un retrait de 40px et une marge verticale par défaut — les
+   trois partent, comme pour `.plis` et `.faits`. Sans ça les lignes de D5 et de D2p
+   commençaient à 40px quand tout l'écran est à 26px, et la liste poussait 16px de blanc
+   qu'aucun gabarit ne demande (mesuré le 19/08/2026). C'est la seule liste du produit qui
+   avait échappé à la remise à zéro. */
 .deposes {
+  margin: 0;
+  padding: 0;
   list-style: none;
 }
 
@@ -568,6 +625,15 @@
    tranche, et c'est `all: unset` qui gagne. Les trois cibles de l'atelier tabulaient donc
    sans filet visible (docs/integration.md#accessibilité--la-liste-à-cocher). Fond crème
    partout ici : le filet est carmin. */
+/* L'ÉCRAN N'EST PAS UNE CIBLE. `montrer()` lui donne le focus pour le retirer de l'élément
+   qui vient de devenir inerte (src/atelier/main.ts) ; il porte donc `tabindex="-1"` et
+   correspond à `:focus-visible`, qui lui peignait le filet carmin de `pli.css` sur TOUTE sa
+   hauteur, à gauche, sur les six écrans. Le filet dit où le clavier est posé — un conteneur
+   qu'on ne peut pas atteindre au Tab n'a rien à dire. */
+.ecran:focus-visible {
+  box-shadow: none;
+}
+
 .ligne input:focus-visible,
 .ligne textarea:focus-visible,
 .type:focus-visible,

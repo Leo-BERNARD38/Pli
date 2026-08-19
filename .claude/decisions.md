@@ -475,3 +475,137 @@ si la mesure sur les deux téléphones le rend visible.
   hauteur est maintenant écrite par le module à chaque frappe, `height: auto` d'abord pour
   qu'elle redescende quand on efface. `resize: none` reste : la poignée du navigateur
   donnerait une seconde façon de régler la même chose.
+
+### La revue de tout, au navigateur — 19/08/2026
+
+Cinq de ces six décisions viennent d'une seule chose : **avoir ouvert le build dans un
+navigateur et traversé le parcours en entier**, plutôt que de relire des fichiers. Aucune
+n'était visible dans un diff, aucun relecteur ne les avait vues, et `npm run verifie`,
+`npm test` et `npm run types` passaient tous les trois.
+
+- **19/08/2026 — A1 n'a plus d'image, et la maquette avait raison depuis le début.**
+  `docs/` avait tranché contre `design/` au jalon 2 : « le fond d'A1, c'est le rideau »,
+  alors que la maquette montrait un papier crème. Mesuré sur le build : le rideau était
+  **préchargé, 614 ko, lancés à 66 ms** — dans la même seconde que les trois polices que le
+  texte, lui, **attend** vraiment, puisque `font-display: block` ne peint rien avant elles.
+  A1 est la page qui doit s'afficher avant tout le reste ; elle traînait le plus gros
+  fichier du parcours. Papier crème et grain : **4 requêtes au lieu de 5, 89 ko au lieu de
+  703**, et le rideau sort entièrement du build. Ce qui ne change pas : la tête et le numéro
+  restent à l'encre et non au carmin de la maquette — sur A1 la seule chose qui agit est le
+  volet, et cette raison-là ne dépendait pas du fond. Au passage, `.volet__ombre` — le fil
+  d'ombre du papier devant la pliure, que `pli.css` portait depuis la reprise du handoff
+  sans que rien ne l'écrive — est enfin posé.
+
+- **19/08/2026 — A3 et A4 partent à chaque changement d'adresse.** `montrer()` commande les
+  `.pli__dessus` et la couche du dessous ; les deux couches qui montent vivent **au-dessus**,
+  en z-index 3 et 4, et personne ne les commandait. Depuis A4, « tes plis ↑ » changeait donc
+  bien le hash, C1 se construisait bien — **sous A4, qui le recouvrait entièrement**. Le
+  chemin principal du jalon 5 ne menait nulle part, et rien ne le disait. Elles se retirent
+  maintenant dans le routeur, une fois, pour toutes les routes.
+
+- **19/08/2026 — le cadre du pli est en `overflow: clip`, pas `hidden`.** Les deux rognent
+  pareil, mais `hidden` fait du pli un **conteneur de défilement** : A3 et A4, posées à
+  `translateY(100%)`, portent sa hauteur de défilement à deux écrans. Il suffisait qu'un
+  élément prenne le focus — le bouton « déplier », c'est-à-dire l'alternative au geste, donc
+  le chemin de l'accessibilité — pour que le navigateur fasse défiler le pli de **180px**
+  afin de le « révéler ». Et il n'en revenait jamais : A2 arrivait amputée de sa tête, A4
+  dépassait par le bas. Mesuré au clavier, sur une invitation. `clip` n'est pas un conteneur
+  de défilement ; plus rien ne peut faire glisser le cadre.
+
+- **19/08/2026 — `refermer()` repose les deux couches sans condition.** Le `if (!ouvert)
+  return` avait l'air juste : pourquoi refermer ce qui est fermé ? Mais le geste ne referme
+  pas seulement, il **repose**. La relecture d'un pli sort la couche du dessous de sa place
+  (`transform: none`) et la rend au clavier (`inert = false`), parce qu'elle y est l'écran ;
+  le lien suivant retrouvait donc un A2 posé à 0 et atteignable au Tab depuis A1 —
+  « répondre » d'un pli qu'elle n'avait pas déplié. C'est la faute du jalon 3, revenue par
+  une autre porte, et elle demande deux Tab pour se voir.
+
+- **19/08/2026 — trois défauts de l'atelier, un seul geste pour les trois.** Une `<ul>`
+  garde le retrait de 40px et la marge du navigateur si on ne les remet pas à zéro : les
+  listes de **D5 et D2p** commençaient donc à 40px quand tout l'écran est à 26. Un
+  `<button>` garde le fond gris et la bordure en relief du navigateur si `all: unset` ne
+  passe pas : `.conduite__retour` s'affichait en petite boîte système sur **les six écrans**.
+  Et `montrer()` donne le focus à l'écran qui arrive pour le retirer de celui qui devient
+  inerte — le `:focus-visible` nu de `pli.css` lui peignait alors le filet carmin **sur
+  toute sa hauteur**. Trois oublis du même ordre : une peau de navigateur qu'on croyait
+  avoir retirée.
+
+- **19/08/2026 — rien ne se coupe par le haut, et `safe` n'était écrit nulle part.**
+  `depot.css` décrivait `safe` en commentaire depuis le jalon 4 — « un corps aligné en fin
+  coupe le DÉBUT de son contenu quand il déborde, et le rend inatteignable » — sans que la
+  déclaration existe. Conséquence mesurée : sur D2, une invitation remplie poussait son
+  titre **9px au-dessus** du corps de l'aperçu, où `overflow: hidden` le mangeait. « Tu es
+  invitée » n'était pas dans l'aperçu, qui est la moitié de D2. `justify-content: safe
+  flex-end` sur `.mini .corps` et sur `.ecran > .corps`.
+
+- **19/08/2026 — `verifie.mjs` cesse de crier ce qu'il a déjà accepté.** Le script portait
+  deux griefs permanents que rien ne pouvait éteindre : `sessionStorage` dans `fond.ts`,
+  qui est l'exception nommée du drapeau de rechargement, et le dégradé mesuré de
+  `pli.css`, dont le message demandait précisément « si elle est mesurée, le dire en
+  commentaire » — le commentaire était là. Le premier devient un **refus** partout ailleurs
+  et se tait à l'endroit nommé ; le second lit le commentaire avant de parler. Trois lignes
+  de bruit à chaque `npm run verifie`, c'est trois lignes derrière lesquelles un vrai grief
+  se cache.
+
+### Les phrases, révisées — 19/08/2026
+
+- **19/08/2026 — la marque dit « Pli », le texte dit « il ».** Compté avant de toucher à
+  quoi que ce soit : « pli » ou « plis » revenait **26 fois sur 187 mots visibles**, un mot
+  sur sept. Douze fois la marque — elle a le droit, c'est son travail ; quatorze fois le
+  texte, qui répétait à quelqu'un le nom du produit écrit trois centimètres au-dessus. C3
+  cumulait quatre occurrences en trois lignes, dont « Ce **pli** est dans tes **plis** »
+  dans la même phrase. La cause n'était pas de la négligence : le lexique dit « on dit un
+  pli », et le produit l'avait lu comme une obligation de le dire. **Le lexique fixe quel
+  mot, pas à quelle fréquence** — c'est maintenant écrit dans `design-system.md`. Reste
+  deux occurrences, et une seule dans le produit : l'aperçu du lien, seul endroit où la
+  marque n'est pas à l'écran.
+- **19/08/2026 — « Un pli t'attend. » quitte A1 pour l'aperçu du lien.** La phrase est
+  normative depuis le design, et elle le reste — mais à l'endroit où elle travaille. Sur
+  A1 elle nommait le produit sous sa propre marque et ne s'adressait pas à elle ; dans une
+  conversation WhatsApp, elle est tout ce qu'il y a. A1 dit désormais **« Il n'attendait
+  que toi. »**
+- **19/08/2026 — les écrans s'enchaînent au lieu de s'étiqueter.** Une fois les répétitions
+  tombées, un arc apparaît sans qu'on l'ait écrit : *il n'attendait que toi* (A1) → *il se
+  referme derrière toi* (A4) → *il est rangé, avec les autres* (C3) → *ce que je t'enverrai
+  restera ici* (C1). Et les trois écrans d'accident deviennent trois états d'un même
+  voyage : **il arrive** (C5), **il n'a juste pas pu arriver** (hors ligne), **il a dû être
+  coupé en chemin** (C4). C'est la même métaphore, tenue sur trois écrans qui ne se voient
+  jamais ensemble.
+- **19/08/2026 — l'atelier a la même passe, sans la douceur.** C'est un outil, il ne parle
+  qu'à moi : « déposer le pli » → « déposer », « Envoie ce lien à la personne » →
+  « Envoie-le-lui », « Touche un pli pour le renvoyer » → « Touche-en un ». Aucune
+  tentative de ton — les mots servent à ne pas se tromper d'écran.
+
+### Les mouvements — 19/08/2026
+
+- **19/08/2026 — le dépliage ne s'animait pas, et personne ne pouvait le voir.**
+  `tokens.css` écrit `--ouvre: 460ms` ; le minifieur CSS du build le réécrit en **`.46s`**,
+  qui est plus court et rigoureusement équivalent pour le navigateur. Mais `geste.ts` le
+  relisait avec `parseFloat`, qui en tire **0,46**, et posait `transform 0.46ms` : la
+  feuille sautait en **une image**. Trois choses cachaient le défaut — il n'existe pas en
+  `npm run dev` où le CSS n'est pas minifié ; le geste au doigt n'était pas touché, puisqu'il
+  écrit les positions lui-même, donc seul le relâchement claquait ; et une capture d'un pli
+  ouvert est identique dans les deux cas. Mesuré sur le build : `-360px` puis `-844px`, deux
+  images consécutives. La règle qui en sort : **une valeur CSS relue en JavaScript se
+  convertit, elle ne se `parseFloat` pas.** Les autres réglages du geste sont sans unité et
+  étaient hors d'atteinte.
+- **19/08/2026 — on n'anime pas pour animer.** La première version de cette passe posait un
+  fondu sur **tous** les écrans, y compris ceux qui arrivent avec la page. C'est exactement
+  la faute que la règle interdit : un chargement n'a pas à être accompagné, il a à être
+  court, et faire apparaître A1 retarderait le premier texte, qui est tout ce que ce produit
+  défend. Le fondu ne dit qu'une chose, et il ne la dit qu'une fois : **c'est ton tap qui a
+  produit cet écran.** Il ne s'applique donc qu'après un `hashchange`, jamais au premier
+  rendu — un hash ne change pas tout seul.
+- **19/08/2026 — ce qui se touche répond au doigt.** Le produit n'avait aucun `:active`, et
+  `.pli` coupe le halo du navigateur avec `-webkit-tap-highlight-color: transparent` : taper
+  « répondre », un des trois mots ou une entrée du journal ne produisait rien jusqu'à ce que
+  l'écran suivant arrive. Sur un réseau lent, c'est une seconde d'incertitude, et on retape.
+  Ce n'est pas un mouvement décoratif : c'est l'interface qui accuse réception. Deux sens,
+  parce qu'un seul ne va pas aux deux familles — ce qui est plein s'atténue à `.55`, ce qui
+  est déjà discret (`.conduite__retour` à `.55`, `.passage` à `.45`) **s'allume** à `1`.
+  Les atténuer les ferait disparaître au moment précis où on les touche.
+- **19/08/2026 — la marque disparaissait au survol.** `a:hover { color: var(--encre) }` et
+  `a.marque { color: inherit }` valent la même spécificité ; l'ordre tranchait en faveur du
+  survol. Sur C3, qui est en encre, la marque passait donc de crème à encre — invisible.
+  Corrigé en `:not(.marque, .action)` plutôt qu'en déplaçant la règle : l'ordre ne doit plus
+  décider, c'est la troisième fois que ce piège mord dans ce dépôt.

@@ -24,7 +24,9 @@ et on note l'écart ici.
 Le fichier se scinde en deux à la reprise :
 
 - **`src/styles/tokens.css`** — le bloc `:root`, tel quel, avec les corrections ci-dessous.
-- **`src/styles/pli.css`** — les sections 1 à 7, tel quel.
+- **`src/styles/pli.css`** — les sections 1 à 6, tel quel. La 7 reste dehors, voir juste
+  en dessous ; la 6, « le dépôt », a depuis migré dans `src/styles/depot.css` — elle
+  n'appartient qu'à l'atelier et pesait 900 octets gzip dans le document qui part chez elle.
 
 Deux choses à retirer au passage :
 
@@ -75,7 +77,7 @@ Voici tout ce qui s'en déduit.
 
 | Où | La maquette dit | À écrire |
 |---|---|---|
-| A1 | « Il ne se lira qu'une fois. » | « Il ne s'ouvre qu'une fois. Ensuite il reste dans tes plis. » |
+| A1 | « Il ne se lira qu'une fois. » | « Il ne s'ouvre qu'une fois. Ensuite il est à toi. » |
 | A3 | « Elle le saura tout de suite, sans notification et sans compte. » | À réécrire : rien ne remonte automatiquement |
 | A4 | « C'est parti chez a. Le pli se referme derrière toi. » | Faux — on affiche le mot, on n'affirme rien |
 | A4 | « écrire à ton tour ↑ » | « tes plis ↑ » — elle n'a pas d'atelier |
@@ -122,7 +124,8 @@ Voici tout ce qui s'en déduit.
 | `.image--pleine` | absente | **une couche de fond** (`inset: 0`), le texte par-dessus — et elle **s'arrête à la pliure** quand un volet couvre le bas |
 | Le voile d'une image pleine page | non spécifié | **`.image--pleine .image__fondu--encre`**, ses propres arrêts : `.68` mesuré, `.85` et `66 %` repris de `.image__fondu--encre`. Celui d'un bandeau retombe à `.38` au tiers, pile sous la tête et le numéro |
 | `.etiquette--fine` sur carmin | `.62` partout | **opacité pleine sur carmin** — crème sur carmin vaut déjà 5,1:1, le `.62` le ramenait à 2,7:1 |
-| La tête et le numéro d'A1 | en carmin | **en crème** — sur A1 la seule chose qui agit est le volet, et mesuré, le rose laissait 19,7 % de la ligne du numéro sous 4,5:1 |
+| La tête et le numéro d'A1 | en carmin | **en encre** — sur A1 la seule chose qui agit est le volet (règle nº 2). Ils ont été en crème tant qu'A1 portait le rideau ; le papier crème leur rend l'encre, et la raison, elle, n'a pas changé |
+| Le fond d'A1 | papier crème | **papier crème** — `docs/` avait imposé le rideau, la mesure l'a repris (19/08/2026, voir plus bas) |
 | Le titre de C4 | — | **`line-height: .92`** — deux lignes de capitales accentuées, le cas que `.titre--geant` nomme |
 | `theme-color` | `#C81E33` dans installation.md, `#E9E2D2` dans appareils.md | **`#E9E2D2`**, le sable, dans les deux entrées ; le carmin reste le `theme_color` du manifeste |
 
@@ -150,10 +153,16 @@ avant qu'un poème ait besoin d'une correction.
 Cinq questions que cette section laissait ouvertes sont tranchées, et faites. Elles sont
 reportées dans le tableau ci-dessus ; voici ce qui les a tranchées.
 
-**Le fond d'A1, c'est le rideau.** `parcours.md` et `design-system.md` le disent tous les
-deux, seule la maquette montre un papier crème — et `docs/` gagne toujours contre `design/`.
-Le choix emporte le fondu, comme annoncé : A1 compose donc **en crème et en rose sur une
-image sombre**, non en encre et carmin sur du papier.
+~~**Le fond d'A1, c'est le rideau.**~~ **Renversé le 19/08/2026, et la maquette avait
+raison.** `docs/` avait tranché contre elle pour le rideau ; la mesure a donné tort à
+`docs/`. A1 est l'écran qui doit se peindre avant tout le reste, et il traînait 614 ko
+préchargés **dans la même seconde que les trois polices que le texte attend vraiment** —
+`font-display: block` ne peint rien avant elles. Le papier crème ne coûte pas une requête.
+
+A1 compose donc **en encre sur du papier**, comme la maquette : la tête et le numéro
+gardent l'encre plutôt que le carmin de la maquette — sur A1 la seule chose qui agit est le
+volet —, et le fil d'ombre du volet, que `pli.css` portait sans que rien ne l'écrive, est
+enfin posé. Le rideau reste dans `src/textures/`, hors du build.
 
 **Le débordement du gabarit** se traite des deux côtés, et les deux sont écrits. Un plafond
 **par type**, mesuré à 360 × 780 et daté, dans
@@ -215,11 +224,11 @@ Ce que les canevas ajoutent, écran par écran :
 
 | Écran | Ce que la maquette montre | Ce que le produit en retient |
 |---|---|---|
-| **B0a-c** | une promesse **par type** — « Deux lignes t'attendent », « Quatre strophes t'attendent » | contredit le gabarit, qui écrit une promesse unique en dur ; voir plus bas |
-| **C2** | un écran de synthèse : « Tu as dit oui », la griffe, « relire le pli », « tes plis ↑ » | le produit réaffiche le pli entier et rappelle le mot — deux formes différentes |
+| **B0a-c** | une promesse **par type** — « Deux lignes t'attendent », « Quatre strophes t'attendent » | **suivi** (19/08/2026), débarrassé de ce que ces phrases comptaient : aucune promesse ne chiffre |
+| **C2** | un écran de synthèse : « Tu as dit oui », la griffe, « relire le pli », « tes plis ↑ » | **suivi**, à deux mots près : l'action dit « le relire » — la marque nomme déjà le produit |
 | **C3** | « Ce pli s'est refermé », Bodoni **400** sur encre, « tes plis » | le fond encre et le chemin vers le journal sont tenus |
 | **C4** | « Il n'y a rien ici », Bodoni 400, et une action « voir tes plis ↑ » | le produit dit « lien abîmé » et n'a que la marque comme chemin |
-| **C5** | la marque seule en 64px, un filet pointillé carmin, « un pli arrive » | **suivi**, et l'écran est écrit (19/08/2026). Deux écarts, plus bas |
+| **C5** | la marque seule en 64px, un filet pointillé carmin, « un pli arrive » | **suivi**, et l'écran est écrit (19/08/2026). L'écran dit « il arrive » — voir le lexique. Deux écarts, plus bas |
 | **l'atelier** | un choix de **style** (crème · encre · carmin · drapé), une image, une date | **écarté** : « le papier découle du type, jamais un choix offert au dépôt » (règle nº 4) |
 | **D4 de la maquette** | un aperçu **plein écran** — « tu vois ce qu'elle verra » | le produit n'a que l'aperçu en petit de D2 ; aucune décision prise |
 
@@ -237,14 +246,14 @@ c'est-à-dire notre **D3** ; et le D4 de la maquette est un aperçu, pas le tiro
   ([parcours.md](parcours.md#les-états)). C5 attend aussi longtemps que le réseau met, et
   ne rend la main qu'au fichier ou au refus.
 
-**La promesse d'A1 contredit son gabarit.** [parcours.md](parcours.md#a1--lattente) écrit
-« Commune aux quatre types ; seule la promesse change », puis donne **une** phrase de
-remplacement ; le gabarit l'écrit en dur pour les quatre types et son commentaire affirme
-l'inverse de la doc. Les maquettes tranchent avec la doc — chaque type a sa promesse. Le
-coût du changement n'est pas nul : la promesse en dur est ce qui laisse le premier texte se
-peindre **sans attendre le décodage**, et un emplacement rempli par le module arriverait
-après lui ([chargement.md](chargement.md#le-budget-écran-par-écran)). À trancher avec son
-auteur, pas en passant.
+**La promesse d'A1 suit le type — tranché le 19/08/2026.** [parcours.md](parcours.md#a1--lattente)
+écrivait « seule la promesse change » puis n'en donnait qu'une, et le gabarit l'écrivait en
+dur pour les quatre. Les maquettes ont tranché avec la doc : chaque type a sa promesse, les
+quatre sont dans `parcours.md`. Le coût était réel et il a été payé sans rien perdre : celle
+de l'invitation reste **en dur dans le document**, donc le premier texte se peint toujours
+sans attendre le décodage, et les trois autres la remplacent dans la même frame que le
+numéro et la signature. **Aucune ne chiffre quoi que ce soit** — une maquette sait qu'il y a
+quatre strophes, un gabarit ne le sait pas.
 
 ### Écrans qui n'existaient pas
 
@@ -256,13 +265,21 @@ en fin de [parcours.md](parcours.md#3-ce-qui-nest-pas-encore-maquetté).
 
 Rien de tout cela n'est dans les prototypes. `PLI.md` §10 l'admet lui-même.
 
-- [ ] Un `<button>` « déplier » atteignable au clavier, qui pose `p = 1` directement.
-- [ ] `@media (prefers-reduced-motion: reduce)` : pas d'invite du volet, ouverture à 120 ms.
-- [x] Focus visible partout — `.ligne input { all: unset }` le supprimait. Filet carmin de
-      2px à gauche sur `:focus-visible`, posé le 19/08/2026 sur les deux cibles où l'on
-      tape ; `.type`, `.depose` et `.passage` l'avaient depuis le jalon 4.
-- [ ] Le texte reste sélectionnable et présent si une animation échoue.
-- [ ] `.etiquette--fine` à `.62`.
+- [x] Un `<button>` « déplier » atteignable au clavier, qui pose `p = 1` directement —
+      `.deplier` dans le gabarit, `armer()` le branche (jalon 2).
+- [x] `@media (prefers-reduced-motion: reduce)` : pas d'invite du volet, ouverture à
+      120 ms — le bloc est dans `pli.css`, la durée dans `geste.ts` parce qu'elle se calcule.
+- [x] Focus visible partout — `all: unset` le supprimait. Filet carmin de 2px à gauche sur
+      `:focus-visible` : `.type`, `.depose` et `.passage` depuis le jalon 4, les deux lignes
+      de saisie et `.conduite__retour` le 19/08/2026. Un conteneur pris de focus pour
+      *déplacer* le focus n'en porte pas — `.ecran` est exclu, sinon le filet courait sur
+      toute la hauteur de l'écran.
+- [x] Le texte reste sélectionnable et présent si une animation échoue — `.corps` rend
+      `user-select` au texte, que le cadre coupe pour le geste.
+- [x] `.etiquette--fine` à `.62`.
+
+Rien n'y reste ouvert. Ce qui s'y ajoute à l'avenir se coche ici, et un écran qui part en
+production sans une de ces lignes est à refaire.
 
 **Contrastes connus et acceptés** — ces deux-là ne vivent que dans l'atelier, chez moi :
 
@@ -290,3 +307,47 @@ Avant de considérer un écran fini :
 8. Aucune icône, aucun SVG — **sauf les deux flèches**, devenues des tracés inline pour
    retirer Bodoni du premier écran ([ressources.md](ressources.md#les-deux-flèches)). Le
    dessin ne change pas, le moyen change. C'est l'unique exception, et elle est fermée.
+
+## Les phrases, révisées — 19/08/2026
+
+Une passe sur **tout ce qu'elle lit**, à trois exigences : moins redondant, plus doux, et
+qui **raconte une histoire** plutôt que d'étiqueter des états.
+
+**Ce qui l'a déclenchée, c'est un compte.** « pli » ou « plis » revenait **26 fois sur
+187 mots visibles** — un mot sur sept. Douze fois la marque, qui a le droit ; quatorze fois
+le texte, qui répétait à quelqu'un le nom du produit écrit trois centimètres au-dessus. Le
+pire tenait en un écran : C3 disait « Ce **pli** est dans tes **plis**, avec les autres. »,
+sous la marque, à côté d'une action « tes **plis** ↑ ». Quatre fois, en trois lignes.
+
+La cause n'était pas de la négligence mais une **lecture trop littérale du lexique** :
+« on dit un pli » fixe quel mot employer quand on nomme la chose, pas combien de fois la
+nommer. La règle est maintenant écrite dans
+[design-system.md](design-system.md#ton-et-vocabulaire) : **la marque le dit, le texte dit
+« il »**. Deux occasions restent, et une seule est dans le produit — l'aperçu du lien, où la
+marque n'est pas à l'écran.
+
+**L'arc**, une fois les répétitions tombées, se tient sans qu'on ait eu à l'écrire :
+
+| | |
+|---|---|
+| A1 · l'attente | Il n'attendait que toi. |
+| A4 · le mot | Il se referme derrière toi. |
+| C3 · refermé | Il est rangé, avec les autres. |
+| C1 · le journal vide | Ce que je t'enverrai restera ici. |
+
+Et les trois écrans d'accident cessent d'être des messages système pour devenir **trois
+états d'un même voyage** : « il arrive » (C5), « il n'a juste pas pu arriver » (hors ligne),
+« il a dû être coupé en chemin » (C4).
+
+Ce qui **n'a pas bougé**, et pourquoi :
+
+- **l'aperçu du lien** garde « Un pli t'attend. » et « Il ne s'ouvre qu'une fois. » C'est le
+  seul endroit où la marque n'est pas à l'écran, où la phrase ouvre une conversation, et où
+  le mot « pli » gagne donc sa place ([partage.md](partage.md)) ;
+- **C4** garde « Il a dû être coupé en chemin. Redemande-le-moi. » — première personne, aucune
+  excuse, aucun jargon : c'était déjà à la bonne température ;
+- **le lexique lui-même** : aucun mot n'entre, aucun ne sort. Seule sa portée est précisée.
+
+L'atelier a eu la même passe, **sans la douceur** : c'est un outil, il ne parle qu'à moi.
+« déposer le pli » → « déposer », « Envoie ce lien à la personne » → « Envoie-le-lui »,
+« Touche un pli pour le renvoyer » → « Touche-en un ».

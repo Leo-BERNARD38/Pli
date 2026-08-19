@@ -3,7 +3,8 @@
 ## Stack
 
 - **TypeScript + Vite**, sans framework.
-- **CSS natif** : variables, `@layer`, animations. Pas de librairie d'animation.
+- **CSS natif** : variables, `:has()`, unités de conteneur, animations. Pas de librairie
+  d'animation, et pas de `@layer` : cinq feuilles suffisent, l'ordre de chargement les range.
 - **Zéro dépendance npm au runtime.** Le codec, le routeur et la moulinette tiennent en
   quelques dizaines de lignes chacun.
 
@@ -17,9 +18,15 @@ leo-bernard38.github.io/Pli/           elle   → index.html
 leo-bernard38.github.io/Pli/atelier/   moi    → atelier/index.html
 ```
 
-Deux entrées Vite, donc **deux bundles réellement distincts**. Le formulaire, les aperçus
-et l'index des poèmes ne se chargent jamais sur son téléphone. Ils ne partagent que
-`lib/` et `styles/`.
+**Deux builds, et non deux entrées d'un même build** — `vite build --mode lecteur`, puis
+`--mode atelier`. La nuance a coûté un jalon : dès que l'atelier importe `codec.ts`, Rollup
+en fait un chunk commun aux deux entrées, le document du lecteur perd son inlining et gagne
+une requête avant le premier texte. Un build par entrée rend à chacune sa copie du module
+partagé (`vite.config.ts`).
+
+Les lignes de saisie, les aperçus et l'index des poèmes ne se chargent donc jamais sur son
+téléphone. Ils ne partagent que du **code source** — `lib/` et `styles/` —, jamais un
+fichier servi.
 
 ## Routage
 
@@ -97,7 +104,7 @@ Autrement dit : si elle ne reçoit pas de pli pendant une dizaine de jours, **so
 peut disparaître** — l'objet décrit dans [concept.md](concept.md) comme celui qui a de la
 valeur au bout de six mois.
 
-L'exemption est nette : **les sites ajoutés à l'écran d'accueil y échappent.** Le
+L'exemption est nette : **les sites ajoutés à l'écran d'accueil y échappent.**
 Le manifeste n'est donc pas une coquetterie, il est porteur. Trois conséquences :
 
 1. **L'ajout à l'écran d'accueil est une étape du parcours**, pas un bonus. Un écran
@@ -146,9 +153,11 @@ de ce qui ne doit jamais casser dans un lien déjà envoyé — est dans
 
 Trois points qui restent ici parce qu'ils touchent au produit :
 
-- Le domaine décorrèle l'URL du nom du dépôt : le dépôt redevient renommable, et chaque
-  lien envoyé y gagne 18 caractères.
-- **Ne plus changer de domaine.** Il est dans chaque lien déjà envoyé.
+- **Il n'y a pas de domaine personnalisé**, et il n'y en a pas besoin. Le préfixe compte
+  36 signes (`https://leo-bernard38.github.io/Pli/`) contre 15 pour un domaine court : 21
+  signes par lien, à rapprocher de la mesure nº 1 quand elle sera faite.
+- **L'adresse se gèle au premier pli envoyé**, pas avant. Après lui elle est dans une
+  conversation, pour toujours ([hebergement.md](hebergement.md#ladresse)).
 - `public/plis/` est copié tel quel dans la sortie — les poèmes se lisent en **même
   origine**, `leo-bernard38.github.io/Pli/plis/015-vhtq.txt`. Aucune question de CORS, un cache HTTP normal.
 
@@ -220,6 +229,7 @@ src/
     tiroir.ts              mes réglages d'atelier — l'autre, et le dernier
     routeur.ts             les routes par hash
     dates.ts               formats français
+    poeme.ts               le format du poème et de son index — isomorphe, comme le codec
   fleches.html             les deux tracés, inline dans chaque document qui s'en sert
   styles/
     tokens.css             extrait de design/handoff/pli.css
@@ -241,7 +251,7 @@ scripts/polices.py         les sous-ensembles — regénère src/fonts/
 scripts/fleches.py         les deux flèches — regénère src/fleches.html
 scripts/icones.py          la planche des icônes — regénère public/icones/
 scripts/verifie.mjs        la relecture déterministe — lexique, encres, invariants
-plier.bat · plier.sh       les deux enveloppes
+scripts/plier.bat · .sh    les deux enveloppes de la moulinette
 design/                    l'archive du design — jamais dans le build
   handoff/                 les trois pages exportées
   canevas/                 les six canevas, la source dont handoff/ est l'export
@@ -258,7 +268,8 @@ le pli s'affiche, il n'est simplement pas archivé.
 
 ## Tests
 
-Pas de tests unitaires généralisés. Deux modules les méritent :
+Pas de tests unitaires généralisés. Ce qui est testé, c'est **ce qu'un lien déjà parti ne
+pardonnerait pas**, et rien d'autre :
 
 - **`codec.ts`** — un lien cassé est un pli perdu, et il tourne des deux côtés.
   Tester l'aller-retour sur les quatre types, les accents, un poème long, un payload tronqué.
@@ -266,6 +277,10 @@ Pas de tests unitaires généralisés. Deux modules les méritent :
 - **`journal.ts`** — le dédoublonnage sur `h`, l'empreinte du payload, **jamais sur `n`**.
 - **`tiroir.ts`** — les réglages, le compteur, les déposés.
 - **`routeur.ts`** — ce qu'un hash désigne, et ce qu'il refuse.
+- **`poeme.ts`** — le jeton réutilisé, l'index qui ne perd rien, la lecture d'une source.
 
-C'est le plancher, et rien au-delà : **pas de tests d'écran, pas de tests de rendu, pas
-d'émulateur**. Cinq fichiers `*.test.ts` dans `src/lib/`, lancés par `npm test`.
+C'est le plancher, pas un plafond : un module de `lib/` qui arriverait avec un invariant à
+tenir prend son fichier de test comme les autres. Ce qu'on ne fait pas, en revanche, est
+tranché : **pas de tests d'écran, pas de tests de rendu, pas d'émulateur** — ce qui se voit
+se vérifie sur les deux téléphones. Six fichiers `*.test.ts` dans `src/lib/`, lancés par
+`npm test`.

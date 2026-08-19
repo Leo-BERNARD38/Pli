@@ -19,7 +19,12 @@ dans le même commit.
 ## Le lexique — fermé et normatif (design-system.md#ton-et-vocabulaire)
 
 **On dit** — déplier · déposer · répondre · refermer · un pli · le volet · la pliure ·
-l'atelier · nº 014 · « Un pli t'attend. » · « pour toi seule » · « déposé par a. »
+l'atelier · nº 014 · « pour toi seule » · « déposé par a. » · « Un pli t'attend. », **dans
+l'aperçu du lien et là seulement**.
+
+**Le lexique fixe quel mot, pas à quelle fréquence.** La marque écrit « Pli » sur chaque
+écran : le texte, lui, dit **« il »**. Le mot ne s'écrit que là où la marque n'est pas
+(19/08/2026 — il était à 26 occurrences sur 187 mots visibles, il en reste 2).
 
 **On ne dit pas** — ouvrir · envoyer un message · créer · valider · champ · formulaire ·
 compte · notification · erreur · studio · créateur · carte · expiré.
@@ -72,9 +77,9 @@ Un titre, une voix, jusqu'à trois faits, une action. Au-delà, c'est un autre t
 | `--trait` | `rgba(20,16,14,.16)` |
 | `--carmin-pointille` | `rgba(200,30,51,.55)` |
 
-`.etiquette--fine` à **`.62`**, pas `.5`. Aplats mesurés : rideau `#743c3b` → `#440b10`,
-drapé `#944850` / `#904a53`. Voiles d'image : pleine page sur encre `.68`, bandeau `.82`,
-souvenir `.85`.
+`.etiquette--fine` à **`.62`**, pas `.5` — mais **opacité pleine sur carmin**, où `.62`
+tombe à 2,7:1. Aplat mesuré du drapé : `#944850` / `#904a53`. Voiles d'image : pleine page
+sur encre `.68`, bandeau `.82`, souvenir `.85`.
 
 ## La typographie (design-system.md)
 
@@ -89,10 +94,15 @@ souvenir `.85`.
 A1 n'appelle que **trois familles** — Pinyon, Newsreader, Space Mono. **Bodoni commence à
 A2.** `font-display: block`, jamais `swap`.
 
-Sur A1 le titre est commun — « Un pli t'attend. » — et **la promesse suit le type** : celle
-de l'invitation est en dur dans le document, les trois autres la remplacent au décodage.
+Sur A1 le titre est commun — « Il n'attendait que toi. » — et **la promesse suit le type** :
+celle de l'invitation est en dur dans le document, les trois autres la remplacent au
+décodage.
 Aucune ne chiffre quoi que ce soit. Les quatre phrases sont dans
 [parcours.md](../docs/parcours.md#a1--lattente).
+
+**A1 ne porte aucune image** (19/08/2026). Papier crème et grain, texte à l'encre, volet
+carmin avec son fil d'ombre — c'est la maquette. Le rideau y coûtait 614 ko préchargés dans
+la même seconde que les polices que le texte attend.
 
 ## Le geste (design-system.md, fluidite.md)
 
@@ -106,7 +116,17 @@ Aucune ne chiffre quoi que ce soit. Les quatre phrases sont dans
 | entrée | `9 %` |
 | courbe | `cubic-bezier(.32,.72,0,1)` — le jeton s'appelle `--courbe` |
 | invite du volet | `translateY(-9px)`, `2,6 s` — **arrêtée** au toucher, pas mise en pause |
-| `prefers-reduced-motion` | pas d'invite, ouverture à `120 ms` |
+| `prefers-reduced-motion` | pas d'invite, ouverture à `120 ms`, pas de respiration sur C5, aucun écran ne se pose |
+
+**On n'anime pas pour animer.** Trois emplois, et pas un quatrième : les deux couches suivent
+le doigt · l'écran se pose en `160 ms` **quand un tap l'a demandé**, jamais au chargement ·
+ce qui se touche répond en `120 ms` d'opacité. Plus deux mouvements décoratifs nommés,
+l'invite du volet et la respiration de C5.
+
+**Une durée CSS relue en JS se convertit, elle ne se `parseFloat` pas.** Le minifieur du
+build réécrit `460ms` en `.46s` : `parseFloat` en tire 0,46, et le dépliage a claqué en une
+image pendant tout le jalon 2 (19/08/2026, `geste.ts`). Les réglages sans unité — `--seuil`,
+`--elan`, `--caoutchouc`, `--entree` — sont hors d'atteinte.
 
 Le seul chemin autorisé :
 
@@ -125,9 +145,11 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 
 ## Le chargement (chargement.md, hebergement.md)
 
-- **A1 en 5 requêtes** : le document, trois polices préchargées, une peinture.
-- Vague 1 **≤ 14 ko gzip** — le build échoue au-delà. Mesuré le 19/08/2026 : **12,26 ko**,
-  tout le lecteur dedans (5,86 au jalon 2, avant A2, le geste, la réponse et le journal).
+- **A1 en 4 requêtes** : le document et trois polices préchargées. **Aucune image** — A1 est
+  sur papier crème depuis le 19/08/2026, et rien d'autre n'est préchargé.
+- Vague 1 **≤ 14 336 octets gzip** — le build échoue au-delà. Mesuré le 19/08/2026 :
+  **13 131 octets**, tout le lecteur dedans (5 998 au jalon 2, avant A2, le geste, la
+  réponse, le journal, C2 et C5).
 - Les trois polices d'A1 : **52,6 ko** mesurés, cible 90.
 - Un `#p=` lance son `fetch` **en toute première instruction**.
 - Budgets comptés **en gzip** (Pages ne sert pas de brotli) et **cache vide**

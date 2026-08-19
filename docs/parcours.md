@@ -21,7 +21,7 @@ enchaînent, ce qui les déclenche, et ce qui se range où.
                       │ non
                       ▼
                  A1  l'attente
-                      │  ⟵ le geste : glisser vers le haut
+                      │  ⟵ le geste : tirer la pliure vers le haut
                       ▼
               ✎ écrire au journal
                       │
@@ -59,19 +59,31 @@ qui s'ouvre.
 ## A1 · l'attente
 
 Commune aux quatre types ; seule la promesse change. Numéro, promesse en voix,
-« déposé par a. », et le volet carmin qui invite. Le fond est le rideau, la seule image
-des états fermés — elle ne dit rien du contenu, c'est tout son intérêt
-([design-system.md](design-system.md#les-deux-images-du-produit)).
+« déposé par a. », et le volet carmin qui invite.
 
-Le titre est commun — **« Un pli t'attend. »** — et la promesse suit le type. La phrase de
-la maquette, « Il ne se lira qu'une fois », devient fausse dès que le journal existe :
+**Le fond est le papier crème, et A1 ne porte aucune image** — c'est ce que la maquette
+montre, et c'est la raison d'être de cet écran : il doit se peindre avant tout le reste. Le
+rideau y a vécu du jalon 2 au 19/08/2026 ; il coûtait 614 ko préchargés en même temps que
+les trois polices que le texte, lui, attend vraiment
+([.claude/decisions.md](../.claude/decisions.md),
+[chargement.md](chargement.md#vague-2--ce-qui-est-préchargé-et-rien-dautre)). Les peintures
+commencent à A2, quand le pli est ouvert.
+
+Le titre est commun — **« Il n'attendait que toi. »** — et la promesse suit le type.
+
+Il a dit « Un pli t'attend. » du jalon 2 au 19/08/2026, et cette phrase-là n'a pas disparu :
+elle est passée **dans l'aperçu du lien** ([partage.md](partage.md)), le seul endroit où la
+marque n'est pas à l'écran et où le mot « pli » gagne donc sa place. Sur A1 elle disait au
+lecteur le nom du produit, écrit trois centimètres au-dessus, et le titre ne s'adressait pas
+à elle. La phrase de la maquette, « Il ne se lira qu'une fois », est fausse depuis que le
+journal existe :
 
 | Type | La promesse |
 |---|---|
-| invitation | Il ne s'ouvre qu'une fois. Ensuite il reste dans tes plis. |
-| pensée | Rien à répondre. Tu peux la lire debout. |
-| poème | Prends le temps. Il n'y a rien à répondre. |
-| souvenir | Une image, une ligne. Tu sauras tout de suite quel jour c'était. |
+| invitation | Il ne s'ouvre qu'une fois. Ensuite il est à toi. |
+| pensée | Rien à répondre. Lis-la où tu veux. |
+| poème | Prends ton temps. Celui-là se lit lentement. |
+| souvenir | Une image, une ligne. Tu sauras tout de suite. |
 
 Elles viennent des écrans d'attente du design — A1 et B0a-c — débarrassées de ce qu'elles
 comptaient : une maquette sait qu'il y a quatre strophes, un gabarit ne le sait pas. **Aucune
@@ -83,8 +95,8 @@ rideau ne dit rien du contenu, elle non plus.
 
 Celle de l'invitation est **écrite en dur dans le document** : c'est elle qui se peint avant
 le décodage, et les trois autres la remplacent quand le lien a livré son type, dans la même
-frame que le numéro et la signature. Le document a grossi de 379 octets gzip le 19/08/2026 —
-11 988 sur les 14 ko du plafond ([chargement.md](chargement.md#le-budget-écran-par-écran)).
+frame que le numéro et la signature. Ce que le document pèse est mesuré à chaque build, et
+le build échoue au-dessus du plafond ([chargement.md](chargement.md#le-budget-écran-par-écran)).
 
 ## Le dépliage
 
@@ -124,8 +136,8 @@ brief demandait — elle est déjà dans le gabarit, elle ne coûte rien.
 
 Trois mots, un seul tap : *oui, j'y serai* · *peut-être* · *je ne peux pas*.
 
-**La ligne libre se tape dans WhatsApp**, pas ici — l'écran le dit (« un seul mot suffit ·
-tu pourras ajouter une ligne juste après ») et le message part avec son curseur au bout. Le
+**La ligne libre se tape dans WhatsApp**, pas ici — l'écran le dit (« un mot suffit · le
+reste, tu l'écriras toi-même ») et le message part avec son curseur au bout. Le
 produit n'a pas de ligne de saisie sur A3, et n'en aura pas : ce serait un second choix sur
 un écran qui n'en veut qu'un, et une chose de plus à écrire avant de répondre. Le champ
 `ligne` du journal existe donc, et **vaut toujours `null`** — voir
@@ -177,7 +189,7 @@ fichier qu'on n'a pas, et le réseau a marché.
 
 **C2 est un rappel, pas le pli.** Sa maquette (`design/canevas/`) en fait un écran de
 synthèse, et c'est ce qu'on suit : ce qu'elle a répondu, quand, la griffe, et les faits —
-le jour, l'heure, le lieu. Le pli entier est à un tap, sous « relire le pli », et c'est là
+le jour, l'heure, le lieu. Le pli entier est à un tap, sous « le relire », et c'est là
 seulement que le mot remplace « répondre » : on ne répond pas deux fois. Trois écarts à cette
 maquette :
 
@@ -246,9 +258,13 @@ L'aperçu en haut à droite se remplit pendant la frappe. En dessous, les lignes
 Le titre · Ton mot · Quand · Où · Signé — « Quand » et « Où » n'existant que pour
 l'invitation.
 
-Le compteur de signes du titre s'étend au corps, avec le plafond mesuré sur les deux
-téléphones (voir [architecture.md](architecture.md#la-longueur-du-lien)). Le bouton reste
-inactif tant que le texte principal est vide.
+Le compteur de signes du titre s'étend au corps. Il porte sur **ce que le papier peut
+tenir** — mesuré dans un vrai pli déplié
+([donnees.md](donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé)) — et **pas sur la
+longueur du lien**, qui est une des quatre mesures ouvertes et se fait sur les deux
+téléphones ([architecture.md](architecture.md#la-longueur-du-lien)). Les deux se
+confondent facilement : l'une est la place sur la page, l'autre ce qu'une conversation
+transporte. Le bouton reste inactif tant que le texte principal est vide.
 
 ## D2p · quel poème
 
@@ -279,7 +295,8 @@ ramène à la liste, jamais à des textes qui n'existent pas.
 
 Deux corrections à la maquette :
 
-- **Le lien ne s'affiche pas.** `pli.re/015-vhtq` tient sur une ligne, un vrai payload non.
+- **Le lien ne s'affiche pas.** L'adresse d'un poème tient sur une ligne, un vrai payload
+  non — la maquette montrait `pli.re/015-vhtq`, un domaine que le produit n'a pas pris.
   La ligne de lien est remplacée par les deux actions : **envoyer** (partage natif) et
   **copier le lien**.
 - **« lien valable 30 jours » disparaît** de E1 : il n'y a plus d'expiration.
@@ -320,9 +337,10 @@ construit — **sa forme se reprendra le jour où il s'écrira**, pas avant.
                                         stdout : nº 015 → leo-bernard38.github.io/Pli/#p=015-vhtq
 ```
 
-J'écris le poème à mon bureau, dans un `.md` à front-matter. Une ligne vide sépare deux
-strophes — et **une strophe est une page**. La moulinette encode, met l'index à jour et
-m'imprime le lien fini. Je pousse. Le contrat complet est dans
+J'écris le poème à mon bureau, dans un `.md` à front-matter. **Une ligne vide sépare deux
+strophes**, et c'est toute la syntaxe. Elles se suivent à la lecture : le poème défile, il
+ne pagine pas ([design-system.md](design-system.md#les-cinq-règles)). La moulinette encode,
+met l'index à jour et m'imprime le lien fini. Je pousse. Le contrat complet est dans
 [donnees.md](donnees.md#3-le-poème).
 
 ---

@@ -23,7 +23,7 @@ import {
   type Reponse,
 } from '../lib/journal.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
-import { ecrire, oublierLaPeinture, ETIQUETTES } from './a1.ts'
+import { ecrire, ETIQUETTES } from './a1.ts'
 import { preparer } from './fond.ts'
 import { armer, type Geste } from './geste.ts'
 import { chemin, journal, rappel, rappeler, refermer } from './plis.ts'
@@ -64,15 +64,62 @@ const dessous = document.querySelector<HTMLElement>('.pli__dessous')
 document.querySelector('#reessayer')?.addEventListener('click', () => location.reload())
 
 /**
+ * UN ÉCRAN QU'ELLE A DEMANDÉ SE POSE ; UN ÉCRAN QUI ARRIVE, JAMAIS.
+ *
+ * On n'anime pas pour animer. Le fondu ne sert qu'une chose : dire que **c'est son tap qui
+ * a produit cet écran**. Il ne s'applique donc qu'après une action dans la page — « tes
+ * plis ↑ » depuis A4, une entrée du journal, « le relire ».
+ *
+ * **Le premier écran ne se pose jamais.** A1, C4, C5, hors ligne arrivent avec la page : les
+ * faire apparaître retarderait le premier texte, qui est tout ce que ce produit défend
+ * (docs/chargement.md). Un chargement n'a pas à être accompagné, il a à être court.
+ *
+ * 160 ms, en `opacity` seule, et par l'API d'animation plutôt qu'une transition CSS :
+ * `geste.ts` écrit `style.transition` **en ligne** sur les deux couches et l'effacerait.
+ * La durée est ici, en clair, et non dans `tokens.css` : le minifieur du build y réécrit
+ * `160ms` en `.16s`, et c'est exactement ce qui avait cassé le dépliage (geste.ts).
+ */
+const POSE = 160
+const CALME = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+/**
+ * Vrai tant qu'on est sur l'écran que la page a apporté.
+ *
+ * Le premier écran vient du chargement ; **tous les suivants viennent d'un `hashchange`**,
+ * et un hash ne change pas tout seul — c'est elle qui a touché quelque chose. L'écouteur
+ * est posé avant `suivre()`, donc il tombe avant le routeur sur le même événement.
+ */
+let chargement = true
+window.addEventListener('hashchange', () => {
+  chargement = false
+})
+
+function poser(ecran: HTMLElement): void {
+  if (chargement || CALME.matches) return
+  ecran.animate([{ opacity: 0 }, { opacity: 1 }], {
+    duration: POSE,
+    easing: 'cubic-bezier(.32,.72,0,1)',
+  })
+}
+
+/**
  * Un seul écran à la fois, et jamais deux. `hidden` seul ne suffit pas : les couches sont
  * en `display: flex`, une déclaration d'auteur qui bat la feuille du navigateur — le
  * gabarit porte la règle qui va avec (docs/parcours.md#larrivée).
  */
 function montrer(ecran: HTMLElement | null): void {
   if (cadre) cadre.hidden = false
+  // Ce qui était à l'écran AVANT, et non « ce qui était masqué » : C1, C2 et C3 sont
+  // fabriqués par `plis.ts` et arrivent donc dans le document sans jamais avoir porté
+  // `hidden`. Seul un écran qui en remplace un autre se pose — revenir sur celui qui est
+  // déjà là ne doit rien rejouer.
+  const avant = [...(cadre?.querySelectorAll<HTMLElement>('.pli__dessus') ?? [])].find(
+    (couche) => !couche.hidden,
+  )
   for (const couche of cadre?.querySelectorAll<HTMLElement>('.pli__dessus') ?? []) {
     couche.hidden = couche !== ecran
   }
+  if (ecran && ecran !== avant) poser(ecran)
   // La couche du dessous ne se montre que pour elle-même — la relecture, qui n'a pas de
   // couche du dessus. Le geste, lui, la découvre en tirant : il ne passe pas par ici.
   if (dessous && ecran) dessous.hidden = true
@@ -81,6 +128,12 @@ function montrer(ecran: HTMLElement | null): void {
 /**
  * A3 et A4 partent avec leur pli. Elles sont ajoutées au cadre, pas au document : un
  * second lien dans la même page en trouverait deux, dont une avec le mauvais numéro.
+ *
+ * Elles partent aussi à **chaque changement d'adresse**, et c'est ce qui manquait : ce
+ * sont les seules couches que `montrer()` ne commande pas — elles vivent au-dessus des
+ * `.pli__dessus`, en z-index 3 et 4. Depuis A4, « tes plis ↑ » changeait bien le hash et
+ * C1 se construisait bien : il se construisait **sous A4**, qui le recouvrait entièrement.
+ * Le chemin principal du jalon 5 ne menait donc nulle part, sans un mot.
  */
 function retirerLesCouchesQuiMontent(): void {
   for (const vieille of cadre?.querySelectorAll('.pli__monte') ?? []) vieille.remove()
@@ -283,11 +336,10 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
     auSeuil: () => {
       aRanger = entreeDuPli
     },
-    // Le pli est déplié : l'entrée s'écrit, et A1 rend sa peinture. Deux textures décodées
-    // au maximum, et A2 vient d'en poser une.
+    // Le pli est déplié : l'entrée s'écrit, et le poème reprend son doigt. A1 n'a plus
+    // de peinture à rendre depuis qu'il n'en porte plus (src/lecteur/a1.ts).
     auDepliage: () => {
       rangerAuJournal()
-      oublierLaPeinture()
       rendreLeDefilement()
     },
   })
@@ -318,7 +370,6 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
 async function relireLePli(pli: Pli, mot: string | null): Promise<void> {
   if (!dessous) return
   const mienne = generation
-  retirerLesCouchesQuiMontent()
   // La même vague 3 que le dépliage, et le même A2 au bout : un pli relu est le pli, pas
   // un résumé. Il n'y a simplement plus de feuille à tirer par-dessus.
   await preparer(dessous, pli, ETIQUETTES[pli.t])
@@ -330,6 +381,7 @@ async function relireLePli(pli: Pli, mot: string | null): Promise<void> {
   // reprend sa place et redevient atteignable (docs/fluidite.md#ce-qui-a-le-droit-de-bouger).
   dessous.style.transform = 'none'
   dessous.inert = false
+  if (dessous.hidden) poser(dessous)
   dessous.hidden = false
   // Un poème relu défile comme un poème déplié : il n'y a ici aucun geste à attendre.
   rendreLeDefilement()
@@ -344,7 +396,6 @@ async function relireLePli(pli: Pli, mot: string | null): Promise<void> {
 async function montrerLeRappel(pli: Pli, reponse: Reponse): Promise<void> {
   if (!cadre) return
   const mienne = generation
-  retirerLesCouchesQuiMontent()
   const ecran = await rappel(cadre, pli, reponse, () => {
     if (mienne === generation) void relireLePli(pli, reponse.mot)
   })
@@ -362,6 +413,9 @@ async function montrerLeJournal(): Promise<void> {
 suivre((route) => {
   rangerAuJournal()
   reprendreLeDefilement()
+  // Une adresse qu'on quitte emporte ses couches qui montent : A3 et A4 appartiennent au
+  // pli qu'on vient de lire, pas à l'écran qui arrive.
+  retirerLesCouchesQuiMontent()
   const mienne = ++generation
 
   if (route.ecran === 'journal') {
@@ -416,7 +470,6 @@ suivre((route) => {
     ({ pli, payload }) => {
       if (attente !== null) clearTimeout(attente)
       if (mienne !== generation) return
-      retirerLesCouchesQuiMontent()
 
       // L'arrivée décide l'écran d'après le journal, jamais d'après le seul lien : une
       // réponse déjà notée mène à C2, un dépliage déjà noté à C3

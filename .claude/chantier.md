@@ -22,10 +22,9 @@ dont la forme dépend de la **mesure 4** — elle ne se simule pas, la page rest
 
 **Jalon 4 — l'atelier.** Le code est écrit, relu et commité en trois lots : le socle (le
 tiroir, la garde à deux modules, les deux builds), D0 et D4, puis D1 à D3 avec le partage.
-Un pli se compose et se dépose depuis le téléphone, sans passer par le code. Deux gestes
-manuels restent, et un seul bloque : **l'empreinte du seuil**, à fabriquer en local avec
-`/seuil` et à recopier dans `src/atelier/seuil.ts` — tant qu'elle est vide, rien ne passe la
-porte, et c'est délibéré.
+**L'empreinte du seuil est posée**, la porte s'ouvre, et un pli se compose et se dépose
+depuis le téléphone sans passer par le code. Ce qui reste est à faire sur les deux
+téléphones, et rien n'y bloque.
 
 **Jalon 3 — la boucle.** Écrit, relu et commité en deux lots : le module du journal, puis A3
 et A4 avec le passage à WhatsApp. L'échange fonctionne de bout en bout dans Chromium. Ce qui
@@ -48,18 +47,20 @@ journal se lit.
 - [x] `design/` — l'archive figée, dont les cinq peintures dans `design/handoff/assets/`
 - [x] `public/icones/` — icônes, manifeste et `og.png`, à servir tels quels
 - [x] `scripts/icones.py` — la planche des icônes
+- [x] `scripts/plier.mjs`, `plier.sh`, `plier.bat` — la moulinette du poème
 - [x] `.claude/` — relecteurs, commandes, gardes
 - [x] le socle npm — `package.json`, `tsconfig.json`, `tsconfig.isomorphe.json`, `vite.config.ts`
-- [x] `src/lib/` — `codec.ts`, `dates.ts`, `routeur.ts`, `journal.ts`, `tiroir.ts`, avec
-      leurs tests
+- [x] `src/lib/` — `codec.ts`, `dates.ts`, `routeur.ts`, `journal.ts`, `tiroir.ts`,
+      `poeme.ts`, avec leurs six tests
 - [x] les deux entrées — `index.html`, `atelier/index.html`
 - [x] `src/lecteur/` — `main.ts`, `a1.ts`, `a2.ts`, `reponse.ts`, `geste.ts`, `fond.ts`,
       `plis.ts` (`plateau.ts` est parti avec le plein cadre, 19/08/2026)
 - [x] `polices-source/` et `src/fonts/` — les quatre familles, sources et sous-ensembles
 - [x] `src/atelier/` — `main.ts`, `seuil.ts`, `reglages.ts`, `type.ts`, `textes.ts`,
-      `apercu.ts`, `lien.ts`, `deposes.ts`, `vue.ts`
+      `apercu.ts`, `lien.ts`, `deposes.ts`, `poemes.ts`, `vue.ts`
 - [x] `src/styles/` — `tokens.css`, `pli.css`, `depot.css` et les feuilles des types
-- [x] `src/textures/` — les cinq peintures, en définition native
+- [x] `src/textures/` — les cinq peintures, en définition native. **Quatre sont servies** :
+      le rideau est sorti du build avec l'image d'A1 (19/08/2026)
 - [x] `src/fleches.html` — les deux tracés
 
 ## Jalon 0 — socle
@@ -253,7 +254,8 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
       que `.type` et `.depose` s'imposent — reste-t-elle franchissable au pouce ?
 
 **Fin du jalon :** je compose et j'envoie depuis mon téléphone, sans passer par le code.
-Vraie dès que l'empreinte du seuil est posée.
+Vraie depuis que l'empreinte du seuil est posée — reste à le faire pour de bon, sur les
+deux téléphones.
 
 ### Ce que la revue de D5 a trouvé
 
@@ -501,6 +503,83 @@ le document qui part chez elle. **Le budget serre maintenant** — 13 266 sur 14
 C5 et l'écran hors ligne : c'est la première réserve à prendre le jour où il faudra de la
 place. Le fragment reste monolithique pour n'avoir qu'une
 chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip gênent.
+
+## La revue de tout, au navigateur — 19/08/2026
+
+Une passe sur le code **et** la doc, sur le build ouvert dans un navigateur. Ce qui suit
+n'était visible dans aucun diff : `verifie`, `types` et `test` passaient tous les trois, et
+aucun relecteur n'avait rien vu. Le détail et le pourquoi sont dans
+[decisions.md](decisions.md).
+
+- [x] **A1 n'a plus d'image** — papier crème, comme la maquette. 4 requêtes au lieu de 5,
+      **89 ko au lieu de 703**, et le rideau sort du build. `.volet__ombre`, que `pli.css`
+      portait sans que rien ne l'écrive, est posée
+- [x] **A3 et A4 recouvraient le journal** — depuis A4, « tes plis ↑ » construisait bien C1,
+      **sous** A4. Le chemin principal du jalon 5 ne menait nulle part
+- [x] **le cadre défilait de 180px au clavier** — `overflow: hidden` fait du pli un conteneur
+      de défilement, et le focus du bouton « déplier » l'y faisait glisser. `clip` le referme
+- [x] **`refermer()` ne reposait pas les couches** quand le pli n'était pas ouvert : après une
+      relecture, « répondre » d'A2 se ramassait au Tab depuis A1
+- [x] **trois peaux de navigateur oubliées dans l'atelier** — le retrait de 40px des `<ul>` de
+      D5 et D2p, la bordure système de `.conduite__retour` sur les six écrans, et le filet de
+      focus peint sur toute la hauteur de l'écran
+- [x] **le titre manquait à l'aperçu de D2** — `safe` était décrit en commentaire depuis le
+      jalon 4 et n'avait jamais été écrit
+- [x] **le code mort** — `Depot.payload`, le compteur module de l'atelier, le paramètre `pli`
+      de `tete()`, `.titre--section`, `#a4 .action`, trois commentaires orphelins
+- [x] **la doc remise d'aplomb** — `@layer` qu'on n'emploie pas, « deux entrées Vite » qui
+      sont deux builds, `poeme.ts` absent de l'arborescence, cinq tests annoncés pour six,
+      « une strophe est une page » qui contredisait le défilement, le compteur de D2 renvoyé
+      à la mauvaise mesure, quatre cases d'accessibilité faites mais non cochées, l'invite
+      « en pause » que `fluidite.md` avait déjà corrigée en « arrêtée »
+- [x] **`verifie.mjs` cesse de crier ce qu'il a déjà accepté** — plus aucun grief permanent
+
+Ce que la passe a **regardé sans y toucher**, et qui appartient à l'auteur :
+
+- [ ] **le contenu du volet d'A1 est collé en haut**, et les deux sources du design ne disent
+      pas la même chose : le prototype `handoff/lecteur.html` le pose à 50px du haut, le
+      canevas **Pli — Maquettes** l'aligne en bas avec 30px de pied. Le dépôt suit le
+      prototype. À 34 % de 844px, ça laisse **environ 190px de carmin vide** sous « glisser
+      vers le haut ». `docs/` ne tranche pas — c'est une composition, elle se choisit
+- [ ] **l'aperçu de D2 ne peut pas tout montrer** d'une invitation remplie. Il réserve les
+      34 % du volet — qui appartient à A1 — pour composer le contenu d'A2, qui, lui, n'a pas
+      de volet mais un bandeau de 46 %. Depuis `safe`, ce qui déborde sort par le bas au lieu
+      du haut : le titre revient, les faits et la signature se coupent. La vraie question est
+      ce que l'aperçu doit montrer, et elle n'a pas de réponse dans `docs/`
+- [ ] **« glisser vers le haut » ou « tirer la pliure vers le haut »** — le prototype dit le
+      premier, le canevas le second, et « la pliure » est un mot du lexique. Rien ne tranche
+- [ ] **le compteur de D2 se lit mal** : il affiche « 3 signes » pour dire qu'il en reste
+      trois, et « 16 signes » sur une ligne vide. Ce qui reste et ce qui est écrit se lisent
+      pareil
+
+## Les mouvements, révisés — 19/08/2026
+
+Le geste était la **seule** transition du produit, et il ne tournait pas. Mesuré sur le
+build, pas sur `npm run dev`.
+
+- [x] **le dépliage s'anime enfin.** Le minifieur réécrit `--ouvre: 460ms` en `.46s`, et
+      `parseFloat` en tirait **0,46** : le module posait `transform 0.46ms` et la feuille
+      sautait en une image, en production seulement. Le doigt n'était pas touché — seul le
+      relâchement claquait, ce qu'aucune capture ne montre. La courbe se lit maintenant dans
+      les chiffres : −360 → −644 en 130 ms, puis −827 → −831 sur les dernières
+- [x] **ce qui se touche répond au doigt.** Zéro `:active` dans tout le produit, et `.pli`
+      coupe le halo du navigateur : taper « répondre » ou une entrée du journal ne produisait
+      rien jusqu'à l'écran suivant
+- [x] **un écran demandé se pose, un écran chargé jamais.** 160 ms d'opacité après un tap ;
+      A1, C4, C5 et hors ligne arrivent avec la page et ne fondent pas — un chargement n'a
+      pas à être accompagné, il a à être court
+- [x] **la marque cesse de disparaître au survol.** `a:hover` la repeignait en encre, sur
+      C3 qui est en encre
+- [x] **« copié » revient à « copier le lien »** au bout de 1,6 s. Il restait pour toujours,
+      et le dépôt suivant retrouvait un bouton qui prétendait avoir déjà copié
+
+Ce que la passe a **regardé sans y toucher** :
+
+- [ ] **le journal arrive d'un bloc.** Un décalage ligne à ligne serait joli et ne servirait
+      rien : c'est un sommaire, on le balaye. Écarté, pas oublié
+- [ ] **`.type[aria-pressed]` bascule sec.** Le fond carmin à 5 % apparaît d'un coup. C'est
+      un état, pas un mouvement — à rouvrir seulement si le choix du type paraît sourd sur
+      le téléphone
 
 ## Ce qui reste ouvert
 

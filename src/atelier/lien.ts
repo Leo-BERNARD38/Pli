@@ -14,11 +14,6 @@ import { noterUnDepot } from '../lib/tiroir.ts'
 /** L'adresse du produit. Elle se gèle au premier pli envoyé (CLAUDE.md#les-invariants). */
 const ADRESSE = `https://leo-bernard38.github.io${import.meta.env.BASE_URL}`
 
-/** Ce qu'un dépôt a produit, une fois le lien fabriqué. */
-export interface Depot {
-  adresse: string
-  payload: string
-}
 
 /** L'adresse d'un pli, depuis son seul payload — la même règle des deux côtés. */
 export function adresseDuPayload(payload: string): string {
@@ -35,15 +30,16 @@ export function adresseDuPoeme(nom: string): string {
 }
 
 /**
- * Fabrique le lien, et le note dans mon historique.
+ * Fabrique le lien, et le note dans mon historique. Rend l'adresse, et rien d'autre :
+ * le payload est déjà rangé au tiroir, et D3 n'en a que faire.
  *
  * Le dépôt est noté **avant** que je partage : ce qui part dans une conversation ne se
  * rattrape pas, et un lien fabriqué puis perdu serait un pli sans trace de mon côté.
  */
-export async function deposerLePli(pli: Pli): Promise<Depot> {
+export async function deposerLePli(pli: Pli): Promise<string> {
   const payload = await encoder(pli)
   noterUnDepot({ n: pli.n, t: pli.t, ti: pli.ti, c: payload })
-  return { adresse: adresseDuPayload(payload), payload }
+  return adresseDuPayload(payload)
 }
 
 /**
@@ -72,10 +68,19 @@ export function tenirLeLien(ecran: HTMLElement): (adresse: string, n: number) =>
     })
   })
 
+  // « copié » disait la vérité une fois, puis mentait : le mot restait pour toujours, et le
+  // dépôt suivant retrouvait un bouton qui prétendait avoir déjà copié. Il revient de
+  // lui-même — un accusé de réception, pas un état.
+  let retour = 0
   copier?.addEventListener('click', () => {
     void navigator.clipboard?.writeText(adresse).then(
       () => {
-        if (copier) copier.textContent = 'copié'
+        if (!copier) return
+        copier.textContent = 'copié'
+        clearTimeout(retour)
+        retour = window.setTimeout(() => {
+          copier.textContent = 'copier le lien'
+        }, 1600)
       },
       () => {
         // Le presse-papier peut être fermé : le lien reste dans l'historique du tiroir.
@@ -85,7 +90,7 @@ export function tenirLeLien(ecran: HTMLElement): (adresse: string, n: number) =>
 
   return (ou: string, n: number) => {
     adresse = ou
-    if (numero) numero.textContent = `Nº ${String(n).padStart(3, '0')}`
+    if (numero) numero.textContent = `nº ${String(n).padStart(3, '0')}`
     if (longueur) longueur.textContent = `${[...ou].length} signes`
     if (copier) copier.textContent = 'copier le lien'
     if (envoyer) envoyer.hidden = typeof navigator.share !== 'function'

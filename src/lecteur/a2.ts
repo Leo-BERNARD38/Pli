@@ -93,7 +93,7 @@ function fleche(): SVGSVGElement {
   return svg
 }
 
-function tete(pli: Pli, etiquette: string): HTMLElement {
+function tete(etiquette: string): HTMLElement {
   const e = element('header', 'tete')
   e.append(element('p', 'marque', 'Pli'), element('p', 'etiquette', etiquette))
   return e
@@ -128,11 +128,11 @@ export function construire(
     )
     // Sur un bandeau, la tête se pose DANS l'image, comme la maquette la montre ; sur une
     // page entière, l'image est une couche de fond et la tête reste dans le flux.
-    if (c.toile.forme === 'haute') image.append(tete(pli, etiquette))
+    if (c.toile.forme === 'haute') image.append(tete(etiquette))
     morceaux.push(image)
   }
 
-  if (!c.toile || c.toile.forme === 'pleine') morceaux.push(tete(pli, etiquette))
+  if (!c.toile || c.toile.forme === 'pleine') morceaux.push(tete(etiquette))
 
   const corps = element('div', `corps${c.reparti ? ' corps--reparti' : ''}`)
 
