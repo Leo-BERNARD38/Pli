@@ -57,8 +57,10 @@
          dépôt (docs/parcours.md#d4--le-tiroir). Ce qui est écrit est gardé : aucune
          action ne l'enregistre, la ligne suffit. -->
     <section class="ecran" id="d4" hidden>
+      <!-- Pas de retour ici, et c'est voulu : « continuer » ramène à D1, et D0 n'a rien
+           derrière lui. La conduite garde son pas à droite, comme partout ailleurs
+           (`.conduite__pas:only-child`, depot.css). -->
       <div class="conduite">
-        <button class="conduite__retour" type="button" data-va="d1" hidden>← le type</button>
         <p class="conduite__pas">le tiroir</p>
       </div>
 

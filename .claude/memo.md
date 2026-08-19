@@ -72,9 +72,9 @@ Un titre, une voix, jusqu'à trois faits, une action. Au-delà, c'est un autre t
 | `--trait` | `rgba(20,16,14,.16)` |
 | `--carmin-pointille` | `rgba(200,30,51,.55)` |
 
-`.etiquette--fine` à **`.62`**, pas `.5`. Aplats mesurés : rideau `#743c3b` → `#440b10`,
-drapé `#944850` / `#904a53`. Voiles d'image : pleine page sur encre `.68`, bandeau `.82`,
-souvenir `.85`.
+`.etiquette--fine` à **`.62`**, pas `.5` — mais **opacité pleine sur carmin**, où `.62`
+tombe à 2,7:1. Aplat mesuré du drapé : `#944850` / `#904a53`. Voiles d'image : pleine page
+sur encre `.68`, bandeau `.82`, souvenir `.85`.
 
 ## La typographie (design-system.md)
 
@@ -94,6 +94,10 @@ de l'invitation est en dur dans le document, les trois autres la remplacent au d
 Aucune ne chiffre quoi que ce soit. Les quatre phrases sont dans
 [parcours.md](../docs/parcours.md#a1--lattente).
 
+**A1 ne porte aucune image** (19/08/2026). Papier crème et grain, texte à l'encre, volet
+carmin avec son fil d'ombre — c'est la maquette. Le rideau y coûtait 614 ko préchargés dans
+la même seconde que les polices que le texte attend.
+
 ## Le geste (design-system.md, fluidite.md)
 
 | Réglage | Valeur |
@@ -106,7 +110,7 @@ Aucune ne chiffre quoi que ce soit. Les quatre phrases sont dans
 | entrée | `9 %` |
 | courbe | `cubic-bezier(.32,.72,0,1)` — le jeton s'appelle `--courbe` |
 | invite du volet | `translateY(-9px)`, `2,6 s` — **arrêtée** au toucher, pas mise en pause |
-| `prefers-reduced-motion` | pas d'invite, ouverture à `120 ms` |
+| `prefers-reduced-motion` | pas d'invite, ouverture à `120 ms`, pas de respiration sur C5 |
 
 Le seul chemin autorisé :
 
@@ -125,9 +129,11 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 
 ## Le chargement (chargement.md, hebergement.md)
 
-- **A1 en 5 requêtes** : le document, trois polices préchargées, une peinture.
-- Vague 1 **≤ 14 ko gzip** — le build échoue au-delà. Mesuré le 19/08/2026 : **12,26 ko**,
-  tout le lecteur dedans (5,86 au jalon 2, avant A2, le geste, la réponse et le journal).
+- **A1 en 4 requêtes** : le document et trois polices préchargées. **Aucune image** — A1 est
+  sur papier crème depuis le 19/08/2026, et rien d'autre n'est préchargé.
+- Vague 1 **≤ 14 336 octets gzip** — le build échoue au-delà. Mesuré le 19/08/2026 :
+  **13 131 octets**, tout le lecteur dedans (5 998 au jalon 2, avant A2, le geste, la
+  réponse, le journal, C2 et C5).
 - Les trois polices d'A1 : **52,6 ko** mesurés, cible 90.
 - Un `#p=` lance son `fetch` **en toute première instruction**.
 - Budgets comptés **en gzip** (Pages ne sert pas de brotli) et **cache vide**

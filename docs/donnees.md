@@ -1,7 +1,8 @@
 # Données
 
-Quatre jeux de données, quatre endroits, aucun serveur. Les sections 5 et 6 décrivent
-les deux mécanismes qui s'appuient dessus.
+Quatre jeux de données, quatre endroits, aucun serveur — sections 1, 3, 4 et 5. Les
+sections **2 et 6** décrivent les deux mécanismes qui s'appuient dessus : l'encodage, et la
+réponse WhatsApp.
 
 | Donnée | Où | Qui l'écrit |
 |---|---|---|
@@ -87,8 +88,9 @@ Le titre est le levier : à 64px, 22 signes font une troisième ligne de capital
 92px d'un coup, là où le paragraphe ci-dessus n'en veut que deux. D'où **16** — et « Tu es
 invitée » en fait 13.
 
-Ces plafonds sont ceux du **dépôt** : c'est l'atelier qui les tiendra, au jalon 4. Le lecteur,
-lui, ne fait plus confiance à personne — le corps coupe chez lui plutôt que de recouvrir la
+Ces plafonds sont ceux du **dépôt**, et c'est l'atelier qui les tient — D2 compte les signes
+qui restent, et refuse le dépôt au-delà ([parcours.md](parcours.md#d2--les-textes)). Le
+lecteur, lui, ne fait confiance à personne — le corps coupe chez lui plutôt que de recouvrir la
 marque ([integration.md](integration.md)).
 
 **À ne pas confondre avec la longueur du lien**, qui est une des quatre mesures ouvertes et

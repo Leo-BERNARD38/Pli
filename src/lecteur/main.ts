@@ -23,7 +23,7 @@ import {
   type Reponse,
 } from '../lib/journal.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
-import { ecrire, oublierLaPeinture, ETIQUETTES } from './a1.ts'
+import { ecrire, ETIQUETTES } from './a1.ts'
 import { preparer } from './fond.ts'
 import { armer, type Geste } from './geste.ts'
 import { chemin, journal, rappel, rappeler, refermer } from './plis.ts'
@@ -81,6 +81,12 @@ function montrer(ecran: HTMLElement | null): void {
 /**
  * A3 et A4 partent avec leur pli. Elles sont ajoutées au cadre, pas au document : un
  * second lien dans la même page en trouverait deux, dont une avec le mauvais numéro.
+ *
+ * Elles partent aussi à **chaque changement d'adresse**, et c'est ce qui manquait : ce
+ * sont les seules couches que `montrer()` ne commande pas — elles vivent au-dessus des
+ * `.pli__dessus`, en z-index 3 et 4. Depuis A4, « tes plis ↑ » changeait bien le hash et
+ * C1 se construisait bien : il se construisait **sous A4**, qui le recouvrait entièrement.
+ * Le chemin principal du jalon 5 ne menait donc nulle part, sans un mot.
  */
 function retirerLesCouchesQuiMontent(): void {
   for (const vieille of cadre?.querySelectorAll('.pli__monte') ?? []) vieille.remove()
@@ -283,11 +289,10 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
     auSeuil: () => {
       aRanger = entreeDuPli
     },
-    // Le pli est déplié : l'entrée s'écrit, et A1 rend sa peinture. Deux textures décodées
-    // au maximum, et A2 vient d'en poser une.
+    // Le pli est déplié : l'entrée s'écrit, et le poème reprend son doigt. A1 n'a plus
+    // de peinture à rendre depuis qu'il n'en porte plus (src/lecteur/a1.ts).
     auDepliage: () => {
       rangerAuJournal()
-      oublierLaPeinture()
       rendreLeDefilement()
     },
   })
@@ -318,7 +323,6 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
 async function relireLePli(pli: Pli, mot: string | null): Promise<void> {
   if (!dessous) return
   const mienne = generation
-  retirerLesCouchesQuiMontent()
   // La même vague 3 que le dépliage, et le même A2 au bout : un pli relu est le pli, pas
   // un résumé. Il n'y a simplement plus de feuille à tirer par-dessus.
   await preparer(dessous, pli, ETIQUETTES[pli.t])
@@ -344,7 +348,6 @@ async function relireLePli(pli: Pli, mot: string | null): Promise<void> {
 async function montrerLeRappel(pli: Pli, reponse: Reponse): Promise<void> {
   if (!cadre) return
   const mienne = generation
-  retirerLesCouchesQuiMontent()
   const ecran = await rappel(cadre, pli, reponse, () => {
     if (mienne === generation) void relireLePli(pli, reponse.mot)
   })
@@ -362,6 +365,9 @@ async function montrerLeJournal(): Promise<void> {
 suivre((route) => {
   rangerAuJournal()
   reprendreLeDefilement()
+  // Une adresse qu'on quitte emporte ses couches qui montent : A3 et A4 appartiennent au
+  // pli qu'on vient de lire, pas à l'écran qui arrive.
+  retirerLesCouchesQuiMontent()
   const mienne = ++generation
 
   if (route.ecran === 'journal') {
@@ -416,7 +422,6 @@ suivre((route) => {
     ({ pli, payload }) => {
       if (attente !== null) clearTimeout(attente)
       if (mienne !== generation) return
-      retirerLesCouchesQuiMontent()
 
       // L'arrivée décide l'écran d'après le journal, jamais d'après le seul lien : une
       // réponse déjà notée mène à C2, un dépliage déjà noté à C3

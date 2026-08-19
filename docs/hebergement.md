@@ -19,8 +19,8 @@ Deux workflows, et pas un de plus :
 
 | Workflow | Quand | Ce qu'il fait |
 |---|---|---|
-| `verif` | sur chaque PR | `npm ci`, `npm test` (codec et dates), `npm run build` |
-| `deploiement` | sur push vers `main` | le build, puis `actions/deploy-pages` |
+| `verif` | sur chaque PR | `npm ci`, `npm run verifie`, `npm test`, `npm run types`, `npm run build` |
+| `deploiement` | sur push vers `main` | `verifie`, les tests, le build, puis `actions/deploy-pages` |
 
 Node en version LTS, épinglée dans le workflow et dans `package.json` (`engines`) — le codec
 tourne des deux côtés, sa version de Node fait partie du contrat
@@ -111,10 +111,10 @@ vigilance est de ne pas y verser un jour les originaux des peintures.
 
 ## Avant le premier déploiement
 
-- [ ] `base: '/Pli/'` dans Vite — un sous-chemin de dépôt, pas la racine d'un hôte
-- [ ] `.nojekyll` dans `public/`, donc à la racine de `dist/` — et **pas** de `CNAME`
-- [ ] le dépôt nommé `Pli`, source de Pages = « GitHub Actions »
-- [ ] `404.html` en crème, qui renvoie à `leo-bernard38.github.io/Pli/`
-- [ ] `design/` absent de `dist/`
-- [ ] les balises `og:` servies dans le HTML statique ([partage.md](partage.md))
-- [ ] `curl` de vérification passé sur le domaine réel
+- [x] `base: '/Pli/'` dans Vite — un sous-chemin de dépôt, pas la racine d'un hôte
+- [x] `.nojekyll` dans `public/`, donc à la racine de `dist/` — et **pas** de `CNAME`
+- [x] le dépôt nommé `Pli`, source de Pages = « GitHub Actions »
+- [x] `404.html` en crème, qui renvoie à `leo-bernard38.github.io/Pli/`
+- [x] `design/` absent de `dist/` — il n'est importé par rien, Vite ne le voit pas
+- [x] les balises `og:` servies dans le HTML statique ([partage.md](partage.md))
+- [ ] **à la main, chez moi** : le `curl` de vérification passé sur l'adresse réelle

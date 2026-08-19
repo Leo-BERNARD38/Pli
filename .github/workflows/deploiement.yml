@@ -32,6 +32,9 @@ jobs:
       - run: npm ci
       - run: npm run verifie
       - run: npm test
+      # Les mêmes contrôles que `verif`, dans le même ordre : ce qui part chez elle ne se
+      # rattrape pas, et `main` peut recevoir un commit direct qu'aucune PR n'a relu.
+      - run: npm run types
       - run: npm run build
 
       # dist/ porte déjà .nojekyll et 404.html, copiés de public/. Pas de CNAME : le site

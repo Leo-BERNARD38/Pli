@@ -13,14 +13,15 @@ publiable.
 | Entrée | Pour qui | Contenu |
 |---|---|---|
 | `leo-bernard38.github.io/Pli/` | elle | les plis reçus (A1→A4), le journal (C1→C5) |
-| `leo-bernard38.github.io/Pli/atelier/` | moi | déposer, fabriquer le lien (D0→D4, E1) |
+| `leo-bernard38.github.io/Pli/atelier/` | moi | déposer, fabriquer le lien (D0→D5, D2p) |
 
 Quatre types de pli — `inv` invitation, `pen` pensée, `poe` poème, `sou` souvenir. Les trois
 courts voyagent **entièrement dans le fragment de l'URL** ; le poème est un fichier encodé du
 dépôt dont le lien ne porte que le numéro (`#p=015-vhtq`).
 
 TypeScript + Vite, **sans framework**, CSS natif, **zéro dépendance npm au runtime**. Deux
-entrées Vite. Routage par `hashchange` — Pages ne réécrit aucune URL, toute URL profonde
+**builds** séparés, un par entrée — pas deux entrées d'un même build, sinon Rollup sort un
+chunk commun et le document du lecteur perd son inlining. Routage par `hashchange` — Pages ne réécrit aucune URL, toute URL profonde
 tomberait en 404. Le fragment ne quitte jamais l'appareil : c'est **la** garantie du produit,
 d'où pas de chiffrement, seulement `deflate-raw` + base64url préfixé d'une version.
 
@@ -43,7 +44,7 @@ npm run dev        # les deux entrées
 npm run build
 npm run verifie    # la relecture déterministe — lexique, encres, invariants, mouvement
 npm run types      # deux passes : tout le projet, puis src/lib/ sans la bibliothèque DOM
-npm test           # codec.ts, dates.ts, le routeur — rien d'autre
+npm test           # les six modules de src/lib/ — ce qu'un lien parti ne pardonne pas
 ```
 
 Et ce qui tourne à côté, quand on y touche : `scripts/polices.py` (les quatre familles),
@@ -64,10 +65,12 @@ Un lien parti n'a plus de version : il est dans une conversation, pour toujours.
 4. **Rien de secret dans le dépôt.** Le numéro WhatsApp `w` ne vit que dans le tiroir et dans
    un lien déjà envoyé. Seule l'empreinte du seuil entre, jamais la date.
 5. **`plis-source/` ne se commite jamais.**
-6. **Tout accès au stockage passe par `journal.ts` ou `tiroir.ts`**, et par eux seuls — ses
+6. **Tout `localStorage` passe par `journal.ts` ou `tiroir.ts`**, et par eux seuls — ses
    plis à elle d'un côté, mes réglages d'atelier de l'autre, jamais mélangés. Dédoublonnage
    sur `h`, l'empreinte du payload — **jamais sur `n`**. La navigation privée dégrade
-   proprement.
+   proprement. Une exception, nommée et fermée : le drapeau du rechargement de secours vit
+   en `sessionStorage`, dans `fond.ts`, parce qu'il ne doit **pas** survivre à l'onglet —
+   ce serait une boucle de rechargement ([docs/mises-a-jour.md](docs/mises-a-jour.md)).
 7. **Aucun tiers, jamais.** Pas de CDN, pas de mesure d'audience, pas de framework, pas de
    polyfill. On cible iOS 26 et Android 16, deux appareils connus.
 8. **L'adresse se gèle au premier pli envoyé.** Aujourd'hui `leo-bernard38.github.io/Pli/`,
@@ -106,7 +109,13 @@ temps, un seul suffit.
 chiffre : c'est `grep`, `cat`, ou la fiche. Un sous-agent coûte le prix d'un contexte entier ;
 on le paie pour un jugement, jamais pour une lecture.
 
-**5 · Un refus n'attend pas.** On ne passe pas à l'étape suivante avec un refus derrière soi.
+**5 · Un écran se regarde.** Ouvrir le build dans un navigateur et traverser le parcours —
+les quatre types, le geste, le journal, l'atelier de D0 à D5 — trouve ce qu'aucune relecture
+de texte ne voit : une liste décalée de 40px, un bouton resté nu, un écran qui en recouvre
+un autre. C'est ce qui a trouvé les quatre plus grosses fautes du 19/08/2026, et aucun
+relecteur ne les avait vues.
+
+**6 · Un refus n'attend pas.** On ne passe pas à l'étape suivante avec un refus derrière soi.
 Puis on commite (`type: phrase courte en français, en minuscules`) et on coche l'étape dans
 `.claude/chantier.md`.
 

@@ -58,8 +58,8 @@ a {
    Ces deux lignes vivaient dans plis.css, la feuille du journal, demandée à la volée. Or
    `chemin()` transforme la marque en `<a>` dès A1, où cette feuille n'est jamais chargée :
    la marque tombait donc sur le `color: var(--carmin)` ci-dessus, et se retrouvait en
-   carmin sur le rideau — mesuré à 1,4:1 le 19/08/2026, aux trois largeurs. Elle appartient
-   au gabarit, pas au journal. */
+   carmin sur le fond sombre qu'A1 portait alors — mesuré à 1,4:1 le 19/08/2026, aux trois
+   largeurs. Elle appartient au gabarit, pas au journal. */
 a.marque,
 a.action {
   color: inherit;
@@ -100,14 +100,22 @@ a:hover {
    `container-type: size` ouvre les unités de conteneur à ce qui vit dedans (voir .corps,
    plus bas). Il est sans conséquence ici : les enfants du pli sont tous en
    `position: absolute; inset: 0`, aucun ne dicte sa taille, et le confinement de
-   disposition n'ajoute rien que `position: relative` et `overflow: hidden` ne fassent
-   déjà. */
+   disposition n'ajoute rien que `position: relative` et le rognage ne fassent déjà.
+
+   `overflow: clip` ET NON `hidden`, ET C'EST UNE RÉPARATION. Les deux rognent pareil, mais
+   `hidden` fait du pli un CONTENEUR DE DÉFILEMENT : A3 et A4, posées à `translateY(100%)`,
+   portent sa hauteur de défilement à deux écrans. Il suffisait alors qu'un élément prenne
+   le focus — le bouton « déplier », l'alternative au geste — pour que le navigateur fasse
+   défiler le pli de 180px pour le « révéler », et il n'en revenait jamais : A2 arrivait
+   amputée de sa tête et A4 dépassait par le bas. Mesuré le 19/08/2026, au clavier, sur une
+   invitation. `clip` n'est pas un conteneur de défilement : rien ne peut plus le faire
+   glisser. Le doigt, lui, n'a jamais été concerné — il ne donne pas le focus. */
 .pli {
   position: relative;
   width: 100%;
   height: 100dvh;
   container-type: size;
-  overflow: hidden;
+  overflow: clip;
   background: var(--creme);
   background-image: var(--grain);
   display: flex;
@@ -814,12 +822,6 @@ button.action {
    (docs/design-system.md#les-mains). */
 #a3 .titre {
   font-size: 52px;
-}
-
-/* A4 · le mot. L'action « tes plis ↑ » est posée mais muette — C1, le journal, est le
-   jalon 5. Elle ne se donne donc pas l'air d'agir. */
-#a4 .action {
-  cursor: default;
 }
 
 /* ==========================================================================

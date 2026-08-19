@@ -83,8 +83,10 @@ journal n'affiche aucune peinture.
 - **`will-change: transform` sur exactement deux éléments** : la feuille dessus, la page
   dessous. Posé au `pointerdown`, **retiré au `transitionend`**. Une propriété `will-change`
   laissée en place transforme chaque écran en couche permanente.
-- Les écrans hors champ sortent du rendu : `content-visibility: hidden` plutôt que d'être
-  gardés vivants.
+- Les écrans hors champ sortent du rendu, et le produit le fait **sans
+  `content-visibility`** : ce qui n'est pas à l'écran porte `hidden`, donc `display: none`,
+  qui ne coûte ni disposition ni peinture. La propriété avait été prescrite ici avant que le
+  gabarit existe ; elle n'a jamais eu de travail à faire.
 - Les textures sont des `<img>` dans leur couche, `object-fit: cover`. Le cadrage est réglé
   une fois par `object-position` ([design-system.md](design-system.md#les-images)) — jamais
   animé.

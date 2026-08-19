@@ -239,8 +239,15 @@ export function armer(p: Pieces): Geste {
   return {
     // Un autre lien arrive sans rechargement : le pli doit être refermé, et le prochain
     // dépliage doit compter pour un.
+    //
+    // Sans condition, et c'est une réparation. Un `if (!ouvert) return` avait l'air juste —
+    // pourquoi refermer ce qui est fermé ? — mais le geste ne referme pas seulement : il
+    // REPOSE les deux couches. La relecture d'un pli sort la couche du dessous de sa place
+    // (`transform: none`) et la rend au clavier (`inert = false`), parce qu'elle y est
+    // l'écran ; le lien suivant retrouvait alors un A2 posé à 0 et atteignable au Tab
+    // depuis A1 — « répondre » d'un pli qu'elle n'avait pas déplié. C'est la faute du
+    // jalon 3, revenue par une autre porte (mesuré le 19/08/2026, deux Tab depuis A1).
     refermer: () => {
-      if (!ouvert) return
       deplie = false
       poser(false)
     },

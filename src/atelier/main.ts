@@ -28,7 +28,7 @@ import { calerLeCompteur, prochainNumero, seuilFranchi, type Depose } from '../l
 
 import { poserLapercu } from './apercu.ts'
 import { tenirLesDeposes } from './deposes.ts'
-import { adresseDuPayload, adresseDuPoeme, deposerLePli, tenirLeLien, type Depot } from './lien.ts'
+import { adresseDuPayload, adresseDuPoeme, deposerLePli, tenirLeLien } from './lien.ts'
 import { nomDe, tenirLesPoemes } from './poemes.ts'
 import { laReponseEstPossible, tenirLeTiroir } from './reglages.ts'
 import { tenirLeSeuil } from './seuil.ts'
@@ -53,7 +53,6 @@ const mini = document.getElementById('mini')
 suivreLaVue(ecrans.values())
 
 let type: Type = 'inv'
-let numero = prochainNumero()
 
 /**
  * Montre un écran, et un seul.
@@ -166,9 +165,8 @@ const relireLesTypes = ecrans.get('d1')
  */
 async function deposer(): Promise<void> {
   if (!textes || !lien) return
-  numero = prochainNumero()
-  const depot: Depot = await deposerLePli(fabriquer(type, textes.lire(), numero))
-  lien(depot.adresse, numero)
+  const numero = prochainNumero()
+  lien(await deposerLePli(fabriquer(type, textes.lire(), numero)), numero)
   conduireLeLien('depot')
   montrer('d3')
 }

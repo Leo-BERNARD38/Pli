@@ -15,12 +15,17 @@ L'objectif chiffré ne bouge pas : **le texte d'A1 lisible en moins d'une second
 | Vague | Quand | Quoi | Budget |
 |---|---|---|---|
 | **1 · critique** | dans le document | HTML d'A1 + CSS inline + le module d'ouverture | **≤ 14 ko gzip, 1 requête** |
-| **2 · immédiate** | `preload` dans le `<head>` | 3 polices sous-ensemblées, puis le rideau | 3 requêtes + l'image |
-| **3 · arrière-plan** | après le premier rendu, en idle | la texture du type, Bodoni entier, le CSS du type, `journal.ts` | invisible |
+| **2 · immédiate** | `preload` dans le `<head>` | 3 polices sous-ensemblées, **et rien d'autre** | 3 requêtes |
+| **3 · arrière-plan** | après le premier rendu, en idle | la texture du type, Bodoni entier, le CSS du type, le module d'A3 | invisible |
 
-Cible d'ensemble : **A1 en cinq requêtes** — le document, trois polices, une peinture. Et
-rien de tiers, jamais : pas de CDN de polices, pas de mesure d'audience, pas une seule
-connexion en dehors de `leo-bernard38.github.io/Pli`.
+Cible d'ensemble : **A1 en quatre requêtes** — le document et trois polices. Aucune image :
+A1 est sur papier crème, et la première peinture du parcours est celle du type, en vague 3
+(19/08/2026). Et rien de tiers, jamais : pas de CDN de polices, pas de mesure d'audience,
+pas une seule connexion en dehors de `leo-bernard38.github.io/Pli`.
+
+`journal.ts` n'est pas dans cette table, et c'est voulu : il est **statique**, donc inliné
+dans le document avec le reste du module d'ouverture. L'écriture au seuil ne charge rien
+parce qu'il n'y a rien à charger.
 
 ## Vague 1 — le document se suffit à lui-même
 
@@ -53,7 +58,12 @@ La liste est fermée.
 | Pinyon Script | le mot « Pli », en haut à gauche d'A1 |
 | Newsreader ital. 300 | la voix — « Un pli t'attend. » |
 | Space Mono 700 | les étiquettes, « déposé par a. » |
-| `rideau-carmin-nuit.webp` | le fond des états fermés, en priorité **basse** |
+
+**Aucune image n'est préchargée**, et c'est le changement du 19/08/2026. Le rideau d'A1 y
+était, en priorité basse : 614 ko lancés dans la même seconde que les trois polices que le
+texte, lui, **attend** — `font-display: block` ne peint rien avant elles. A1 est passé sur
+papier crème, qui ne coûte pas une requête, et le premier écran a perdu 614 ko sans perdre
+une ligne ([.claude/decisions.md](../.claude/decisions.md)).
 
 **Bodoni n'est pas là**, et c'est nouveau : le `↑` de la pliure était son seul emploi sur
 A1. Les deux flèches du produit sont devenues des tracés SVG inline
@@ -81,25 +91,24 @@ préchargée et en même origine — puis l'écrit une fois, à sa place.
 Le risque assumé : si une police n'arrive jamais, le texte apparaît en police de secours au
 bout de trois secondes. C'est le bon échec.
 
-### Le rideau
+### Les peintures, quand elles arrivent
 
-C'est une image, elle passe donc après le texte, sans exception. `<img>` et non fond CSS :
-c'est le seul moyen d'avoir `fetchpriority`, `decoding` et `decode()`.
+Une peinture passe **après le texte, sans exception**, et A1 n'en porte plus aucune : la
+première du parcours est celle du type, chargée en vague 3 pendant qu'elle regarde le volet
+fermé. `<img>` et non fond CSS — c'est le seul moyen d'avoir `decoding` et `decode()`.
 
-```html
-<img src="/assets/rideau-…webp" decoding="async" fetchpriority="low" alt="">
-```
-
-Elle est **lourde** — les peintures sont servies en définition native, 600 ko à 1,15 Mo
+Elles sont **lourdes** — les peintures sont servies en définition native, 600 ko à 1,15 Mo
 ([ressources.md](ressources.md#les-cinq-peintures--ce-quon-a-vraiment)). C'est un choix
 assumé : une peinture se charge une fois, sur une bonne connexion, et on la regarde
 longtemps. Ce que ce choix exige en retour est strict :
 
-- le cadre est peint **à plat** dès la première image — un aplat ou un dégradé de deux
-  couleurs prélevées sur la toile, qui ne coûte pas un octet ;
-- la peinture se fond par-dessus en 240 ms d'opacité quand `decode()` a rendu la main ;
-- **le texte d'A1 ne l'attend jamais.** En 5G elle arrive en 100 à 200 ms, en 4G en une
-  seconde, et dans les deux cas l'écran était déjà lisible.
+- le papier est peint **dès la première image** — le crème et son grain, qui ne coûtent pas
+  un octet ;
+- la peinture se fond par-dessus en 240 ms d'opacité quand `decode()` a rendu la main, et un
+  décodage manqué laisse simplement le papier : c'est le bon échec ;
+- **aucun texte ne l'attend.** Elle est décodée pendant A1, posée à l'ouverture d'A2, et le
+  geste ne la fabrique pas — il déplace ce qui est prêt
+  ([fluidite.md](fluidite.md#la-file-dattente-principale)).
 
 ## Vague 3 — pendant qu'elle regarde le volet
 
@@ -152,12 +161,13 @@ Un réseau coupé ne mène pas à C4 : il a son propre écran, avec « réessaye
 
 | Poste | Cible | Mesuré | Le |
 |---|---|---|---|
-| document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 ko** | **12,26 ko** — un seul fichier : A1, C4, le gabarit, le geste et la vague 3. 9,56 ko le 18/08 ; le journal du jalon 5, les quatre promesses d'A1 (+379 o) puis C2 le rappel l'ont porté là | 19/08/2026, en local |
+| document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 336 o** | **13 131 o** — un seul fichier : A1, C4, C5, hors ligne, le gabarit, le geste et la vague 3. 9 787 o le 18/08 ; le journal du jalon 5, les quatre promesses d'A1, C2 le rappel puis C5 l'ont porté là | 19/08/2026, en local |
 | les trois polices d'A1 | **≤ 90 ko** | **52,6 ko** — Pinyon 24,6 · Newsreader 20,8 · Space Mono 7,2 | 18/08/2026, en local |
 | une texture | définition native, **600 ko à 1,15 Mo** | 600 ko à 1,15 Mo | 17/08/2026 |
-| requêtes **bloquantes** avant le premier rendu | **1** | **1** — le document, et lui seul | 18/08/2026, en local |
-| requêtes avant le texte d'A1 **lisible** | **4** | **4** — le document et les trois polices | 18/08/2026, en local |
-| requêtes avant A1 complet (rideau compris) | **≤ 5** | **5** — le document, trois polices, le rideau | 18/08/2026, en local |
+| requêtes **bloquantes** avant le premier rendu | **1** | **1** — le document, et lui seul | 19/08/2026, en local |
+| requêtes avant le texte d'A1 **lisible** | **4** | **4** — le document et les trois polices | 19/08/2026, en local |
+| requêtes avant A1 **complet** | **4** | **4** — A1 n'a rien de plus à charger : aucune image | 19/08/2026, en local |
+| octets avant A1 complet | — | **89 ko** — 36 de document, 53 de polices. C'était 703 ko avec le rideau | 19/08/2026, en local |
 | texte d'A1 peint, 4G, cache vide | **< 1 s** | — | à mesurer sur les deux téléphones |
 | A2 après le geste | **0 requête** | **0** — tout est chargé et décodé pendant qu'elle regarde le volet | 18/08/2026, en local |
 
@@ -172,16 +182,19 @@ n'existe qu'à l'arrivée des polices — la quatrième requête. Lire « 1 » t
 lisait comme une victoire qui n'était pas gagnée.
 
 Bodoni n'est plus sur ce chemin : A1 n'a pas de titre, et le seul du document — celui de
-C4 — est dans un bloc `hidden`, donc jamais mis en forme au premier rendu. La cinquième
-requête est le rideau, préchargé en priorité basse.
+C4 — est dans un bloc `hidden`, donc jamais mis en forme au premier rendu.
 
-**Deux réserves, à lever sur les deux téléphones.** Le panneau réseau montrera plus de cinq
-lignes : le navigateur va chercher l'icône de l'onglet et le manifeste tout seul, et la
-vague 3 suit derrière — comptées ici, le document, trois polices et le rideau font bien les
-cinq, puis viennent la texture du type, sa feuille et Bodoni. Ce n'est pas un dépassement. Et sur **C4**, Bodoni est demandée au moment où l'écran
-s'affiche : le titre « lien abîmé » reste invisible le temps qu'elle arrive. La phrase qui
-porte le message, elle, est en Newsreader, préchargée — l'écran n'est jamais muet, seul son
-titre se pose un instant après.
+**Les deux lignes de requêtes se rejoignent depuis le 19/08/2026**, et c'est le signe que
+l'écran est au bout de ce qu'on peut lui retirer : A1 lisible et A1 complet, c'est le même
+moment, parce qu'il n'y a plus rien à attendre après les polices.
+
+**Deux réserves, à lever sur les deux téléphones.** Le panneau réseau montrera plus de
+quatre lignes : le navigateur va chercher l'icône de l'onglet et le manifeste tout seul, et
+la vague 3 suit derrière — comptées ici, le document et les trois polices font les quatre,
+puis viennent la texture du type, sa feuille et Bodoni. Ce n'est pas un dépassement. Et sur
+**C4**, Bodoni est demandée au moment où l'écran s'affiche : le titre « lien abîmé » reste
+invisible le temps qu'elle arrive. La phrase qui porte le message, elle, est en Newsreader,
+préchargée — l'écran n'est jamais muet, seul son titre se pose un instant après.
 
 La colonne de droite ne se remplit que de ce qui a vraiment été mesuré. Un budget sans date
 de mesure est une intention, pas un budget — et **les deux dernières lignes ne se mesurent

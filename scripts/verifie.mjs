@@ -96,8 +96,15 @@ const NOMS_INTERDITS = new Set([
   'notif', 'notification', 'error', 'erreur', 'open', 'ouvrir',
 ])
 
-/** Les deux seuls modules qui ont le droit de toucher au stockage du navigateur. */
+/** Les deux seuls modules qui ont le droit de toucher `localStorage`. */
 const STOCKAGE = /lib[/\\](journal|tiroir)\.ts$/
+
+/**
+ * L’exception nommée de `sessionStorage` : le drapeau du rechargement de secours
+ * (CLAUDE.md#les-invariants). Il ne doit PAS survivre à l’onglet — ce serait une boucle de
+ * rechargement —, donc il ne peut pas vivre dans un des deux modules de journal.
+ */
+const DRAPEAU_DE_SESSION = /lecteur[/\\]fond\.ts$/
 
 /** Les chaînes de caractères d’une ligne — ce que quelqu’un peut lire à l’écran. */
 function chaines(ligne) {
@@ -117,6 +124,18 @@ for (const chemin of aRegarder) {
   const propre = sansCommentaires(brut, ext)
   const lignes = propre.split('\n')
   const lignesBrutes = brut.split('\n')
+  // « si elle est mesurée, le dire en commentaire » — alors on lit le commentaire. Une
+  // valeur en dur précédée d’un bloc qui parle de mesure a déjà répondu ; la redemander à
+  // chaque `npm run verifie` est du bruit, et le bruit finit par cacher un vrai grief.
+  const mesuree = new Set()
+  if (ext === '.css') {
+    for (const bloc of brut.matchAll(/\/\*[\s\S]*?\*\//g)) {
+      if (!/mesur/i.test(bloc[0])) continue
+      const debut = brut.slice(0, bloc.index).split('\n').length
+      const fin = debut + bloc[0].split('\n').length + 12
+      for (let l = debut; l < fin; l += 1) mesuree.add(l)
+    }
+  }
   const test = !/\.test\.ts$/.test(f)
 
   lignes.forEach((ligne, i) => {
@@ -166,8 +185,8 @@ for (const chemin of aRegarder) {
     // (docs/donnees.md#5-mon-historique).
     if (/\blocalStorage\s*\./.test(ligne) && !STOCKAGE.test(f))
       refus(f, n, 'invariant — tout accès à `localStorage` passe par `journal.ts` ou `tiroir.ts`')
-    if (/\bsessionStorage\s*\./.test(ligne) && !STOCKAGE.test(f))
-      regard(f, n, 'invariant — `garde-invariants` demande qu’aucun stockage ne vive hors de `journal.ts` ou `tiroir.ts`')
+    if (/\bsessionStorage\s*\./.test(ligne) && !STOCKAGE.test(f) && !DRAPEAU_DE_SESSION.test(f))
+      refus(f, n, 'invariant — `sessionStorage` n’a qu’une exception nommée, le drapeau de rechargement de `fond.ts`')
     if (/history\.(pushState|replaceState)/.test(ligne))
       refus(f, n, 'invariant — routage par hash seulement : Pages ne réécrit aucune URL, une route profonde tombe en 404')
     // `wa.me` n'est pas un tiers au sens de la règle : rien n'en est chargé, c'est la
@@ -181,7 +200,7 @@ for (const chemin of aRegarder) {
     if (ext === '.css') {
       if (/#(000|fff)\b|#(000000|ffffff)\b/i.test(ligne))
         refus(f, n, 'encres — `--encre` et `--creme`, jamais `#000` ni `#fff`')
-      else if (/#[0-9a-fA-F]{3,8}\b/.test(ligne) && basename(f) !== 'tokens.css')
+      else if (/#[0-9a-fA-F]{3,8}\b/.test(ligne) && basename(f) !== 'tokens.css' && !mesuree.has(n))
         regard(f, n, 'encres — une couleur en dur hors de `tokens.css` ; si elle est mesurée, le dire en commentaire')
       if (/font-display\s*:\s*swap/.test(ligne))
         refus(f, n, 'chargement — `font-display: block`, jamais `swap`')

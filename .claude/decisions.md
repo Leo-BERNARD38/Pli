@@ -475,3 +475,74 @@ si la mesure sur les deux téléphones le rend visible.
   hauteur est maintenant écrite par le module à chaque frappe, `height: auto` d'abord pour
   qu'elle redescende quand on efface. `resize: none` reste : la poignée du navigateur
   donnerait une seconde façon de régler la même chose.
+
+### La revue de tout, au navigateur — 19/08/2026
+
+Cinq de ces six décisions viennent d'une seule chose : **avoir ouvert le build dans un
+navigateur et traversé le parcours en entier**, plutôt que de relire des fichiers. Aucune
+n'était visible dans un diff, aucun relecteur ne les avait vues, et `npm run verifie`,
+`npm test` et `npm run types` passaient tous les trois.
+
+- **19/08/2026 — A1 n'a plus d'image, et la maquette avait raison depuis le début.**
+  `docs/` avait tranché contre `design/` au jalon 2 : « le fond d'A1, c'est le rideau »,
+  alors que la maquette montrait un papier crème. Mesuré sur le build : le rideau était
+  **préchargé, 614 ko, lancés à 66 ms** — dans la même seconde que les trois polices que le
+  texte, lui, **attend** vraiment, puisque `font-display: block` ne peint rien avant elles.
+  A1 est la page qui doit s'afficher avant tout le reste ; elle traînait le plus gros
+  fichier du parcours. Papier crème et grain : **4 requêtes au lieu de 5, 89 ko au lieu de
+  703**, et le rideau sort entièrement du build. Ce qui ne change pas : la tête et le numéro
+  restent à l'encre et non au carmin de la maquette — sur A1 la seule chose qui agit est le
+  volet, et cette raison-là ne dépendait pas du fond. Au passage, `.volet__ombre` — le fil
+  d'ombre du papier devant la pliure, que `pli.css` portait depuis la reprise du handoff
+  sans que rien ne l'écrive — est enfin posé.
+
+- **19/08/2026 — A3 et A4 partent à chaque changement d'adresse.** `montrer()` commande les
+  `.pli__dessus` et la couche du dessous ; les deux couches qui montent vivent **au-dessus**,
+  en z-index 3 et 4, et personne ne les commandait. Depuis A4, « tes plis ↑ » changeait donc
+  bien le hash, C1 se construisait bien — **sous A4, qui le recouvrait entièrement**. Le
+  chemin principal du jalon 5 ne menait nulle part, et rien ne le disait. Elles se retirent
+  maintenant dans le routeur, une fois, pour toutes les routes.
+
+- **19/08/2026 — le cadre du pli est en `overflow: clip`, pas `hidden`.** Les deux rognent
+  pareil, mais `hidden` fait du pli un **conteneur de défilement** : A3 et A4, posées à
+  `translateY(100%)`, portent sa hauteur de défilement à deux écrans. Il suffisait qu'un
+  élément prenne le focus — le bouton « déplier », c'est-à-dire l'alternative au geste, donc
+  le chemin de l'accessibilité — pour que le navigateur fasse défiler le pli de **180px**
+  afin de le « révéler ». Et il n'en revenait jamais : A2 arrivait amputée de sa tête, A4
+  dépassait par le bas. Mesuré au clavier, sur une invitation. `clip` n'est pas un conteneur
+  de défilement ; plus rien ne peut faire glisser le cadre.
+
+- **19/08/2026 — `refermer()` repose les deux couches sans condition.** Le `if (!ouvert)
+  return` avait l'air juste : pourquoi refermer ce qui est fermé ? Mais le geste ne referme
+  pas seulement, il **repose**. La relecture d'un pli sort la couche du dessous de sa place
+  (`transform: none`) et la rend au clavier (`inert = false`), parce qu'elle y est l'écran ;
+  le lien suivant retrouvait donc un A2 posé à 0 et atteignable au Tab depuis A1 —
+  « répondre » d'un pli qu'elle n'avait pas déplié. C'est la faute du jalon 3, revenue par
+  une autre porte, et elle demande deux Tab pour se voir.
+
+- **19/08/2026 — trois défauts de l'atelier, un seul geste pour les trois.** Une `<ul>`
+  garde le retrait de 40px et la marge du navigateur si on ne les remet pas à zéro : les
+  listes de **D5 et D2p** commençaient donc à 40px quand tout l'écran est à 26. Un
+  `<button>` garde le fond gris et la bordure en relief du navigateur si `all: unset` ne
+  passe pas : `.conduite__retour` s'affichait en petite boîte système sur **les six écrans**.
+  Et `montrer()` donne le focus à l'écran qui arrive pour le retirer de celui qui devient
+  inerte — le `:focus-visible` nu de `pli.css` lui peignait alors le filet carmin **sur
+  toute sa hauteur**. Trois oublis du même ordre : une peau de navigateur qu'on croyait
+  avoir retirée.
+
+- **19/08/2026 — rien ne se coupe par le haut, et `safe` n'était écrit nulle part.**
+  `depot.css` décrivait `safe` en commentaire depuis le jalon 4 — « un corps aligné en fin
+  coupe le DÉBUT de son contenu quand il déborde, et le rend inatteignable » — sans que la
+  déclaration existe. Conséquence mesurée : sur D2, une invitation remplie poussait son
+  titre **9px au-dessus** du corps de l'aperçu, où `overflow: hidden` le mangeait. « Tu es
+  invitée » n'était pas dans l'aperçu, qui est la moitié de D2. `justify-content: safe
+  flex-end` sur `.mini .corps` et sur `.ecran > .corps`.
+
+- **19/08/2026 — `verifie.mjs` cesse de crier ce qu'il a déjà accepté.** Le script portait
+  deux griefs permanents que rien ne pouvait éteindre : `sessionStorage` dans `fond.ts`,
+  qui est l'exception nommée du drapeau de rechargement, et le dégradé mesuré de
+  `pli.css`, dont le message demandait précisément « si elle est mesurée, le dire en
+  commentaire » — le commentaire était là. Le premier devient un **refus** partout ailleurs
+  et se tait à l'endroit nommé ; le second lit le commentaire avant de parler. Trois lignes
+  de bruit à chaque `npm run verifie`, c'est trois lignes derrière lesquelles un vrai grief
+  se cache.

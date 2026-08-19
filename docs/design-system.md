@@ -34,8 +34,14 @@ Elles servent de critères de revue. Un écran qui en casse une est à refaire, 
 | `--carmin-pointille` | `rgba(200,30,51,.55)` | le trait d'action, 2px dashed |
 | `--grain` | `repeating-linear-gradient(0deg, rgba(20,16,14,.022) 0 1px, transparent 1px 4px)` | grain du papier crème |
 
-Aucune autre couleur n'entre dans le produit. Sur encre, ce qui serait carmin devient rose ;
-sur carmin, ce qui serait carmin devient crème.
+Aucune autre **encre** n'entre dans le produit : tout ce qui porte du texte, un filet ou un
+aplat vient de cette table. Sur encre, ce qui serait carmin devient rose ; sur carmin, ce
+qui serait carmin devient crème.
+
+L'exception est nommée et fermée : **les voiles d'image**, dont les alphas sont *mesurés*
+sur ce que le navigateur peint, jamais choisis. Ils s'écrivent en clair dans la feuille du
+type, avec le chiffre et sa date en commentaire — `scripts/verifie.mjs` les signale à
+regarder, et c'est ce commentaire qui répond.
 
 **Contrastes vérifiés** — carmin sur crème **5,1:1**, rose sur encre **9,7:1**, crème sur
 carmin **5,1:1**. Tous conformes. Le seul manquement corrigé est `.etiquette--fine`, passée
@@ -85,7 +91,7 @@ Elles n'entrent jamais dans un pli déplié.
 
 | Image | Emploi | Cadrage |
 |---|---|---|
-| `rideau-carmin-nuit.webp` | les états fermés — A1, C3 | `50% 30%` |
+| `rideau-carmin-nuit.webp` | **plus servi** — A1 est passé sur papier crème le 19/08/2026, et C3 n'en a jamais porté. Le fichier reste dans `src/textures/`, hors du build | — |
 | `papier-froisse-creme.webp` | l'aperçu OG, le journal vide, l'écran d'installation | `50% 25%` |
 
 Les cinq sont de la même main : peinture à l'huile, abstraite, carmin et rose, **aucune
@@ -185,7 +191,10 @@ Deux couches, un `translate3d` chacune. Pas de flou, pas d'ombre animée, rien �
 `touch-action: none` sur le cadre, `will-change: transform` sur les deux couches.
 
 Le seul mouvement décoratif du produit est l'invite du volet : `translateY(-9px)` à 76 %
-d'un cycle de 2,6 s, en pause dès que le doigt touche.
+d'un cycle de 2,6 s. Elle **s'arrête** dès que le doigt touche — `animation: none`, et non
+`animation-play-state: paused`, qui garderait la couche promue et en ferait quatre au lieu
+de deux pendant le geste. La mesure et ce qu'elle coûte sont dans
+[fluidite.md](fluidite.md#le-mouvement-décoratif).
 
 **« ligne » porte deux sens, et les deux sont dans le lexique** : *la ligne* de saisie de
 l'atelier, le mot qui remplace « champ » ; et *hors ligne*, l'écran du réseau coupé
@@ -203,8 +212,10 @@ Absente des prototypes, obligatoire dans le produit.
 - **Une alternative au geste**, toujours : un `<button>` « déplier » atteignable au clavier
   qui pose `p = 1` directement.
 - **`prefers-reduced-motion: reduce`** supprime l'invite du volet et ramène l'ouverture à 120 ms.
-- **Le focus doit rester visible.** `.ligne input { all: unset }` le supprime : ajouter un
-  filet carmin de 2px à gauche sur `:focus-visible`, comme `.note` en porte déjà un.
+- **Le focus doit rester visible.** `all: unset` le supprime partout où il passe — les
+  lignes de saisie, `.type`, `.depose`, `.passage`, `.conduite__retour`. Chacune reprend un
+  filet carmin de 2px à gauche sur `:focus-visible`. Sur encre il devient rose, sur carmin
+  crème, et un conteneur qu'on ne peut pas atteindre au Tab n'en porte pas.
 - Le texte reste sélectionnable et présent même si une animation échoue.
 
 ## Ton et vocabulaire
