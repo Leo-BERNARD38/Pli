@@ -100,3 +100,59 @@
 #c2 .faits li:first-child {
   color: var(--carmin);
 }
+
+/* Le chemin vers l'atelier — le relais, en bas du journal.
+   ==========================================================================
+
+   Discret comme la ligne de D1 vers les plis déposés : il attend d'être cherché, il ne
+   recouvre pas le sommaire (docs/parcours.md#le-journal). Il porte le même nom que celle-là,
+   `.passage`, parce que c'est le même geste des deux côtés — et la règle est recopiée plutôt
+   que partagée : `depot.css` ne va jamais chez elle, et remonter la classe dans `pli.css`,
+   la seule feuille commune aux deux entrées, la ferait entrer dans le document inliné pour
+   un écran qui n'est pas la vague 1 (docs/chargement.md#les-trois-vagues).
+
+   Pas d'`all: unset` ici, contrairement à l'atelier : là-bas c'est un `<button>` et il faut
+   lui retirer sa peau système ; ici c'est un `<a>`, et deux déclarations suffisent. Le filet
+   de focus de `pli.css` s'applique donc sans qu'on ait à le lui rendre. */
+.passage {
+  /* L'ÉCRAN VIDE PORTE UNE IMAGE PLEINE PAGE, et c'est une couche de fond positionnée : un
+     élément statique passe DESSOUS, quel que soit son rang dans le DOM — une boîte non
+     positionnée se peint avant un descendant positionné, même à z-index 0. Le chemin restait
+     donc dans l'arbre et dans l'ordre du Tab, entièrement invisible. C'est le même oubli que
+     `.tete` et `.corps` ont déjà réparé chacune de leur côté (pli.css). */
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px var(--marge-droite) calc(18px + var(--encoche-bas)) var(--marge-gauche);
+  border-top: 1px solid var(--trait);
+  color: inherit;
+  text-decoration: none;
+  /* .62, la valeur de `.etiquette--fine`, et pour la même raison : à .55 l'encre sur le crème
+     du sommaire tombe sous les 4,5:1 d'un texte de cette taille (mémo, « .62, pas .5 »). */
+  opacity: 0.62;
+  /* Le cadre coupe tout le toucher pour le geste : sans cette ligne, le tap n'arrive pas. */
+  touch-action: manipulation;
+}
+
+/* Sous un chemin, c'est LUI qui touche le bord : le corps lui rend le pied et l'encoche,
+   sans quoi les deux se compteraient et l'écran se creuserait de 30px. */
+.corps:has(~ .passage) {
+  padding-bottom: 0;
+}
+
+/* Le journal vide compose en crème sur l'encre : un filet à 16 % de noir n'y existe pas.
+   Même valeur que le filet de `.action` sur les mêmes fonds (pli.css). */
+.pli--encre .passage {
+  border-top-color: rgba(239, 169, 160, 0.5);
+}
+
+/* La flèche droite suit la couleur du texte, comme celle du haut — `fill: currentColor`.
+   Elle est plus petite que la flèche d'une action : c'est un chemin, pas l'action de
+   l'écran. */
+.passage .fleche {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}

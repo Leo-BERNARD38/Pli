@@ -126,7 +126,7 @@ function montrer(ecran: HTMLElement | null): void {
 }
 
 /**
- * A3 et A4 partent avec leur pli. Elles sont ajoutées au cadre, pas au document : un
+ * A3, A4 et A5 partent avec leur pli. Elles sont ajoutées au cadre, pas au document : un
  * second lien dans la même page en trouverait deux, dont une avec le mauvais numéro.
  *
  * Elles partent aussi à **chaque changement d'adresse**, et c'est ce qui manquait : ce
@@ -271,6 +271,16 @@ let entreeDuPli: { h: string; c: string } | null = null
 /** Décidée au seuil, en attente d'écriture. */
 let aRanger: { h: string; c: string } | null = null
 
+/**
+ * Poser les couches qui montent — celles du pli à l'écran, jamais celles du précédent.
+ *
+ * Elle vit ici et non dans la portée d'`armer()` pour la même raison qu'`entreeDuPli` :
+ * **le geste ne s'arme qu'une fois pour toute la session** (voir plus bas). Un `auDepliage`
+ * qui appellerait directement la fonction du premier pli garderait ce pli-là pour toujours,
+ * et le second aurait déplié un pli en posant les couches d'un autre.
+ */
+let poserLesCouches: (() => void) | null = null
+
 function rangerAuJournal(): void {
   const entree = aRanger
   if (!entree) return
@@ -309,8 +319,10 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
   geste?.refermer()
   // Les écouteurs du geste survivent d'un pli à l'autre : entre ici et l'empreinte du
   // nouveau payload, un seuil franchi rangerait l'ANCIENNE entrée sous le pli qui vient
-  // de s'afficher. Mieux vaut ne rien ranger que ranger le mauvais pli.
+  // de s'afficher. Mieux vaut ne rien ranger que ranger le mauvais pli. Les couches qui
+  // montent suivent la même règle, et pour la même raison.
   entreeDuPli = null
+  poserLesCouches = null
 
   // L'empreinte se calcule ICI, pendant qu'elle regarde le volet fermé. L'écriture, elle,
   // doit rester synchrone : à `pagehide`, plus rien d'asynchrone n'a le temps d'aboutir.
@@ -321,9 +333,28 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
   await preparer(dessous, pli, ETIQUETTES[pli.t])
   if (mienne !== generation) return mienne
 
-  // La marque d'A2 mène au journal : pour une pensée et un souvenir, qui n'ont pas
-  // d'action, c'est le seul chemin qui reste (docs/parcours.md#a2--la-découverte).
+  // La marque d'A2 mène au journal, comme sur tous les écrans du lecteur. Elle a longtemps
+  // été le SEUL chemin des trois types sans réponse ; depuis qu'ils ont « c'est lu » et
+  // A5, elle est le raccourci et non le dernier recours (docs/parcours.md#a2--la-découverte).
   chemin(dessous)
+
+  // LA DEMANDE PART ICI, LA POSE ATTEND LA FIN DU DÉPLIAGE — et les deux moments sont
+  // différents exprès (docs/fluidite.md#la-file-dattente-principale).
+  //
+  // La demande : « import() dynamique → pendant A1 », dit le tableau. On est pendant A1, le
+  // volet est encore fermé, et la requête a tout le temps qu'elle voudra.
+  //
+  // La pose : `armer()` rend le `pointerdown` vivant à la ligne suivante, de façon synchrone.
+  // Un module attendu ICI se serait résolu en plein geste, et sa résolution ajoute une
+  // section au cadre — une insertion dans un ancêtre en `container-type: size`, donc un
+  // recalcul de mise en page dans la fenêtre où le fil principal ne doit faire QUE déplacer
+  // deux couches. Le défaut existait déjà pour l'invitation ; il serait passé d'un pli sur
+  // quatre à quatre sur quatre. Les couches se posent donc à `transitionend`, comme le
+  // journal s'écrit à `transitionend`, et pour la même raison.
+  const couches = import('./monte.ts')
+  // Une demande qu'on abandonne ne doit pas laisser un échec sans personne pour l'entendre :
+  // si elle quitte avant de déplier, personne n'attend plus cette promesse.
+  couches.catch(() => {})
 
   geste ??= armer({
     cadre,
@@ -341,20 +372,25 @@ async function preparerLeGeste(pli: Pli, payload: string): Promise<number> {
     auDepliage: () => {
       rangerAuJournal()
       rendreLeDefilement()
+      poserLesCouches?.()
     },
   })
 
-  // A3 et A4 arrivent APRÈS le geste, et pour l'invitation seulement : elles ne servent
-  // qu'une fois le pli déplié, un pli sur quatre les demande, et rien ne les attend avant
-  // (docs/parcours.md#a3--la-réponse--invitation-seulement).
-  if (pli.t === 'inv') {
-    const { armerLaReponse } = await import('./reponse.ts')
-    if (mienne !== generation) return mienne
-    armerLaReponse({
-      cadre,
-      dessous,
-      pli,
-      noter: (mot) => noterLaReponse(h, payload, mot),
+  // Le type décide laquelle monte — A3 et A4 pour l'invitation, A5 · la fermeture pour les
+  // trois autres (docs/parcours.md#a5--la-fermeture).
+  poserLesCouches = () => {
+    void couches.then((quoi) => {
+      if (mienne !== generation) return
+      if (pli.t === 'inv') {
+        quoi.armerLaReponse({
+          cadre,
+          dessous,
+          pli,
+          noter: (mot) => noterLaReponse(h, payload, mot),
+        })
+      } else {
+        quoi.armerLaFermeture({ cadre, dessous, etiquette: ETIQUETTES[pli.t] })
+      }
     })
   }
   return mienne
@@ -413,8 +449,8 @@ async function montrerLeJournal(): Promise<void> {
 suivre((route) => {
   rangerAuJournal()
   reprendreLeDefilement()
-  // Une adresse qu'on quitte emporte ses couches qui montent : A3 et A4 appartiennent au
-  // pli qu'on vient de lire, pas à l'écran qui arrive.
+  // Une adresse qu'on quitte emporte ses couches qui montent : A3, A4 et A5 appartiennent
+  // au pli qu'on vient de lire, pas à l'écran qui arrive.
   retirerLesCouchesQuiMontent()
   const mienne = ++generation
 

@@ -14,34 +14,23 @@
 
 import { decoderLIndex, nomDuFichier, type Entree } from '../lib/poeme.ts'
 
+import { ligne, numero } from './liste.ts'
 import { PAPIERS } from './type.ts'
 
 /** L'adresse de l'index, sous le préfixe du site — le seul endroit où il est écrit. */
 const INDEX = `${import.meta.env.BASE_URL}plis/index`
 
-function element(nom: string, classe: string, texte?: string): HTMLElement {
-  const e = document.createElement(nom)
-  e.className = classe
-  if (texte !== undefined) e.textContent = texte
-  return e
-}
-
-/** Une ligne : le numéro et le type, puis le titre. Le vocabulaire de `pli.css`, pas un autre. */
-function ligne(quoi: Entree, choisir: () => void): HTMLElement {
-  const item = document.createElement('li')
-  const bouton = document.createElement('button')
-  bouton.type = 'button'
-  bouton.className = 'depose'
-  bouton.addEventListener('click', choisir)
-
-  const dedans = element('span', 'depose__texte')
-  dedans.append(
-    element('span', 'etiquette', `nº ${String(quoi.n).padStart(3, '0')} · ${PAPIERS.poe.nom}`),
-    element('span', 'voix voix--corps', quoi.ti),
-  )
-  bouton.append(dedans)
-  item.append(bouton)
-  return item
+/**
+ * Une ligne : le numéro et le type, puis le titre. Pas de troisième ligne — l'index ne porte
+ * pas de date, et un poème n'est de toute façon pas « déposé » depuis ici (choisir un poème
+ * n'est pas le déposer, docs/parcours.md#d2p--quel-poème).
+ */
+function ligneDuPoeme(quoi: Entree, choisir: () => void): HTMLElement {
+  return ligne({
+    etiquette: `nº ${numero(quoi.n)} · ${PAPIERS.poe.nom}`,
+    nom: quoi.ti,
+    choisir,
+  })
 }
 
 /** Ce que la liste a rendu — de quoi caler mon compteur sans le deviner. */
@@ -81,7 +70,7 @@ export function tenirLesPoemes(
       perdu = true
     }
 
-    liste?.replaceChildren(...poemes.map((quoi) => ligne(quoi, () => choisir(quoi))))
+    liste?.replaceChildren(...poemes.map((quoi) => ligneDuPoeme(quoi, () => choisir(quoi))))
     if (liste) liste.hidden = poemes.length === 0
     if (rien) rien.hidden = poemes.length > 0 || perdu
     if (coupe) coupe.hidden = !perdu
