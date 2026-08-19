@@ -78,6 +78,11 @@ souvenir `.85`.
 A1 n'appelle que **trois familles** — Pinyon, Newsreader, Space Mono. **Bodoni commence à
 A2.** `font-display: block`, jamais `swap`.
 
+Sur A1 le titre est commun — « Un pli t'attend. » — et **la promesse suit le type** : celle
+de l'invitation est en dur dans le document, les trois autres la remplacent au décodage.
+Aucune ne chiffre quoi que ce soit. Les quatre phrases sont dans
+[parcours.md](../docs/parcours.md#a1--lattente).
+
 ## Le geste (design-system.md, fluidite.md)
 
 | Réglage | Valeur |
@@ -110,7 +115,8 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 ## Le chargement (chargement.md, hebergement.md)
 
 - **A1 en 5 requêtes** : le document, trois polices préchargées, une peinture.
-- Vague 1 **≤ 14 ko gzip** — le build échoue au-delà. Mesuré aujourd'hui : **5,86 ko**.
+- Vague 1 **≤ 14 ko gzip** — le build échoue au-delà. Mesuré le 19/08/2026 : **12,26 ko**,
+  tout le lecteur dedans (5,86 au jalon 2, avant A2, le geste, la réponse et le journal).
 - Les trois polices d'A1 : **52,6 ko** mesurés, cible 90.
 - Un `#p=` lance son `fetch` **en toute première instruction**.
 - Budgets comptés **en gzip** (Pages ne sert pas de brotli) et **cache vide**

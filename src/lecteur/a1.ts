@@ -1,8 +1,8 @@
 // A1 · l'attente — le premier écran, celui que le lien apporte.
 //
-// Commune aux quatre types : la promesse ne change pas, seule l'étiquette de la tête change
-// (docs/parcours.md#a1--lattente). Le balisage vit dans le document, parce qu'il est la
-// vague 1 ; ce module n'y pose que ce que le lien apporte.
+// Commune aux quatre types ; **seule la promesse change** (docs/parcours.md#a1--lattente).
+// Le balisage vit dans le document, parce qu'il est la vague 1 ; ce module n'y pose que ce
+// que le lien apporte.
 
 import type { Pli, Type } from '../lib/codec.ts'
 
@@ -22,6 +22,24 @@ export const ETIQUETTES: Record<Type, string> = {
   pen: 'une pensée',
   poe: 'un poème',
   sou: 'un souvenir',
+}
+
+/**
+ * La promesse — la seule chose qui change d'un type à l'autre sur l'attente
+ * (docs/parcours.md#a1--lattente). Elle dit ce qui attend et ce qu'on en attend d'elle,
+ * **jamais ce que le pli contient** : le rideau ne dit rien du contenu, la promesse non
+ * plus. Reprises des écrans d'attente du design — A1 et B0a-c
+ * (design/canevas/, docs/integration.md) — débarrassées de ce qu'elles comptaient : une
+ * maquette sait qu'il y a quatre strophes, un gabarit ne le sait pas.
+ *
+ * Celle de l'invitation est écrite en dur dans le document : c'est elle qui se peint avant
+ * le décodage, et les trois autres la remplacent quand le lien a livré son type.
+ */
+export const PROMESSES: Record<Type, string> = {
+  inv: 'Il ne s’ouvre qu’une fois. Ensuite il reste dans tes plis.',
+  pen: 'Rien à répondre. Tu peux la lire debout.',
+  poe: 'Prends le temps. Il n’y a rien à répondre.',
+  sou: 'Une image, une ligne. Tu sauras tout de suite quel jour c’était.',
 }
 
 const ecran = document.querySelector<HTMLElement>('#a1')
@@ -56,6 +74,7 @@ function peindre(): void {
 /** Écrit sur A1 ce que le lien apporte, puis lance la peinture. */
 export function ecrire(pli: Pli): void {
   poser('[data-type]', ETIQUETTES[pli.t])
+  poser('[data-promesse]', PROMESSES[pli.t])
   poser('[data-numero]', `nº ${numero(pli.n)} — pour toi seule`)
   poser('[data-signature]', `déposé par ${pli.s}`)
   poser('[data-cachet]', numero(pli.n))

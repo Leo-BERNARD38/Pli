@@ -25,9 +25,15 @@
 | [installation.md](installation.md) | L'app sur l'écran d'accueil : manifest, icônes, cadence |
 | [mises-a-jour.md](mises-a-jour.md) | Pousser une version sans servir d'ancien code ni casser un lien |
 
-Le travail de design est archivé, non modifié, dans [`design/`](../design/README.md).
+Le travail de design est archivé dans [`design/`](../design/README.md) : les trois pages
+exportées dans `handoff/`, et **les six canevas dans [`canevas/`](../design/canevas/README.md)**,
+qui dessinent tous les écrans — y compris ceux que `parcours.md` a longtemps crus jamais
+dessinés. L'archive **peut s'agrandir, jamais changer**.
+
 **Quand `design/` et `docs/` divergent, `docs/` fait foi** — les écarts sont listés
-dans [integration.md](integration.md#ce-qui-a-changé-depuis-le-design).
+dans [integration.md](integration.md#ce-qui-a-changé-depuis-le-design), et ceux que les
+canevas ont révélés dans
+[la section qui leur est propre](integration.md#les-maquettes-que-le-handoff-navait-pas-transportées).
 
 ## Par où commencer
 

@@ -14,12 +14,19 @@ import '../styles/tokens.css'
 import '../styles/pli.css'
 
 import { decoder, type Pli } from '../lib/codec.ts'
-import { empreinte, entrees, noterLaReponse, noterLeDepliage, trouver } from '../lib/journal.ts'
+import {
+  empreinte,
+  entrees,
+  noterLaReponse,
+  noterLeDepliage,
+  trouver,
+  type Reponse,
+} from '../lib/journal.ts'
 import { lire, suivre, type Route } from '../lib/routeur.ts'
 import { ecrire, oublierLaPeinture, ETIQUETTES } from './a1.ts'
 import { preparer } from './fond.ts'
 import { armer, type Geste } from './geste.ts'
-import { chemin, journal, rappeler, refermer } from './plis.ts'
+import { chemin, journal, rappel, rappeler, refermer } from './plis.ts'
 
 // Ordre imposé par docs/chargement.md : si le hash est un #p=, le fetch part en TOUTE
 // première instruction, avant qu'on décode quoi que ce soit. C'est la seule requête que le
@@ -261,6 +268,22 @@ async function relireLePli(pli: Pli, mot: string | null): Promise<void> {
   dessous.hidden = false
 }
 
+/**
+ * C2 · le rappel. Le seul endroit qui le montre, pour ses deux chemins — une entrée du
+ * journal, et le retour de WhatsApp par rechargement (docs/partage.md#le-retour). Son
+ * action rend le pli entier, sans changer d'adresse : `#/relire/<h>` désigne l'entrée, et
+ * le rappel comme le pli en sont deux lectures.
+ */
+async function montrerLeRappel(pli: Pli, reponse: Reponse): Promise<void> {
+  if (!cadre) return
+  const mienne = generation
+  retirerLesCouchesQuiMontent()
+  const ecran = await rappel(cadre, pli, reponse, () => {
+    if (mienne === generation) void relireLePli(pli, reponse.mot)
+  })
+  if (mienne === generation) montrer(ecran)
+}
+
 /** C1 · le journal, reconstruit à chaque passage : elle en revient après avoir déplié. */
 async function montrerLeJournal(): Promise<void> {
   if (!cadre) return
@@ -297,7 +320,12 @@ suivre((route) => {
     }
     decoder(entree.c).then(
       (pli) => {
-        if (mienne === generation) void relireLePli(pli, entree.reponse?.mot ?? null)
+        if (mienne !== generation) return
+        // Une invitation déjà répondue arrive sur C2, le rappel ; tout le reste est le pli
+        // lui-même. C2 n'est pas un écran de plus sur le chemin : c'est ce qu'elle vient
+        // chercher, et le pli est à un tap (docs/parcours.md#les-états).
+        if (entree.reponse) void montrerLeRappel(pli, entree.reponse)
+        else void relireLePli(pli, null)
       },
       () => {
         if (mienne === generation) montrer(c4)
@@ -316,7 +344,7 @@ suivre((route) => {
       // (docs/partage.md#le-retour).
       const entree = trouver(payload)
       if (entree?.reponse) {
-        void relireLePli(pli, entree.reponse.mot)
+        void montrerLeRappel(pli, entree.reponse)
         return
       }
       if (entree && cadre) {

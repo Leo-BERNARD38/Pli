@@ -4,7 +4,7 @@
 # Cinq gardes, toutes sur des faits que le dépôt garde pour toujours :
 #   1. un poème en clair (plis-source/)
 #   2. un fichier de poème supprimé ou renommé (son lien est déjà parti)
-#   3. design/, qui est une archive figée
+#   3. design/, l'archive figée — elle peut s'agrandir, jamais changer
 #   4. l'empreinte du seuil accompagnée de sa date en clair
 #   5. un numéro de téléphone français
 #
@@ -44,8 +44,12 @@ echo "$fichiers" | grep -q '^plis-source/' &&
 echo "$etats" | grep -qE '^(D|R[0-9]*)[[:space:]]+public/plis/' &&
   ajoute "Un fichier de public/plis/ est supprime ou renomme. Son nom est une adresse publique depuis le premier envoi : le lien deja parti tomberait en 404. Retirer un poeme est un geste manuel et delibere, jamais un effet de bord."
 
-echo "$fichiers" | grep -q '^design/' &&
-  ajoute "design/ est une archive figee. Quand le design se trompe, on corrige docs/ et on note l'ecart dans docs/integration.md."
+# design/ est une archive figee : elle peut S'AGRANDIR, jamais changer. Un canevas du
+# projet design qui n'etait pas encore dans le depot y entre (A) ; un fichier deja archive
+# qui serait modifie, supprime ou renomme (M, D, R) est refuse comme avant. Assoupli le
+# 19/08/2026, quand les six canevas sont entres.
+echo "$etats" | grep -qE '^(M|D|R[0-9]*|T)[[:space:]]+design/' &&
+  ajoute "Un fichier deja dans design/ est modifie, supprime ou renomme. L'archive peut s'agrandir, jamais changer : quand le design se trompe, on corrige docs/ et on note l'ecart dans docs/integration.md."
 
 printf '%s' "$contenu" | grep -qE '^\+.*pli\.seuil\.[0-9]' &&
   ajoute "La date du seuil apparait en clair a cote du prefixe pli.seuil. Seule l'empreinte sha-256 entre dans le depot (voir /seuil)."

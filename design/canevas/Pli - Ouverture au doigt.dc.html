@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,800&amp;family=Newsreader:ital,opsz,wght@0,6..72,300&amp;family=Space+Mono:wght@400;700&amp;family=Pinyon+Script&amp;display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#E9E2D2;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+  a{color:#C81E33}a:hover{color:#14100E}
+  ::selection{background:#C81E33;color:#F7F2E8}
+  @keyframes pli-nudge{0%,62%,100%{transform:translateY(0)}76%{transform:translateY(-9px)}}
+</style>
+</helmet>
+
+<section style="padding:26px 20px 60px;display:flex;flex-direction:column;gap:26px;align-items:center;font-family:'Space Mono',monospace;color:#14100E;background:#E9E2D2">
+
+  <div style="width:100%;max-width:420px;display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-size:10px;letter-spacing:.2em;background:#C81E33;color:#F7F2E8;padding:3px 7px">2a</div>
+      <div style="font-size:11px;letter-spacing:.28em;text-transform:uppercase">le glissement — au doigt</div>
+    </div>
+    <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:42px;line-height:.9;letter-spacing:-.03em;color:#C81E33">Glisse vers<br>le haut.</div>
+    <div style="font-size:12px;line-height:1.7">La feuille suit le doigt image par image. Relâche avant un tiers de l'écran et elle retombe, au-delà elle part — un coup sec suffit. Comme une feuille de route iOS.</div>
+  </div>
+
+  <div ref="{{ frameRef }}" data-screen-label="2a" style="position:relative;width:100%;max-width:420px;height:min(78vh,760px);min-height:520px;overflow:hidden;border-radius:34px;background:#F7F2E8;box-shadow:0 16px 40px rgba(20,16,14,.18);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent">
+
+    <div ref="{{ underRef }}" style="position:absolute;inset:0;background:#F7F2E8;display:flex;flex-direction:column;will-change:transform">
+      <div style="position:relative;height:42%;flex:0 0 auto;overflow:hidden">
+        <img src="assets/drape-carmin-rose.webp" alt="drapé à l'huile, carmin et rose" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 46%;display:block">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,11,.5) 0%,rgba(14,12,11,0) 34%,rgba(247,242,232,.05) 72%,#F7F2E8 100%)"></div>
+        <div style="position:absolute;top:28px;left:26px;right:26px;display:flex;align-items:flex-start;justify-content:space-between;color:#F7F2E8">
+          <div style="font-family:'Pinyon Script',cursive;font-size:46px;line-height:.86">Pli</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding-top:14px">la découverte</div>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0 26px 30px">
+        <div>
+          <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:64px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase;color:#C81E33">Tu es<br>invitée</div>
+          <div style="margin:-12px 0 0 74px;white-space:nowrap;font-family:'Pinyon Script',cursive;font-size:48px;line-height:1;transform:rotate(-4deg)">rien qu'à toi</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase">
+          <div style="color:#C81E33">samedi</div>
+          <div style="font-size:14px;letter-spacing:.14em">22 août — 20h00</div>
+          <div style="font-size:14px;letter-spacing:.06em">Le Petit Comptoir</div>
+        </div>
+        <div style="border-top:2px dashed rgba(200,30,51,.55);padding-top:18px;display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:12.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">répondre</div>
+          <div style="font-family:'Bodoni Moda',serif;font-size:22px;line-height:1;color:#C81E33">↑</div>
+        </div>
+      </div>
+    </div>
+
+    <div ref="{{ coverRef }}" style="position:absolute;inset:0;z-index:2;will-change:transform">
+      <div style="position:absolute;inset:0;background:#F7F2E8;background-image:repeating-linear-gradient(0deg,rgba(20,16,14,.022) 0 1px,transparent 1px 4px)">
+        <div style="position:absolute;top:30px;left:26px;right:26px;display:flex;align-items:flex-start;justify-content:space-between">
+          <div style="font-family:'Pinyon Script',cursive;font-size:48px;line-height:.86">Pli</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#C81E33;padding-top:16px">une invitation</div>
+        </div>
+        <div style="position:absolute;left:26px;right:26px;bottom:38%;display:flex;flex-direction:column;gap:14px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">nº 014 — pour toi seule</div>
+          <div style="font-family:'Newsreader',serif;font-style:italic;font-weight:300;font-size:29px;line-height:1.26;max-width:14ch;text-wrap:pretty">Un pli t'attend. Il ne se lira qu'une fois.</div>
+        </div>
+      </div>
+      <div style="position:absolute;bottom:0;left:0;right:0;height:34%;background:#C81E33;color:#F7F2E8">
+        <div style="position:absolute;top:-19px;left:50%;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;background:#F7F2E8;border:1.5px solid rgba(200,30,51,.6);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:.06em;color:#C81E33">014</div>
+        <div ref="{{ hintRef }}" style="position:absolute;top:50px;left:26px;right:26px;display:flex;flex-direction:column;gap:12px;animation:pli-nudge 2.6s cubic-bezier(.32,.72,0,1) infinite">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:13px;font-weight:700;letter-spacing:.28em;text-transform:uppercase">déplier</div>
+            <div style="font-family:'Bodoni Moda',serif;font-size:22px;line-height:1">↑</div>
+          </div>
+          <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;opacity:.7">glisser vers le haut</div>
+        </div>
+      </div>
+    </div>
+
+    <div ref="{{ voletRef }}" style="position:absolute;inset:0;z-index:3;display:none">
+      <div ref="{{ s1Ref }}" style="position:absolute;top:0;left:0;right:0;height:34%;background:#C81E33;color:#F7F2E8;will-change:transform">
+        <div style="position:absolute;top:-19px;left:50%;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;background:#F7F2E8;border:1.5px solid rgba(200,30,51,.6);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:.06em;color:#C81E33">014</div>
+        <div style="position:absolute;top:50px;left:26px;right:26px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:13px;font-weight:700;letter-spacing:.28em;text-transform:uppercase">déplier</div>
+            <div style="font-family:'Bodoni Moda',serif;font-size:22px;line-height:1">↑</div>
+          </div>
+          <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;opacity:.7">glisser vers le haut</div>
+        </div>
+      </div>
+      <div ref="{{ s2Ref }}" style="position:absolute;top:33%;left:0;right:0;height:34%;background:#C81E33;will-change:transform"></div>
+      <div ref="{{ s3Ref }}" style="position:absolute;top:66%;left:0;right:0;height:34%;background:#C81E33;will-change:transform"></div>
+    </div>
+
+    <div ref="{{ ligneRef }}" style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#C81E33;z-index:4;display:none;will-change:transform"></div>
+
+    <div ref="{{ resetRef }}" onClick="{{ onReset }}" style="position:absolute;bottom:18px;right:18px;z-index:5;opacity:0;pointer-events:none;transition:opacity .3s;background:rgba(20,16,14,.72);color:#F7F2E8;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:11px 14px;border-radius:999px;cursor:pointer">refermer</div>
+  </div>
+
+  <div style="width:100%;max-width:420px;display:flex;flex-direction:column;gap:12px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <div ref="{{ b1Ref }}" onClick="{{ pick1 }}" style="height:52px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',serif;font-weight:700;font-size:22px;border:1.5px solid #14100E;cursor:pointer;-webkit-tap-highlight-color:transparent">1</div>
+      <div ref="{{ b2Ref }}" onClick="{{ pick2 }}" style="height:52px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',serif;font-weight:700;font-size:22px;border:1.5px solid #14100E;cursor:pointer;-webkit-tap-highlight-color:transparent">2</div>
+      <div ref="{{ b3Ref }}" onClick="{{ pick3 }}" style="height:52px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',serif;font-weight:700;font-size:22px;border:1.5px solid #14100E;cursor:pointer;-webkit-tap-highlight-color:transparent">3</div>
+      <div ref="{{ b4Ref }}" onClick="{{ pick4 }}" style="height:52px;display:flex;align-items:center;justify-content:center;font-family:'Bodoni Moda',serif;font-weight:700;font-size:22px;border:1.5px solid #14100E;cursor:pointer;-webkit-tap-highlight-color:transparent">4</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div ref="{{ nomRef }}" style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:24px;letter-spacing:-.01em">Le glissement</div>
+      <div ref="{{ descRef }}" style="font-size:12px;line-height:1.7">La feuille d'attente se soulève et sort par le haut. L'invitation attendait derrière, elle monte de 9 % pour la rejoindre.</div>
+    </div>
+  </div>
+
+  <div style="width:100%;max-width:420px;display:flex;flex-direction:column;gap:9px;font-size:12px;line-height:1.72;border-top:2px solid #14100E;padding-top:16px">
+    <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#C81E33">Ce qui rend le geste naturel</div>
+    <div><b>Suivi au doigt.</b> Aucune animation pendant le glissement : la feuille est à la position du doigt, donc on peut s'arrêter, revenir, hésiter.</div>
+    <div><b>Deux façons de valider.</b> Un tiers de l'écran franchi, ou une vitesse de relâchement suffisante — le coup sec marche même à 10 % de course.</div>
+    <div><b>Résistance vers le bas.</b> Tirer dans le mauvais sens ne fait presque rien : la feuille cède d'un dixième, puis revient. Le même caoutchouc que les listes iOS.</div>
+    <div><b>Courbe de sortie.</b> <code>cubic-bezier(.32,.72,0,1)</code>, la courbe des feuilles système : départ vif, arrivée posée, sans rebond.</div>
+    <div><b>Ce qui bouge.</b> Deux couches, un <code>translate3d</code> chacune. Pas de flou, pas d'ombre animée, rien à repeindre.</div>
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:460,&quot;height&quot;:1180},&quot;seuil&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:32,&quot;min&quot;:15,&quot;max&quot;:55,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Geste&quot;},&quot;profondeurEntree&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:9,&quot;min&quot;:0,&quot;max&quot;:20,&quot;step&quot;:1,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Geste&quot;}}">
+const EASE_OUT = 'cubic-bezier(.32,.72,0,1)';
+
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.frame = React.createRef();
+    this.cover = React.createRef();
+    this.under = React.createRef();
+    this.hint  = React.createRef();
+    this.reset = React.createRef();
+    this.volet = React.createRef();
+    this.s1 = React.createRef(); this.s2 = React.createRef(); this.s3 = React.createRef();
+    this.ligne = React.createRef();
+    this.nom = React.createRef(); this.desc = React.createRef();
+    this.b1 = React.createRef(); this.b2 = React.createRef(); this.b3 = React.createRef(); this.b4 = React.createRef();
+    this.open = false;
+    this.dragging = false;
+    this.variant = 1;
+  }
+
+  get depth(){ return Number(this.props.profondeurEntree ?? 9) / 100; }
+  get seuil(){ return Number(this.props.seuil ?? 32) / 100; }
+
+  paint(p, animate){
+    const h = this.frame.current ? this.frame.current.clientHeight : 1;
+    const c = this.cover.current, u = this.under.current;
+    if(!c || !u) return;
+    const dur = animate ? (p > 0.5 ? 460 : 340) : 0;
+    const tr = dur ? `transform ${dur}ms ${EASE_OUT}, opacity ${dur}ms linear, clip-path ${dur}ms ${EASE_OUT}` : 'none';
+    const set = (el, y) => { if(!el) return; el.style.transition = tr; el.style.transform = `translate3d(0,${y}px,0)`; };
+    const v = this.variant;
+
+    if(v === 1){
+      set(c, -p * h); set(u, (1 - p) * this.depth * h);
+    } else if(v === 2 || v === 4){
+      set(c, 0); set(u, 0);
+      [this.s1, this.s2, this.s3].forEach((r, i) => {
+        const dec = v === 4 ? 0.09 * i : 0;
+        const pi = Math.max(0, Math.min(1.2, (p - dec) / (1 - 0.18)));
+        set(r.current, (0.66 - 1.66 * pi) * h);
+      });
+      c.style.opacity = p >= 0.42 ? '0' : '1';
+    } else if(v === 3){
+      set(c, 0); set(u, 0);
+      u.style.clipPath = `inset(${Math.max(0, (1 - p)) * 100}% 0 0 0)`;
+      set(this.ligne.current, -Math.min(1, Math.max(0, p)) * h);
+    }
+  }
+
+  setVariant(n){
+    this.variant = n;
+    this.open = false;
+    const c = this.cover.current, u = this.under.current;
+    if(!c || !u) return;
+    c.style.opacity = '1';
+    u.style.zIndex = n === 3 ? '3' : '1';
+    u.style.clipPath = n === 3 ? 'inset(100% 0 0 0)' : 'none';
+    if(this.volet.current) this.volet.current.style.display = (n === 2 || n === 4) ? 'block' : 'none';
+    if(this.ligne.current) this.ligne.current.style.display = n === 3 ? 'block' : 'none';
+    if(this.hint.current) this.hint.current.style.animationPlayState = 'running';
+    if(this.reset.current){ this.reset.current.style.opacity = '0'; this.reset.current.style.pointerEvents = 'none'; }
+
+    const meta = {
+      1: ['Le glissement', "La feuille d'attente se soulève et sort par le haut. L'invitation attendait derrière, elle monte de 9 % pour la rejoindre."],
+      2: ['Le volet', "Le volet carmin suit le doigt, recouvre l'écran à mi-course, puis sort par le haut : l'invitation est dessous."],
+      3: ['La ligne carmin', "Rien ne se déplace : une ligne de 3 px remonte avec le doigt et l'invitation apparaît derrière elle, du bas vers le haut."],
+      4: ['Les trois bandes', "Le volet part en trois bandes décalées : l'écran se découvre par tranches, comme un papier qui se déplie."]
+    }[n];
+    if(this.nom.current) this.nom.current.textContent = meta[0];
+    if(this.desc.current) this.desc.current.textContent = meta[1];
+    [this.b1, this.b2, this.b3, this.b4].forEach((r, i) => {
+      const el = r.current; if(!el) return;
+      const on = i + 1 === n;
+      el.style.background = on ? '#C81E33' : 'transparent';
+      el.style.color = on ? '#F7F2E8' : '#14100E';
+      el.style.borderColor = on ? '#C81E33' : '#14100E';
+    });
+    this.paint(0, false);
+  }
+
+  setOpen(v){
+    this.open = v;
+    if(this.hint.current) this.hint.current.style.animationPlayState = v ? 'paused' : 'running';
+    if(this.reset.current){
+      this.reset.current.style.opacity = v ? '1' : '0';
+      this.reset.current.style.pointerEvents = v ? 'auto' : 'none';
+    }
+    this.paint(v ? 1 : 0, true);
+  }
+
+  componentDidMount(){
+    const f = this.frame.current; if(!f) return;
+    this.setVariant(1);
+    let id = null, y0 = 0, p0 = 0, lastY = 0, lastT = 0, v = 0;
+
+    const down = e => {
+      if(id !== null) return;
+      id = e.pointerId; this.dragging = true;
+      y0 = lastY = e.clientY; lastT = e.timeStamp; v = 0;
+      p0 = this.open ? 1 : 0;
+      f.setPointerCapture && f.setPointerCapture(id);
+      if(this.hint.current) this.hint.current.style.animationPlayState = 'paused';
+    };
+
+    const move = e => {
+      if(id !== e.pointerId) return;
+      const h = f.clientHeight;
+      const dt = e.timeStamp - lastT;
+      if(dt > 0) v = (e.clientY - lastY) / dt;
+      lastY = e.clientY; lastT = e.timeStamp;
+      let p = p0 + (y0 - e.clientY) / h;
+      if(p < 0) p = p * 0.1;              // caoutchouc vers le bas
+      if(p > 1) p = 1 + (p - 1) * 0.1;    // caoutchouc en haut
+      this.paint(p, false);
+      e.preventDefault();
+    };
+
+    const up = e => {
+      if(id !== e.pointerId) return;
+      const h = f.clientHeight;
+      let p = p0 + (y0 - e.clientY) / h;
+      const fling = v < -0.55, flingBack = v > 0.55;
+      const commit = flingBack ? false : (fling || p > this.seuil);
+      f.releasePointerCapture && f.releasePointerCapture(id);
+      id = null; this.dragging = false;
+      this.setOpen(commit);
+    };
+
+    f.addEventListener('pointerdown', down);
+    f.addEventListener('pointermove', move, {passive:false});
+    f.addEventListener('pointerup', up);
+    f.addEventListener('pointercancel', up);
+    this.detach = () => {
+      f.removeEventListener('pointerdown', down);
+      f.removeEventListener('pointermove', move);
+      f.removeEventListener('pointerup', up);
+      f.removeEventListener('pointercancel', up);
+    };
+    this.onResize = () => { if(!this.dragging) this.paint(this.open ? 1 : 0, false); };
+    window.addEventListener('resize', this.onResize);
+  }
+
+  componentDidUpdate(){ if(!this.dragging) this.paint(this.open ? 1 : 0, false); }
+  componentWillUnmount(){ this.detach && this.detach(); window.removeEventListener('resize', this.onResize); }
+
+  renderVals(){
+    return {
+      frameRef: this.frame, coverRef: this.cover, underRef: this.under,
+      hintRef: this.hint, resetRef: this.reset,
+      voletRef: this.volet, s1Ref: this.s1, s2Ref: this.s2, s3Ref: this.s3,
+      ligneRef: this.ligne, nomRef: this.nom, descRef: this.desc,
+      b1Ref: this.b1, b2Ref: this.b2, b3Ref: this.b3, b4Ref: this.b4,
+      pick1: () => this.setVariant(1), pick2: () => this.setVariant(2),
+      pick3: () => this.setVariant(3), pick4: () => this.setVariant(4),
+      onReset: e => { e.stopPropagation(); this.setOpen(false); }
+    };
+  }
+}
+</script>
+</body>
+</html>

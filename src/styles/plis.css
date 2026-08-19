@@ -61,3 +61,42 @@
   position: relative;
   z-index: 1;
 }
+
+/* C2 · le rappel — ce qu'elle a répondu, et de quoi il s'agissait.
+   ==========================================================================
+
+   Un écran de synthèse, pas le pli réaffiché (design/canevas/, écran C2). Il n'emprunte
+   rien à la feuille de l'invitation : celle-là est une vague 3, chargée par le type, et
+   C2 s'ouvre sans elle. Les valeurs des faits sont donc reprises telles quelles — mêmes
+   14px, même .3em, même premier fait en carmin ; les recopier est le prix de l'ordre de
+   chargement, et c'est le même arbitrage que `reponse.ts` face à `a2.ts`
+   (docs/chargement.md#les-trois-vagues). */
+
+/* 64px, la deuxième taille du titre : « tu as dit peut-être » est le plus long des trois
+   mots, et il tient en deux lignes (docs/design-system.md#les-mains). */
+#c2 .titre {
+  font-size: 64px;
+}
+
+/* La griffe touche son titre, comme sur A2. */
+#c2 .griffe {
+  margin-top: -4px;
+}
+
+#c2 .faits {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#c2 .faits li {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+#c2 .faits li:first-child {
+  color: var(--carmin);
+}

@@ -213,16 +213,20 @@ index.html                 elle
 atelier/index.html         moi
 src/
   lecteur/                 A1 → A4, les types, les états C
-  atelier/                 D0 → D3, E1
+  atelier/                 D0 → D5 — E1, le bureau, est « plus tard »
   lib/
     codec.ts               encode / décode — isomorphe Node + navigateur
-    journal.ts             seul accès à localStorage
+    journal.ts             ses plis à elle — l'un des deux accès à localStorage
+    tiroir.ts              mes réglages d'atelier — l'autre, et le dernier
+    routeur.ts             les routes par hash
     dates.ts               formats français
   fleches.html             les deux tracés, inline dans chaque document qui s'en sert
   styles/
     tokens.css             extrait de design/handoff/pli.css
     pli.css                le gabarit et les classes — inline dans le document
     <type>.css             composition par type, chargée en arrière-plan
+    plis.css               le journal, C1 · C2 · C3 — demandée à la volée
+    depot.css              l'atelier seul, jamais dans le bundle qui part chez elle
   textures/                les cinq peintures — importées, donc empreintées
   fonts/                   les woff2 sous-ensemblés — importés par le CSS
 public/                    servi tel quel, noms stables
@@ -236,14 +240,21 @@ scripts/plier.mjs          la moulinette
 scripts/polices.py         les sous-ensembles — regénère src/fonts/
 scripts/fleches.py         les deux flèches — regénère src/fleches.html
 scripts/icones.py          la planche des icônes — regénère public/icones/
+scripts/verifie.mjs        la relecture déterministe — lexique, encres, invariants
 plier.bat · plier.sh       les deux enveloppes
-design/                    l'archive figée du design — jamais dans le build
+design/                    l'archive du design — jamais dans le build
+  handoff/                 les trois pages exportées
+  canevas/                 les six canevas, la source dont handoff/ est l'export
 docs/
 ```
 
-Tout accès à `localStorage` passe par `journal.ts` : le mode navigation privée, où
-l'écriture échoue, doit dégrader proprement — le pli s'affiche, il n'est simplement pas
-archivé.
+Tout accès à `localStorage` passe par **`journal.ts` ou `tiroir.ts`**, et par eux seuls. Ils
+sont deux depuis le jalon 4, et pas un de plus : ses plis à elle d'un côté, mes réglages
+d'atelier de l'autre — le numéro de réponse n'a rien à faire dans le module que le lecteur
+importe. `scripts/verifie.mjs` tient la règle et n'accepte que ces deux-là.
+
+Des deux côtés, le mode navigation privée, où l'écriture échoue, doit dégrader proprement —
+le pli s'affiche, il n'est simplement pas archivé.
 
 ## Tests
 
@@ -252,3 +263,9 @@ Pas de tests unitaires généralisés. Deux modules les méritent :
 - **`codec.ts`** — un lien cassé est un pli perdu, et il tourne des deux côtés.
   Tester l'aller-retour sur les quatre types, les accents, un poème long, un payload tronqué.
 - **`dates.ts`** — les formats français.
+- **`journal.ts`** — le dédoublonnage sur `h`, l'empreinte du payload, **jamais sur `n`**.
+- **`tiroir.ts`** — les réglages, le compteur, les déposés.
+- **`routeur.ts`** — ce qu'un hash désigne, et ce qu'il refuse.
+
+C'est le plancher, et rien au-delà : **pas de tests d'écran, pas de tests de rendu, pas
+d'émulateur**. Cinq fichiers `*.test.ts` dans `src/lib/`, lancés par `npm test`.

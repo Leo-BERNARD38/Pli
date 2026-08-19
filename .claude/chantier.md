@@ -122,7 +122,8 @@ Aucun n'est resté debout, et deux valaient le détour :
 
 ### Ce qui est vérifié pour de bon
 
-Les 34 tests passent, `npm run types` compile deux fois, et dans Chromium en 390 × 844 à 3× :
+Les tests passent — 34 à l'époque, **50 aujourd'hui** —, `npm run types` compile deux fois,
+et dans Chromium en 390 × 844 à 3× :
 le gabarit tient, les quatre polices se posent, un `#c=` **encodé sous Node** remplit le même
 balisage sans rechargement, un lien abîmé laisse la page nue sans la vider, le tiret cadratin
 et les accents français rendent, et `performance.mark('a1')` se pose une fois.
@@ -140,7 +141,7 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
 
 - [x] le document du lecteur se suffit à lui-même — gabarit et module inline, par le greffon
       `pli-inliner-le-document` de `vite.config.ts` ; **1 requête** avant le premier texte,
-      **5,86 ko gzip** à l'époque, **10,5 ko** une fois A2, le geste, la réponse et le
+      **5,86 ko gzip** à l'époque, **12,26 ko** une fois A2, le geste, la réponse et le
       journal dedans — plafond de 14 ko tenu par le build, à chaque commit
 - [x] ~~le pli tient dans l'écran — `--echelle` sur le pli~~ **remplacé le 19/08/2026** :
       le pli **remplit** l'écran, vérifié de 360 × 780 à 1440 × 900 — la page ne défile
@@ -220,7 +221,7 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
       mais inactif : il passe par la moulinette, et D2p arrive avec lui
 - [x] D2 · les textes — les lignes nommées, l'aperçu qui se remplit pendant la frappe, et le
       compteur calé sur ce que **le papier** porte, mesuré
-      ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter))
+      ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé))
 - [x] D3 · le lien — le lien ne s'affiche pas, deux actions à la place : envoyer (partage
       natif) et copier. Le dépôt est noté avant le partage
 - [x] mon historique des plis déposés — `pli.v1.deposes`, dédoublonné sur le payload, jamais
@@ -314,14 +315,59 @@ cadre, l'atelier et son clavier, le contraste, la doc.
       navigateur intégré de WhatsApp est le cas où elle peut tomber
 - [ ] **à la main** : refaire les plafonds du papier à la hauteur visible la plus courte
       qu'on serve ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé))
-- [ ] **à trancher** : `theme-color` vaut le sable, qui n'entoure plus rien. Au-dessus d'un
-      A1 devenu le rideau plein cadre, la barre du navigateur fait une couture claire que
-      le plateau cachait. Toucher la balise touche aussi le manifeste — ce n'est pas une
-      décision de mise en page
-- [ ] **à trancher** : le paysage. Un téléphone couché offre ~390px de haut pour une
-      composition dessinée pour 780 ; la mise à l'échelle réglait ce cas sans qu'on le
-      sache, le plein cadre coupera. Le plein cadre partout interdit les media queries de
-      **largeur** ; l'orientation est un autre axe, et c'est une décision d'auteur
+- [ ] **à trancher, et ça attend les maquettes** : `theme-color` vaut le sable, qui
+      n'entoure plus rien. Au-dessus d'un A1 devenu le rideau plein cadre, la barre du
+      navigateur fait une couture claire que le plateau cachait. Toucher la balise touche
+      aussi le manifeste — ce n'est pas une décision de mise en page. Aucune valeur unique
+      ne convient à tous les écrans (le rideau sombre d'A1, le crème d'A2 et du journal),
+      donc la réponse est un choix d'auteur qui doit se rapprocher des maquettes
+      **Pli — Maquettes** de Claude Design. Elles n'ont pas pu être lues le 19/08/2026 : le
+      serveur de Claude Design demande `/design-login`, qui exige un terminal interactif que
+      la session distante n'a pas. À reprendre depuis une session locale, ou après un « Send
+      to Claude Code Web » qui sème le projet dans l'espace de travail
+- [x] **le paysage, tranché le 19/08/2026 : il n'existe pas.** On ne sert que du portrait
+      mobile. Aucune règle d'orientation n'entre dans les feuilles, le manifeste disait déjà
+      `orientation: "portrait"`, et une composition coupée sur un téléphone couché est
+      acceptée — c'est écrit dans
+      [installation.md](../docs/installation.md#le-manifeste-et-les-icônes)
+
+## Les maquettes retrouvées — 19/08/2026
+
+`design/handoff/` n'exportait que trois pages. Le projet design en compte **six canevas**,
+et ils dessinent des écrans que [parcours.md](../docs/parcours.md#3-ce-qui-nest-pas-encore-maquetté)
+listait comme jamais dessinés : **C2 à C5**, **B0a-c**, **B2 · B3**, et l'atelier. Ces
+écrans-là ont donc été codés sans leur maquette.
+
+- [x] les six canevas entrent dans l'archive — [`design/canevas/`](../design/canevas/README.md),
+      avec leur README. La garde passe de « rien ne bouge sous `design/` » à **« l'archive
+      peut s'agrandir, jamais changer »** : elle lit les états, accepte un ajout, refuse
+      toujours modification, suppression et renommage. Vérifiée dans les deux sens
+- [x] le relevé des écarts, écran par écran, dans
+      [integration.md](../docs/integration.md#les-maquettes-que-le-handoff-navait-pas-transportées) —
+      ce que chaque canevas montre, ce que le produit en retient, ce qu'il en écarte
+- [x] le `handoff/` du projet design est identique **bit pour bit** à celui du dépôt :
+      l'archive était à jour, il n'y avait rien à reprendre de ce côté
+- [ ] **C4 reste nu, et c'est tranché** : la maquette lui donne « voir tes plis ↑ » en bas,
+      l'auteur a choisi de n'en rien faire — un lien abîmé n'invite pas à aller ailleurs
+- [x] **A1 · la promesse suit le type.** `parcours.md` disait « seule la promesse change »
+      puis n'en donnait qu'une ; le gabarit l'écrivait en dur pour les quatre. Les quatre
+      promesses viennent des écrans d'attente du design, débarrassées de ce qu'elles
+      comptaient — **aucune ne chiffre** : le plafond d'une pensée est en signes, pas en
+      lignes, et `revue-ecran` a refusé la première version qui promettait « deux lignes ».
+      Celle de l'invitation reste en dur, les trois autres la remplacent au décodage, dans
+      la même frame que le numéro et la signature. **+379 octets gzip** : le document passe
+      de 11 609 à 11 988, plafond 14 336
+- [x] **C2 · le rappel va vers la maquette** : un écran de synthèse — ce qu'elle a répondu,
+      quand, de quoi il s'agissait — et « relire le pli » pour le pli entier, qui est ce
+      que le code faisait jusqu'ici. Trois écarts assumés à cette maquette : on écrit
+      « répondu le … » et non « réponse envoyée », parce que rien ne garantit qu'elle a
+      appuyé sur envoyer ; une seule action, la marque menant déjà au journal ; et sa phrase
+      « Le pli reste lisible. Onze jours. » n'est pas reprise — elle promet une durée que
+      **la mesure 2** n'a pas rendue
+
+Le §11 du `PLI.md` du projet design décrit l'icône et laisse un « reste à faire » —
+vectoriser la lettre. **Il est déjà fait** : `scripts/icones.py` sort des `<path>`, aucun
+`<text>`, et `PLI.md` n'entre pas dans l'archive parce qu'il en modifierait une page.
 
 ## Les mesures — aucune ne se devine
 
@@ -377,7 +423,7 @@ la marque inclut l'aller-retour réseau — **noter le type de lien à côté du
 la ligne du budget ne veut rien dire.
 
 **Au jalon 2, pour A1 et A2** — trois choses restent en l'air, notées dans
-[integration.md](../docs/integration.md#ce-qui-reste-à-trancher-avec-a1) : le fond d'A1
+[integration.md](../docs/integration.md#ce-qui-a-été-tranché-avec-a1-au-jalon-2) : le fond d'A1
 (`parcours.md` dit le rideau, la maquette montre un papier crème), l'empilement de
 `.image--pleine` avec le texte, et la composition des faits.
 

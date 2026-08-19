@@ -80,7 +80,9 @@ mot arrive.
 - `lib/journal.ts` — **le module, pas l'écran** : l'écriture au dépliage et le dédoublonnage
   sur l'empreinte `h`. A3 note la réponse dans le journal avant d'ouvrir WhatsApp
   ([parcours.md](parcours.md#a3--la-réponse--invitation-seulement)), donc le module vient ici
-  et pas plus tard. Il porte aussi l'invariant « tout `localStorage` passe par `journal.ts` »
+  et pas plus tard. Il porte aussi l'invariant du stockage — « tout `localStorage` passe par
+  `journal.ts` », auquel le jalon 4 ajoutera `tiroir.ts`, et **eux deux seulement**
+  ([architecture.md](architecture.md#arborescence-cible))
 - A3 les trois mots, A4 le mot
 - Le passage à WhatsApp, dans le bon ordre — la réponse notée, **puis** A4, **puis** `wa.me`
 

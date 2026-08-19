@@ -57,6 +57,12 @@ valables.
 | `background_color: #F7F2E8` | le **crème** du papier : l'écran de lancement est une feuille, pas un rectangle blanc |
 | `theme_color: #C81E33` | le **carmin**, la seule couleur d'action, pour la barre système d'Android |
 
+`orientation: "portrait"` ne vaut que pour l'app installée : dans Safari, un téléphone couché
+n'est verrouillé par rien, et la composition — dessinée pour une proportion de 360 × 780 —
+se fait couper depuis que le pli remplit le viewport. **C'est accepté** : on ne sert que du
+portrait mobile, et aucune règle d'orientation n'entre dans les feuilles
+(19/08/2026, [decisions.md](../.claude/decisions.md)).
+
 Les balises qui vont avec, à coller telles quelles dans les deux entrées :
 
 ```html

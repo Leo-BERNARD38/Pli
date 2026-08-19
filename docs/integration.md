@@ -10,6 +10,7 @@ projet design, et **ce qu'il ne faut pas recopier** des prototypes.
 | Question | Réponse |
 |---|---|
 | Les valeurs de la DA | [`design/handoff/pli.css`](../design/handoff/pli.css) |
+| Ce que le design dessinait | [`design/canevas/`](../design/canevas/README.md) — la source dont `handoff/` est l'export |
 | Le geste et ses réglages | `pli.css` + [`lecteur.html`](../design/handoff/lecteur.html) |
 | Ce qu'on construit | `docs/` — **il gagne toujours** contre `design/` |
 | Le lexique | [design-system.md](design-system.md#ton-et-vocabulaire) |
@@ -180,6 +181,45 @@ par-dessus, le fondu entre les deux.
 hiérarchie de la maquette (trois compositions distinctes, index par index) ne se devine pas
 dans une chaîne de texte libre, et une invitation à un seul fait tomberait sur une
 composition qui n'a pas été dessinée pour elle.
+
+### Les maquettes que le handoff n'avait pas transportées
+
+**Relevé le 19/08/2026.** `design/handoff/` ne porte que trois pages — `index`, `lecteur`,
+`createur`. Le projet design en compte six canevas, et ceux-là dessinent des écrans que
+[parcours.md](parcours.md#3-ce-qui-nest-pas-encore-maquetté) listait comme jamais dessinés :
+**C2 à C5**, **B0a-c**, **B2 · B3**, et l'atelier de D1 à son écran de lien. Les écrans
+concernés ont donc été codés sans leur maquette, d'après `docs/` seul.
+
+Les canevas sont entrés dans le dépôt le 19/08/2026, sous
+[`design/canevas/`](../design/canevas/README.md). L'archive **peut s'agrandir, jamais
+changer** : la garde, assouplie ce jour-là, accepte un fichier qui n'y était pas et refuse
+toujours qu'un fichier déjà archivé soit modifié, supprimé ou renommé. Le `handoff/` du
+projet design est identique **bit pour bit** à `design/handoff/` : rien à reprendre de ce
+côté, l'archive du dépôt était à jour.
+
+Ce que les canevas ajoutent, écran par écran :
+
+| Écran | Ce que la maquette montre | Ce que le produit en retient |
+|---|---|---|
+| **B0a-c** | une promesse **par type** — « Deux lignes t'attendent », « Quatre strophes t'attendent » | contredit le gabarit, qui écrit une promesse unique en dur ; voir plus bas |
+| **C2** | un écran de synthèse : « Tu as dit oui », la griffe, « relire le pli », « tes plis ↑ » | le produit réaffiche le pli entier et rappelle le mot — deux formes différentes |
+| **C3** | « Ce pli s'est refermé », Bodoni **400** sur encre, « tes plis » | le fond encre et le chemin vers le journal sont tenus |
+| **C4** | « Il n'y a rien ici », Bodoni 400, et une action « voir tes plis ↑ » | le produit dit « lien abîmé » et n'a que la marque comme chemin |
+| **C5** | la marque seule en 64px, un filet pointillé carmin, « un pli arrive » | écran encore à écrire — il vient avec le poème |
+| **l'atelier** | un choix de **style** (crème · encre · carmin · drapé), une image, une date | **écarté** : « le papier découle du type, jamais un choix offert au dépôt » (règle nº 4) |
+| **D4 de la maquette** | un aperçu **plein écran** — « tu vois ce qu'elle verra » | le produit n'a que l'aperçu en petit de D2 ; aucune décision prise |
+
+Deux numéros ne se correspondent pas : le **D5 de la maquette** est l'écran du lien prêt,
+c'est-à-dire notre **D3** ; et le D4 de la maquette est un aperçu, pas le tiroir.
+
+**La promesse d'A1 contredit son gabarit.** [parcours.md](parcours.md#a1--lattente) écrit
+« Commune aux quatre types ; seule la promesse change », puis donne **une** phrase de
+remplacement ; le gabarit l'écrit en dur pour les quatre types et son commentaire affirme
+l'inverse de la doc. Les maquettes tranchent avec la doc — chaque type a sa promesse. Le
+coût du changement n'est pas nul : la promesse en dur est ce qui laisse le premier texte se
+peindre **sans attendre le décodage**, et un emplacement rempli par le module arriverait
+après lui ([chargement.md](chargement.md#le-budget-écran-par-écran)). À trancher avec son
+auteur, pas en passant.
 
 ### Écrans qui n'existaient pas
 
