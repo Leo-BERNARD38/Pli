@@ -51,9 +51,9 @@ const COMPOSITIONS: Record<Type, Composition> = {
     toile: { adresse: voile, forme: 'pleine', cadrage: '50% 50%', fondu: 'papier' },
     reparti: true,
   },
-  // Le poème pagine, une strophe par écran, au même geste que le dépliage — c'est le
-  // jalon 6 (B2 · B3). Au jalon 2 il montre sa première strophe et rien de plus : lui
-  // poser « la suite ↑ » alors que rien ne suit serait un mensonge.
+  // Le poème n'a ni image ni action : il se lit d'un bout à l'autre, et son corps défile
+  // s'il le faut (src/styles/poe.css). Rien en bas — la marque mène au journal, comme pour
+  // la pensée et le souvenir.
   poe: { encre: true },
 }
 
@@ -140,11 +140,15 @@ export function construire(
   }
 
   // La voix : ce que la personne a écrit — elle est sur les quatre types
-  // (docs/donnees.md#1-le-pli). Pour un poème, la première strophe : la pagination est le
-  // jalon 6. Chaque feuille de type lui donne sa taille.
-  const strophes = Array.isArray(pli.b) ? pli.b : [pli.b]
+  // (docs/donnees.md#1-le-pli). Chaque feuille de type lui donne sa taille.
+  //
+  // Un poème porte ses strophes, et elles sont TOUTES là, à la suite : il ne pagine pas, il
+  // défile (docs/design-system.md#les-cinq-règles). Une strophe par paragraphe — le blanc
+  // entre deux vient de la feuille, jamais d'une ligne vide de plus dans le texte.
   const voix = element('div', 'voix')
-  voix.append(element('p', '', strophes[0] ?? ''))
+  for (const strophe of Array.isArray(pli.b) ? pli.b : [pli.b]) {
+    voix.append(element('p', '', strophe))
+  }
   corps.append(voix)
 
   // Jusqu'à trois faits — au-delà, c'est un autre type de pli. Composition uniforme : une

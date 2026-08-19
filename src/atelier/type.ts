@@ -23,8 +23,8 @@ export interface Papier {
   question: string
   /** le plafond du titre, ou `null` quand le type n'en montre pas */
   titre: number | null
-  /** le plafond de la voix */
-  voix: number
+  /** le plafond de la voix, ou `null` quand rien ne le borne */
+  voix: number | null
   /** les deux faits — l'invitation seulement */
   faits: boolean
   /** ce que l'atelier ne sait pas encore fabriquer */
@@ -58,12 +58,15 @@ export const PAPIERS: Record<Type, Papier> = {
     faits: false,
     ici: true,
   },
+  // Le poème n'a **pas de plafond de papier**, et c'est la seule exception : il défile, donc
+  // aucune hauteur d'écran ne le borne (docs/design-system.md#les-cinq-règles). Il ne passe
+  // pas non plus par D2 — il s'écrit au bureau et se choisit dans une liste, sur D2p.
   poe: {
     nom: 'un poème',
     glose: 'il s’écrit à ton bureau, et la moulinette en fait le lien',
     question: 'Choisis un poème.',
-    titre: 88,
-    voix: 358,
+    titre: null,
+    voix: null,
     faits: false,
     ici: false,
   },

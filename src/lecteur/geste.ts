@@ -177,6 +177,13 @@ export function armer(p: Pieces): Geste {
     // « déplier » du clavier, « répondre » en bas d'A2, et les trois liens d'A3 — sans le
     // `a`, `touch-action: none` avalait le tap et la réponse ne partait jamais.
     if (doigt !== null || (e.target as Element | null)?.closest('a, button')) return
+    // Un poème ouvert défile, et c'est la seule exception à « un pli = un écran »
+    // (docs/design-system.md#les-cinq-règles). Le geste lui rend le doigt entièrement :
+    // sans ça, tirer ferait à la fois défiler le texte et remonter la feuille. L'attribut
+    // est posé par `main.ts` une fois le poème ouvert, et par la même occasion `pli.css`
+    // rend `touch-action` au navigateur — les deux vont ensemble, l'un sans l'autre ne
+    // ferait rien. On ne referme donc pas un poème en tirant : la marque mène au journal.
+    if (p.cadre.dataset.defile !== undefined) return
     doigt = e.pointerId
     hauteur = p.cadre.getBoundingClientRect().height
     y0 = y = yImage = e.clientY

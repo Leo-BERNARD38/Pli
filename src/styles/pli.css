@@ -118,6 +118,22 @@ a:hover {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* LE DOIGT RENDU AU DÉFILEMENT — le poème, et lui seul.
+
+   `touch-action: none` ci-dessus est ce qui donne le geste au produit plutôt qu'au
+   navigateur. Il se croise le long des ancêtres : un `pan-y` posé sur le corps d'un poème
+   serait annulé par le `none` du cadre, et le doigt ne ferait rien. La permission doit donc
+   se rendre ICI, sur le cadre lui-même.
+
+   Elle se rend **une fois le poème ouvert, jamais avant** : pendant le dépliage, c'est le
+   geste qui a le doigt. C'est `main.ts` qui pose l'attribut — au dépliage d'un poème, et à
+   sa relecture, où il n'y a pas de geste du tout — et qui le retire à chaque changement
+   d'adresse. Le geste, de son côté, laisse passer le `pointerdown` qui tombe dedans, comme
+   il laisse déjà passer ce qui est dans un `a` ou un `button` (src/lecteur/geste.ts). */
+.pli[data-defile] {
+  touch-action: pan-y;
+}
+
 /* `display: flex` ci-dessus est une déclaration d'auteur : elle bat le `[hidden]` de la
    feuille du navigateur, et un pli masqué restait à l'écran. Un lien abîmé montrait donc
    un pli qui n'était pas le sien (docs/parcours.md#larrivée). */

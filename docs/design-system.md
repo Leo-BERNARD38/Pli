@@ -10,6 +10,9 @@ du fichier d'origine — chaque écart est repris et justifié dans
 Elles servent de critères de revue. Un écran qui en casse une est à refaire, pas à discuter.
 
 1. **Un pli = un écran.** Jamais de défilement dans un pli, jamais un flux de six pages.
+   **Une exception, et elle est nommée : le poème.** C'est le seul contenu long du produit,
+   et il se lit d'un bout à l'autre — son corps défile, les autres jamais. Ce n'est pas une
+   permission générale : tout écran qui défile sans être un poème casse la règle.
 2. **Le carmin est l'action.** Une seule couleur agit ; tout le reste est papier et encre.
 3. **La pliure est physique.** Elle suit le doigt, résiste dans le mauvais sens, retombe si on hésite.
 4. **Le papier découle du type.** Il change le fond et l'encre, jamais la composition —
@@ -74,7 +77,7 @@ le fichier.
 | poème | **aucune** | — | — |
 
 Le poème n'a pas d'image, et c'est délibéré : c'est le seul contenu long, le seul qui
-pagine, et le seul où lire compte plus que regarder.
+défile, et le seul où lire compte plus que regarder.
 
 ### Les deux images du produit
 
