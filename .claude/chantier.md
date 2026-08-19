@@ -552,6 +552,68 @@ Ce que la passe a **regardé sans y toucher**, et qui appartient à l'auteur :
       trois, et « 16 signes » sur une ligne vide. Ce qui reste et ce qui est écrit se lisent
       pareil
 
+## Une seule page — 19/08/2026
+
+**L'atelier n'est plus un second document.** C'est la route `#/atelier` de la même page, et
+c'est une décision d'auteur prise en connaissant son prix, qui est lourd.
+
+Ce qui l'a déclenchée n'est pas technique : **on perdait son chemin en traversant.** Deux
+documents, c'est deux historiques — le retour du navigateur ramenait sur ce qu'on lisait
+*avant* la traversée, jamais sur la liste qu'on venait de quitter, et cet écran-là n'a pas
+de traversée. Reproduit au navigateur avant d'y toucher.
+
+- [x] un seul document, un seul build, un seul routeur. `atelier/index.html` sort du dépôt ;
+      `public/atelier/index.html` le remplace par une **redirection** vers `#/atelier` —
+      une icône posée sur un écran d'accueil pointe une adresse qui doit rester valable
+- [x] **le code de l'atelier ne s'exécute qu'à `tenirLAtelier()`.** L'import est statique —
+      une page, un fichier — mais rien ne tourne avant qu'on y aille. Sans cette porte,
+      ouvrir un pli sur son téléphone à elle armerait six écrans, poserait un observateur de
+      vue et lirait mon tiroir dans `localStorage`, sur le chemin critique du texte qu'elle
+      attend
+- [x] **les quatre feuilles des types restent en vague 3.** L'atelier les importait
+      statiquement pour son aperçu : elles seraient entrées dans le document sans que
+      personne le demande. La fusion n'a pas le droit de changer ce qu'elle télécharge, ni
+      quand — trois avertissements Rollup l'ont dit avant moi
+- [x] `#/atelier` est une route, avec ses tests. Un test existant affirmait le contraire —
+      il était juste, il est retourné
+- [x] la garde « rien de `src/atelier/` dans le bundle du lecteur » est retirée : elle
+      gardait une frontière qui n'existe plus. **C'est le plafond qui garde le premier écran
+      maintenant**, et lui seul
+- [x] **la traversée glisse.** Le troisième mouvement du produit : ce qu'on quitte part d'un
+      côté, ce qui arrive vient de l'autre, et le retour défait l'aller. `--ouvre` et
+      `--courbe`, comme le dépliage. Sous `prefers-reduced-motion`, les deux côtés se
+      remplacent sans mouvement, et là où le navigateur ne sait pas faire, le changement se
+      fait quand même
+- [x] le corps du routeur est extrait dans `afficherLeLecteur()`, qui rend une promesse : le
+      retour attend que son écran d'arrivée existe, sinon il glisserait sur du vide
+- [x] **l'atelier reprend où on l'a laissé** — sous deux documents, revenir le rechargeait
+      et le ramenait à sa première question
+
+**Ce que ça coûte, et il faut le lire en entier :**
+
+| | avant | après |
+|---|---|---|
+| document du premier écran | 13 945 o gzip | **23 017** |
+| plafond de la vague 1 | 14 336 | **24 576** |
+| octets avant A1 complet | 89 ko | **129 ko** |
+| requêtes pour traverser | un chargement de page | **zéro** |
+
+- [x] **le temps que ça coûte est mesuré, pas supposé** : les deux builds servis côte à
+      côte, 60 ms de latence, 9 Mb/s, CPU bridé ×4, cache vide, médiane sur sept tours →
+      **+16 ms** sur le repère `a1` (138 → 154) et autant sur le premier rendu (248 → 264).
+      Neuf kilo-octets coûtent seize millisecondes : ce n'est pas le document qui domine,
+      c'est la latence et les polices. C'est ce qui rend la fusion payable
+- [ ] **« le texte d'A1 peint en moins d'une seconde en 4G » reste à faire sur les deux
+      téléphones**, et c'est maintenant LA mesure qui compte. La ligne ci-dessus dit
+      seulement qu'on ne part pas de très loin — un émulateur n'est pas un téléphone
+- [ ] **le balisage de l'atelier est parsé à chaque chargement**, chez elle comprise —
+      quinze kilo-octets bruts de sections qu'elle n'ouvrira peut-être jamais. Les octets
+      sont comptés, ce temps-là ne l'est pas
+- [ ] **l'empreinte du seuil voyage dans le document qui part chez elle.** Elle était déjà
+      publique — `/Pli/atelier/` était une adresse que n'importe qui pouvait charger — et le
+      seuil n'a jamais été qu'un paillasson. Mais la phrase « l'atelier ne se charge jamais
+      sur son téléphone » est fausse depuis ce jour, et elle est retirée partout
+
 ## Les parcours — les sorties, et le relais rouvert — 19/08/2026
 
 Trois culs-de-sac, trouvés en traversant le produit à l'écran. Écrit, relu par `revue-ecran`

@@ -11,22 +11,60 @@
 Pourquoi pas React : quelques écrans, aucun état partagé complexe, et un geste sur mesure.
 Le framework coûterait plus qu'il ne rapporte.
 
-## Deux entrées
+## Une seule page
 
 ```
-leo-bernard38.github.io/Pli/           elle   → index.html
-leo-bernard38.github.io/Pli/atelier/   moi    → atelier/index.html
+leo-bernard38.github.io/Pli/            TOUT le produit — un document, un build, un routeur
+leo-bernard38.github.io/Pli/atelier/    une redirection vers `#/atelier`
 ```
 
-**Deux builds, et non deux entrées d'un même build** — `vite build --mode lecteur`, puis
-`--mode atelier`. La nuance a coûté un jalon : dès que l'atelier importe `codec.ts`, Rollup
-en fait un chunk commun aux deux entrées, le document du lecteur perd son inlining et gagne
-une requête avant le premier texte. Un build par entrée rend à chacune sa copie du module
-partagé (`vite.config.ts`).
+**Il y a eu deux entrées, et deux builds, jusqu'au 19/08/2026.** Le raisonnement d'alors
+était juste et il a coûté un jalon : dès que l'atelier importe `codec.ts`, Rollup en fait un
+chunk commun aux deux entrées, le document du lecteur perd son inlining et gagne une requête
+avant le premier texte. Un build par entrée rendait à chacune sa copie du module partagé.
 
-Les lignes de saisie, les aperçus et l'index des poèmes ne se chargent donc jamais sur son
-téléphone. Ils ne partagent que du **code source** — `lib/` et `styles/` —, jamais un
-fichier servi.
+**Ce qui l'a renversé n'est pas technique, c'est un parcours cassé.** Deux documents, c'est
+deux historiques de navigation : traverser rechargeait la page, et le retour du navigateur
+ramenait sur ce qu'on lisait *avant* la traversée, jamais sur la liste qu'on venait de
+quitter. On perdait le chemin d'un côté à l'autre sans rien avoir fait de faux. Un seul
+document referme ça par construction : la traversée est un `hashchange`, le retour la
+défait, et les deux côtés peuvent glisser l'un sur l'autre — ce qu'aucun changement de
+document ne permet de montrer.
+
+### Ce que ça coûte, en clair
+
+| | avant | après |
+|---|---|---|
+| le document du premier écran | 13 945 octets gzip | **23 017** |
+| plafond de la vague 1 | 14 336 | **24 576** |
+| requêtes pour traverser | un chargement de page entier | **zéro** |
+
+L'atelier pèse donc près de **9 ko gzip sur le premier écran d'A1**, qui est ce que ce
+produit défend en premier. C'est le prix, il est écrit, et il est tenu par le même plafond
+qu'avant — le build échoue au-delà ([chargement.md](chargement.md#le-plafond-de-la-vague-1)).
+
+Trois choses limitent la casse, et elles ne sont pas des détails :
+
+- **Le code de l'atelier ne s'exécute pas tant qu'on n'y va pas.** L'import est statique —
+  une page, un fichier —, mais le module n'expose qu'une porte, `tenirLAtelier()`. Sans
+  elle, ouvrir un pli sur son téléphone à elle armerait six écrans, poserait un observateur
+  de vue et lirait mon tiroir dans `localStorage`, sur le chemin critique du texte qu'elle
+  attend.
+- **Les quatre feuilles des types restent en vague 3.** L'atelier les importait
+  statiquement pour son aperçu ; elles seraient entrées dans le document sans que personne
+  le demande. La fusion n'a pas le droit de changer ce qu'elle télécharge, ni quand.
+- **`public/atelier/index.html` reste**, en redirection : une icône posée sur un écran
+  d'accueil pointe une adresse qui doit rester valable.
+
+**Ce que la fusion ne change pas.** Il n'y a toujours ni serveur ni synchronisation, deux
+`localStorage` séparés — son journal par `journal.ts`, mon tiroir par `tiroir.ts` —, et le
+seuil tient toujours la porte de l'atelier.
+
+**Ce qu'elle change, et qu'il faut dire :** l'empreinte du seuil voyage désormais dans le
+document qui part chez elle. Elle y était déjà exposée — `/Pli/atelier/` était une adresse
+publique que n'importe qui pouvait charger — et le seuil n'a jamais été qu'un paillasson
+(voir plus bas). Mais la phrase « l'atelier ne se charge jamais sur son téléphone » est
+fausse depuis ce jour, et elle est retirée partout.
 
 ## Routage
 
@@ -37,9 +75,13 @@ URL profonde tomberait en 404.
 leo-bernard38.github.io/Pli/#/            ses plis (vide tant qu'elle n'a rien reçu)
 leo-bernard38.github.io/Pli/#c=<payload>  un pli porté par le lien
 leo-bernard38.github.io/Pli/#p=<nom>      un poème, porté par un fichier
+leo-bernard38.github.io/Pli/#/atelier     l'atelier — D0 → D1 → D2 → D3
 leo-bernard38.github.io/Pli/#/installer   la marche à suivre pour l'ajout à l'écran d'accueil
-leo-bernard38.github.io/Pli/atelier/      D0 → D1 → D2 → D3
 ```
+
+Les étapes internes de l'atelier ne sont pas dans le hash, et c'est délibéré : aucune ne
+s'envoie, et un dépôt à moitié écrit n'a pas d'adresse. Le retour se fait par la conduite,
+en haut à gauche. `#/atelier`, lui, en a une — c'est une traversée, pas une étape.
 
 Le routeur est une fonction sur `hashchange`. Pas de librairie.
 

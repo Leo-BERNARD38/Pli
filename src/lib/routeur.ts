@@ -7,7 +7,13 @@
 //   leo-bernard38.github.io/Pli/#c=<payload>  un pli porté par le lien
 //   leo-bernard38.github.io/Pli/#p=<nom>      un poème, porté par un fichier
 //   leo-bernard38.github.io/Pli/#/relire/<h>  un pli de son journal, relu
+//   leo-bernard38.github.io/Pli/#/atelier     l'atelier — le dépôt, de l'autre côté
 //   leo-bernard38.github.io/Pli/#/installer   l'ajout à l'écran d'accueil
+//
+// **Une seule page depuis le 19/08/2026** : l'atelier n'est plus un second document servi
+// sous `/Pli/atelier/`, c'est une route comme les autres. Les seules adresses qui partent
+// dans une conversation restent `#c=` et `#p=` ; `#/`, `#/relire/` et `#/atelier` ne
+// quittent jamais l'appareil (docs/architecture.md#une-seule-page).
 
 /** L'écran que le lien demande. */
 export type Route =
@@ -15,6 +21,7 @@ export type Route =
   | { ecran: 'pli'; payload: string }
   | { ecran: 'poeme'; nom: string }
   | { ecran: 'relire'; h: string }
+  | { ecran: 'atelier' }
   | { ecran: 'installer' }
   | { ecran: 'inconnu' }
 
@@ -37,6 +44,7 @@ export function lire(hash: string): Route {
   const chemin = hash.startsWith('#') ? hash.slice(1) : hash
 
   if (chemin === '' || chemin === '/') return { ecran: 'journal' }
+  if (chemin === '/atelier') return { ecran: 'atelier' }
   if (chemin === '/installer') return { ecran: 'installer' }
   if (chemin.startsWith('c=')) return { ecran: 'pli', payload: chemin.slice(2) }
 

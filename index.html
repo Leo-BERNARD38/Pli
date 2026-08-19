@@ -7,9 +7,10 @@
     <meta name="color-scheme" content="light" />
     <title>Pli</title>
 
-    <!-- Les icônes et le manifeste, à coller telles quelles dans les deux entrées
-         (docs/installation.md#le-manifeste-et-les-icônes). Noms stables, jamais empreintés :
-         une icône posée sur son écran d'accueil pointe une adresse qui doit rester valable. -->
+    <!-- Les icônes et le manifeste (docs/installation.md#le-manifeste-et-les-icônes). Noms
+         stables, jamais empreintés : une icône posée sur son écran d'accueil pointe une
+         adresse qui doit rester valable. C'est la même règle qui garde
+         `public/atelier/index.html` en vie, en redirection, depuis la page unique. -->
     <link rel="icon" href="/icones/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="icon" href="/icones/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icones/apple-touch-icon.png" />
@@ -157,6 +158,375 @@
         </div>
       </section>
     </main>
+
+
+    <!-- ══ L'ATELIER ══════════════════════════════════════════════════════════════════
+         Mon côté, dans le MÊME document depuis le 19/08/2026 : une seule page, une seule
+         requête, un seul routeur (docs/architecture.md#une-seule-page). Il vivait sous un
+         second document, `/Pli/atelier/`, buildé à part — cette adresse est devenue une
+         redirection, pour que l'icône déjà posée sur mon écran d'accueil marche encore.
+
+         Ce que la fusion coûte est mesuré et écrit dans
+         docs/chargement.md#le-plafond-de-la-vague-1 : le premier écran porte désormais tout
+         le produit. Ce qu'elle rend : le retour du navigateur ne tombe plus dans le vide
+         entre deux documents, la traversée est un `hashchange` et non un chargement, et les
+         écrans peuvent glisser les uns sur les autres.
+
+         **Rien de ceci ne s'exécute avant qu'on aille à l'atelier** : le module attend
+         `tenirLAtelier()` (src/atelier/main.ts). Les sections sont là, inertes, et le
+         chemin critique d'A1 ne les traverse pas.
+         ══════════════════════════════════════════════════════════════════════════════ -->
+    <!-- D0 · le seuil. Une seule fois, puis mémorisé. Une question, une ligne
+         (docs/parcours.md#d0--le-seuil). La comparaison porte sur une empreinte, jamais
+         sur la date en clair (docs/architecture.md#le-seuil-de-latelier). -->
+    <!-- `hidden` DÈS LE BALISAGE, comme ses cinq frères — et c'est la page unique qui
+         l'exige. Sous son propre document, D0 s'affichait d'office : le document ENTIER
+         était l'atelier, il n'y avait rien à masquer. Ici il est frère du pli, `.ecran`
+         compose en `display: flex` sur toute la hauteur, et rien ne défile en `overflow`
+         caché : sans cet attribut, la question « Depuis quand ? » et sa ligne de saisie
+         sont dans le rendu et atteignables au Tab **sur chaque chargement, le sien
+         compris**, jusqu'à ce que le script les referme. Et si le script ne tourne pas,
+         pour toujours. `montrer('d0')` le lève quand on franchit la porte. -->
+    <section class="ecran" id="d0" hidden>
+      <div class="corps corps--reparti">
+        <p class="marque">Pli</p>
+        <div class="groupe">
+          <h1 class="question">Depuis quand ?</h1>
+          <label class="ligne ligne--seule">
+            <span class="ligne__nom">jj/mm/aaaa</span>
+            <input
+              id="seuil"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="jj/mm/aaaa"
+            />
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- D4 · le tiroir. Ce que je ne veux pas retaper, et qui n'a rien à faire dans le
+         dépôt (docs/parcours.md#d4--le-tiroir). Ce qui est écrit est gardé : aucune
+         action ne l'enregistre, la ligne suffit. -->
+    <section class="ecran" id="d4" hidden>
+      <!-- Pas de retour ici, et c'est voulu : « continuer » ramène à D1, et D0 n'a rien
+           derrière lui. La conduite garde son pas à droite, comme partout ailleurs
+           (`.conduite__pas:only-child`, depot.css). -->
+      <div class="conduite">
+        <p class="conduite__pas">le tiroir</p>
+      </div>
+
+      <div class="corps">
+        <div class="groupe">
+          <h1 class="question">Ce que tu ne retapes pas.</h1>
+          <p class="aide">Trois lignes, gardées sur ce téléphone seul. Rien n'en sort.</p>
+        </div>
+      </div>
+
+      <div class="lignes">
+        <label class="ligne">
+          <span class="ligne__nom">le numéro de réponse</span>
+          <input
+            id="w"
+            type="text"
+            inputmode="tel"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="336XXXXXXXX"
+          />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">la signature</span>
+          <input id="s" type="text" autocomplete="off" placeholder="a." />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">le prochain numéro</span>
+          <input id="n" type="text" inputmode="numeric" autocomplete="off" />
+        </label>
+      </div>
+
+      <button class="bouton" type="button" data-va="d1">
+        <span>continuer</span>
+        <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-droite" /></svg>
+      </button>
+    </section>
+
+    <!-- D1 · le type. Quatre lignes, chacune avec son nom, sa glose et le layout vu en
+         petit — un vrai pli réduit par transform, jamais un dessin séparé
+         (docs/parcours.md#d1--le-type). Le type fixe la mise en page : après lui, il n'y a
+         plus que du texte. -->
+    <section class="ecran" id="d1" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d4">← le tiroir</button>
+        <p class="conduite__pas">1 sur 3</p>
+      </div>
+
+      <div class="corps corps--haut">
+        <p class="marque marque--petite">Pli</p>
+        <div class="groupe">
+          <h1 class="question">Qu'est-ce que tu envoies ?</h1>
+          <p class="aide">
+            Le type choisit la mise en page. Tu n'auras plus que les textes à écrire.
+          </p>
+        </div>
+      </div>
+
+      <div class="lignes">
+        <button class="type" type="button" data-type="inv">
+          <span>
+            <span class="type__nom">une invitation</span>
+            <span class="type__glose">un titre, un mot, la date et le lieu — elle répond oui ou non</span>
+          </span>
+          <span class="apercu apercu--vignette">
+            <span class="mini">
+              <span class="mini__volet"></span>
+              <span class="mini__pile">
+                <span class="mini__bloc mini__bloc--carmin" style="height: 104px"></span>
+                <span class="mini__bloc mini__bloc--encre" style="height: 12px; width: 150px"></span>
+                <span class="mini__bloc mini__bloc--encre" style="height: 12px; width: 190px"></span>
+              </span>
+            </span>
+          </span>
+        </button>
+
+        <button class="type" type="button" data-type="pen">
+          <span>
+            <span class="type__nom">une pensée</span>
+            <span class="type__glose">deux lignes seules au milieu de la page — rien à répondre</span>
+          </span>
+          <span class="apercu apercu--vignette">
+            <span class="mini pli--encre">
+              <span class="mini__pile">
+                <span class="mini__bloc mini__bloc--clair" style="height: 22px"></span>
+                <span class="mini__bloc mini__bloc--clair" style="height: 22px; width: 70%"></span>
+              </span>
+            </span>
+          </span>
+        </button>
+
+        <button class="type" type="button" data-type="sou">
+          <span>
+            <span class="type__nom">un souvenir</span>
+            <span class="type__glose">un titre haut, une ligne en bas, beaucoup de vide</span>
+          </span>
+          <span class="apercu apercu--vignette">
+            <span class="mini">
+              <span class="mini__pile">
+                <span class="mini__bloc mini__bloc--carmin" style="height: 76px"></span>
+                <span class="mini__bloc mini__bloc--encre" style="height: 18px; width: 60%"></span>
+              </span>
+            </span>
+          </span>
+        </button>
+
+        <!-- Le poème ne s'écrit pas ici : il passe par la moulinette, à mon bureau
+             (docs/parcours.md#le-poème-hors-atelier). La ligne mène donc à D2p, la liste
+             des poèmes déjà pliés, et non à D2 — c'est le seul type dont on choisit le
+             texte au lieu de l'écrire. -->
+        <button class="type" type="button" data-type="poe">
+          <span>
+            <span class="type__nom">un poème</span>
+            <span class="type__glose">il s’écrit à ton bureau, et la moulinette en fait le lien</span>
+          </span>
+          <span class="apercu apercu--vignette">
+            <span class="mini pli--encre">
+              <span class="mini__pile">
+                <span class="mini__bloc mini__bloc--clair" style="height: 14px; width: 80%"></span>
+                <span class="mini__bloc mini__bloc--clair" style="height: 14px; width: 62%"></span>
+                <span class="mini__bloc mini__bloc--clair" style="height: 14px; width: 74%"></span>
+              </span>
+            </span>
+          </span>
+        </button>
+      </div>
+
+      <!-- Les deux chemins discrets de l'atelier, empilés : ce que j'ai déposé, et ce que
+           j'ai reçu. Ils se lisent l'un sous l'autre, et chacun nomme sa liste — c'est là
+           que la différence entre les deux se voit le mieux.
+
+           Celui de D5 ne se montre que s'il mène quelque part : une ligne vers une liste
+           vide n'est pas discrète, elle est vide. Celui des plis reçus, lui, est TOUJOURS
+           là : c'est la seule sortie de l'atelier tant que rien n'a été déposé, et D5 est
+           alors inatteignable.
+
+           C'est un hash, comme tout le reste : une seule page, une seule requête, et le
+           retour du navigateur défait la traversée au lieu de recharger un document
+           (docs/architecture.md#une-seule-page). -->
+      <button class="passage" type="button" data-va="d5" hidden>les plis déposés</button>
+      <a class="passage" href="#/">les plis reçus</a>
+
+      <button class="bouton" type="button" data-va="d2" disabled>
+        <span>continuer</span>
+        <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-droite" /></svg>
+      </button>
+    </section>
+
+    <!-- D2 · les textes. « Voici la page telle qu'elle la recevra. Tu remplis, elle se
+         remplit » (docs/parcours.md#d2--les-textes). L'aperçu est un vrai pli 360 × 780
+         réduit, et il porte `data-type` : les feuilles des types le composent exactement
+         comme elle le lira. -->
+    <section class="ecran" id="d2" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d1">← le type</button>
+        <p class="conduite__pas">2 sur 3</p>
+      </div>
+
+      <div class="corps corps--haut">
+        <div class="entete">
+          <div class="groupe">
+            <h1 class="question">Écris ton invitation.</h1>
+            <p class="aide">Voici la page telle qu'elle la recevra. Tu remplis, elle se remplit.</p>
+          </div>
+
+          <div class="apercu apercu--tete">
+            <div class="mini" id="mini" data-type="inv">
+              <div class="tete">
+                <p class="marque">Pli</p>
+                <p class="etiquette carmin" data-mini="type"></p>
+              </div>
+              <div class="corps">
+                <h2 class="titre" data-mini="titre"></h2>
+                <p class="voix" data-mini="voix"></p>
+                <ul class="faits">
+                  <li class="etiquette carmin" data-mini="quand"></li>
+                  <li class="etiquette attenue" data-mini="ou"></li>
+                </ul>
+                <p class="etiquette etiquette--fine" data-mini="signature"></p>
+              </div>
+              <div class="mini__volet"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lignes">
+        <label class="ligne ligne--titre" data-si="titre">
+          <span class="ligne__nom">Le titre <span class="reste" id="reste-ti"></span></span>
+          <input id="ti" type="text" autocomplete="off" placeholder="Tu es invitée" />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">Ton mot <span class="reste" id="reste-b"></span></span>
+          <textarea
+            id="b"
+            rows="2"
+            placeholder="Une ou deux lignes, comme tu le dirais à voix haute."
+          ></textarea>
+        </label>
+        <label class="ligne" data-si="faits">
+          <span class="ligne__nom">Quand</span>
+          <input id="quand" type="text" autocomplete="off" placeholder="samedi 22 août · 20h00" />
+        </label>
+        <label class="ligne" data-si="faits">
+          <span class="ligne__nom">Où <span class="facultatif">— facultatif</span></span>
+          <input id="ou" type="text" autocomplete="off" placeholder="Le Petit Comptoir" />
+        </label>
+        <label class="ligne">
+          <span class="ligne__nom">Signé</span>
+          <input id="signe" type="text" autocomplete="off" placeholder="a." />
+        </label>
+      </div>
+
+      <button class="bouton" type="button" data-va="d3" disabled>
+        <span>déposer</span>
+        <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-droite" /></svg>
+      </button>
+    </section>
+
+    <!-- D3 · le lien, identique pour les quatre types. Le lien ne s'affiche pas : un vrai
+         payload ne tient pas sur une ligne. Deux actions à la place — envoyer, et copier
+         (docs/parcours.md#d3--le-lien). Aucune expiration : elle n'existe plus. -->
+    <section class="ecran pli--carmin" id="d3" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d2" data-lien="retour">← modifier</button>
+        <p class="conduite__pas" data-lien="pas">3 sur 3</p>
+      </div>
+
+      <div class="corps corps--reparti">
+        <p class="marque marque--petite">Pli</p>
+        <div class="groupe">
+          <h1 class="titre titre--geant" data-lien="numero"></h1>
+          <p class="voix voix--corps">
+            Envoie-le-lui. Il se déplie une fois, chez elle, et se referme.
+          </p>
+          <p class="etiquette etiquette--fine" data-lien="longueur"></p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="action" type="button" id="envoyer">
+          <span class="etiquette etiquette--forte">envoyer</span>
+          <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-droite" /></svg>
+        </button>
+        <button class="action action--fine" type="button" id="copier">copier le lien</button>
+      </div>
+    </section>
+
+    <!-- D2p · QUEL POÈME. Il remplace D2 pour le poème : le texte ne s'écrit pas ici, il
+         s'écrit à mon bureau et passe par la moulinette
+         (docs/parcours.md#d2p--quel-poème). C'est le seul écran de l'atelier qui demande le
+         réseau — l'index est un fichier du dépôt, encodé comme les poèmes.
+
+         Trois états, et le troisième n'est pas le deuxième : la liste, « aucun poème
+         encore » qui est un fait, et « pas de réseau » qui passe. -->
+    <section class="ecran" id="d2p" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d1">← le type</button>
+        <p class="conduite__pas">2 sur 3</p>
+      </div>
+
+      <div class="corps corps--haut">
+        <p class="marque marque--petite">Pli</p>
+        <div class="groupe">
+          <h1 class="question">Quel poème ?</h1>
+          <p class="aide">Ceux que la moulinette a pliés. Touche-en un, le lien est prêt.</p>
+        </div>
+        <p class="aide" data-poemes="rien" hidden>
+          Aucun poème encore. Écris-en un à ton bureau, puis passe-le à la moulinette.
+        </p>
+        <p class="aide" data-poemes="coupe" hidden>
+          Pas de réseau. La liste des poèmes vit dans le dépôt — reviens quand ça repasse.
+        </p>
+      </div>
+
+      <ul class="lignes deposes" data-poemes="liste" hidden></ul>
+    </section>
+
+    <!-- D5 · les plis déposés. « Relire et renvoyer ce que j'ai déposé »
+         (docs/parcours.md#3-ce-qui-nest-pas-encore-maquetté) — la seule ligne que la
+         spécification en donne. La liste reprend la grammaire du sommaire de C1, chez
+         elle : le numéro, le type, ce qui est écrit, depuis quand. Une ligne se touche et
+         le lien revient, avec ses deux actions. -->
+    <section class="ecran" id="d5" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d1">← le type</button>
+        <p class="conduite__pas">les plis déposés</p>
+      </div>
+
+      <div class="corps corps--haut">
+        <div class="groupe">
+          <h1 class="question">Ce que tu as déposé.</h1>
+          <p class="aide">Sur ce téléphone seul. Touche-en un pour le renvoyer tel quel.</p>
+        </div>
+        <p class="aide" data-deposes="rien" hidden>Rien encore. Le premier restera ici.</p>
+      </div>
+
+      <ul class="lignes deposes" data-deposes="liste" hidden></ul>
+
+      <!-- Le retour vers ce que j'ai reçu, en bas de la liste de ce que j'ai déposé —
+           exactement là où le journal met son chemin vers l'atelier. Chaque liste finit par
+           celle d'en face (src/lecteur/plis.ts, docs/parcours.md#le-journal). -->
+      <a class="passage" href="#/">les plis reçus</a>
+
+      <!-- Vider l'historique demande deux touches : la première prévient, la seconde
+           efface. Rien ne se rattrape ici, et une liste qui s'en va sur un frôlement se
+           serait rattrapée nulle part. Il ne se montre que s'il y a quelque chose à vider. -->
+      <button class="passage passage--vider" type="button" data-vider hidden>
+        vider l’historique
+      </button>
+    </section>
 
     <script type="module" src="/src/lecteur/main.ts"></script>
   </body>

@@ -797,9 +797,16 @@ button.action {
   }
 
   /* Les 120 ms de docs/fluidite.md. Le dépliage les pose en ligne, depuis geste.ts, parce
-     que sa durée se calcule ; A3 et A4 n'ont que cette transition, elle tient ici. */
+     que sa durée se calcule ; A3, A4 et A5 n'ont que cette transition, elle tient ici. */
   .pli__monte {
     transition-duration: 120ms;
+  }
+
+  /* La traversée ne glisse plus : les deux côtés se remplacent, sans mouvement. Le
+     navigateur garde sa transition, elle ne dure simplement rien. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
 
   /* Les docs ne nomment que l'invite et les 120 ms d'ouverture. Le fondu d'arrivée d'une
@@ -884,4 +891,72 @@ a.ligne:active {
 .volet :focus-visible,
 .bouton:focus-visible {
   box-shadow: inset 2px 0 0 var(--creme);
+}
+
+/* ==========================================================================
+   LA TRAVERSÉE — d'un côté du produit à l'autre, et on voit ce qu'on quitte.
+   ==========================================================================
+
+   Les deux côtés étaient deux documents : traverser rechargeait la page, et rien ne disait
+   où l'on allait. Une seule page depuis le 19/08/2026, donc une transition possible — et
+   elle est la troisième du produit, après le dépliage et la pose d'un écran.
+
+   Elle glisse, elle ne fond pas, et c'est tout ce qu'on lui demande : un fondu dit « autre
+   chose », un glissement dit « par là ». L'atelier entre par la DROITE, comme la flèche du
+   chemin qui y mène ; il ressort par où il est entré.
+
+   `--ouvre`, la durée du dépliage : le produit n'a qu'une durée de déplacement, et il n'y a
+   aucune raison qu'une feuille et un côté ne bougent pas au même rythme. Une seule courbe,
+   comme partout.
+
+   Deux couches, et pas une de plus — le navigateur en fabrique exactement deux, l'ancienne
+   image et la nouvelle, et il les compose lui-même (docs/fluidite.md#les-couches-et-ce-quelles-coûtent). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  /* Le fondu par défaut du navigateur, retiré : il se superposerait au glissement et
+     donnerait un entre-deux gris que rien ne demande. */
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+@keyframes traverse-sort-a-gauche {
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@keyframes traverse-entre-a-droite {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes traverse-sort-a-droite {
+  to {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes traverse-entre-a-gauche {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+/* L'aller : ce qu'on quitte part à gauche, ce qui arrive vient de la droite. */
+[data-traverse='aller']::view-transition-old(root) {
+  animation: traverse-sort-a-gauche var(--ouvre) var(--courbe) both;
+}
+
+[data-traverse='aller']::view-transition-new(root) {
+  animation: traverse-entre-a-droite var(--ouvre) var(--courbe) both;
+}
+
+/* Le retour défait l'aller, exactement. C'est ce qui fait qu'on sait d'où l'on vient. */
+[data-traverse='retour']::view-transition-old(root) {
+  animation: traverse-sort-a-droite var(--ouvre) var(--courbe) both;
+}
+
+[data-traverse='retour']::view-transition-new(root) {
+  animation: traverse-entre-a-gauche var(--ouvre) var(--courbe) both;
 }

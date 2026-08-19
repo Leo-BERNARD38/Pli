@@ -9,7 +9,7 @@ d'ancien et de neuf.
 | Famille | Fichiers | Nom | Périmable ? |
 |---|---|---|---|
 | **empreintés** | js, css, polices, textures | `pli-a3f9c1.js` | non — un contenu neuf a un nom neuf |
-| **stables** | `index.html`, `atelier/index.html`, `plis/*.txt`, `plis/index`, tout `icones/` | leur nom | **oui, dix minutes** |
+| **stables** | `index.html`, `plis/*.txt`, `plis/index`, tout `icones/`, et `atelier/index.html` — qui n'est plus qu'une redirection figée depuis la page unique ([architecture.md](architecture.md#une-seule-page)) | leur nom | **oui, dix minutes** |
 
 L'empreinte règle le problème que tu décris — **jamais un ancien CSS avec un nouveau code**.
 Deux versions d'un même fichier ne portent pas le même nom, elles ne peuvent pas se

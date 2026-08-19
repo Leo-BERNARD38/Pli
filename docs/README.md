@@ -15,7 +15,7 @@
 
 | Document | Contenu |
 |---|---|
-| [architecture.md](architecture.md) | Stack, routage, deux entrées, arborescence — la carte |
+| [architecture.md](architecture.md) | Stack, routage, la page unique, arborescence — la carte |
 | [hebergement.md](hebergement.md) | GitHub Pages : ce qu'il donne, ce qu'il refuse, ce qu'on en déduit |
 | [chargement.md](chargement.md) | Les trois vagues : ce qui part avant le texte, et ce qui attend |
 | [fluidite.md](fluidite.md) | Le geste sans accroc : CPU, GPU, et ce qui ne doit jamais tourner pendant |

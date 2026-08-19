@@ -107,9 +107,9 @@
    Discret comme la ligne de D1 vers les plis déposés : il attend d'être cherché, il ne
    recouvre pas le sommaire (docs/parcours.md#le-journal). Il porte le même nom que celle-là,
    `.passage`, parce que c'est le même geste des deux côtés — et la règle est recopiée plutôt
-   que partagée : `depot.css` ne va jamais chez elle, et remonter la classe dans `pli.css`,
-   la seule feuille commune aux deux entrées, la ferait entrer dans le document inliné pour
-   un écran qui n'est pas la vague 1 (docs/chargement.md#les-trois-vagues).
+   que partagée : celle de `depot.css` porte un `all: unset` dont un `<a>` n'a pas besoin, et
+   remonter la classe dans `pli.css` ferait entrer dans le document, qui est la vague 1, une
+   règle qui n'y sert qu'à C1 (docs/chargement.md#le-plafond-de-la-vague-1).
 
    Pas d'`all: unset` ici, contrairement à l'atelier : là-bas c'est un `<button>` et il faut
    lui retirer sa peau système ; ici c'est un `<a>`, et deux déclarations suffisent. Le filet

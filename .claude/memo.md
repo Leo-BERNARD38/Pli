@@ -127,6 +127,14 @@ la même seconde que les polices que le texte attend.
 | invite du volet | `translateY(-9px)`, `2,6 s` — **arrêtée** au toucher, pas mise en pause |
 | `prefers-reduced-motion` | pas d'invite, ouverture à `120 ms`, pas de respiration sur C5, aucun écran ne se pose |
 
+**UNE SEULE PAGE depuis le 19/08/2026.** L'atelier est la route `#/atelier` du même
+document : deux documents, c'était deux historiques, et l'on perdait son chemin en
+traversant. Plafond de la vague 1 **24 576** (13 945 → **23 017** mesurés), le code de
+l'atelier ne s'exécute qu'à `tenirLAtelier()`, les quatre feuilles des types restent en
+vague 3, et `/Pli/atelier/` survit en redirection. La traversée **glisse** — l'atelier entre
+par la droite, le retour défait l'aller. **Ce que la fusion coûte en temps est mesuré :
++16 ms** sur le repère `a1` (4G simulée, CPU ×4, cache vide, médiane de sept tours).
+
 **Deux gestes depuis le 19/08/2026, et un seul principe** — le sens dit ce que le doigt
 fait. Vers le haut, l'action que l'écran dessine avec sa flèche : A1 se déplie, A2 fait
 monter A3 ou A5. Vers le bas, on revient d'un cran : A3 et A5 redescendent, A2 se referme.
@@ -163,11 +171,13 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 
 ## Le chargement (chargement.md, hebergement.md)
 
-- **A1 en 4 requêtes** : le document et trois polices préchargées. **Aucune image** — A1 est
+- **A1 en 4 requêtes** : le document et trois polices préchargées. Le document porte tout le
+  produit depuis la page unique — 23 017 octets gzip, plafond 24 576. **Aucune image** — A1 est
   sur papier crème depuis le 19/08/2026, et rien d'autre n'est préchargé.
-- Vague 1 **≤ 14 336 octets gzip** — le build échoue au-delà. Mesuré le 19/08/2026 :
-  **13 131 octets**, tout le lecteur dedans (5 998 au jalon 2, avant A2, le geste, la
-  réponse, le journal, C2 et C5).
+- Vague 1 **≤ 24 576 octets gzip** — le build échoue au-delà. Mesuré le 19/08/2026 :
+  **23 017 octets**, tout le PRODUIT dedans, l'atelier compris. Il valait 14 336 et portait
+  le lecteur seul : 5 998 au jalon 2, 13 131 avec le journal et C5, 13 945 avec A5, puis la
+  page unique (docs/architecture.md#une-seule-page).
 - Les trois polices d'A1 : **52,6 ko** mesurés, cible 90.
 - Un `#p=` lance son `fetch` **en toute première instruction**.
 - Budgets comptés **en gzip** (Pages ne sert pas de brotli) et **cache vide**

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#E9E2D2" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Pli</title>
+    <!--
+      L'ATELIER A DÉMÉNAGÉ DANS LA PAGE PRINCIPALE — 19/08/2026.
+      Il vivait ici, sous son propre document et son propre build. Il est maintenant une
+      route de la page unique, `#/atelier` (docs/architecture.md#une-seule-page).
+
+      Cette page reste, et elle ne fait qu'une chose : renvoyer là-bas. Une icône posée sur
+      un écran d'accueil pointe une adresse qui doit rester valable — c'est la même règle
+      que pour les noms des icônes, et c'est la seule raison d'être de ce fichier.
+
+      `replace` et non `href` : le retour du navigateur ne doit pas ramener ici, il
+      rebondirait sans fin. Et une balise `<meta http-equiv="refresh">` en secours, pour le
+      cas où le script ne tourne pas — elle laisse, elle, une entrée dans l'historique, mais
+      mieux vaut une entrée de trop qu'une porte fermée.
+    -->
+    <meta http-equiv="refresh" content="0; url=/Pli/#/atelier" />
+    <script>
+      window.location.replace('/Pli/#/atelier')
+    </script>
+  </head>
+  <body></body>
+</html>
