@@ -297,8 +297,15 @@ cadre, l'atelier et son clavier, le contraste, la doc.
 - [x] `.pli` et `.ecran` en plein cadre, `plateau.ts` et `--echelle` supprimés
 - [x] l'encoche portée par le contenu, remise à zéro dans `.mini`
 - [x] le clavier réduit la vue, l'action reste collée en bas ; le zoom est bloqué
-- [x] le contraste mesuré sur ce que le navigateur peint, aux trois largeurs — au pire
-      4,84:1, et deux défauts corrigés : C1 vide, et la marque en carmin sur le rideau
+- [x] le contraste du **lecteur** mesuré sur ce que le navigateur peint, aux trois largeurs
+      — au pire 4,84:1, et trois défauts corrigés : C1 vide, la marque en carmin sur le
+      rideau, et D3 qui composait en crème sur crème depuis le jalon 4
+- [x] le filet de focus rendu aux deux lignes de saisie — `docs/integration.md` le demandait
+      depuis le jalon 1, case non cochée
+- [ ] **le contraste de l'atelier n'est pas mesuré.** Le harnais bute sur le routage : tant
+      que l'empreinte du seuil est vide, l'atelier ramène D0 et les autres écrans ne se
+      laissent pas tenir à l'écran assez longtemps. D0 mesure 4,48:1 au pire ; D1 à D5 ont
+      été relus à l'œil, pas chiffrés. À faire quand l'empreinte sera posée
 - [ ] **à la main, sur les deux téléphones** : compter les couches à l'inspecteur pendant
       un dépliage — `container-type: size` sur `.pli` est une propriété de confinement que
       ce dépôt n'a jamais mesurée, et un coût de couche se mesure

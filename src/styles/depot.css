@@ -42,6 +42,17 @@
   flex-direction: column;
 }
 
+/* D3 est le seul écran carmin de l'atelier, et il ne l'était pas : `.pli--carmin` vit dans
+   pli.css, `.ecran` dans cette feuille-ci, chargée APRÈS — à spécificité égale c'est l'ordre
+   qui tranche, et le papier crème gagnait. D3 composait donc en crème sur crème, illisible,
+   depuis le jalon 4. C'est le même piège que le filet de focus de l'atelier, au même
+   endroit et pour la même raison : le calcul de spécificité de pli.css ne vaut qu'à
+   l'intérieur de pli.css. Deux classes, et l'ordre ne décide plus. */
+.ecran.pli--carmin {
+  background: var(--carmin);
+  background-image: none;
+}
+
 /* `display: flex` est une déclaration d'auteur : elle bat le `[hidden]` de la feuille du
    navigateur, et l'écran masqué resterait à l'écran. La faute est déjà arrivée sur `.pli`
    au jalon 1 — elle ne se refait pas ici. */
@@ -494,12 +505,22 @@
 }
 
 /* Le filet de focus, rendu à ce que `all: unset` lui prend.
+
+   Les lignes de saisie manquaient à l'appel : `.ligne input` vaut une classe ET un type
+   (0,1,1), donc son `all: unset` battait le `:focus-visible` nu de pli.css (0,1,0) quel que
+   soit l'ordre. Le jalon 4 avait rendu son filet à `.type`, `.depose` et `.passage`, pas aux
+   deux seules cibles où l'on tape — et docs/integration.md#accessibilité--la-liste-à-cocher
+   le demandait depuis le début, case non cochée. `.ligne:focus-within` posait bien une
+   teinte, mais elle s'allume aussi à la souris et ne dit pas OÙ le clavier est.
+
    `pli.css` écrit `:focus-visible` en fin de feuille pour gagner à spécificité égale — mais
    ce calcul ne vaut qu'à l'intérieur d'une feuille. `depot.css` est chargée APRÈS, donc à
    égalité (`:focus-visible` et `.type` valent une classe chacun) c'est encore l'ordre qui
    tranche, et c'est `all: unset` qui gagne. Les trois cibles de l'atelier tabulaient donc
    sans filet visible (docs/integration.md#accessibilité--la-liste-à-cocher). Fond crème
    partout ici : le filet est carmin. */
+.ligne input:focus-visible,
+.ligne textarea:focus-visible,
 .type:focus-visible,
 .depose:focus-visible,
 .passage:focus-visible {

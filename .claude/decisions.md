@@ -415,3 +415,16 @@ si la mesure sur les deux téléphones le rend visible.
   rideau sombre — 1,4:1, mesuré aux trois largeurs. Le chemin discret appartient au
   gabarit, pas au journal. La faute date du jalon 5 ; le plein cadre ne l'a pas causée, il
   l'a fait trouver.
+- **19/08/2026 — D3 composait en crème sur crème, et personne ne l'avait vu.** `.ecran`
+  (`depot.css`) et `.pli--carmin` (`pli.css`) valent une classe chacun ; `depot.css` est
+  chargée après, donc à égalité c'est l'ordre qui tranche, et le papier crème gagnait sur le
+  carmin. L'écran du lien était illisible **depuis le jalon 4**. C'est le même piège, au même
+  endroit, que le filet de focus de l'atelier trouvé en relisant D5 : le calcul de
+  spécificité de `pli.css` ne vaut qu'à l'intérieur de `pli.css`. `.ecran.pli--carmin`, deux
+  classes, et l'ordre ne décide plus.
+- **19/08/2026 — le filet de focus rendu aux deux lignes de saisie.** `.ligne input` vaut une
+  classe et un type (0,1,1) : son `all: unset` battait le `:focus-visible` nu de `pli.css`
+  (0,1,0) quel que soit l'ordre. Le jalon 4 avait rendu son filet à `.type`, `.depose` et
+  `.passage` — pas aux deux seules cibles où l'on tape, et
+  `docs/integration.md#accessibilité--la-liste-à-cocher` le demandait depuis le jalon 1, case
+  non cochée.

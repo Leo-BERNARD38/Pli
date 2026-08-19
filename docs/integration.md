@@ -193,8 +193,9 @@ Rien de tout cela n'est dans les prototypes. `PLI.md` §10 l'admet lui-même.
 
 - [ ] Un `<button>` « déplier » atteignable au clavier, qui pose `p = 1` directement.
 - [ ] `@media (prefers-reduced-motion: reduce)` : pas d'invite du volet, ouverture à 120 ms.
-- [ ] Focus visible partout — `.ligne input { all: unset }` le supprime aujourd'hui.
-      Un filet carmin de 2px à gauche sur `:focus-visible`.
+- [x] Focus visible partout — `.ligne input { all: unset }` le supprimait. Filet carmin de
+      2px à gauche sur `:focus-visible`, posé le 19/08/2026 sur les deux cibles où l'on
+      tape ; `.type`, `.depose` et `.passage` l'avaient depuis le jalon 4.
 - [ ] Le texte reste sélectionnable et présent si une animation échoue.
 - [ ] `.etiquette--fine` à `.62`.
 
