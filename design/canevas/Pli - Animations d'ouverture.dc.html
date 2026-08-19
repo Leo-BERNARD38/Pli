@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,800;1,6..96,400&amp;family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&amp;family=Space+Mono:wght@400;700&amp;family=Pinyon+Script&amp;display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#E9E2D2;-webkit-font-smoothing:antialiased}
+  a{color:#C81E33}a:hover{color:#14100E}
+  ::selection{background:#C81E33;color:#F7F2E8}
+
+  /* 1a — le volet */
+  @keyframes v-sheet{0%,10%{transform:translateY(66%)}36%,42%{transform:translateY(0)}64%,82%{transform:translateY(-100%)}90%,92%{transform:translateY(0)}100%{transform:translateY(66%)}}
+  @keyframes v-open{0%,37%{opacity:0}38%,90%{opacity:1}91%,100%{opacity:0}}
+  @keyframes v-closed{0%,37%{opacity:1}38%,90%{opacity:0}91%,100%{opacity:1}}
+
+  /* 1b — les trois bandes */
+  @keyframes b-group{0%,10%{transform:translateY(66%)}32%,94%{transform:translateY(0)}100%{transform:translateY(66%)}}
+  @keyframes b-s1{0%,34%{transform:translateY(0)}52%,84%{transform:translateY(-100%)}92%,100%{transform:translateY(0)}}
+  @keyframes b-s2{0%,40%{transform:translateY(0)}58%,84%{transform:translateY(-200%)}91%,100%{transform:translateY(0)}}
+  @keyframes b-s3{0%,46%{transform:translateY(0)}64%,84%{transform:translateY(-300%)}90%,100%{transform:translateY(0)}}
+  @keyframes b-open{0%,33%{opacity:0}34%,92%{opacity:1}93%,100%{opacity:0}}
+  @keyframes b-closed{0%,33%{opacity:1}34%,92%{opacity:0}93%,100%{opacity:1}}
+
+  /* 1c — le glissement */
+  @keyframes g-out{0%,12%{transform:translateY(0)}44%,82%{transform:translateY(-100%)}100%{transform:translateY(0)}}
+  @keyframes g-in{0%,12%{transform:translateY(9%)}44%,82%{transform:translateY(0)}100%{transform:translateY(9%)}}
+
+  /* 1d — la ligne carmin */
+  @keyframes l-clip{0%,12%{clip-path:inset(100% 0 0 0)}46%,82%{clip-path:inset(0 0 0 0)}100%{clip-path:inset(100% 0 0 0)}}
+  @keyframes l-line{0%,12%{transform:translateY(0)}46%,82%{transform:translateY(-637px)}100%{transform:translateY(0)}}
+
+  /* 1e — l'écartement */
+  @keyframes e-top{0%,12%{transform:translateY(0)}46%,82%{transform:translateY(-100%)}100%{transform:translateY(0)}}
+  @keyframes e-bottom{0%,12%{transform:translateY(0)}46%,82%{transform:translateY(100%)}100%{transform:translateY(0)}}
+  @keyframes e-open{0%,12%{transform:scale(.95)}46%,82%{transform:scale(1)}100%{transform:scale(.95)}}
+</style>
+</helmet>
+
+<section ref="{{ rootRef }}" style="padding:70px 70px 120px;display:flex;flex-direction:column;gap:64px;font-family:'Space Mono',monospace;color:#14100E;background:#E9E2D2">
+
+  <div style="display:flex;gap:56px;flex-wrap:wrap;align-items:flex-start">
+    <div style="max-width:720px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:11px;letter-spacing:.2em;background:#C81E33;color:#F7F2E8;padding:4px 8px">1</div>
+        <div style="font-size:12px;letter-spacing:.34em;text-transform:uppercase">Pli · l'ouverture · cinq propositions</div>
+      </div>
+      <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:78px;line-height:.86;letter-spacing:-.03em;color:#C81E33">Le geste<br>d'ouvrir.</div>
+      <div style="font-size:13px;line-height:1.78;max-width:640px">Même point de départ pour les cinq : l'écran d'attente A1, volet carmin en bas, sceau nº 014 sur son bord. Même geste : glisser vers le haut. Ce qui change, c'est ce que le doigt entraîne — le volet entier, trois bandes, la page complète, une ligne, ou les deux moitiés du pli. Chaque maquette boucle : ouverture, temps de lecture, refermeture.</div>
+    </div>
+    <div style="width:280px;display:flex;flex-direction:column;gap:10px;border-top:2px solid #14100E;padding-top:14px;font-size:11.5px;line-height:1.75">
+      <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase">Contraintes tenues</div>
+      <div><b>À plat.</b> Aucune perspective, aucune rotation d'axe, aucun pliage simulé : le papier se déplace, il ne se tourne pas.</div>
+      <div><b>Deux propriétés seulement.</b> <code>transform</code> et <code>opacity</code> — plus un <code>clip-path</code> pour 1d. Ni flou, ni ombre animée, ni filtre : rien qui repeigne à chaque image sur mobile.</div>
+      <div><b>Une seule couche bouge à la fois.</b> Le reste est immobile, donc composé une fois pour toutes.</div>
+      <div><b>2,5 s d'ouverture</b> sur un cycle de 5 s. Le geste réel serait suivi au doigt ; la boucle en montre la fin.</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:52px;flex-wrap:wrap;align-items:flex-start">
+
+    <div id="1a" style="display:flex;flex-direction:column;gap:14px;width:300px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:10px;letter-spacing:.2em;background:#C81E33;color:#F7F2E8;padding:3px 7px">1a</div>
+        <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:22px;letter-spacing:-.01em">Le volet</div>
+      </div>
+      <div data-screen-label="1a" style="position:relative;width:300px;height:640px;overflow:hidden;border-radius:30px;background:#F7F2E8;box-shadow:0 14px 32px rgba(20,16,14,.16)">
+        <div style="position:absolute;inset:0;animation:v-open var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running);background:#F7F2E8;display:flex;flex-direction:column">
+          <div style="position:relative;height:42%;flex:0 0 auto;overflow:hidden">
+            <img src="assets/drape-carmin-rose.webp" alt="drapé à l'huile, carmin et rose" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 46%;display:block">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,11,.5) 0%,rgba(14,12,11,0) 34%,rgba(247,242,232,.05) 72%,#F7F2E8 100%)"></div>
+            <div style="position:absolute;top:24px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between;color:#F7F2E8">
+              <div style="font-family:'Pinyon Script',cursive;font-size:40px;line-height:.86">Pli</div>
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding-top:12px">la découverte</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0 22px 24px">
+            <div>
+              <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:54px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase;color:#C81E33">Tu es<br>invitée</div>
+              <div style="margin:-10px 0 0 62px;white-space:nowrap;font-family:'Pinyon Script',cursive;font-size:42px;line-height:1;transform:rotate(-4deg)">rien qu'à toi</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase">
+              <div style="color:#C81E33">samedi</div>
+              <div style="font-size:12px;letter-spacing:.14em">22 août — 20h00</div>
+              <div style="font-size:12px;letter-spacing:.06em">Le Petit Comptoir</div>
+            </div>
+            <div style="border-top:2px dashed rgba(200,30,51,.55);padding-top:16px;display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:11.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">répondre</div>
+              <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1;color:#C81E33">↑</div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;animation:v-closed var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running);background:#F7F2E8;background-image:repeating-linear-gradient(0deg,rgba(20,16,14,.022) 0 1px,transparent 1px 4px)">
+          <div style="position:absolute;top:26px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between">
+            <div style="font-family:'Pinyon Script',cursive;font-size:42px;line-height:.86">Pli</div>
+            <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#C81E33;padding-top:14px">une invitation</div>
+          </div>
+          <div style="position:absolute;left:22px;right:22px;bottom:38%;display:flex;flex-direction:column;gap:12px">
+            <div style="font-size:9.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">nº 014 — pour toi seule</div>
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-weight:300;font-size:25px;line-height:1.26;max-width:14ch;text-wrap:pretty">Un pli t'attend. Il ne se lira qu'une fois.</div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;background:#C81E33;color:#F7F2E8;animation:v-sheet var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running)">
+          <div style="position:absolute;top:-17px;left:50%;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;background:#F7F2E8;border:1.5px solid rgba(200,30,51,.6);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:.06em;color:#C81E33">014</div>
+          <div style="position:absolute;top:44px;left:22px;right:22px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase">déplier</div>
+              <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1">↑</div>
+            </div>
+            <div style="font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.7">tirer la pliure vers le haut</div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:11px;line-height:1.7;border-left:2px solid #C81E33;padding-left:12px">Le volet carmin suit le doigt, recouvre l'écran entier une demi-seconde, puis sort par le haut : l'invitation est dessous. Le lavis plein reprend le geste de A4. Une couche animée, plein cadre.</div>
+    </div>
+
+    <div id="1b" style="display:flex;flex-direction:column;gap:14px;width:300px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:10px;letter-spacing:.2em;background:#C81E33;color:#F7F2E8;padding:3px 7px">1b</div>
+        <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:22px;letter-spacing:-.01em">Les trois bandes</div>
+      </div>
+      <div data-screen-label="1b" style="position:relative;width:300px;height:640px;overflow:hidden;border-radius:30px;background:#F7F2E8;box-shadow:0 14px 32px rgba(20,16,14,.16)">
+        <div style="position:absolute;inset:0;animation:b-open var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running);background:#F7F2E8;display:flex;flex-direction:column">
+          <div style="position:relative;height:42%;flex:0 0 auto;overflow:hidden">
+            <img src="assets/drape-carmin-rose.webp" alt="drapé à l'huile, carmin et rose" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 46%;display:block">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,11,.5) 0%,rgba(14,12,11,0) 34%,rgba(247,242,232,.05) 72%,#F7F2E8 100%)"></div>
+            <div style="position:absolute;top:24px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between;color:#F7F2E8">
+              <div style="font-family:'Pinyon Script',cursive;font-size:40px;line-height:.86">Pli</div>
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding-top:12px">la découverte</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0 22px 24px">
+            <div>
+              <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:54px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase;color:#C81E33">Tu es<br>invitée</div>
+              <div style="margin:-10px 0 0 62px;white-space:nowrap;font-family:'Pinyon Script',cursive;font-size:42px;line-height:1;transform:rotate(-4deg)">rien qu'à toi</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase">
+              <div style="color:#C81E33">samedi</div>
+              <div style="font-size:12px;letter-spacing:.14em">22 août — 20h00</div>
+              <div style="font-size:12px;letter-spacing:.06em">Le Petit Comptoir</div>
+            </div>
+            <div style="border-top:2px dashed rgba(200,30,51,.55);padding-top:16px;display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:11.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">répondre</div>
+              <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1;color:#C81E33">↑</div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;animation:b-closed var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running);background:#F7F2E8;background-image:repeating-linear-gradient(0deg,rgba(20,16,14,.022) 0 1px,transparent 1px 4px)">
+          <div style="position:absolute;top:26px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between">
+            <div style="font-family:'Pinyon Script',cursive;font-size:42px;line-height:.86">Pli</div>
+            <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#C81E33;padding-top:14px">une invitation</div>
+          </div>
+          <div style="position:absolute;left:22px;right:22px;bottom:38%;display:flex;flex-direction:column;gap:12px">
+            <div style="font-size:9.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">nº 014 — pour toi seule</div>
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-weight:300;font-size:25px;line-height:1.26;max-width:14ch;text-wrap:pretty">Un pli t'attend. Il ne se lira qu'une fois.</div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;animation:b-group var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running)">
+          <div style="position:absolute;top:0;left:0;right:0;height:34%;background:#C81E33;animation:b-s1 var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running)">
+            <div style="position:absolute;top:-17px;left:50%;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;background:#F7F2E8;border:1.5px solid rgba(200,30,51,.6);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:.06em;color:#C81E33">014</div>
+            <div style="position:absolute;top:44px;left:22px;right:22px;display:flex;flex-direction:column;gap:10px;color:#F7F2E8">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase">déplier</div>
+                <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1">↑</div>
+              </div>
+              <div style="font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.7">trois bandes, l'une après l'autre</div>
+            </div>
+          </div>
+          <div style="position:absolute;top:33%;left:0;right:0;height:34%;background:#C81E33;animation:b-s2 var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running)"></div>
+          <div style="position:absolute;top:66%;left:0;right:0;height:34%;background:#C81E33;animation:b-s3 var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running)"></div>
+        </div>
+      </div>
+      <div style="font-size:11px;line-height:1.7;border-left:2px solid #C81E33;padding-left:12px">Le volet monte d'un bloc, puis repart en trois bandes décalées de 150 ms : l'écran se découvre par tranches, comme un papier qui se déplie. Le plus long des cinq, à réserver au premier pli reçu.</div>
+    </div>
+
+    <div id="1c" style="display:flex;flex-direction:column;gap:14px;width:300px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:10px;letter-spacing:.2em;background:#C81E33;color:#F7F2E8;padding:3px 7px">1c</div>
+        <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:22px;letter-spacing:-.01em">Le glissement</div>
+      </div>
+      <div data-screen-label="1c" style="position:relative;width:300px;height:640px;overflow:hidden;border-radius:30px;background:#F7F2E8;box-shadow:0 14px 32px rgba(20,16,14,.16)">
+        <div style="position:absolute;inset:0;animation:g-in var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running);background:#F7F2E8;display:flex;flex-direction:column">
+          <div style="position:relative;height:42%;flex:0 0 auto;overflow:hidden">
+            <img src="assets/drape-carmin-rose.webp" alt="drapé à l'huile, carmin et rose" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 46%;display:block">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,11,.5) 0%,rgba(14,12,11,0) 34%,rgba(247,242,232,.05) 72%,#F7F2E8 100%)"></div>
+            <div style="position:absolute;top:24px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between;color:#F7F2E8">
+              <div style="font-family:'Pinyon Script',cursive;font-size:40px;line-height:.86">Pli</div>
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding-top:12px">la découverte</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0 22px 24px">
+            <div>
+              <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:54px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase;color:#C81E33">Tu es<br>invitée</div>
+              <div style="margin:-10px 0 0 62px;white-space:nowrap;font-family:'Pinyon Script',cursive;font-size:42px;line-height:1;transform:rotate(-4deg)">rien qu'à toi</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase">
+              <div style="color:#C81E33">samedi</div>
+              <div style="font-size:12px;letter-spacing:.14em">22 août — 20h00</div>
+              <div style="font-size:12px;letter-spacing:.06em">Le Petit Comptoir</div>
+            </div>
+            <div style="border-top:2px dashed rgba(200,30,51,.55);padding-top:16px;display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:11.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">répondre</div>
+              <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1;color:#C81E33">↑</div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;animation:g-out var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running)">
+          <div style="position:absolute;inset:0;background:#F7F2E8;background-image:repeating-linear-gradient(0deg,rgba(20,16,14,.022) 0 1px,transparent 1px 4px)">
+            <div style="position:absolute;top:26px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between">
+              <div style="font-family:'Pinyon Script',cursive;font-size:42px;line-height:.86">Pli</div>
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#C81E33;padding-top:14px">une invitation</div>
+            </div>
+            <div style="position:absolute;left:22px;right:22px;bottom:38%;display:flex;flex-direction:column;gap:12px">
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">nº 014 — pour toi seule</div>
+              <div style="font-family:'Newsreader',serif;font-style:italic;font-weight:300;font-size:25px;line-height:1.26;max-width:14ch;text-wrap:pretty">Un pli t'attend. Il ne se lira qu'une fois.</div>
+            </div>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;height:34%;background:#C81E33;color:#F7F2E8">
+            <div style="position:absolute;top:-17px;left:50%;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;background:#F7F2E8;border:1.5px solid rgba(200,30,51,.6);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:.06em;color:#C81E33">014</div>
+            <div style="position:absolute;top:44px;left:22px;right:22px;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase">déplier</div>
+                <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1">↑</div>
+              </div>
+              <div style="font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.7">la page entière remonte</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:11px;line-height:1.7;border-left:2px solid #C81E33;padding-left:12px">Aucun lavis : l'écran d'attente est une feuille qu'on soulève, l'invitation attendait derrière et monte de 9 % pour la rejoindre. Le plus sobre, le plus facile à suivre au doigt image par image.</div>
+    </div>
+
+    <div id="1d" style="display:flex;flex-direction:column;gap:14px;width:300px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:10px;letter-spacing:.2em;background:#C81E33;color:#F7F2E8;padding:3px 7px">1d</div>
+        <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:22px;letter-spacing:-.01em">La ligne carmin</div>
+      </div>
+      <div data-screen-label="1d" style="position:relative;width:300px;height:640px;overflow:hidden;border-radius:30px;background:#F7F2E8;box-shadow:0 14px 32px rgba(20,16,14,.16)">
+        <div style="position:absolute;inset:0;background:#F7F2E8;background-image:repeating-linear-gradient(0deg,rgba(20,16,14,.022) 0 1px,transparent 1px 4px)">
+          <div style="position:absolute;top:26px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between">
+            <div style="font-family:'Pinyon Script',cursive;font-size:42px;line-height:.86">Pli</div>
+            <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#C81E33;padding-top:14px">une invitation</div>
+          </div>
+          <div style="position:absolute;left:22px;right:22px;bottom:38%;display:flex;flex-direction:column;gap:12px">
+            <div style="font-size:9.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">nº 014 — pour toi seule</div>
+            <div style="font-family:'Newsreader',serif;font-style:italic;font-weight:300;font-size:25px;line-height:1.26;max-width:14ch;text-wrap:pretty">Un pli t'attend. Il ne se lira qu'une fois.</div>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;height:34%;background:#C81E33;color:#F7F2E8">
+            <div style="position:absolute;top:-17px;left:50%;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;background:#F7F2E8;border:1.5px solid rgba(200,30,51,.6);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:.06em;color:#C81E33">014</div>
+            <div style="position:absolute;top:44px;left:22px;right:22px;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase">déplier</div>
+                <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1">↑</div>
+              </div>
+              <div style="font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.7">une ligne remonte l'écran</div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;animation:l-clip var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running);background:#F7F2E8;display:flex;flex-direction:column">
+          <div style="position:relative;height:42%;flex:0 0 auto;overflow:hidden">
+            <img src="assets/drape-carmin-rose.webp" alt="drapé à l'huile, carmin et rose" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 46%;display:block">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,11,.5) 0%,rgba(14,12,11,0) 34%,rgba(247,242,232,.05) 72%,#F7F2E8 100%)"></div>
+            <div style="position:absolute;top:24px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between;color:#F7F2E8">
+              <div style="font-family:'Pinyon Script',cursive;font-size:40px;line-height:.86">Pli</div>
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding-top:12px">la découverte</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0 22px 24px">
+            <div>
+              <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:54px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase;color:#C81E33">Tu es<br>invitée</div>
+              <div style="margin:-10px 0 0 62px;white-space:nowrap;font-family:'Pinyon Script',cursive;font-size:42px;line-height:1;transform:rotate(-4deg)">rien qu'à toi</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase">
+              <div style="color:#C81E33">samedi</div>
+              <div style="font-size:12px;letter-spacing:.14em">22 août — 20h00</div>
+              <div style="font-size:12px;letter-spacing:.06em">Le Petit Comptoir</div>
+            </div>
+            <div style="border-top:2px dashed rgba(200,30,51,.55);padding-top:16px;display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:11.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">répondre</div>
+              <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1;color:#C81E33">↑</div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:#C81E33;animation:l-line var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running)"></div>
+      </div>
+      <div style="font-size:11px;line-height:1.7;border-left:2px solid #C81E33;padding-left:12px">Rien ne se déplace : une ligne de 3 px remonte l'écran et l'invitation apparaît derrière elle, du bas vers le haut. Le volet carmin est mangé le premier. Découpe simple, sans ombre ni flou.</div>
+    </div>
+
+    <div id="1e" style="display:flex;flex-direction:column;gap:14px;width:300px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:10px;letter-spacing:.2em;background:#C81E33;color:#F7F2E8;padding:3px 7px">1e</div>
+        <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:22px;letter-spacing:-.01em">L'écartement</div>
+      </div>
+      <div data-screen-label="1e" style="position:relative;width:300px;height:640px;overflow:hidden;border-radius:30px;background:#F7F2E8;box-shadow:0 14px 32px rgba(20,16,14,.16)">
+        <div style="position:absolute;inset:0;animation:e-open var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running);background:#F7F2E8;display:flex;flex-direction:column">
+          <div style="position:relative;height:42%;flex:0 0 auto;overflow:hidden">
+            <img src="assets/drape-carmin-rose.webp" alt="drapé à l'huile, carmin et rose" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 46%;display:block">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,11,.5) 0%,rgba(14,12,11,0) 34%,rgba(247,242,232,.05) 72%,#F7F2E8 100%)"></div>
+            <div style="position:absolute;top:24px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between;color:#F7F2E8">
+              <div style="font-family:'Pinyon Script',cursive;font-size:40px;line-height:.86">Pli</div>
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding-top:12px">la découverte</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0 22px 24px">
+            <div>
+              <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:54px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase;color:#C81E33">Tu es<br>invitée</div>
+              <div style="margin:-10px 0 0 62px;white-space:nowrap;font-family:'Pinyon Script',cursive;font-size:42px;line-height:1;transform:rotate(-4deg)">rien qu'à toi</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase">
+              <div style="color:#C81E33">samedi</div>
+              <div style="font-size:12px;letter-spacing:.14em">22 août — 20h00</div>
+              <div style="font-size:12px;letter-spacing:.06em">Le Petit Comptoir</div>
+            </div>
+            <div style="border-top:2px dashed rgba(200,30,51,.55);padding-top:16px;display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:11.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">répondre</div>
+              <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1;color:#C81E33">↑</div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;top:0;left:0;right:0;height:66%;overflow:hidden;animation:e-top var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running)">
+          <div style="position:absolute;top:0;left:0;right:0;height:640px;background:#F7F2E8;background-image:repeating-linear-gradient(0deg,rgba(20,16,14,.022) 0 1px,transparent 1px 4px)">
+            <div style="position:absolute;top:26px;left:22px;right:22px;display:flex;align-items:flex-start;justify-content:space-between">
+              <div style="font-family:'Pinyon Script',cursive;font-size:42px;line-height:.86">Pli</div>
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#C81E33;padding-top:14px">une invitation</div>
+            </div>
+            <div style="position:absolute;left:22px;right:22px;bottom:38%;display:flex;flex-direction:column;gap:12px">
+              <div style="font-size:9.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#C81E33">nº 014 — pour toi seule</div>
+              <div style="font-family:'Newsreader',serif;font-style:italic;font-weight:300;font-size:25px;line-height:1.26;max-width:14ch;text-wrap:pretty">Un pli t'attend. Il ne se lira qu'une fois.</div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:34%;background:#C81E33;color:#F7F2E8;animation:e-bottom var(--pli-dur,5s) cubic-bezier(.6,0,.25,1) infinite;animation-play-state:var(--pli-play,running)">
+          <div style="position:absolute;top:-17px;left:50%;transform:translateX(-50%);width:34px;height:34px;border-radius:50%;background:#F7F2E8;border:1.5px solid rgba(200,30,51,.6);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:.06em;color:#C81E33">014</div>
+          <div style="position:absolute;top:44px;left:22px;right:22px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase">déplier</div>
+              <div style="font-family:'Bodoni Moda',serif;font-size:20px;line-height:1">↑</div>
+            </div>
+            <div style="font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.7">le pli s'écarte en deux</div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:11px;line-height:1.7;border-left:2px solid #C81E33;padding-left:12px">L'écran se sépare sur la pliure : le haut sort par le haut, le volet carmin sort par le bas, l'invitation était entre les deux et passe de 95 % à sa taille. Le geste vers le haut n'entraîne qu'une des deux moitiés.</div>
+    </div>
+
+  </div>
+
+  <div style="display:flex;gap:44px;flex-wrap:wrap;border-top:2px solid #14100E;padding-top:18px">
+    <div style="width:620px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:30px;letter-spacing:-.01em">Ce qui les sépare</div>
+      <div style="font-size:12.5px;line-height:1.78;display:flex;flex-direction:column;gap:9px">
+        <div><b>Deux familles.</b> 1a et 1b passent par le lavis carmin plein — le pli se referme sur l'écran avant de le rendre. 1c, 1d et 1e ne cachent jamais rien : la page suivante est déjà là, derrière.</div>
+        <div><b>Le sceau.</b> Il voyage avec le volet dans les cinq cas, sauf en 1d où il descend hors cadre avec la bande. Si le sceau doit rester lisible jusqu'au bout, écarter 1d.</div>
+        <div><b>Le suivi au doigt.</b> 1c est la seule qui se pilote entièrement à la position du doigt sans état intermédiaire — les autres demandent un point de bascule au relâchement.</div>
+        <div><b>Coût.</b> 1a, 1c, 1e : une à trois couches en <code>translate</code>. 1b : cinq couches, toutes en <code>translate</code>. 1d : un <code>clip-path</code> animé, le seul point à mesurer sur un appareil d'entrée de gamme.</div>
+      </div>
+    </div>
+    <div style="width:280px;display:flex;flex-direction:column;gap:10px;font-size:11.5px;line-height:1.75;border-top:2px solid #C81E33;padding-top:14px">
+      <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#C81E33">Reste à trancher</div>
+      <div>La refermeture montrée ici n'existe pas dans l'app : elle est là pour la boucle. En vrai, l'écran d'attente ne revient jamais.</div>
+      <div>Faut-il la même ouverture pour tous les types de plis, ou une par type — le poème plus lent, la pensée immédiate ?</div>
+    </div>
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;vitesse&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.4,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Boucle&quot;},&quot;pause&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Boucle&quot;}}">
+class Component extends DCLogic {
+  constructor(props){ super(props); this.root = React.createRef(); }
+  applyVars(){
+    const el = this.root.current; if(!el) return;
+    const v = Number(this.props.vitesse ?? 1) || 1;
+    el.style.setProperty('--pli-dur', (5 / v).toFixed(2) + 's');
+    el.style.setProperty('--pli-play', this.props.pause ? 'paused' : 'running');
+  }
+  componentDidMount(){ this.applyVars(); }
+  componentDidUpdate(){ this.applyVars(); }
+  renderVals(){ return { rootRef: this.root }; }
+}
+</script>
+</body>
+</html>

@@ -10,6 +10,7 @@ projet design, et **ce qu'il ne faut pas recopier** des prototypes.
 | Question | Réponse |
 |---|---|
 | Les valeurs de la DA | [`design/handoff/pli.css`](../design/handoff/pli.css) |
+| Ce que le design dessinait | [`design/canevas/`](../design/canevas/README.md) — la source dont `handoff/` est l'export |
 | Le geste et ses réglages | `pli.css` + [`lecteur.html`](../design/handoff/lecteur.html) |
 | Ce qu'on construit | `docs/` — **il gagne toujours** contre `design/` |
 | Le lexique | [design-system.md](design-system.md#ton-et-vocabulaire) |
@@ -189,10 +190,12 @@ composition qui n'a pas été dessinée pour elle.
 **C2 à C5**, **B0a-c**, **B2 · B3**, et l'atelier de D1 à son écran de lien. Les écrans
 concernés ont donc été codés sans leur maquette, d'après `docs/` seul.
 
-Les canevas **ne sont pas dans le dépôt** : `design/` est une archive figée et la garde
-refuse tout ajout, y compris celui-là. Ils vivent dans le projet Claude Design « Pli —
-Maquettes ». Le `handoff/` qui les accompagne est identique **bit pour bit** à
-`design/handoff/` : rien à reprendre de ce côté, l'archive du dépôt est à jour.
+Les canevas sont entrés dans le dépôt le 19/08/2026, sous
+[`design/canevas/`](../design/canevas/README.md). L'archive **peut s'agrandir, jamais
+changer** : la garde, assouplie ce jour-là, accepte un fichier qui n'y était pas et refuse
+toujours qu'un fichier déjà archivé soit modifié, supprimé ou renommé. Le `handoff/` du
+projet design est identique **bit pour bit** à `design/handoff/` : rien à reprendre de ce
+côté, l'archive du dépôt était à jour.
 
 Ce que les canevas ajoutent, écran par écran :
 

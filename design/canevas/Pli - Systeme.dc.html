@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,800&amp;family=Newsreader:ital,opsz,wght@0,6..72,300&amp;family=Space+Mono:wght@400;700&amp;family=Pinyon+Script&amp;display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#E9E2D2;-webkit-font-smoothing:antialiased}
+  a{color:#C81E33}a:hover{color:#14100E}
+  ::selection{background:#C81E33;color:#F7F2E8}
+</style>
+</helmet>
+
+<section id="6a" style="padding:70px 70px 130px;display:flex;flex-direction:column;gap:70px;font-family:'Space Mono',monospace;color:#14100E;background:#E9E2D2">
+
+  <div style="display:flex;gap:56px;flex-wrap:wrap;align-items:flex-start">
+    <div style="max-width:760px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:11px;letter-spacing:.2em;background:#C81E33;color:#F7F2E8;padding:4px 8px">6a</div>
+        <div style="font-size:12px;letter-spacing:.34em;text-transform:uppercase">Pli · système de design · v1</div>
+      </div>
+      <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:82px;line-height:.86;letter-spacing:-.03em;color:#C81E33">Un objet,<br>pas une page.</div>
+      <div style="font-size:13px;line-height:1.78">Tout le produit tient dans quatre encres, quatre mains, une pliure à 34 % et une seule courbe de mouvement. Cette page est la référence de travail ; le dossier <code>handoff/</code> en est la version exécutable — <code>pli.css</code> porte toutes les valeurs, trois HTML autonomes montrent le geste, le dépôt mobile et le dépôt sur ordinateur, et <code>PLI.md</code> tient la spécification pour Claude Code.</div>
+      <div style="display:flex;gap:26px;flex-wrap:wrap;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding-top:4px">
+        <a href="handoff/index.html">handoff/index.html</a>
+        <a href="handoff/lecteur.html">lecteur.html</a>
+        <a href="handoff/createur.html">createur.html</a>
+        <a href="handoff/createur-bureau.html">createur-bureau.html</a>
+        <a href="PLI.md">PLI.md</a>
+      </div>
+    </div>
+    <div style="width:290px;display:flex;flex-direction:column;gap:10px;border-top:2px solid #14100E;padding-top:14px;font-size:11.5px;line-height:1.75">
+      <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase">Les cinq règles</div>
+      <div><b>Un pli = un écran.</b> Jamais de défilement dans un pli, jamais un flux de six pages.</div>
+      <div><b>Le carmin est l'action.</b> Une seule couleur agit ; le reste est papier et encre.</div>
+      <div><b>La pliure est physique.</b> Elle suit le doigt, résiste dans le mauvais sens, retombe si on hésite.</div>
+      <div><b>Quatre partitions, attachées au type.</b> Le papier change le fond et l'encre, jamais la composition — et ce n'est pas un choix offert au créateur.</div>
+      <div><b>Rien à signer.</b> Pas de compte, pas de notification, pas de brouillon nommé.</div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-top:2px solid #14100E;padding-top:14px;flex-wrap:wrap">
+      <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:34px;letter-spacing:-.01em">Encres et papiers</div>
+      <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.6">quatre valeurs · le carmin devient rose sur fond encre</div>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div style="width:220px;height:100px;background:#F7F2E8;border:1px solid rgba(20,16,14,.16);background-image:repeating-linear-gradient(0deg,rgba(20,16,14,.022) 0 1px,transparent 1px 4px);display:flex;align-items:flex-end;padding:10px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase">crème · #F7F2E8 · le papier</div>
+      <div style="width:220px;height:100px;background:#E9E2D2;border:1px solid rgba(20,16,14,.16);display:flex;align-items:flex-end;padding:10px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase">sable · #E9E2D2 · le plateau</div>
+      <div style="width:220px;height:100px;background:#14100E;color:#F7F2E8;display:flex;align-items:flex-end;padding:10px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase">encre · #14100E · jamais #000</div>
+      <div style="width:220px;height:100px;background:#C81E33;color:#F7F2E8;display:flex;align-items:flex-end;padding:10px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase">carmin · #C81E33 · l'action</div>
+      <div style="width:220px;height:100px;background:#14100E;color:#EFA9A0;display:flex;align-items:flex-end;padding:10px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase">rose · #EFA9A0 · carmin sur sombre</div>
+    </div>
+    <div style="font-size:12.5px;line-height:1.78;max-width:900px;border-left:2px solid #C81E33;padding-left:14px">Aucune autre couleur n'entre dans le produit. Les images apportent leurs teintes mais sont toujours recouvertes d'un dégradé qui les ramène au crème ou à l'encre. Trois papiers de pli, plus un : crème, encre, carmin, drapé. Sur encre et drapé, tout ce qui serait carmin devient rose ; sur carmin, tout ce qui serait carmin devient crème.</div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-top:2px solid #14100E;padding-top:14px;flex-wrap:wrap">
+      <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:34px;letter-spacing:-.01em">Quatre mains</div>
+      <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.6">chacune a un seul emploi</div>
+    </div>
+    <div style="background:#F7F2E8;padding:26px;display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;gap:50px;flex-wrap:wrap;align-items:flex-end">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Pinyon Script',cursive;font-size:52px;line-height:.86">Pli</div>
+          <div style="font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.55">Pinyon Script · le mot « Pli », rien d'autre</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Bodoni Moda',serif;font-weight:800;font-size:56px;line-height:.9;letter-spacing:-.035em;text-transform:uppercase;color:#C81E33">Tu es<br>invitée</div>
+          <div style="font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.55">Bodoni Moda 800 · capitales · −.035em · un seul titre par pli</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Pinyon Script',cursive;font-size:48px;line-height:1;transform:rotate(-4deg)">rien qu'à toi</div>
+          <div style="font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.55">la griffe · une par pli au maximum</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:50px;flex-wrap:wrap;align-items:flex-end;border-top:1px solid rgba(20,16,14,.16);padding-top:22px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Newsreader',serif;font-style:italic;font-weight:300;font-size:31px;line-height:1.28;max-width:15ch;text-wrap:pretty">Un pli t'attend. Il ne se lira qu'une fois.</div>
+          <div style="font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.55">Newsreader italique 300 · la voix de celui qui écrit · 15–18 ch</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:14px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:#C81E33">déplier</div>
+          <div style="font-size:11.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase">répondre</div>
+          <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;opacity:.5">nº 014 — pour toi seule</div>
+          <div style="font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.55">Space Mono 700 · capitales · .24 à .30em · tout le reste</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-top:2px solid #14100E;padding-top:14px;flex-wrap:wrap">
+      <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:34px;letter-spacing:-.01em">Le gabarit</div>
+      <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.6">360 × 780 · marge 26 · pliure 34 % · rayon 36</div>
+    </div>
+    <div style="display:flex;gap:44px;flex-wrap:wrap;align-items:flex-start">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#C81E33">gabarit nu · les quatre zones</div>
+        <div data-screen-label="gabarit" style="position:relative;width:360px;height:640px;overflow:hidden;border-radius:36px;background:#F7F2E8;background-image:repeating-linear-gradient(0deg,rgba(20,16,14,.022) 0 1px,transparent 1px 4px);box-shadow:0 18px 40px rgba(20,16,14,.18);display:flex;flex-direction:column">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:34%;background:#C81E33"></div>
+          <div style="position:absolute;bottom:34%;left:0;right:0;height:18px;background:linear-gradient(0deg,rgba(20,16,14,.13),rgba(20,16,14,0));z-index:3"></div>
+          <div style="position:absolute;bottom:calc(34% - 19px);left:50%;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;background:#F7F2E8;border:1.5px solid rgba(200,30,51,.6);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#C81E33;z-index:4">014</div>
+          <div style="padding:34px 26px 10px;margin:0 0 0;border-bottom:1px dashed rgba(200,30,51,.4);display:flex;justify-content:space-between;font-size:10px;letter-spacing:.2em;text-transform:uppercase">
+            <span>tête · marque</span><span style="color:#C81E33">type</span>
+          </div>
+          <div style="flex:1;min-height:0;margin:0 26px;padding:14px 0 12px;border-bottom:1px dashed rgba(200,30,51,.4);display:flex;flex-direction:column;justify-content:flex-end;gap:8px;font-size:10px;letter-spacing:.2em;text-transform:uppercase">
+            <span>corps · titre, voix, trois faits</span>
+            <span style="opacity:.5">aligné en bas, jamais centré</span>
+          </div>
+          <div style="position:relative;height:34%;flex:0 0 auto;color:#F7F2E8;padding:0 26px 26px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;z-index:2;font-size:10px;letter-spacing:.2em;text-transform:uppercase">
+            <span>volet · l'action · 34 % de la hauteur</span>
+            <span style="opacity:.7">le cachet est à cheval sur la pliure</span>
+          </div>
+        </div>
+      </div>
+      <div style="width:340px;display:flex;flex-direction:column;gap:10px;border-top:2px solid #14100E;padding-top:14px;font-size:11.5px;line-height:1.75">
+        <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase">Ce que le gabarit impose</div>
+        <div><b>Marge unique : 26px.</b> Aucun autre retrait horizontal n'existe dans un pli.</div>
+        <div><b>Le contenu s'aligne en bas.</b> Le corps pousse vers la pliure ; on ne centre jamais verticalement.</div>
+        <div><b>Un titre, une voix, trois faits, une action.</b> Au-delà, c'est un autre type de pli.</div>
+        <div><b>Les images font 42 à 46 %</b> de la hauteur, ou la page entière, jamais entre les deux — et toujours sous un dégradé.</div>
+        <div><b>Pas d'icônes.</b> Les flèches sont des caractères Bodoni (↑ →) ; le seul symbole du produit est le cachet numéroté.</div>
+      </div>
+      <div style="width:300px;display:flex;flex-direction:column;gap:10px;border-top:2px solid #14100E;padding-top:14px;font-size:11.5px;line-height:1.75">
+        <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase">Le mouvement</div>
+        <div>Une seule courbe : <code>cubic-bezier(.32,.72,0,1)</code>.</div>
+        <div><b>460 ms</b> à l'ouverture, <b>340 ms</b> au retour — l'échec doit être rapide.</div>
+        <div><b>Seuil 32 %</b> de course, ou un <b>élan de 0,55 px/ms</b> : le coup sec suffit.</div>
+        <div><b>Caoutchouc 0,1</b> dans le mauvais sens. <b>Entrée 9 %</b> pour la page dessous.</div>
+        <div>Pendant le geste, aucune transition : la feuille est à la position du doigt. Deux couches, un <code>translate3d</code> chacune.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:baseline;gap:16px;border-top:2px solid #14100E;padding-top:14px;flex-wrap:wrap">
+      <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:34px;letter-spacing:-.01em">Les parcours</div>
+      <div style="font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;opacity:.6">lecteur · types · états · dépôt</div>
+    </div>
+    <div style="display:flex;gap:40px;flex-wrap:wrap;font-size:12px;line-height:1.8">
+      <div style="width:420px;display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#C81E33">lecteur — arrive par lien</div>
+        <div><b>A1</b> l'attente · crème + volet · commune à tous les types</div>
+        <div><b>A2</b> la découverte · crème + image 46 %</div>
+        <div><b>A3</b> la réponse · encre · trois mots au choix</div>
+        <div><b>A4</b> le relais · carmin · le mot en 78px</div>
+        <div style="padding-top:10px;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#C81E33">les autres types</div>
+        <div><b>B0a-c</b> attentes · même gabarit, autre promesse</div>
+        <div><b>B1</b> une pensée · image pleine · aucune pliure d'action</div>
+        <div><b>B2–B3</b> un poème · encre · entrée puis lecture</div>
+        <div><b>B4</b> un souvenir · image pleine · une ligne</div>
+      </div>
+      <div style="width:420px;display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#C81E33">états</div>
+        <div><b>C1</b> sans lien · l'historique, en stockage local</div>
+        <div><b>C2</b> déjà répondu · rappel du mot envoyé</div>
+        <div><b>C3</b> refermé · le pli ne se relit pas</div>
+        <div><b>C4</b> lien mort · expiré à 30 jours ou inconnu</div>
+        <div><b>C5</b> le pli arrive · la marque respire</div>
+        <div style="padding-top:10px;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#C81E33">dépôt — trois questions</div>
+        <div><b>D1</b> le type · avec son layout vu en petit</div>
+        <div><b>D2</b> les textes · le layout se remplit pendant la frappe</div>
+        <div><b>D3</b> le lien · <code>pli.re/015-vhtq</code></div>
+        <div><b>E1</b> ordinateur · les trois questions sur un écran</div>
+      </div>
+    </div>
+    <div style="font-size:12.5px;line-height:1.78;max-width:900px;border-left:2px solid #C81E33;padding-left:14px">Le créateur ne compose pas une page : il choisit un type, voit la mise en page qui vient avec, et remplit des lignes nommées — « Le titre », « Ton mot », « Quand », « Où ». Pas d'image à déposer, pas de style à régler, pas de police, pas de couleur. Le layout est montré, jamais manipulé : le pli miniature est un vrai pli réduit par <code>transform: scale()</code>, qui se remplit pendant la frappe. Une question par écran, une seule action en bas, l'étape écrite « 2 sur 3 », et rien n'est envoyé avant le dernier écran.</div>
+  </div>
+
+  <div style="display:flex;gap:44px;flex-wrap:wrap;border-top:2px solid #14100E;padding-top:18px">
+    <div style="width:420px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:30px;letter-spacing:-.01em">Assets</div>
+      <div style="position:relative;height:200px;overflow:hidden;border:1px solid rgba(20,16,14,.16)">
+        <img src="assets/drape-carmin-rose.webp" alt="drapé à l'huile, carmin et rose" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+      </div>
+      <div style="font-size:11.5px;line-height:1.75"><b>assets/drape-carmin-rose.webp</b> — la seule image du système. Partition « drapé », découverte A2 (<code>50% 46%</code>), pensée B1 (<code>50% 76%</code>), souvenir B4 (<code>50% 30%</code>). Le cadrage est un réglage d'<code>object-position</code>, jamais un recadrage de fichier.</div>
+    </div>
+    <div style="width:420px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-family:'Bodoni Moda',serif;font-weight:700;font-size:30px;letter-spacing:-.01em">Reste à trancher</div>
+      <div style="font-size:12.5px;line-height:1.78;display:flex;flex-direction:column;gap:9px">
+        <div><b>Modifier un pli après dépôt</b> tant qu'il n'a pas été ouvert ? Simple techniquement, mais ça affaiblit le « il ne se lira qu'une fois ».</div>
+        <div><b>Le relais.</b> Répondre invite à écrire à son tour — un pli complet, ou seulement un mot ?</div>
+        <div><b>Le poème</b> est le seul contenu qui peut dépasser un écran : défiler, ou paginer strophe par strophe avec le geste du dépliage ?</div>
+        <div><b>Les faits</b> sont du texte libre. Un vrai sélecteur de date introduirait le premier « champ » du produit.</div>
+        <div><b>Accessibilité, à faire :</b> une alternative au geste (bouton « déplier ») et <code>prefers-reduced-motion</code>. Absent des prototypes.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+</x-dc>
+</body>
+</html>
