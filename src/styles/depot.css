@@ -22,15 +22,20 @@
 
    Il n'a ni pliure ni volet, et il a le droit de défiler : « un pli = un écran » parle des
    plis, et l'atelier n'en montre qu'en petit, dans .apercu (docs/design-system.md#le-gabarit).
-   Il garde en revanche la largeur du pli — 360, jamais élargie : c'est la seule forme dans
-   laquelle ce que j'écris sera lu (docs/parcours.md#e1--latelier-au-bureau).
-   ========================================================================== */
+
+   Il remplit l'écran, comme le pli : le gabarit de 360 était la largeur d'une planche, pas
+   celle d'un téléphone (.claude/decisions.md, 19/08/2026). La seule forme dans laquelle ce
+   que j'écris sera lu, c'est ce que `.mini` montre — et lui garde ses 360 × 780.
+
+   --vue-h est la hauteur VISIBLE, écrite par src/atelier/vue.ts. C'est le seul écran du
+   produit avec un clavier : quand il monte, l'écran rétrécit, et l'action reste collée en
+   bas au lieu de partir dessous. 100dvh est le secours, quand visualViewport manque. */
 .ecran {
   position: relative;
   width: 100%;
-  max-width: var(--ecran-l);
-  min-height: 100dvh;
-  margin-inline: auto;
+  height: var(--vue-h, 100dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--creme);
   background-image: var(--grain);
   display: flex;
@@ -45,8 +50,25 @@
 }
 
 /* Le corps du pli n'a pas de retrait en haut : dans un pli c'est la tête qui le porte, et
-   l'atelier n'en a pas. */
+   l'atelier n'en a pas.
+
+   Et c'est LUI qui cède quand le clavier monte, jamais l'action : le pli ne défile jamais,
+   l'atelier si, et c'est justement ce qui le distingue d'un pli. `safe` parce qu'un corps
+   aligné en fin — ou réparti — coupe le DÉBUT de son contenu quand il déborde, et le rend
+   inatteignable : l'alignement sûr retombe sur le début plutôt que de perdre une ligne. */
 .ecran > .corps {
+  padding-top: calc(34px + var(--encoche-haut));
+  /* `1 0 auto` et non `flex: 1` : il prend la place qui reste — donc l'action tombe en bas
+     quand il y en a — mais il ne rétrécit jamais sous son contenu. Le pli coupe (« un pli =
+     un écran ») ; l'atelier défile, et c'est ce qui le distingue d'un pli. Sans ça, un
+     clavier ouvert écraserait la question et l'aperçu au lieu de les faire défiler. */
+  flex: 1 0 auto;
+  overflow: visible;
+}
+
+/* Seul D0 n'a pas de conduite au-dessus : c'est son corps qui touche le haut. Ailleurs
+   l'encoche est déjà portée par la conduite, et la compter deux fois creuserait l'écran. */
+.ecran > .conduite ~ .corps {
   padding-top: 34px;
 }
 
@@ -64,7 +86,7 @@
 /* barre de conduite : où j'en suis, comment je reviens */
 .conduite {
   flex: 0 0 auto;
-  padding: 22px var(--marge) 14px;
+  padding: calc(22px + var(--encoche-haut)) var(--marge-droite) 14px var(--marge-gauche);
   border-bottom: 1px solid var(--trait);
   display: flex;
   align-items: center;
@@ -72,6 +94,7 @@
 }
 
 .conduite__retour {
+  touch-action: manipulation;
   font-family: var(--mono);
   font-weight: 700;
   font-size: 11px;
@@ -114,7 +137,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 16px var(--marge);
+  padding: 16px var(--marge-droite) 16px var(--marge-gauche);
   border-top: 1px solid var(--trait);
   cursor: pointer;
   touch-action: manipulation;
@@ -172,7 +195,15 @@
   box-shadow: 0 6px 14px rgba(20, 16, 14, 0.16);
 }
 
+/* L'aperçu montre le GABARIT, pas l'appareil : il n'a ni encoche ni barre d'accueil, et il
+   garde ses 360 × 780 pendant que le pli, lui, remplit l'écran. Sans cette remise à zéro, la
+   vignette hériterait de l'encoche du téléphone qui la regarde — une encoche dans une image
+   de pli. C'est la raison d'être des quatre jetons. */
 .mini {
+  --encoche-haut: 0px;
+  --encoche-bas: 0px;
+  --encoche-gauche: 0px;
+  --encoche-droite: 0px;
   position: absolute;
   top: 0;
   left: 0;
@@ -207,7 +238,7 @@
    « champ » est sur la liste fermée du lexique, et le lexique fait foi
    (docs/integration.md#ce-qui-a-changé-depuis-le-design). */
 .ligne {
-  padding: 15px var(--marge);
+  padding: 15px var(--marge-droite) 15px var(--marge-gauche);
   border-top: 1px solid var(--trait);
   display: flex;
   flex-direction: column;
@@ -283,9 +314,16 @@
 }
 
 /* les trois mots d'A3 — remontés de design/handoff/lecteur.html */
-/* une seule action, pleine largeur, toujours en bas */
+/* une seule action, pleine largeur, toujours en bas.
+
+   `sticky` : l'écran défile sous elle, elle ne s'en va pas. Une action qu'on ne voit pas
+   n'existe pas, et c'est exactement ce que faisait le clavier — il poussait « continuer »
+   hors du champ. */
 .bouton {
   all: unset;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -293,7 +331,8 @@
   gap: 12px;
   background: var(--carmin);
   color: var(--creme);
-  padding: 22px;
+  padding: 22px calc(22px + var(--encoche-droite)) calc(22px + var(--encoche-bas))
+    calc(22px + var(--encoche-gauche));
   cursor: pointer;
   touch-action: manipulation;
   font-family: var(--mono);
@@ -303,8 +342,13 @@
   text-transform: uppercase;
 }
 
+/* Le gris de l'attente était translucide : posé sur le papier il ne se voyait pas, mais
+   collé au-dessus d'un écran qui défile, le texte passerait au travers. Le même voile, sur
+   son papier, en une seule couche opaque — et toujours aucune couleur nouvelle. */
 .bouton[disabled] {
-  background: rgba(20, 16, 14, 0.12);
+  background:
+    linear-gradient(rgba(20, 16, 14, 0.12), rgba(20, 16, 14, 0.12)),
+    var(--creme);
   color: rgba(20, 16, 14, 0.4);
   cursor: default;
 }
@@ -378,12 +422,19 @@
 
 /* Les deux actions de D3 vivent hors du corps : elles reprennent sa marge, et rien d'autre
    — `.action` ne dessine que son filet pointillé du haut. */
+/* Les deux actions de D3, même travail que `.bouton`. Le fond est NOMMÉ et non hérité :
+   collée au-dessus d'un écran qui défile, une barre transparente laisserait passer le
+   texte. D3 est toujours en carmin. */
 .actions {
   flex: 0 0 auto;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background: var(--carmin);
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 0 var(--marge) 34px;
+  padding: 0 var(--marge-droite) calc(34px + var(--encoche-bas)) var(--marge-gauche);
 }
 
 /* D5 · les plis déposés. La même cible qu'une ligne de type — 76px, tout le côté du
@@ -399,7 +450,7 @@
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  padding: 16px var(--marge);
+  padding: 16px var(--marge-droite) 16px var(--marge-gauche);
   border-top: 1px solid var(--trait);
   cursor: pointer;
   touch-action: manipulation;
@@ -431,7 +482,7 @@
   all: unset;
   display: block;
   flex: 0 0 auto;
-  padding: 20px var(--marge);
+  padding: 20px var(--marge-droite) 20px var(--marge-gauche);
   font-family: var(--mono);
   font-weight: 700;
   font-size: 11px;

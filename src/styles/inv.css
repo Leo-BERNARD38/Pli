@@ -30,7 +30,7 @@
    aucun retrait nouveau (docs/design-system.md#le-gabarit). */
 [data-type='inv'] .image--haute .tete {
   position: absolute;
-  inset: 34px var(--marge) auto;
+  inset: calc(34px + var(--encoche-haut)) var(--marge-droite) auto var(--marge-gauche);
   padding: 0;
   color: var(--creme);
   z-index: 1;

@@ -33,6 +33,7 @@ import { laReponseEstPossible, tenirLeTiroir } from './reglages.ts'
 import { tenirLeSeuil } from './seuil.ts'
 import { fabriquer, tenirLesTextes } from './textes.ts'
 import { tenirLeType } from './type.ts'
+import { suivreLaVue } from './vue.ts'
 
 /** Les écrans de l'atelier, dans l'ordre où on les traverse. D5 est à part : on n'y passe
  * pas, on y va — c'est une salle, pas une étape. */
@@ -45,6 +46,10 @@ for (const nom of ['d0', 'd4', 'd1', 'd2', 'd3', 'd5'] as const) {
 }
 
 const mini = document.getElementById('mini')
+
+// Les écrans suivent la hauteur visible : c'est le seul endroit du produit où un clavier
+// monte, et l'action doit rester collée en bas (docs/appareils.md).
+suivreLaVue(ecrans.values())
 
 let type: Type = 'inv'
 let numero = prochainNumero()
