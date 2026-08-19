@@ -138,8 +138,8 @@ objet posé. Aujourd'hui rien ne les lit.
 Quatre zones, de haut en bas :
 
 1. **Tête** — `padding: 34px 26px 0`. Marque à gauche, type à droite.
-2. **Corps** — `flex:1`, `padding: 0 26px 30px`, contenu **aligné en bas** ou réparti.
-   On ne centre jamais verticalement.
+2. **Corps** — `flex:1`, `padding: 0 26px 30px`, contenu **aligné en bas** ou réparti — ou
+   aligné en haut et défilant, pour le poème et lui seul. On ne centre jamais verticalement.
 3. **Pliure** — le trait d'action : `border-top: 2px dashed`, étiquette à gauche, flèche `↑` à droite.
 4. **Volet** — 34 % de la hauteur, fond carmin.
 

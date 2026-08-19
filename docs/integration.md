@@ -134,7 +134,7 @@ Voici tout ce qui s'en déduit.
 |---|---|
 | Modifier un pli après dépôt ? | **Non tranchée** — voir ci-dessous |
 | Le relais en A4 : jusqu'où ? | **Il n'existe pas.** À deux, elle n'a pas d'atelier ; A4 mène à ses plis |
-| Le poème : défiler ou paginer ? | **Paginer**, au même geste que le dépliage — une strophe, un écran |
+| Le poème : défiler ou paginer ? | **Défiler** (19/08/2026, renverse la réponse d'origine). Un poème est un texte, il se lit d'un bout à l'autre ; la pagination n'a jamais été construite. C'est l'exception nommée à la règle 1 ([design-system.md](design-system.md#les-cinq-règles)) |
 | Les faits : texte libre ou sélecteur ? | **Texte libre.** Un sélecteur ajouterait un contrôle là où il n'y a qu'une ligne |
 | Les images reviennent-elles ? | **Oui, comme conséquence du type** — jamais un emplacement à remplir |
 
@@ -251,7 +251,10 @@ Rien de tout cela n'est dans les prototypes. `PLI.md` §10 l'admet lui-même.
 Avant de considérer un écran fini :
 
 1. **Les cinq règles** de [design-system.md](design-system.md#les-cinq-règles) tiennent-elles ?
-2. Le contenu s'aligne-t-il **en bas** ? On ne centre jamais verticalement.
+2. Le contenu s'aligne-t-il **en bas** ? On ne centre jamais verticalement. Deux exceptions,
+   et elles seules : un corps **réparti** (le souvenir), et le **poème**, aligné en haut
+   parce qu'il défile — sous `flex-end`, ce qui dépasse sort par le haut et ne se rattrape
+   pas au défilement.
 3. Une seule marge, **26px**. Aucun autre retrait horizontal.
 4. **Un seul titre**, **une seule griffe**, **une seule action** par pli.
 5. Le texte tient-il **aux deux extrêmes** — quatre mots et le maximum autorisé ?

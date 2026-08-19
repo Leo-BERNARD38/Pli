@@ -35,6 +35,8 @@ interface Composition {
   reparti?: true
   /** La pensée ne montre pas de titre : sa phrase EST le pli (docs/parcours.md). */
   sansTitre?: true
+  /** Le corps se lit d'un bout à l'autre et défile. Le poème, et lui seul. */
+  defile?: true
 }
 
 const COMPOSITIONS: Record<Type, Composition> = {
@@ -54,13 +56,19 @@ const COMPOSITIONS: Record<Type, Composition> = {
   // Le poème n'a ni image ni action : il se lit d'un bout à l'autre, et son corps défile
   // s'il le faut (src/styles/poe.css). Rien en bas — la marque mène au journal, comme pour
   // la pensée et le souvenir.
-  poe: { encre: true },
+  poe: { encre: true, defile: true },
 }
 
 /** L'adresse de la toile d'un type, pour que la vague 3 sache quoi charger avant A2. */
 export function toileDe(type: Type): string | null {
   return COMPOSITIONS[type].toile?.adresse ?? null
 }
+
+/**
+ * L'identifiant du titre d'un poème. Il ne sert qu'à nommer la zone qui défile, et il est
+ * unique dans la page : une seule couche porte un `data-type` à la fois.
+ */
+const TITRE = 'titre-du-poeme'
 
 function element(nom: string, classe: string, texte?: string): HTMLElement {
   const e = document.createElement(nom)
@@ -134,7 +142,10 @@ export function construire(
   // d'accessibilité sans que rien ne le lise.
   if (!c.sansTitre) {
     const haut = document.createElement('div')
-    haut.append(element('h1', 'titre', pli.ti))
+    const titre = element('h1', 'titre', pli.ti)
+    // Le titre nomme la zone qui défile, pour qui l'atteint au clavier — voir plus bas.
+    if (c.defile) titre.id = TITRE
+    haut.append(titre)
     if (pli.g) haut.append(element('p', 'griffe', pli.g))
     corps.append(haut)
   }
@@ -168,6 +179,19 @@ export function construire(
     action.setAttribute('type', 'button')
     action.append(element('span', 'etiquette carmin', c.action), fleche())
     corps.append(action)
+  }
+
+  // UN CORPS QUI DÉFILE SE PREND AU CLAVIER, ou il ne se lit pas. Une `div` en
+  // `overflow-y: auto` n'entre jamais d'elle-même dans l'ordre du Tab : sans ces trois
+  // attributs, un poème plus long qu'un écran était illisible sans doigt ni souris — la
+  // marque était le seul élément atteignable de l'écran, et elle mène ailleurs.
+  //
+  // `region` plutôt qu'un rôle de défilement, qui n'existe pas : c'est une zone nommée, et
+  // c'est son titre qui la nomme. Le lecteur d'écran annonce donc le poème, pas « zone ».
+  if (c.defile) {
+    corps.tabIndex = 0
+    corps.setAttribute('role', 'region')
+    corps.setAttribute('aria-labelledby', TITRE)
   }
 
   morceaux.push(corps)
