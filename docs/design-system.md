@@ -228,6 +228,25 @@ referme pas non plus en poussant.
 **Le tap reste le chemin, jamais le seul chemin** — c'est la règle du bouton « déplier », et
 elle vaut pour les deux gestes : « répondre » et « c'est lu » se touchent aussi.
 
+### La traversée — 19/08/2026
+
+Le troisième mouvement du produit, et le dernier : passer d'un côté à l'autre — les plis
+reçus, l'atelier. Il n'existait pas, parce qu'il n'était pas possible : c'étaient deux
+documents, et traverser rechargeait la page.
+
+**Elle glisse, elle ne fond pas.** Un fondu dit « autre chose », un glissement dit « par
+là » : ce qu'on quitte part d'un côté, ce qui arrive vient de l'autre, et **le retour défait
+l'aller** — c'est ce qui fait qu'on sait d'où l'on vient. L'atelier entre par la droite,
+comme la flèche du chemin qui y mène.
+
+`--ouvre` et `--courbe`, les mêmes qu'au dépliage : le produit n'a qu'une durée de
+déplacement et une courbe. Deux couches, et pas une de plus — le navigateur fabrique
+l'image d'avant et celle d'après, et les compose lui-même. Sous
+`prefers-reduced-motion`, les deux côtés se remplacent sans mouvement.
+
+Elle n'a **pas** de repli : là où le navigateur ne sait pas faire, le changement se fait
+quand même, sans glissement. Le produit ne dépend jamais d'un mouvement pour fonctionner.
+
 Le premier des deux mouvements décoratifs est l'invite du volet : `translateY(-9px)` à 76 %
 d'un cycle de 2,6 s. Le second est la respiration de C5, `2,4 s` en opacité, pendant que le
 fichier d'un poème arrive. Elle **s'arrête** dès que le doigt touche — `animation: none`, et non

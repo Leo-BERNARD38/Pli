@@ -57,8 +57,23 @@ test('l’ajout à l’écran d’accueil a son adresse', () => {
   assert.deepEqual(lire('#/installer'), { ecran: 'installer' })
 })
 
+// `#/atelier` était ici, et il y était à raison : l'atelier vivait sous un second document.
+// Depuis la page unique du 19/08/2026, c'est une route — le test qui l'attendait inconnue
+// est plus bas, retourné (docs/architecture.md#une-seule-page).
 test('un hash inconnu est inconnu, jamais deviné', () => {
-  for (const hash of ['#/atelier', '#c', '#p', '#nimporte', '#/installer/2']) {
+  for (const hash of ['#c', '#p', '#nimporte', '#/installer/2']) {
+    assert.deepEqual(lire(hash), { ecran: 'inconnu' }, hash)
+  }
+})
+
+test('#/atelier mène à l’atelier — une route comme les autres depuis la page unique', () => {
+  assert.deepEqual(lire('#/atelier'), { ecran: 'atelier' })
+})
+
+test('rien d’autre ne mène à l’atelier : ni la racine du second document, ni une variante', () => {
+  // `/Pli/atelier/` était une ADRESSE, elle est devenue une redirection : le routeur ne la
+  // voit jamais. Et une route voisine ne doit pas ouvrir mon dépôt par accident.
+  for (const hash of ['#/atelier/', '#/atelier/d1', '#atelier', '#/Atelier', '#/ateliers']) {
     assert.deepEqual(lire(hash), { ecran: 'inconnu' }, hash)
   }
 })

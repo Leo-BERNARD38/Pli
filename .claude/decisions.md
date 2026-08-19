@@ -647,3 +647,26 @@ n'était visible dans un diff, aucun relecteur ne les avait vues, et `npm run ve
   A1 et A2 sous un écran qui les recouvre ; et le **seuil devient relatif** pour une couche
   qu'on rabat, parce que franchir 32 % par en dessous demandait 68 % de course. La pliure,
   elle, garde son algorithme mesuré au chiffre près.
+- **19/08/2026 — une seule page, et c'est cher.** L'atelier vivait sous son propre document
+  et son propre build ; `architecture.md` disait que la nuance avait « coûté un jalon », et
+  elle était juste tant qu'on ne regardait que le chargement. Ce qui l'a renversée est un
+  parcours cassé, reproduit au navigateur : deux documents, c'est deux historiques, et le
+  retour ramenait sur ce qu'on lisait avant la traversée — un écran qui n'a pas de
+  traversée. On perdait son chemin sans rien avoir fait de faux.
+  **Le prix a été chiffré avant d'être payé** : le document du premier écran passe de 13 945
+  à 23 017 octets gzip, le plafond de la vague 1 de 14 336 à 24 576, et l'atelier est
+  désormais dans ce qui part chez elle. L'auteur a tranché en le sachant.
+  Trois choses limitent la casse et ne sont pas négociables : le code de l'atelier ne
+  s'exécute qu'à `tenirLAtelier()` ; les quatre feuilles des types restent en vague 3 — elles
+  seraient entrées dans le document en silence, et trois avertissements Rollup l'ont dit
+  avant nous ; et `/Pli/atelier/` survit en redirection, parce qu'une icône posée sur un
+  écran d'accueil pointe une adresse qui doit rester valable.
+  Ce que la fusion NE change pas, et qu'il faut continuer de lire ainsi : pas de serveur,
+  pas de synchronisation, deux `localStorage` séparés, et le seuil tient toujours la porte.
+- **19/08/2026 — la traversée glisse, elle ne fond pas.** Le troisième et dernier mouvement
+  du produit. Un fondu dit « autre chose », un glissement dit « par là » : ce qu'on quitte
+  part d'un côté, ce qui arrive vient de l'autre, et **le retour défait l'aller**. C'est ce
+  qui manquait pour comprendre où l'on va — et c'était impossible tant qu'il y avait deux
+  documents. Elle emprunte `--ouvre` et `--courbe` au dépliage : le produit n'a qu'une durée
+  de déplacement et une courbe. Elle n'a pas de repli : là où le navigateur ne sait pas
+  faire, le changement se fait quand même, sans glissement.

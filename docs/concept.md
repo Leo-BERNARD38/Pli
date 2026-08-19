@@ -34,16 +34,22 @@ synchronisation : le journal de chaque téléphone est celui de son téléphone,
 reste derrière son seuil. Ce sont deux personnes, pas deux rôles ouverts au public. Pli
 n'est pas un produit publiable : pas de comptes, pas de modération, pas d'inscription.
 
-## Les deux entrées
+## Une seule page, deux côtés
 
-| Entrée | Pour qui | Rôle |
+| Adresse | Pour qui | Rôle |
 |---|---|---|
-| `leo-bernard38.github.io/Pli/` | l'un comme l'autre | Les plis reçus, et le journal |
-| `leo-bernard38.github.io/Pli/atelier/` | l'un comme l'autre | Déposer un pli, fabriquer le lien |
+| `leo-bernard38.github.io/Pli/#/` | l'un comme l'autre | Les plis reçus, et le journal |
+| `leo-bernard38.github.io/Pli/#/atelier` | l'un comme l'autre | Déposer un pli, fabriquer le lien |
 
-Deux points d'entrée, deux bundles distincts. L'atelier **ne se charge que si l'on touche la
-ligne qui y mène** : le chemin est un `<a href>` ordinaire vers l'autre entrée, jamais un
-import, et le premier écran de celle qui ne fait que lire ne porte pas un octet d'atelier. Le détail des routes est dans [architecture.md](architecture.md#routage).
+**Un seul document depuis le 19/08/2026.** L'atelier a vécu sous sa propre adresse et son
+propre build ; deux documents, c'était deux historiques, et l'on perdait son chemin en
+traversant — le retour du navigateur ramenait sur ce qu'on lisait avant, jamais sur la liste
+qu'on venait de quitter. Une seule page referme ça, et laisse les deux côtés glisser l'un
+sur l'autre.
+
+Le prix est réel et il est écrit : le premier écran porte désormais tout le produit
+([architecture.md](architecture.md#une-seule-page)). Ce qui le limite, c'est que **le code
+de l'atelier ne s'exécute pas tant qu'on n'y va pas** : les octets sont là, le travail non. Le détail des routes est dans [architecture.md](architecture.md#routage).
 
 L'atelier demande une fois **notre date d'officialisation** avant de s'ouvrir. C'est un
 paillasson, pas une serrure : ça écarte le curieux, pas quelqu'un qui lit les sources.

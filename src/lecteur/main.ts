@@ -13,6 +13,14 @@
 import '../styles/tokens.css'
 import '../styles/pli.css'
 
+// L'ATELIER EST DANS CETTE PAGE, ET SON CODE NE TOURNE PAS TANT QU'ON N'Y VA PAS.
+//
+// L'import est statique : une seule page, un seul fichier, aucune requête de plus
+// (docs/architecture.md#une-seule-page). Ce qui reste paresseux, c'est l'EXÉCUTION — le
+// module ne fait rien à l'import, il attend `tenirLAtelier()`. Sans cette porte, ouvrir un
+// pli sur son téléphone à elle armerait six écrans, poserait un observateur de vue et
+// lirait mon tiroir dans `localStorage`, sur le chemin critique du texte qu'elle attend.
+import { refermerLAtelier, tenirLAtelier } from '../atelier/main.ts'
 import { decoder, type Pli } from '../lib/codec.ts'
 import {
   empreinte,
@@ -446,7 +454,48 @@ async function montrerLeJournal(): Promise<void> {
   if (mienne === generation) montrer(ecran)
 }
 
-suivre((route) => {
+/**
+ * LA TRAVERSÉE — d'un côté du produit à l'autre, et on voit ce qu'on quitte.
+ *
+ * Les deux côtés étaient deux documents : traverser rechargeait la page, rien ne disait où
+ * l'on allait, et le retour du navigateur retombait sur ce qu'on lisait avant plutôt que
+ * sur la liste qu'on venait de quitter. Une seule page rend le glissement possible ; le
+ * reste est dans `pli.css`, qui porte les quatre animations.
+ *
+ * `startViewTransition` prend une fonction qui change le DOM et **attend sa promesse** si
+ * elle en rend une. C'est ce qui permet au retour d'emporter les deux côtés d'un coup : le
+ * journal se reconstruit dedans, et le glissement ne part qu'une fois l'écran d'arrivée
+ * prêt. L'image d'avant reste à l'écran pendant ce temps — c'est le comportement de l'API,
+ * et c'est mieux qu'un glissement sur du vide.
+ *
+ * Là où le navigateur ne l'a pas, le changement se fait quand même, sans glissement : le
+ * produit ne dépend jamais d'un mouvement pour fonctionner.
+ *
+ * Le sens vit sur la racine le temps de la transition : c'est ce qui fait que le retour
+ * défait l'aller au lieu de rejouer le même geste.
+ */
+function traverser(sens: 'aller' | 'retour', changer: () => Promise<unknown> | void): void {
+  const demarrer = document.startViewTransition
+  if (CALME.matches || typeof demarrer !== 'function') {
+    void changer()
+    return
+  }
+  const racine = document.documentElement
+  racine.dataset['traverse'] = sens
+  const transition = demarrer.call(document, changer)
+  void transition.finished.finally(() => {
+    delete racine.dataset['traverse']
+  })
+}
+
+/** De quel côté on était : le sens de la traversée s'en déduit, et rien d'autre. */
+let cote: 'lecteur' | 'atelier' = 'lecteur'
+
+/**
+ * L'écran que cette adresse demande, côté lecteur. Rend une promesse **quand l'écran met du
+ * temps à exister** — c'est ce que la traversée attend pour ne pas glisser sur du vide.
+ */
+function afficherLeLecteur(route: Route): Promise<unknown> | void {
   rangerAuJournal()
   reprendreLeDefilement()
   // Une adresse qu'on quitte emporte ses couches qui montent : A3, A4 et A5 appartiennent
@@ -455,8 +504,7 @@ suivre((route) => {
   const mienne = ++generation
 
   if (route.ecran === 'journal') {
-    void montrerLeJournal()
-    return
+    return montrerLeJournal()
   }
 
   // `#/installer` n'a pas encore d'écran : sa forme dépend de la mesure 4, et elle ne se
@@ -476,7 +524,7 @@ suivre((route) => {
       montrer(c4)
       return
     }
-    decoder(entree.c).then(
+    return decoder(entree.c).then(
       (pli) => {
         if (mienne !== generation) return
         // Une invitation déjà répondue arrive sur C2, le rappel ; tout le reste est le pli
@@ -489,7 +537,6 @@ suivre((route) => {
         if (mienne === generation) montrer(c4)
       },
     )
-    return
   }
 
   // C5 · L'ATTENTE, et elle ne se montre que si elle dure. Le poème est le seul écran du
@@ -502,7 +549,7 @@ suivre((route) => {
         }, AVANT_C5)
       : null
 
-  pliDe(route).then(
+  return pliDe(route).then(
     ({ pli, payload }) => {
       if (attente !== null) clearTimeout(attente)
       if (mienne !== generation) return
@@ -535,4 +582,36 @@ suivre((route) => {
       montrer(cause instanceof ReseauCoupe ? (horsLigne ?? c4) : c4)
     },
   )
+}
+
+suivre((route) => {
+  // L'ATELIER · l'autre côté de la même page. Il n'a ni pli ni geste : le cadre s'en va
+  // entier, et ses six écrans prennent l'écran (docs/parcours.md#latelier).
+  if (route.ecran === 'atelier') {
+    ++generation
+    rangerAuJournal()
+    retirerLesCouchesQuiMontent()
+    cote = 'atelier'
+    traverser('aller', () => {
+      montrer(null)
+      if (cadre) cadre.hidden = true
+      tenirLAtelier()
+    })
+    return
+  }
+
+  // On revient de l'atelier : le glissement doit emporter les DEUX côtés à la fois, donc
+  // l'écran d'arrivée doit exister avant que la transition se joue. `traverser` attend la
+  // promesse — sans elle, le côté qui part glisserait sur une page encore vide.
+  if (cote === 'atelier') {
+    cote = 'lecteur'
+    traverser('retour', () => {
+      refermerLAtelier()
+      return afficherLeLecteur(route)
+    })
+    return
+  }
+
+  refermerLAtelier()
+  void afficherLeLecteur(route)
 })

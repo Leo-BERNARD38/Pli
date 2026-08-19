@@ -14,7 +14,7 @@ L'objectif chiffré ne bouge pas : **le texte d'A1 lisible en moins d'une second
 
 | Vague | Quand | Quoi | Budget |
 |---|---|---|---|
-| **1 · critique** | dans le document | HTML d'A1 + CSS inline + le module d'ouverture | **≤ 14 ko gzip, 1 requête** |
+| **1 · critique** | dans le document | HTML d'A1 + CSS inline + le module d'ouverture + **tout l'atelier** | **≤ 24 ko gzip, 1 requête** |
 | **2 · immédiate** | `preload` dans le `<head>` | 3 polices sous-ensemblées, **et rien d'autre** | 3 requêtes |
 | **3 · arrière-plan** | après le premier rendu, en idle | la texture du type, Bodoni entier, le CSS du type, le module d'A3 | invisible |
 
@@ -26,6 +26,46 @@ pas une seule connexion en dehors de `leo-bernard38.github.io/Pli`.
 `journal.ts` n'est pas dans cette table, et c'est voulu : il est **statique**, donc inliné
 dans le document avec le reste du module d'ouverture. L'écriture au seuil ne charge rien
 parce qu'il n'y a rien à charger.
+
+## Le plafond de la vague 1
+
+**Il valait 14 336 octets et il portait le lecteur seul. Il vaut 24 576 depuis le
+19/08/2026**, et il porte tout le produit : la page unique y fait entrer l'atelier
+([architecture.md](architecture.md#une-seule-page)). Mesuré le jour même : **23 017 octets**,
+contre 13 945 la veille — près de 9 ko de plus sur le premier écran d'A1.
+
+C'est cher, et ce n'est pas un accident : c'est le prix d'un parcours qui ne se perd plus
+entre deux documents, et il a été payé les yeux ouverts. Le plafond est posé juste au-dessus
+de la mesure, et pas plus haut — **un plafond qui ne serre jamais ne tient rien**. Le build
+échoue au-delà, comme avant.
+
+Deux choses le tiennent, et elles comptent autant que le chiffre :
+
+- **le code de l'atelier ne s'exécute pas** tant qu'on n'est pas allé à l'atelier
+  (`tenirLAtelier()`, src/atelier/main.ts). Les octets sont là, le travail non ;
+- **les quatre feuilles des types restent en vague 3.** L'atelier les importait
+  statiquement pour son aperçu et les aurait fait entrer dans le document : la fusion n'a
+  pas le droit de changer ce qu'elle télécharge, ni quand.
+
+### Ce que la page unique coûte en temps — mesuré
+
+Les octets se comptent, le temps se mesure. Fait le 19/08/2026, sur les deux builds servis
+côte à côte, dans Chromium : **60 ms de latence, 9 Mb/s, CPU bridé ×4, cache vide à chaque
+tour**, médiane sur sept tours.
+
+| | repère `a1` | premier rendu |
+|---|---|---|
+| deux pages | 138 ms | 248 ms |
+| une page | 154 ms | 264 ms |
+| **écart** | **+16 ms** | **+16 ms** |
+
+Neuf kilo-octets de plus coûtent **seize millisecondes** — le document n'est pas ce qui
+domine, la latence et les polices le sont. C'est ce qui rend la fusion payable.
+
+**Ce n'est pas la mesure qui fait foi.** Un émulateur n'est pas un téléphone : « le texte
+d'A1 peint en moins d'une seconde en 4G » reste à faire sur les deux appareils, et c'est
+maintenant la mesure qui compte le plus. Celle-ci dit seulement qu'on ne part pas de très
+loin.
 
 ## Vague 1 — le document se suffit à lui-même
 
@@ -161,13 +201,13 @@ Un réseau coupé ne mène pas à C4 : il a son propre écran, avec « réessaye
 
 | Poste | Cible | Mesuré | Le |
 |---|---|---|---|
-| document d'A1 (HTML + CSS + JS, gzip) | **≤ 14 336 o** | **13 131 o** — un seul fichier : A1, C4, C5, hors ligne, le gabarit, le geste et la vague 3. 9 787 o le 18/08 ; le journal du jalon 5, les quatre promesses d'A1, C2 le rappel puis C5 l'ont porté là | 19/08/2026, en local |
+| document d'A1 (HTML + CSS + JS, gzip) | **≤ 24 576 o** | **23 017 o** — un seul fichier, **et tout le produit dedans** : A1, C1 à C5, hors ligne, le gabarit, le geste, et les six écrans de l'atelier. 9 787 o le 18/08, 13 131 puis 13 945 le 19/08 avec le journal, les promesses d'A1, C2, C5 et A5 — la page unique a fait le reste ([architecture.md](architecture.md#une-seule-page)) | 19/08/2026, en local |
 | les trois polices d'A1 | **≤ 90 ko** | **52,6 ko** — Pinyon 24,6 · Newsreader 20,8 · Space Mono 7,2 | 18/08/2026, en local |
 | une texture | définition native, **600 ko à 1,15 Mo** | 600 ko à 1,15 Mo | 17/08/2026 |
 | requêtes **bloquantes** avant le premier rendu | **1** | **1** — le document, et lui seul | 19/08/2026, en local |
 | requêtes avant le texte d'A1 **lisible** | **4** | **4** — le document et les trois polices | 19/08/2026, en local |
 | requêtes avant A1 **complet** | **4** | **4** — A1 n'a rien de plus à charger : aucune image | 19/08/2026, en local |
-| octets avant A1 complet | — | **89 ko** — 36 de document, 53 de polices. C'était 703 ko avec le rideau | 19/08/2026, en local |
+| octets avant A1 complet | — | **129 ko** — 76 de document, 53 de polices. C'était 89 ko avant la page unique, et 703 ko avec le rideau | 19/08/2026, en local |
 | texte d'A1 peint, 4G, cache vide | **< 1 s** | — | à mesurer sur les deux téléphones |
 | A2 après le geste | **0 requête** | **0** — tout est chargé et décodé pendant qu'elle regarde le volet | 18/08/2026, en local |
 

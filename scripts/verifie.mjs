@@ -52,7 +52,10 @@ const aRegarder = CIBLE
   ? [join(RACINE, relative(RACINE, CIBLE))].filter((c) => existsSync(c))
   : [
       ...fichiers(join(RACINE, 'src')),
-      ...['index.html', 'atelier/index.html'].map((n) => join(RACINE, n)).filter(existsSync),
+      // Une seule page depuis le 19/08/2026 : `atelier/index.html` a disparu du dépôt, et
+      // `public/atelier/index.html` est une redirection de trois lignes, sans un mot du
+      // produit (docs/architecture.md#une-seule-page).
+      ...['index.html'].map((n) => join(RACINE, n)).filter(existsSync),
     ]
 
 /* ── masquer les commentaires : un mot cité n'est pas un mot employé ─────────── */

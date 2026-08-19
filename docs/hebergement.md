@@ -7,8 +7,8 @@ quel ordre est dans [chargement.md](chargement.md).
 
 ```
 dist/
-  index.html              elle
-  atelier/index.html      moi
+  index.html              TOUT le produit — les deux côtés, un seul document
+  atelier/index.html      une redirection vers `#/atelier`, pour l'icône déjà posée
   assets/                 js, css, polices, peintures — noms empreintés par Vite
   plis/                   les poèmes encodés + l'index      (copié de public/)
   icones/                 icônes, manifeste, og.png         (→ installation.md)

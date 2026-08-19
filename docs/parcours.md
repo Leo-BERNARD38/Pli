@@ -262,7 +262,7 @@ tronqué par l'application de messagerie. Le message le dit et propose de me le 
 
 ---
 
-# 2. Moi — `leo-bernard38.github.io/Pli/atelier/`
+# 2. Moi — `leo-bernard38.github.io/Pli/#/atelier`
 
 ```
         D0  le seuil  ──▶  D4  le tiroir  ──▶  D1  le type  ──┬──▶  D2   les textes  ──▶  D3  le lien
@@ -272,6 +272,16 @@ tronqué par l'application de messagerie. Le message le dit et propose de me le 
 
 Trois questions, une par écran, comme le design l'impose. Le retour est en haut à gauche,
 l'étape est écrite « 2 sur 3 », l'action unique est en bas.
+
+**L'atelier est une route de la page unique** — `#/atelier` — depuis le 19/08/2026
+([architecture.md](architecture.md#une-seule-page)). Ses étapes internes, elles, ne sont pas
+dans le hash : aucune ne s'envoie, et un dépôt à moitié écrit n'a pas d'adresse. La
+traversée en a une, parce que c'en est une.
+
+**Il reprend où on l'a laissé.** Sortir vers les plis reçus et revenir ne ramène pas à la
+première question : sous deux documents, revenir rechargeait tout. La traversée glisse — ce
+qu'on quitte part d'un côté, ce qui arrive vient de l'autre, et le retour défait l'aller
+([design-system.md](design-system.md#le-mouvement)).
 
 ## D0 · le seuil
 

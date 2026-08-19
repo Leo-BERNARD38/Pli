@@ -90,14 +90,15 @@ export function chemin(ou: ParentNode): void {
  * l'on repart. Discret comme la ligne de D1 vers les plis déposés — il attend d'être
  * cherché, il ne recouvre pas le sommaire.
  *
- * Un `<a href>` ordinaire vers l'autre entrée, jamais un import : les deux bundles restent
- * étanches, et l'atelier ne se charge que si elle touche la ligne
- * (docs/architecture.md#deux-entrées).
+ * **C'est un hash, plus une adresse.** Il a pointé vers `/Pli/atelier/`, un second document,
+ * tant que les deux côtés ont vécu séparément : traverser rechargeait la page, et le retour
+ * du navigateur tombait sur ce qu'on lisait avant, jamais sur la liste qu'on venait de
+ * quitter. Une seule page, un `hashchange` (docs/architecture.md#une-seule-page).
  */
 function versLatelier(): HTMLElement {
   const vers = document.createElement('a')
   vers.className = 'passage'
-  vers.href = `${import.meta.env.BASE_URL}atelier/`
+  vers.href = '#/atelier'
   // « l'atelier », et non « déposer un pli » : la règle de fréquence du mémo veut que le mot
   // ne s'écrive pas là où la marque est — et elle est juste au-dessus, avec « tes plis » en
   // face d'elle. Le mot nomme la destination, comme « les plis reçus » nomme la sienne de
