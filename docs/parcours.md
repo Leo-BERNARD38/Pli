@@ -62,11 +62,25 @@ Commune aux quatre types ; seule la promesse change. Numéro, promesse en voix,
 des états fermés — elle ne dit rien du contenu, c'est tout son intérêt
 ([design-system.md](design-system.md#les-deux-images-du-produit)).
 
-La phrase de la maquette — « Il ne se lira qu'une fois » — devient fausse dès que le journal
-existe. Elle est remplacée par :
+Le titre est commun — **« Un pli t'attend. »** — et la promesse suit le type. La phrase de
+la maquette, « Il ne se lira qu'une fois », devient fausse dès que le journal existe :
 
-> **Un pli t'attend.**
-> Il ne s'ouvre qu'une fois. Ensuite il reste dans tes plis.
+| Type | La promesse |
+|---|---|
+| invitation | Il ne s'ouvre qu'une fois. Ensuite il reste dans tes plis. |
+| pensée | Deux lignes, rien à répondre. Tu peux les lire debout. |
+| poème | Prends le temps. Il n'y a rien à répondre. |
+| souvenir | Une image, une ligne. Tu sauras tout de suite quel jour c'était. |
+
+Elles viennent des écrans d'attente du design — A1 et B0a-c — débarrassées de ce qu'elles
+comptaient : une maquette sait qu'il y a quatre strophes, un gabarit ne le sait pas. Une
+promesse dit ce qui attend et ce qu'on attend d'elle, **jamais ce que le pli contient** — le
+rideau ne dit rien du contenu, elle non plus.
+
+Celle de l'invitation est **écrite en dur dans le document** : c'est elle qui se peint avant
+le décodage, et les trois autres la remplacent quand le lien a livré son type, dans la même
+frame que le numéro et la signature. Le document a grossi de 379 octets gzip le 19/08/2026 —
+11 988 sur les 14 ko du plafond ([chargement.md](chargement.md#le-budget-écran-par-écran)).
 
 ## Le dépliage
 

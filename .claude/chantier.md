@@ -330,6 +330,31 @@ cadre, l'atelier et son clavier, le contraste, la doc.
       acceptée — c'est écrit dans
       [installation.md](../docs/installation.md#le-manifeste-et-les-icônes)
 
+## Les maquettes retrouvées — 19/08/2026
+
+`design/handoff/` n'exportait que trois pages. Le projet design en compte **six canevas**,
+et ils dessinent des écrans que [parcours.md](../docs/parcours.md#3-ce-qui-nest-pas-encore-maquetté)
+listait comme jamais dessinés : **C2 à C5**, **B0a-c**, **B2 · B3**, et l'atelier. Ces
+écrans-là ont donc été codés sans leur maquette.
+
+- [x] les six canevas entrent dans l'archive — [`design/canevas/`](../design/canevas/README.md),
+      avec leur README. La garde passe de « rien ne bouge sous `design/` » à **« l'archive
+      peut s'agrandir, jamais changer »** : elle lit les états, accepte un ajout, refuse
+      toujours modification, suppression et renommage. Vérifiée dans les deux sens
+- [x] le relevé des écarts, écran par écran, dans
+      [integration.md](../docs/integration.md#les-maquettes-que-le-handoff-navait-pas-transportées) —
+      ce que chaque canevas montre, ce que le produit en retient, ce qu'il en écarte
+- [x] le `handoff/` du projet design est identique **bit pour bit** à celui du dépôt :
+      l'archive était à jour, il n'y avait rien à reprendre de ce côté
+- [ ] **C4 reste nu, et c'est tranché** : la maquette lui donne « voir tes plis ↑ » en bas,
+      l'auteur a choisi de n'en rien faire — un lien abîmé n'invite pas à aller ailleurs
+- [ ] **C2 part vers la maquette** : elle en fait un écran de synthèse, le code réaffiche le
+      pli entier. Tranché le 19/08/2026 — voir le lot en cours
+
+Le §11 du `PLI.md` du projet design décrit l'icône et laisse un « reste à faire » —
+vectoriser la lettre. **Il est déjà fait** : `scripts/icones.py` sort des `<path>`, aucun
+`<text>`, et `PLI.md` n'entre pas dans l'archive parce qu'il en modifierait une page.
+
 ## Les mesures — aucune ne se devine
 
 Elles sont décrites dans [docs/README.md](../docs/README.md#les-mesures-à-faire-avant-de-sengager).

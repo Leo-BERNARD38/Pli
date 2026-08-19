@@ -53,9 +53,9 @@
     <main class="pli">
       <div class="pli__dessous" hidden></div>
 
-      <!-- A1 · l'attente. Commune aux quatre types ; seule l'étiquette de la tête change.
-           Le fond est le rideau, la seule image des états fermés — il ne dit rien du
-           contenu, c'est tout son intérêt (docs/parcours.md#a1--lattente). -->
+      <!-- A1 · l'attente. Commune aux quatre types ; seules l'étiquette de la tête et la
+           promesse changent. Le fond est le rideau, la seule image des états fermés — il ne
+           dit rien du contenu, c'est tout son intérêt (docs/parcours.md#a1--lattente). -->
       <section class="pli__dessus pli--encre" id="a1">
         <div class="image image--pleine image--rideau">
           <img alt="" decoding="async" fetchpriority="low" />
@@ -80,7 +80,13 @@
         <div class="corps">
           <p class="etiquette" data-numero></p>
           <h1 class="voix">Un pli t’attend.</h1>
-          <p class="voix voix--corps">
+          <!-- La promesse est le seul emplacement du lien qui soit ÉCRIT ICI. Les autres
+               restent vides — voir plus haut. Elle, non : vide, elle laisserait un trou sous
+               le titre le temps du décodage, et un poème attend un aller-retour réseau
+               entier. La phrase en dur est celle de l'invitation ; `ecrire()` lui substitue
+               celle du type dans la même frame que le numéro et la signature, donc sans un
+               saut de plus (src/lecteur/a1.ts). -->
+          <p class="voix voix--corps" data-promesse>
             Il ne s’ouvre qu’une fois. Ensuite il reste dans tes plis.
           </p>
           <p class="etiquette etiquette--fine" data-signature></p>
