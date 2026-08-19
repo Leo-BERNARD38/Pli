@@ -26,6 +26,15 @@ export function adresseDuPayload(payload: string): string {
 }
 
 /**
+ * L'adresse d'un poème. Elle ne porte **que le nom du fichier** — le poème ne voyage pas
+ * dans son lien, il vit dans le dépôt (docs/donnees.md#3-le-poème). C'est aussi pourquoi
+ * elle tient sur une ligne là où un vrai payload n'y tiendrait pas.
+ */
+export function adresseDuPoeme(nom: string): string {
+  return `${ADRESSE}#p=${nom}`
+}
+
+/**
  * Fabrique le lien, et le note dans mon historique.
  *
  * Le dépôt est noté **avant** que je partage : ce qui part dans une conversation ne se
@@ -40,12 +49,15 @@ export async function deposerLePli(pli: Pli): Promise<Depot> {
 /**
  * Tient l'écran du lien : le numéro, la longueur, et les deux actions.
  *
+ * Il ne prend que l'adresse, jamais le payload : un poème n'en a pas — son lien ne porte
+ * que le nom de son fichier — et l'écran n'a de toute façon rien à en faire.
+ *
  * La longueur est affichée telle quelle, sans plafond : **le plafond de longueur d'un lien
  * est une des quatre mesures ouvertes** (docs/README.md#les-mesures-à-faire-avant-de-sengager),
  * et il se mesure WhatsApp → iOS → Safari, pas ici. Le chiffre est déjà utile — il ne se
  * fait juste pas encore juger.
  */
-export function tenirLeLien(ecran: HTMLElement): (depot: Depot, n: number) => void {
+export function tenirLeLien(ecran: HTMLElement): (adresse: string, n: number) => void {
   const envoyer = ecran.querySelector<HTMLButtonElement>('#envoyer')
   const copier = ecran.querySelector<HTMLButtonElement>('#copier')
   const numero = ecran.querySelector<HTMLElement>('[data-lien="numero"]')
@@ -71,10 +83,10 @@ export function tenirLeLien(ecran: HTMLElement): (depot: Depot, n: number) => vo
     )
   })
 
-  return (depot: Depot, n: number) => {
-    adresse = depot.adresse
+  return (ou: string, n: number) => {
+    adresse = ou
     if (numero) numero.textContent = `Nº ${String(n).padStart(3, '0')}`
-    if (longueur) longueur.textContent = `${[...depot.adresse].length} signes`
+    if (longueur) longueur.textContent = `${[...ou].length} signes`
     if (copier) copier.textContent = 'copier le lien'
     if (envoyer) envoyer.hidden = typeof navigator.share !== 'function'
   }

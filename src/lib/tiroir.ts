@@ -131,6 +131,23 @@ export function fixerLeProchainNumero(n: number): void {
   ranger(COMPTEUR, Math.max(0, Math.trunc(n) - 1))
 }
 
+/**
+ * Le compteur, calé sur un numéro déjà pris ailleurs — il n'avance jamais que vers le haut.
+ *
+ * **Un poème écrit hors atelier consomme un numéro que le compteur ignore** : il vient d'un
+ * `.md` de mon bureau, pas d'ici. Sans ce calage, deux plis finiraient par porter le nº 015
+ * (docs/donnees.md#lindex). C'est l'index qui l'apporte, à l'ouverture de D2p.
+ *
+ * Il ne recule jamais : un index en retard sur le tiroir ne doit pas rendre un numéro déjà
+ * parti dans une conversation.
+ */
+export function calerLeCompteur(dernierPris: number): void {
+  const pris = Math.trunc(dernierPris)
+  const relu = lire(COMPTEUR)
+  const actuel = typeof relu === 'number' && Number.isInteger(relu) && relu >= 0 ? relu : 0
+  if (pris > actuel) ranger(COMPTEUR, pris)
+}
+
 function estUnDepose(relu: unknown): relu is Depose {
   if (typeof relu !== 'object' || relu === null) return false
   const d = relu as Partial<Depose>

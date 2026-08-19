@@ -19,8 +19,7 @@ jalon 3, et tout ce qui suit est du confort.
 
 | Point | Ce qui manque | Quand |
 |---|---|---|
-| **Le numéro `n` des plis courts** | il vient de `pli.v1.compteur`, sur mon téléphone seul. Le tiroir l'affiche et permet de le corriger — reste à décider ce qui se passe si je ne m'en aperçois pas | jalon 4 |
-| **Hors ligne ≠ introuvable** | pour un poème, C4 confond un fichier absent et un réseau coupé. Le second mérite « réessayer », pas « lien abîmé » ([parcours.md](parcours.md#les-états)) | avec le poème |
+| **Le numéro `n` des plis courts** | il vient de `pli.v1.compteur`, sur mon téléphone seul. Le tiroir l'affiche et permet de le corriger. **Le cas du poème est réglé** (19/08/2026) : un poème écrit hors atelier consommait un numéro que le compteur ignorait, et l'index le lui apporte maintenant à l'ouverture de D2p ([donnees.md](donnees.md#lindex)) | fait |
 
 Les écrans qui ne sont pas encore maquettés sont listés à part, en fin de
 [parcours.md](parcours.md#3-ce-qui-nest-pas-encore-maquetté).
@@ -135,10 +134,6 @@ le jour où il manque vraiment.
 - `scripts/plier.mjs`, `plier.bat`, `plier.sh`
 - `plis-source/` gitignoré, garde-fou avant commit
 - C5 l'attente du fichier
-- D2p : la liste des poèmes dans l'atelier
-- **Hors ligne ≠ introuvable** : pour un poème, C4 confond un fichier absent et un réseau
-  coupé. Le second mérite « réessayer », pas « lien abîmé »
-  ([parcours.md](parcours.md#les-états))
 
 ### Le bureau
 

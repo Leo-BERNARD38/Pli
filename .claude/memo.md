@@ -24,11 +24,20 @@ l'atelier · nº 014 · « Un pli t'attend. » · « pour toi seule » · « dé
 **On ne dit pas** — ouvrir · envoyer un message · créer · valider · champ · formulaire ·
 compte · notification · erreur · studio · créateur · carte · expiré.
 
+**« ligne » a deux sens, et les deux sont bons** : *la ligne* de saisie de l'atelier, qui
+remplace « champ » ; et *hors ligne*, l'écran du réseau coupé. Le second est un idiome, pas
+un emploi du premier.
+
 La règle vaut **aussi pour les noms du code**. Français, minuscules, tutoiement, phrases
 courtes. Pas d'exclamation, pas d'emoji — seule exception nommée, le cœur du message WhatsApp
 d'A3. Étiquettes en minuscules dans le code, capitales par `text-transform`.
 
 `scripts/verifie.mjs` contrôle tout ce paragraphe. Ne pas le refaire à la main.
+
+**Une règle de cascade, apprise trois fois** : le calcul de spécificité d'une feuille ne vaut
+qu'à l'intérieur d'elle. `depot.css` charge après `pli.css`, donc à spécificité égale c'est
+l'ordre qui tranche — et il a déjà mangé le filet de focus de l'atelier, le D3 en crème sur
+crème, et les vignettes de la pensée et du poème. **Deux classes, et l'ordre ne décide plus.**
 
 ## Le gabarit (design-system.md#le-gabarit)
 
@@ -39,6 +48,7 @@ le cadre         remplit le viewport — 100 % × 100dvh, ni coin ni ombre
 --pliure 34%     hauteur du volet fermé, en bas
 tête    padding 34px + encoche, 26px + encoche, 0
 corps   flex:1, padding 0 26px 30px + encoche, contenu ALIGNÉ EN BAS
+        trois exceptions : réparti (souvenir) · en haut et défilant (poème) · centré (C5)
 volet   34 % de la hauteur, fond carmin
 ```
 
@@ -131,6 +141,9 @@ de la transition, le fil principal ne fait **rien d'autre** que déplacer **deux
 |---|---|---|
 | `pli.v1.journal` | son téléphone | `{ h, c, deplieLe, reponse? }`, du plus récent au plus ancien |
 | `pli.v1.reglages` · `pli.v1.compteur` · `pli.v1.deposes` · `pli.v1.seuil` | mon téléphone | le tiroir, et rien de commun avec son journal |
+
+Le compteur se cale sur l'index des poèmes à l'ouverture de D2p, et **ne recule jamais** : un
+poème écrit hors atelier consomme un numéro que le tiroir ignore.
 
 `h` est un **sha-256 tronqué à 8 octets** du payload — 16 signes hexadécimaux. Le
 dédoublonnage se fait sur `h`, **jamais sur `n`**. Son journal passe par `journal.ts`, mon

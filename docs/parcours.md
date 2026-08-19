@@ -45,8 +45,9 @@ enchaînent, ce qui les déclenche, et ce qui se range où.
 À l'ouverture du lien, dans cet ordre :
 
 1. **Décoder.** `#c=` se décode sur place. `#p=` demande un `fetch` — c'est le seul cas
-   où **C5** s'affiche, et le seul qui exige le réseau. Un décodage ou un fetch qui échoue
-   donne **C4**.
+   où **C5** s'affiche, et le seul qui exige le réseau. Un décodage qui échoue, ou un
+   fichier introuvable, donnent **C4** ; un réseau coupé donne l'écran **hors ligne**, qui
+   propose « réessayer ».
 2. **Chercher dans le journal**, sur l'empreinte du payload — jamais sur le numéro
    (voir [donnees.md](donnees.md#4-son-journal)). Trouvé et déjà déplié → **C3**.
 3. Sinon → **A1**.
@@ -163,8 +164,16 @@ d'une invitation à laquelle elle a déjà répondu.
 | **C1** | le journal, y compris vide | crème |
 | **C2** | relecture d'une invitation déjà répondue — depuis le journal, ou au retour de WhatsApp | crème |
 | **C3** | lien déjà déplié — mène au journal | encre |
-| **C4** | payload illisible, ou fichier de poème introuvable | crème |
+| **C4** | payload illisible, ou fichier de poème **introuvable** | crème |
+| **hors ligne** | le réseau a lâché — **poème uniquement** | crème |
 | **C5** | attente du fichier — **poème uniquement** | crème |
+
+**Hors ligne n'est pas introuvable.** C4 confondait les deux, et ce sont deux choses
+opposées : un fichier absent est définitif, un réseau coupé passe. Le second porte donc son
+propre écran et une action, « réessayer » — dire « lien abîmé » à quelqu'un dont le pli
+l'attend serait un mensonge. La distinction se fait sur ce que le `fetch` a fait : seul
+celui qui **lève** est un réseau coupé ; une réponse qui arrive et dit non — 404 — est un
+fichier qu'on n'a pas, et le réseau a marché.
 
 **C2 est un rappel, pas le pli.** Sa maquette (`design/canevas/`) en fait un écran de
 synthèse, et c'est ce qu'on suit : ce qu'elle a répondu, quand, la griffe, et les faits —
@@ -245,13 +254,30 @@ inactif tant que le texte principal est vide.
 
 Le poème ne s'écrit pas ici. Cet écran remplace les lignes nommées par **la liste des
 poèmes déjà déposés** — numéro et titre, lus dans l'index encodé. Une ligne, un tap, le
-lien est fabriqué.
+lien est fabriqué. La liste reprend la grammaire du sommaire de C1 et de D5 : c'est la seule
+grammaire de liste que le produit ait, et un poème se choisit comme un pli déposé se relit.
 
-C'est le seul écran de l'atelier qui demande le réseau.
+C'est le seul écran de l'atelier qui demande le réseau, et il en tire **trois états, pas
+deux** : la liste ; « aucun poème encore », qui est un fait ; et « pas de réseau », qui
+passe. C'est la même distinction que « hors ligne ≠ introuvable » côté lecteur, et pour la
+même raison.
+
+**Choisir un poème n'est pas le déposer.** Un poème est poussé par git, pas fabriqué ici :
+son lien se refabrique depuis le nom de son fichier, sans rien réencoder, **sans noter un
+dépôt et sans avancer le compteur** — exactement comme le renvoi d'un pli depuis D5. Ce qui
+cale le compteur, c'est l'index, et c'est sa seconde raison d'être
+([donnees.md](donnees.md#lindex)) : un poème écrit hors atelier consomme un numéro que le
+tiroir ignore. Le calage ne recule jamais, et ne se fait pas sur un index qu'on n'a pas pu
+lire.
 
 ## D3 · le lien
 
-Identique pour les quatre types. Deux corrections à la maquette :
+Identique pour les quatre types, et il sert **trois fois** : à la fin d'un dépôt, au renvoi
+d'un pli de D5, et au choix d'un poème sur D2p. L'écran ne change pas — seule sa conduite dit
+d'où l'on vient. Un poème ne se modifie pas ici, son texte est à mon bureau : le retour
+ramène à la liste, jamais à des textes qui n'existent pas.
+
+Deux corrections à la maquette :
 
 - **Le lien ne s'affiche pas.** `pli.re/015-vhtq` tient sur une ligne, un vrai payload non.
   La ligne de lien est remplacée par les deux actions : **envoyer** (partage natif) et

@@ -166,10 +166,10 @@
         </button>
 
         <!-- Le poème ne s'écrit pas ici : il passe par la moulinette, à mon bureau
-             (docs/parcours.md#le-poème-hors-atelier). D2p, la liste des poèmes déjà
-             déposés, arrive avec lui. La ligne se montre quand même — les quatre types
-             sont le produit, et en cacher un ferait croire qu'il n'existe pas. -->
-        <button class="type" type="button" data-type="poe" disabled>
+             (docs/parcours.md#le-poème-hors-atelier). La ligne mène donc à D2p, la liste
+             des poèmes déjà pliés, et non à D2 — c'est le seul type dont on choisit le
+             texte au lieu de l'écrire. -->
+        <button class="type" type="button" data-type="poe">
           <span>
             <span class="type__nom">un poème</span>
             <span class="type__glose">il s’écrit à ton bureau, et la moulinette en fait le lien</span>
@@ -301,6 +301,36 @@
          spécification en donne. La liste reprend la grammaire du sommaire de C1, chez
          elle : le numéro, le type, ce qui est écrit, depuis quand. Une ligne se touche et
          le lien revient, avec ses deux actions. -->
+    <!-- D2p · QUEL POÈME. Il remplace D2 pour le poème : le texte ne s'écrit pas ici, il
+         s'écrit à mon bureau et passe par la moulinette
+         (docs/parcours.md#d2p--quel-poème). C'est le seul écran de l'atelier qui demande le
+         réseau — l'index est un fichier du dépôt, encodé comme les poèmes.
+
+         Trois états, et le troisième n'est pas le deuxième : la liste, « aucun poème
+         encore » qui est un fait, et « pas de réseau » qui passe. -->
+    <section class="ecran" id="d2p" hidden>
+      <div class="conduite">
+        <button class="conduite__retour" type="button" data-va="d1">← le type</button>
+        <p class="conduite__pas">2 sur 3</p>
+      </div>
+
+      <div class="corps corps--haut">
+        <p class="marque marque--petite">Pli</p>
+        <div class="groupe">
+          <h1 class="question">Quel poème ?</h1>
+          <p class="aide">Ceux que la moulinette a pliés. Touche-en un, le lien est prêt.</p>
+        </div>
+        <p class="aide" data-poemes="rien" hidden>
+          Aucun poème encore. Écris-en un à ton bureau, puis passe-le à la moulinette.
+        </p>
+        <p class="aide" data-poemes="coupe" hidden>
+          Pas de réseau. La liste des poèmes vit dans le dépôt — reviens quand ça repasse.
+        </p>
+      </div>
+
+      <ul class="lignes deposes" data-poemes="liste" hidden></ul>
+    </section>
+
     <section class="ecran" id="d5" hidden>
       <div class="conduite">
         <button class="conduite__retour" type="button" data-va="d1">← le type</button>

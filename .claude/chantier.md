@@ -8,6 +8,12 @@ Une étape n'est cochée que lorsqu'elle est **écrite, relue et commitée**.
 
 ## Jalon courant
 
+**Le poème — 19/08/2026.** Le quatrième type existe de bout en bout. Il était rangé dans
+« plus tard » de la roadmap et il était déjà à moitié là : `#p=` routait, le `fetch` partait
+en première instruction, le payload était recopié au journal. Manquaient la moulinette,
+l'écran d'attente, la lecture du poème entier, et l'écran de l'atelier. Écrit, relu et
+commité en quatre lots.
+
 **Jalon 5 — la durée.** Le journal se lit. C1 le sommaire et son état vide, C2 la relecture
 d'un pli depuis une entrée, C3 le pli refermé, et la marque « Pli » devenue chemin discret :
 elle mène au journal depuis A1, A2, C3 et C4, et « tes plis ↑ » d'A4 s'allume enfin. Une
@@ -234,10 +240,8 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
       part. **Renvoyer n'est pas déposer** : le lien se refabrique depuis le payload gardé,
       sans réencoder, sans noter un dépôt et sans avancer le compteur — c'est le pli qui est
       parti la première fois, à l'identique. D3 sert les deux fois, seule sa conduite change
-- [ ] **à la main, chez moi** : fabriquer l'empreinte du seuil avec `/seuil` et la recopier
-      dans la constante `EMPREINTE` de `src/atelier/seuil.ts`. Tant qu'elle est vide, **rien
-      ne passe la porte** — un seuil sans empreinte serait une porte ouverte, une empreinte
-      inventée une porte qu'aucune date n'ouvre
+- [x] **l'empreinte du seuil est posée** dans `src/atelier/seuil.ts`. La porte s'ouvre, et
+      ce qui attendait derrière est débloqué — dont le contraste de l'atelier, plus bas
 - [ ] **le compteur de signes du LIEN attend la mesure 1.** D3 affiche le nombre de signes
       du lien fini, sans le juger : le plafond se mesure WhatsApp → iOS → Safari, il ne
       s'estime pas. Ce qui est tenu aujourd'hui, ce sont les plafonds du **papier**, qui sont
@@ -303,10 +307,9 @@ cadre, l'atelier et son clavier, le contraste, la doc.
       rideau, et D3 qui composait en crème sur crème depuis le jalon 4
 - [x] le filet de focus rendu aux deux lignes de saisie — `docs/integration.md` le demandait
       depuis le jalon 1, case non cochée
-- [ ] **le contraste de l'atelier n'est pas mesuré.** Le harnais bute sur le routage : tant
-      que l'empreinte du seuil est vide, l'atelier ramène D0 et les autres écrans ne se
-      laissent pas tenir à l'écran assez longtemps. D0 mesure 4,48:1 au pire ; D1 à D5 ont
-      été relus à l'œil, pas chiffrés. À faire quand l'empreinte sera posée
+- [ ] **le contraste de l'atelier n'est toujours pas mesuré**, mais il n'est plus bloqué :
+      l'empreinte du seuil est posée. D0 mesure 4,48:1 au pire ; D1 à D5 et D2p ont été relus
+      à l'œil, pas chiffrés. Le harnais peut maintenant passer la porte
 - [ ] **à la main, sur les deux téléphones** : compter les couches à l'inspecteur pendant
       un dépliage — `container-type: size` sur `.pli` est une propriété de confinement que
       ce dépôt n'a jamais mesurée, et un coût de couche se mesure
@@ -369,6 +372,72 @@ Le §11 du `PLI.md` du projet design décrit l'icône et laisse un « reste à f
 vectoriser la lettre. **Il est déjà fait** : `scripts/icones.py` sort des `<path>`, aucun
 `<text>`, et `PLI.md` n'entre pas dans l'archive parce qu'il en modifierait une page.
 
+## Le poème — 19/08/2026
+
+- [x] la moulinette — `scripts/plier.mjs`, `plier.sh`, `plier.bat`, et `src/lib/poeme.ts`
+      sous tests. Les deux invariants tiennent, vérifiés de bout en bout : le jeton d'un
+      numéro connu se réutilise (un poème corrigé garde son lien), et rien ne se supprime.
+      `codec.ts` sort deux primitives, `serrer` et `detendre` — l'index s'encode avec la même
+      machinerie. **L'alphabet du jeton est tranché** : la moulinette tire dans exactement ce
+      que le routeur accepte, jamais plus large
+- [x] **le poème défile**, et c'est l'exception nommée à la première des cinq règles. La
+      pagination strophe par strophe (B2 · B3, « la suite ↑ ») est écartée. Le doigt se rend
+      sur le cadre, pas depuis la feuille du type — `touch-action` se croise le long des
+      ancêtres — et **une fois le poème ouvert seulement** : un conteneur qui défile se fait
+      promouvoir en couche, et le rendre scrollable pendant le geste ferait trois couches au
+      lieu de deux
+- [x] C5 · l'attente du fichier, d'après la maquette retrouvée — la marque, un pointillé
+      carmin, « un pli arrive », et une respiration en `opacity` que
+      `prefers-reduced-motion` arrête
+- [x] **hors ligne ≠ introuvable** — un fichier absent et un réseau coupé arrivaient tous
+      deux sur « lien abîmé ». Seul un `fetch` qui **lève** est un réseau coupé ; un 404 est
+      un fichier qu'on n'a pas. Le second a son écran et son « réessayer »
+- [x] D2p · quel poème — la liste lue dans l'index encodé, la grammaire de C1 et de D5, et
+      trois états : la liste, « aucun poème » qui est un fait, « pas de réseau » qui passe.
+      **Choisir un poème n'est pas le déposer** : aucun dépôt noté, le compteur n'avance pas
+- [x] le compteur calé sur l'index — un poème écrit hors atelier consommait un numéro que
+      le tiroir ignorait, et deux plis auraient fini par porter le nº 015. C'est la question
+      que la roadmap laissait ouverte depuis le jalon 4
+- [ ] **le seuil d'apparition de C5 n'est pas mesuré.** 300 ms, et `docs/` n'en donne aucun
+      — à vérifier sur les deux téléphones, en 4G. Trop court, l'attente clignote ; trop
+      long, elle regarde un écran vide
+- [ ] **à la main, sur les deux téléphones** : le défilement d'un poème au pouce, contre le
+      geste. Et compter les couches pendant le dépliage d'un poème — le risque est supprimé
+      par construction, il reste à le voir
+- [ ] **à la main, sur les deux téléphones** : un poème de quatre mots. `flex-start` laisse
+      le vide **en bas**, un motif que le produit n'a nulle part ailleurs
+- [ ] **à la main, chez moi** : sauvegarder `plis-source/` ailleurs que sur la machine. Les
+      poèmes se redécodent, mais il faudrait passer par le décodeur pour les relire
+
+### Ce que les relectures ont trouvé
+
+- **Un index présent mais vide était pris pour un premier lancement.** Une écriture
+  interrompue laisse exactement ça — `writeFile` tronque avant d'écrire — et repartir de
+  zéro aurait réattribué les jetons. Seule l'absence du fichier vaut « premier lancement ».
+- **Deux sources pouvaient déclarer le même `n`.** Le numéro vient du front-matter, pas du
+  nom du fichier : la seconde écrasait le `.txt` de la première sous le même nom, lien
+  valable et contenu changé, sans un mot.
+- **`docs/` s'est contredit lui-même deux fois.** Corriger la règle 1 dans six fichiers en
+  a laissé trois en arrière — `integration.md`, `concept.md`, `fluidite.md` disaient encore
+  « paginer ». Puis le lot suivant a ajouté une troisième exception à la centration
+  verticale sans toucher la liste qui disait « deux, et elles seules ». Une exception qui ne
+  vit que dans sa note d'écart est une brèche ouverte.
+- **Au clavier, un poème plus long qu'un écran était illisible.** Une `div` en
+  `overflow-y: auto` n'entre jamais d'elle-même dans l'ordre du Tab, et la marque était le
+  seul élément atteignable de l'écran — elle mène ailleurs.
+- **`chemin()` prenait ses classes à la marque** en la transformant en lien
+  (`className = 'marque'`). C5 ne respirait pas. Le défaut datait du jalon 5.
+
+### La maquette disait déjà que le poème défile
+
+Trouvé en allant chercher C5 dans `design/canevas/` : l'annotation du canevas
+**Pli — Maquettes** écrit « le poème est **le seul type qui défile** ». Six documents de
+`docs/` décrivaient pourtant une pagination que rien dans `design/` ne demande. C'est
+l'inverse du cas habituel — d'ordinaire c'est l'archive qui se trompe et `docs/` qui
+corrige ; ici la spécification s'était éloignée de sa source sans le noter. Relevé dans
+[integration.md](../docs/integration.md). Un point de cette annotation n'est **pas** repris :
+le « repère de progression en haut ».
+
 ## Les mesures — aucune ne se devine
 
 Elles sont décrites dans [docs/README.md](../docs/README.md#les-mesures-à-faire-avant-de-sengager).
@@ -391,17 +460,19 @@ décision, on ne relit pas le fichier en entier.
 
 ## Ce que les relecteurs demandent pour la suite
 
-**Au jalon 2, pour le gabarit** — le **débordement par le haut** reste ouvert (au maximum
-autorisé, le contenu passe sur la marque et se fait couper sans un mot). ~~Un pli de 780px
+**Au jalon 2, pour le gabarit** — le **débordement par le haut** est traité des deux côtés
+depuis le 18/08 : un plafond par type au dépôt, et `.corps { overflow: hidden }` dans le
+gabarit, pour qu'un lien fabriqué à la main ne recouvre jamais la marque. Ce qui reste
+ouvert est ailleurs (voir plus bas). ~~Un pli de 780px
 sur un écran visible plus court.~~ **Refermé le 19/08/2026**, mais pas par la mise à
 l'échelle : par le plein cadre. Ce qui reste de la question a changé de forme et vit
 maintenant dans [donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé)
 — sur une hauteur visible **plus courte que 780**, les plafonds du papier supposent une
 place que la composition n'a plus.
 
-**Au jalon 2, pour le geste** — `.pli` est la **couche du dessous** : le geste demande deux
-couches, une par `translate3d`. Le `<button>` « déplier » du clavier a maintenant un endroit
-où vivre — le volet — mais il n'y est pas encore, faute de geste à déclencher.
+~~**Au jalon 2, pour le geste** — le `<button>` « déplier » du clavier n'a pas encore
+d'endroit où vivre.~~ **Périmé** : il est dans le volet depuis le jalon 2 (`index.html`), et
+le geste laisse passer ce qui est dans un `a` ou un `button`.
 
 **Au jalon 2, pour le chargement** — ~~l'inlining du CSS et du module~~ **fait**, première
 étape du jalon 2. Le chunk commun est **à moitié résolu** : côté lecteur, un chunk de la
@@ -410,27 +481,25 @@ le build, et `reponse.ts` recopie les deux fonctions plutôt que de les importer
 Reste l'autre moitié : le jour où l'atelier importera `codec.ts` (jalon 4), il faudra
 trancher — deux builds séparés, ou l'inlining du graphe entier.
 
-**Au jalon 2, pour l'invite et le mouvement** — l'invite du volet doit se **mettre en pause**
-au toucher, pas redémarrer ([fluidite.md](../docs/fluidite.md)) : une animation infinie
-composée promeut le volet en couche permanente, et si elle tourne pendant le geste
-l'inspecteur montrera **trois** couches bordées au lieu de deux. Et sous
-`prefers-reduced-motion`, l'ouverture tombe à **120 ms** — le bloc `@media` existe, la
-transition à régler n'existe pas encore.
+~~**Au jalon 2, pour l'invite et le mouvement**~~ — **fait, et mieux que demandé.** L'invite
+**s'arrête** au toucher au lieu de se mettre en pause : mesuré à l'inspecteur, `paused` garde
+la couche promue et le cachet se fait promouvoir à son tour — quatre couches au lieu de deux.
+`prefers-reduced-motion` tombe bien à 120 ms (`geste.ts`).
 
-**Au jalon 2, pour la marque `a1`** — elle date aujourd'hui l'échafaudage déplié ; elle devra
-suivre le texte d'A1. Un lien abîmé ne marque rien : à trancher avec C4. Et pour un `#p=`,
-la marque inclut l'aller-retour réseau — **noter le type de lien à côté du chiffre**, sinon
-la ligne du budget ne veut rien dire.
+~~**Au jalon 2, pour la marque `a1`**~~ — **fait** : elle suit le texte d'A1, un lien abîmé
+ne marque rien, et le type de lien voyage avec elle (`main.ts`, `performance.mark('a1',
+{ detail: { lien } })`).
 
 **Au jalon 2, pour A1 et A2** — trois choses restent en l'air, notées dans
 [integration.md](../docs/integration.md#ce-qui-a-été-tranché-avec-a1-au-jalon-2) : le fond d'A1
 (`parcours.md` dit le rideau, la maquette montre un papier crème), l'empilement de
 `.image--pleine` avec le texte, et la composition des faits.
 
-**Au jalon 4, pour l'atelier** — ~~`index.html` embarque `#fleche-droite` sans s'en servir~~
-**toujours vrai** : l'atelier a maintenant sa propre copie du trace, et celle du lecteur ne
-sert toujours a rien. 219 octets gzip dans le document qui part chez elle, a reprendre le
-jour ou le budget serre. Le fragment reste monolithique pour n'avoir qu'une
+**Au jalon 4, pour l'atelier** — `index.html` embarque `#fleche-droite` sans s'en servir :
+l'atelier a sa propre copie du tracé, celle du lecteur ne sert à rien. 219 octets gzip dans
+le document qui part chez elle. **Le budget serre maintenant** — 13 266 sur 14 336 depuis
+C5 et l'écran hors ligne : c'est la première réserve à prendre le jour où il faudra de la
+place. Le fragment reste monolithique pour n'avoir qu'une
 chose à recopier et une seule à comparer ; à rouvrir si les 219 octets gzip gênent.
 
 ## Ce qui reste ouvert

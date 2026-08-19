@@ -108,6 +108,43 @@
         </div>
       </section>
 
+      <!-- C5 · l'attente du fichier — LE POÈME SEUL, et le seul écran du produit qui dépend
+           du réseau (docs/chargement.md#le-poème-le-seul-cas-qui-dépend-du-réseau). Il ne
+           s'affiche que si l'attente DURE : sur un aller-retour ordinaire, il ne se voit
+           jamais, et un clignotement serait pire que rien.
+
+           La composition vient de la maquette (design/canevas/) : la marque, un pointillé
+           carmin, un mot. Elle centre verticalement, ce qu'aucun autre écran du produit ne
+           fait — c'est un écran sans contenu, il n'a rien à aligner en bas (l'écart est
+           noté dans docs/integration.md). -->
+      <section class="pli__dessus c5" id="c5" hidden>
+        <p class="marque respire">Pli</p>
+        <div class="pointille respire"></div>
+        <p class="etiquette etiquette--fine">un pli arrive</p>
+      </section>
+
+      <!-- HORS LIGNE — le réseau a lâché, et ce n'est PAS un lien abîmé. Un fichier absent
+           est définitif, un réseau coupé passe : les confondre, c'est dire à quelqu'un que
+           son pli est perdu alors qu'il l'attend (docs/roadmap.md#le-poème). Le poème seul
+           peut y tomber, c'est le seul écran qui dépend du réseau. -->
+      <section class="pli__dessus" id="hors-ligne" hidden>
+        <header class="tete">
+          <p class="marque">Pli</p>
+        </header>
+
+        <div class="corps">
+          <h1 class="titre">pas de réseau</h1>
+          <p class="voix voix--corps">Le pli est là. Il n’a pas pu arriver jusqu’ici.</p>
+          <!-- Sans flèche, et c'est délibéré : les deux autres actions du produit —
+               « relire le pli », « envoyer » — mènent quelque part, et la flèche dit ce
+               déplacement. « réessayer » ne va nulle part, il redemande le même fichier à la
+               même adresse. Une flèche promettrait un ailleurs qui n'existe pas. -->
+          <button class="action" type="button" id="reessayer">
+            <span class="etiquette carmin">réessayer</span>
+          </button>
+        </div>
+      </section>
+
       <!-- C4 · le lien abîmé. Le cas réel n'est pas l'expiration — il n'y en a plus — mais
            le lien tronqué par la messagerie (docs/integration.md). Aucune image : le rideau
            est celle des états FERMÉS, et un lien abîmé n'en est pas un. -->

@@ -139,6 +139,15 @@ petit — un poème encodé tient en quelques kilo-octets — en même origine, 
 déjà ouverte : un aller-retour. Le `fetch` part en première instruction, C5 ne s'affiche que
 s'il dure ([parcours.md](parcours.md#larrivée)).
 
+**Le seuil au-delà duquel « ça dure » n'est pas mesuré.** Le code attend `300 ms` avant de
+montrer C5 (`AVANT_C5`, src/lecteur/main.ts) : trop court, l'écran d'attente clignote sur un
+aller-retour ordinaire ; trop long, elle regarde un écran vide. Aucun document ne donne ce
+chiffre et il ne s'estime pas — **à vérifier sur les deux téléphones, en 4G**, comme les
+autres lignes de ce budget.
+
+Un réseau coupé ne mène pas à C4 : il a son propre écran, avec « réessayer »
+([parcours.md](parcours.md#les-états)).
+
 ## Le budget, écran par écran
 
 | Poste | Cible | Mesuré | Le |

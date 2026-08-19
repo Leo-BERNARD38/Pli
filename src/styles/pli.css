@@ -207,6 +207,53 @@ a:hover {
   padding-top: 22px;
 }
 
+/* C5 · L'ATTENTE DU FICHIER — le poème seul, et le seul écran du produit qui dépend du
+   réseau. Il centre verticalement, ce qu'aucun autre écran ne fait : c'est un écran sans
+   contenu, il n'a rien à aligner en bas (design/canevas/, écart noté dans
+   docs/integration.md).
+
+   La respiration porte sur `opacity`, jamais sur autre chose — c'est ce que la fiche
+   autorise à bouger, et `scripts/verifie.mjs` refuse le reste. Elle est infinie, donc elle
+   promeut une couche : ici c'est sans conséquence, rien d'autre ne bouge sur cet écran et
+   il disparaît dès que le fichier arrive (docs/fluidite.md#les-couches-et-ce-quelles-coûtent). */
+.c5 {
+  justify-content: center;
+  align-items: center;
+  gap: 26px;
+}
+
+.pointille {
+  width: 120px;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--carmin-pointille) 0 7px,
+    transparent 7px 14px
+  );
+}
+
+@keyframes respire {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.respire {
+  animation: respire 2.4s ease-in-out infinite;
+}
+
+/* Sous `prefers-reduced-motion`, l'attente ne respire plus — elle se pose, et le mot suffit
+   à dire qu'il se passe quelque chose. */
+@media (prefers-reduced-motion: reduce) {
+  .respire {
+    animation: none;
+  }
+}
+
 /* Le texte se lit, donc il se sélectionne — `user-select: none` du cadre est là pour le
    geste, pas pour la lecture (docs/design-system.md#accessibilité). Ce que le doigt
    traîne au jalon 2 et ce qui reste sélectionnable pendant, c'est au geste de le dire. */

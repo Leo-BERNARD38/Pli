@@ -139,7 +139,9 @@ Quatre zones, de haut en bas :
 
 1. **Tête** — `padding: 34px 26px 0`. Marque à gauche, type à droite.
 2. **Corps** — `flex:1`, `padding: 0 26px 30px`, contenu **aligné en bas** ou réparti — ou
-   aligné en haut et défilant, pour le poème et lui seul. On ne centre jamais verticalement.
+   aligné en haut et défilant, pour le poème et lui seul. On ne centre jamais verticalement,
+   sauf **C5**, l'attente, qui n'a pas de contenu à aligner
+   ([integration.md](integration.md#la-revue-dun-écran)).
 3. **Pliure** — le trait d'action : `border-top: 2px dashed`, étiquette à gauche, flèche `↑` à droite.
 4. **Volet** — 34 % de la hauteur, fond carmin.
 
@@ -184,6 +186,11 @@ Deux couches, un `translate3d` chacune. Pas de flou, pas d'ombre animée, rien �
 
 Le seul mouvement décoratif du produit est l'invite du volet : `translateY(-9px)` à 76 %
 d'un cycle de 2,6 s, en pause dès que le doigt touche.
+
+**« ligne » porte deux sens, et les deux sont dans le lexique** : *la ligne* de saisie de
+l'atelier, le mot qui remplace « champ » ; et *hors ligne*, l'écran du réseau coupé
+([parcours.md](parcours.md#les-états)). Le second est un idiome entier, pas un emploi du
+premier — on ne dit donc jamais « une ligne coupée » pour parler du réseau.
 
 **Écartées, à ne pas implémenter** : le volet en trois bandes décalées, la ligne carmin
 qui révèle par `clip-path`, l'écartement en deux moitiés. Toutes lisibles, mais elles
