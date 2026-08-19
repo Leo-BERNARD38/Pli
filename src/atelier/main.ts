@@ -64,12 +64,31 @@ let type: Type = 'inv'
  * sa première ligne : au téléphone, une ligne prise de focus fait monter le clavier par
  * par-dessus l’aperçu, et l’aperçu est la moitié de D2.
  */
+/**
+ * Un écran que j'ai demandé se pose ; celui qui ouvre la page, jamais. La même règle que
+ * chez elle, et la même raison : le fondu dit que c'est mon tap qui a produit cet écran, il
+ * ne décore pas un chargement (src/lecteur/main.ts).
+ *
+ * La durée est en clair ici, et non dans `tokens.css` : le minifieur du build y réécrit
+ * `160ms` en `.16s`, et c'est exactement ce qui avait cassé le dépliage (geste.ts).
+ */
+const POSE = 160
+const CALME = window.matchMedia('(prefers-reduced-motion: reduce)')
+let chargement = true
+
 function montrer(quel: Ecran): void {
   for (const [nom, element] of ecrans) {
     const vu = nom === quel
+    if (vu && element.hidden && !chargement && !CALME.matches) {
+      element.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: POSE,
+        easing: 'cubic-bezier(.32,.72,0,1)',
+      })
+    }
     element.hidden = !vu
     element.inert = !vu
   }
+  chargement = false
   window.scrollTo(0, 0)
   const arrive = ecrans.get(quel)
   if (arrive) {

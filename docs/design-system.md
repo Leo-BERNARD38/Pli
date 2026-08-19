@@ -190,8 +190,9 @@ s'arrêter, revenir, repartir.
 Deux couches, un `translate3d` chacune. Pas de flou, pas d'ombre animée, rien à repeindre.
 `touch-action: none` sur le cadre, `will-change: transform` sur les deux couches.
 
-Le seul mouvement décoratif du produit est l'invite du volet : `translateY(-9px)` à 76 %
-d'un cycle de 2,6 s. Elle **s'arrête** dès que le doigt touche — `animation: none`, et non
+Le premier des deux mouvements décoratifs est l'invite du volet : `translateY(-9px)` à 76 %
+d'un cycle de 2,6 s. Le second est la respiration de C5, `2,4 s` en opacité, pendant que le
+fichier d'un poème arrive. Elle **s'arrête** dès que le doigt touche — `animation: none`, et non
 `animation-play-state: paused`, qui garderait la couche promue et en ferait quatre au lieu
 de deux pendant le geste. La mesure et ce qu'elle coûte sont dans
 [fluidite.md](fluidite.md#le-mouvement-décoratif).
@@ -200,6 +201,24 @@ de deux pendant le geste. La mesure et ce qu'elle coûte sont dans
 l'atelier, le mot qui remplace « champ » ; et *hors ligne*, l'écran du réseau coupé
 ([parcours.md](parcours.md#les-états)). Le second est un idiome entier, pas un emploi du
 premier — on ne dit donc jamais « une ligne coupée » pour parler du réseau.
+
+**On n'anime pas pour animer.** C'est la règle qui décide de tout le reste : un mouvement
+n'entre que s'il **accompagne** quelque chose — un doigt, un tap, une attente. Trois emplois,
+et pas un quatrième :
+
+| Ce qui bouge | Ce qu'il accompagne |
+|---|---|
+| les deux couches du dépliage | le doigt, puis son relâchement |
+| l'écran qui se pose, `160 ms` en opacité | **le tap qui l'a demandé** — jamais un chargement |
+| ce qui se touche, `120 ms` en opacité | l'accusé de réception du doigt |
+
+Et deux mouvements **décoratifs**, nommés, qui ne servent qu'à dire « quelque chose vit
+ici » : l'invite du volet, et la respiration de C5 pendant que le fichier arrive.
+
+Ce qui **ne s'anime pas**, et c'est délibéré : l'arrivée d'un écran qu'on n'a pas demandé —
+A1, C4, C5, hors ligne viennent avec la page, et les faire apparaître retarderait le premier
+texte, qui est tout ce que ce produit défend ([chargement.md](chargement.md)). Un chargement
+n'a pas à être accompagné, il a à être court.
 
 **Écartées, à ne pas implémenter** : le volet en trois bandes décalées, la ligne carmin
 qui révèle par `clip-path`, l'écartement en deux moitiés. Toutes lisibles, mais elles

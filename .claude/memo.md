@@ -116,7 +116,17 @@ la même seconde que les polices que le texte attend.
 | entrée | `9 %` |
 | courbe | `cubic-bezier(.32,.72,0,1)` — le jeton s'appelle `--courbe` |
 | invite du volet | `translateY(-9px)`, `2,6 s` — **arrêtée** au toucher, pas mise en pause |
-| `prefers-reduced-motion` | pas d'invite, ouverture à `120 ms`, pas de respiration sur C5 |
+| `prefers-reduced-motion` | pas d'invite, ouverture à `120 ms`, pas de respiration sur C5, aucun écran ne se pose |
+
+**On n'anime pas pour animer.** Trois emplois, et pas un quatrième : les deux couches suivent
+le doigt · l'écran se pose en `160 ms` **quand un tap l'a demandé**, jamais au chargement ·
+ce qui se touche répond en `120 ms` d'opacité. Plus deux mouvements décoratifs nommés,
+l'invite du volet et la respiration de C5.
+
+**Une durée CSS relue en JS se convertit, elle ne se `parseFloat` pas.** Le minifieur du
+build réécrit `460ms` en `.46s` : `parseFloat` en tire 0,46, et le dépliage a claqué en une
+image pendant tout le jalon 2 (19/08/2026, `geste.ts`). Les réglages sans unité — `--seuil`,
+`--elan`, `--caoutchouc`, `--entree` — sont hors d'atteinte.
 
 Le seul chemin autorisé :
 

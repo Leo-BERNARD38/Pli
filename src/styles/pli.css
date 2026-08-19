@@ -65,7 +65,11 @@ a.action {
   color: inherit;
 }
 
-a:hover {
+/* Le survol ne touche PAS la marque ni l'action : elles sont des chemins, elles gardent la
+   couleur de leur écran. Écrit en `:not()` plutôt qu'après elles — à spécificité égale
+   l'ordre tranche, et `a:hover` gagnait : sur C3, qui est en encre, la marque passait de
+   crème à encre au survol, c'est-à-dire qu'elle disparaissait (mesuré le 19/08/2026). */
+a:not(.marque, .action):hover {
   color: var(--encre);
 }
 
@@ -822,6 +826,37 @@ button.action {
    (docs/design-system.md#les-mains). */
 #a3 .titre {
   font-size: 52px;
+}
+
+/* ==========================================================================
+   CE QUI SE TOUCHE RÉPOND AU DOIGT.
+
+   Le produit n'avait aucun `:active`, et `.pli` coupe le halo du navigateur avec
+   `-webkit-tap-highlight-color: transparent` : taper « répondre », un des trois mots ou une
+   ligne du journal ne produisait donc **rien** jusqu'à ce que l'écran suivant arrive. Sur un
+   réseau lent, c'est une seconde pendant laquelle on ne sait pas si le tap a été pris — et
+   on retape.
+
+   En `opacity` seule, comme tout ce qui bouge ici (docs/fluidite.md#ce-qui-a-le-droit-de-bouger).
+   Ce n'est pas un mouvement décoratif : c'est l'interface qui accuse réception.
+
+   Deux familles, parce qu'un seul sens ne va pas aux deux : ce qui est plein **s'atténue**,
+   ce qui est déjà discret **s'allume**. Dans les deux cas le doigt obtient une réponse.
+   ========================================================================== */
+.deplier,
+button.action,
+a.action,
+.oui a,
+a.ligne {
+  transition: opacity 120ms var(--courbe);
+}
+
+.deplier:active,
+button.action:active,
+a.action:active,
+.oui a:active,
+a.ligne:active {
+  opacity: 0.55;
 }
 
 /* ==========================================================================

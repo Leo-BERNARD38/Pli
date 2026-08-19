@@ -12,6 +12,31 @@
    section 6, ce sont les trois mots d'A3 — `.oui` — parce qu'ils sont chez elle.
    ========================================================================== */
 
+/* CE QUI SE TOUCHE RÉPOND AU DOIGT — la même règle que chez elle (pli.css), avec les deux
+   sens qu'elle prescrit : ce qui est plein s'atténue, ce qui est déjà discret s'allume.
+   `.conduite__retour` et `.passage` vivent à .55 et .45 ; les atténuer davantage les ferait
+   disparaître au moment précis où on les touche. */
+.type,
+.depose,
+.bouton,
+.action,
+.passage,
+.conduite__retour {
+  transition: opacity 120ms var(--courbe);
+}
+
+.type:active,
+.depose:active,
+.bouton:not([disabled]):active,
+.action:active {
+  opacity: 0.55;
+}
+
+.passage:active,
+.conduite__retour:active {
+  opacity: 1;
+}
+
 /* ==========================================================================
    L'ÉCRAN DE L'ATELIER — un outil, pas un pli.
 

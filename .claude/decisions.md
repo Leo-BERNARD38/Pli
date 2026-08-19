@@ -575,3 +575,37 @@ n'était visible dans un diff, aucun relecteur ne les avait vues, et `npm run ve
   qu'à moi : « déposer le pli » → « déposer », « Envoie ce lien à la personne » →
   « Envoie-le-lui », « Touche un pli pour le renvoyer » → « Touche-en un ». Aucune
   tentative de ton — les mots servent à ne pas se tromper d'écran.
+
+### Les mouvements — 19/08/2026
+
+- **19/08/2026 — le dépliage ne s'animait pas, et personne ne pouvait le voir.**
+  `tokens.css` écrit `--ouvre: 460ms` ; le minifieur CSS du build le réécrit en **`.46s`**,
+  qui est plus court et rigoureusement équivalent pour le navigateur. Mais `geste.ts` le
+  relisait avec `parseFloat`, qui en tire **0,46**, et posait `transform 0.46ms` : la
+  feuille sautait en **une image**. Trois choses cachaient le défaut — il n'existe pas en
+  `npm run dev` où le CSS n'est pas minifié ; le geste au doigt n'était pas touché, puisqu'il
+  écrit les positions lui-même, donc seul le relâchement claquait ; et une capture d'un pli
+  ouvert est identique dans les deux cas. Mesuré sur le build : `-360px` puis `-844px`, deux
+  images consécutives. La règle qui en sort : **une valeur CSS relue en JavaScript se
+  convertit, elle ne se `parseFloat` pas.** Les autres réglages du geste sont sans unité et
+  étaient hors d'atteinte.
+- **19/08/2026 — on n'anime pas pour animer.** La première version de cette passe posait un
+  fondu sur **tous** les écrans, y compris ceux qui arrivent avec la page. C'est exactement
+  la faute que la règle interdit : un chargement n'a pas à être accompagné, il a à être
+  court, et faire apparaître A1 retarderait le premier texte, qui est tout ce que ce produit
+  défend. Le fondu ne dit qu'une chose, et il ne la dit qu'une fois : **c'est ton tap qui a
+  produit cet écran.** Il ne s'applique donc qu'après un `hashchange`, jamais au premier
+  rendu — un hash ne change pas tout seul.
+- **19/08/2026 — ce qui se touche répond au doigt.** Le produit n'avait aucun `:active`, et
+  `.pli` coupe le halo du navigateur avec `-webkit-tap-highlight-color: transparent` : taper
+  « répondre », un des trois mots ou une entrée du journal ne produisait rien jusqu'à ce que
+  l'écran suivant arrive. Sur un réseau lent, c'est une seconde d'incertitude, et on retape.
+  Ce n'est pas un mouvement décoratif : c'est l'interface qui accuse réception. Deux sens,
+  parce qu'un seul ne va pas aux deux familles — ce qui est plein s'atténue à `.55`, ce qui
+  est déjà discret (`.conduite__retour` à `.55`, `.passage` à `.45`) **s'allume** à `1`.
+  Les atténuer les ferait disparaître au moment précis où on les touche.
+- **19/08/2026 — la marque disparaissait au survol.** `a:hover { color: var(--encre) }` et
+  `a.marque { color: inherit }` valent la même spécificité ; l'ordre tranchait en faveur du
+  survol. Sur C3, qui est en encre, la marque passait donc de crème à encre — invisible.
+  Corrigé en `:not(.marque, .action)` plutôt qu'en déplaçant la règle : l'ordre ne doit plus
+  décider, c'est la troisième fois que ce piège mord dans ce dépôt.

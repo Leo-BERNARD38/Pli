@@ -19,6 +19,27 @@
 const CALME = window.matchMedia('(prefers-reduced-motion: reduce)')
 const OUVERTURE_CALME = 120
 
+/**
+ * Une durée écrite dans `tokens.css`, en millisecondes, quelle que soit l'unité qu'elle
+ * porte à l'arrivée.
+ *
+ * **Sans cette conversion, le pli ne s'animait pas.** Le minifieur CSS du build réécrit
+ * `460ms` en `.46s` — c'est plus court, et pour le navigateur c'est la même durée. Mais
+ * `parseFloat` en tire **0,46**, et le module posait `transform 0.46ms` : la feuille
+ * sautait en une image, en production seulement. Le geste au doigt n'était pas touché — il
+ * écrit les positions lui-même —, donc le défaut ne se voyait qu'au relâchement, et jamais
+ * en `npm run dev`. Mesuré le 19/08/2026 sur le build : -360px puis -844px, deux images
+ * consécutives.
+ *
+ * Les autres réglages du geste sont sans unité (`--seuil`, `--elan`, `--caoutchouc`,
+ * `--entree`) : eux ne peuvent pas se faire réécrire.
+ */
+function duree(racine: CSSStyleDeclaration, nom: string): number {
+  const brut = racine.getPropertyValue(nom).trim()
+  const nombre = parseFloat(brut)
+  return /(^|[^m])s$/.test(brut) ? nombre * 1000 : nombre
+}
+
 /** Les réglages du geste vivent dans tokens.css, et nulle part ailleurs. */
 function reglages() {
   const racine = getComputedStyle(document.documentElement)
@@ -28,8 +49,8 @@ function reglages() {
     elan: nombre('--elan'),
     caoutchouc: nombre('--caoutchouc'),
     entree: nombre('--entree'),
-    ouvre: nombre('--ouvre'),
-    referme: nombre('--referme'),
+    ouvre: duree(racine, '--ouvre'),
+    referme: duree(racine, '--referme'),
   }
 }
 

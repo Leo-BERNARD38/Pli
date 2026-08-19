@@ -552,6 +552,35 @@ Ce que la passe a **regardé sans y toucher**, et qui appartient à l'auteur :
       trois, et « 16 signes » sur une ligne vide. Ce qui reste et ce qui est écrit se lisent
       pareil
 
+## Les mouvements, révisés — 19/08/2026
+
+Le geste était la **seule** transition du produit, et il ne tournait pas. Mesuré sur le
+build, pas sur `npm run dev`.
+
+- [x] **le dépliage s'anime enfin.** Le minifieur réécrit `--ouvre: 460ms` en `.46s`, et
+      `parseFloat` en tirait **0,46** : le module posait `transform 0.46ms` et la feuille
+      sautait en une image, en production seulement. Le doigt n'était pas touché — seul le
+      relâchement claquait, ce qu'aucune capture ne montre. La courbe se lit maintenant dans
+      les chiffres : −360 → −644 en 130 ms, puis −827 → −831 sur les dernières
+- [x] **ce qui se touche répond au doigt.** Zéro `:active` dans tout le produit, et `.pli`
+      coupe le halo du navigateur : taper « répondre » ou une entrée du journal ne produisait
+      rien jusqu'à l'écran suivant
+- [x] **un écran demandé se pose, un écran chargé jamais.** 160 ms d'opacité après un tap ;
+      A1, C4, C5 et hors ligne arrivent avec la page et ne fondent pas — un chargement n'a
+      pas à être accompagné, il a à être court
+- [x] **la marque cesse de disparaître au survol.** `a:hover` la repeignait en encre, sur
+      C3 qui est en encre
+- [x] **« copié » revient à « copier le lien »** au bout de 1,6 s. Il restait pour toujours,
+      et le dépôt suivant retrouvait un bouton qui prétendait avoir déjà copié
+
+Ce que la passe a **regardé sans y toucher** :
+
+- [ ] **le journal arrive d'un bloc.** Un décalage ligne à ligne serait joli et ne servirait
+      rien : c'est un sommaire, on le balaye. Écarté, pas oublié
+- [ ] **`.type[aria-pressed]` bascule sec.** Le fond carmin à 5 % apparaît d'un coup. C'est
+      un état, pas un mouvement — à rouvrir seulement si le choix du type paraît sourd sur
+      le téléphone
+
 ## Ce qui reste ouvert
 
 - **Un vrai domaine, plus tard ?** L'adresse ne se gèle qu'au **premier pli envoyé**. Tant

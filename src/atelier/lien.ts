@@ -68,10 +68,19 @@ export function tenirLeLien(ecran: HTMLElement): (adresse: string, n: number) =>
     })
   })
 
+  // « copié » disait la vérité une fois, puis mentait : le mot restait pour toujours, et le
+  // dépôt suivant retrouvait un bouton qui prétendait avoir déjà copié. Il revient de
+  // lui-même — un accusé de réception, pas un état.
+  let retour = 0
   copier?.addEventListener('click', () => {
     void navigator.clipboard?.writeText(adresse).then(
       () => {
-        if (copier) copier.textContent = 'copié'
+        if (!copier) return
+        copier.textContent = 'copié'
+        clearTimeout(retour)
+        retour = window.setTimeout(() => {
+          copier.textContent = 'copier le lien'
+        }, 1600)
       },
       () => {
         // Le presse-papier peut être fermé : le lien reste dans l'historique du tiroir.

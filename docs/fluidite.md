@@ -80,6 +80,11 @@ de [ressources.md](ressources.md#ce-quune-grande-image-coûte) : **deux textures
 vivantes au maximum**, l'`<img>` sort du document quand on quitte l'écran, et la liste du
 journal n'affiche aucune peinture.
 
+- **Ce qui se touche répond au doigt.** `.pli` coupe le halo du navigateur
+  (`-webkit-tap-highlight-color: transparent`) : sans un `:active`, taper « répondre » ou une
+  entrée du journal ne produit **rien** jusqu'à ce que l'écran suivant arrive, et sur un
+  réseau lent on retape. En `opacity` seule, `120 ms` : ce qui est plein s'atténue, ce qui
+  est déjà discret s'allume.
 - **`will-change: transform` sur exactement deux éléments** : la feuille dessus, la page
   dessous. Posé au `pointerdown`, **retiré au `transitionend`**. Une propriété `will-change`
   laissée en place transforme chaque écran en couche permanente.
@@ -164,6 +169,30 @@ se voit. Le prix accepté est un saut d'au plus 9px à l'instant où le doigt se
 élément décoratif, alors que le doigt entraîne déjà toute la feuille.
 
 Sous `prefers-reduced-motion: reduce`, elle n'existe pas et l'ouverture tombe à 120 ms.
+
+## Une durée écrite en CSS ne se lit pas avec `parseFloat`
+
+**Le piège a coûté le dépliage entier, en production, sans que rien ne le dise.**
+
+`tokens.css` écrit `--ouvre: 460ms`, et `geste.ts` le relit pour poser sa transition. Le
+minifieur CSS du build, lui, réécrit `460ms` en **`.46s`** — c'est plus court, et pour le
+navigateur c'est rigoureusement la même durée. Mais `parseFloat('.46s')` rend **0,46**, et le
+module posait `transform 0.46ms` : **la feuille sautait en une image.** Mesuré le 19/08/2026
+sur le build — `-360px` puis `-844px`, deux images consécutives.
+
+Trois choses rendaient ce défaut presque invisible :
+
+- **il n'existe pas en `npm run dev`**, où le CSS n'est pas minifié ;
+- **le geste au doigt n'était pas touché** : il écrit les positions lui-même, image par
+  image. Seul le **relâchement** claquait, et une capture d'écran d'un pli ouvert est
+  identique dans les deux cas ;
+- les autres réglages du geste sont **sans unité** — `--seuil`, `--elan`, `--caoutchouc`,
+  `--entree` — et ne peuvent pas se faire réécrire. Seules les deux durées étaient exposées.
+
+La règle qui en sort : **une valeur CSS relue par du JavaScript se convertit, elle ne se
+`parseFloat` pas.** `geste.ts` porte la fonction ; et une durée qui n'a pas besoin de vivre
+dans `tokens.css` reste une constante du module, comme les `120 ms` de
+`prefers-reduced-motion`.
 
 ## Ce que WebKit fait payer
 
