@@ -104,7 +104,7 @@ chantier est dans [`chantier.md`](chantier.md), les valeurs dans [`memo.md`](mem
 ### Jalon 2
 
 Six points que les docs laissaient ouverts ont été tranchés **avec toi** avant d'écrire, et
-trois d'entre eux ferment des questions d'[integration.md](../docs/integration.md#ce-qui-reste-à-trancher-avec-a1) :
+trois d'entre eux ferment des questions d'[integration.md](../docs/integration.md#ce-qui-a-été-tranché-avec-a1-au-jalon-2) :
 
 - **18/08/2026 — un pli sur un écran plus court se met à l'échelle.** Un `scale()` sur le
   plateau, jamais une recomposition : le gabarit reste littéralement 360 × 780 et aucun écran

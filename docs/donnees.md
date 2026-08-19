@@ -224,6 +224,11 @@ et **ça ne changerait rien au risque d'effacement** décrit dans
 }
 ```
 
+**`ligne` vaut toujours `null`.** La ligne libre de la réponse se tape dans WhatsApp, jamais
+dans le produit ([parcours.md](parcours.md#a3--la-réponse--invitation-seulement)) : le champ
+est là parce que la forme de l'entrée est écrite une fois pour toutes et qu'un journal déjà
+rangé sur un téléphone ne se relit pas autrement. Rien ne l'écrit, rien ne l'affiche.
+
 On stocke le payload, pas l'objet décodé : une seule source de vérité, et on rejoue le
 décodage à l'affichage. Pour un poème, le contenu récupéré est **recopié dans l'entrée à la
 première ouverture** — sans ça, un fichier supprimé ferait disparaître un pli de son

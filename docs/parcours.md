@@ -75,7 +75,7 @@ la maquette, « Il ne se lira qu'une fois », devient fausse dès que le journal
 Elles viennent des écrans d'attente du design — A1 et B0a-c — débarrassées de ce qu'elles
 comptaient : une maquette sait qu'il y a quatre strophes, un gabarit ne le sait pas. **Aucune
 ne chiffre**, et la pensée pas davantage que les autres : son plafond est en signes, pas en
-lignes ([donnees.md](donnees.md#ce-que-le-papier-peut-porter)), et « deux lignes au plus »
+lignes ([donnees.md](donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé)), et « deux lignes au plus »
 en laisse parfois une seule. Une
 promesse dit ce qui attend et ce qu'on attend d'elle, **jamais ce que le pli contient** — le
 rideau ne dit rien du contenu, elle non plus.
@@ -117,7 +117,13 @@ brief demandait — elle est déjà dans le gabarit, elle ne coûte rien.
 ## A3 · la réponse — invitation seulement
 
 Trois mots, un seul tap : *oui, j'y serai* · *peut-être* · *je ne peux pas*.
-Une ligne libre facultative après.
+
+**La ligne libre se tape dans WhatsApp**, pas ici — l'écran le dit (« un seul mot suffit ·
+tu pourras ajouter une ligne juste après ») et le message part avec son curseur au bout. Le
+produit n'a pas de ligne de saisie sur A3, et n'en aura pas : ce serait un second choix sur
+un écran qui n'en veut qu'un, et une chose de plus à écrire avant de répondre. Le champ
+`ligne` du journal existe donc, et **vaut toujours `null`** — voir
+[donnees.md](donnees.md#4-son-journal).
 
 Au tap, dans cet ordre :
 
@@ -246,6 +252,25 @@ Identique pour les quatre types. Deux corrections à la maquette :
   La ligne de lien est remplacée par les deux actions : **envoyer** (partage natif) et
   **copier le lien**.
 - **« lien valable 30 jours » disparaît** de E1 : il n'y a plus d'expiration.
+
+## D5 · les plis déposés
+
+**Écrit au jalon 4, jamais dessiné** — la roadmap le demandait en une ligne, « relire et
+renvoyer ce que j'ai déposé », et la maquette qui porte le numéro D5 est l'écran du lien,
+pas celui-là ([integration.md](integration.md#les-maquettes-que-le-handoff-navait-pas-transportées)).
+Sa forme a donc été arrêtée avec son auteur, et la voici :
+
+- **La liste reprend la grammaire du sommaire de C1** — le numéro et le type, ce qui est
+  écrit, depuis quand. C'est la seule grammaire de liste que le produit ait, et un pli
+  déposé se relit comme un pli reçu.
+- **L'accès est une ligne discrète sur D1**, et elle ne se montre que si elle mène quelque
+  part : rien de déposé, rien à afficher.
+- **Renvoyer n'est pas déposer.** Le lien se refabrique depuis le payload gardé, sans
+  réencoder, sans noter un dépôt et sans avancer le compteur — c'est le pli qui est parti la
+  première fois, à l'identique. D3 sert les deux fois, seule sa conduite change.
+- Le tiroir range le payload, jamais l'objet décodé, et le décodage se rejoue à l'affichage :
+  une ligne devenue illisible s'en va seule, les autres restent
+  ([donnees.md](donnees.md#5-mon-historique)).
 
 ## E1 · l'atelier au bureau
 

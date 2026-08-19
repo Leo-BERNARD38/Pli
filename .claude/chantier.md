@@ -122,7 +122,8 @@ Aucun n'est resté debout, et deux valaient le détour :
 
 ### Ce qui est vérifié pour de bon
 
-Les 34 tests passent, `npm run types` compile deux fois, et dans Chromium en 390 × 844 à 3× :
+Les tests passent — 34 à l'époque, **50 aujourd'hui** —, `npm run types` compile deux fois,
+et dans Chromium en 390 × 844 à 3× :
 le gabarit tient, les quatre polices se posent, un `#c=` **encodé sous Node** remplit le même
 balisage sans rechargement, un lien abîmé laisse la page nue sans la vider, le tiret cadratin
 et les accents français rendent, et `performance.mark('a1')` se pose une fois.
@@ -140,7 +141,7 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
 
 - [x] le document du lecteur se suffit à lui-même — gabarit et module inline, par le greffon
       `pli-inliner-le-document` de `vite.config.ts` ; **1 requête** avant le premier texte,
-      **5,86 ko gzip** à l'époque, **10,5 ko** une fois A2, le geste, la réponse et le
+      **5,86 ko gzip** à l'époque, **12,26 ko** une fois A2, le geste, la réponse et le
       journal dedans — plafond de 14 ko tenu par le build, à chaque commit
 - [x] ~~le pli tient dans l'écran — `--echelle` sur le pli~~ **remplacé le 19/08/2026** :
       le pli **remplit** l'écran, vérifié de 360 × 780 à 1440 × 900 — la page ne défile
@@ -220,7 +221,7 @@ gzip ; il en pèse 10,5 aujourd'hui, tout le lecteur dedans.
       mais inactif : il passe par la moulinette, et D2p arrive avec lui
 - [x] D2 · les textes — les lignes nommées, l'aperçu qui se remplit pendant la frappe, et le
       compteur calé sur ce que **le papier** porte, mesuré
-      ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter))
+      ([donnees.md](../docs/donnees.md#ce-que-le-papier-peut-porter--mesuré-pas-estimé))
 - [x] D3 · le lien — le lien ne s'affiche pas, deux actions à la place : envoyer (partage
       natif) et copier. Le dépôt est noté avant le partage
 - [x] mon historique des plis déposés — `pli.v1.deposes`, dédoublonné sur le payload, jamais
@@ -422,7 +423,7 @@ la marque inclut l'aller-retour réseau — **noter le type de lien à côté du
 la ligne du budget ne veut rien dire.
 
 **Au jalon 2, pour A1 et A2** — trois choses restent en l'air, notées dans
-[integration.md](../docs/integration.md#ce-qui-reste-à-trancher-avec-a1) : le fond d'A1
+[integration.md](../docs/integration.md#ce-qui-a-été-tranché-avec-a1-au-jalon-2) : le fond d'A1
 (`parcours.md` dit le rideau, la maquette montre un papier crème), l'empilement de
 `.image--pleine` avec le texte, et la composition des faits.
 
