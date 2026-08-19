@@ -16,6 +16,7 @@ import {
   prochainNumero,
   reglages,
   seuilFranchi,
+  viderLesDeposes,
 } from './tiroir.ts'
 
 /** Le tiroir du navigateur, en mémoire — Node n'en a pas. */
@@ -127,4 +128,17 @@ test('le compteur se cale sur un numéro pris ailleurs, et ne recule jamais', ()
   fixerLeProchainNumero(40)
   calerLeCompteur(12)
   assert.equal(prochainNumero(), 40)
+})
+
+test('vider l’historique n’emporte que lui — le compteur ne recule pas', () => {
+  bacNeuf()
+  noterUnDepot({ n: 1, t: 'inv', ti: 'la première', c: '2aaa' }, LE_3_SEPTEMBRE)
+  noterUnDepot({ n: 2, t: 'pen', ti: '', c: '2bbb' }, PLUS_TARD)
+  noterLesReglages({ w: '33600000000', s: 'l.' })
+  viderLesDeposes()
+  assert.deepEqual(deposes(), [])
+  // Les nº 1 et 2 sont dans une conversation : le prochain reste le 3.
+  assert.equal(prochainNumero(), 3)
+  assert.deepEqual(reglages(), { w: '33600000000', s: 'l.' })
+  assert.equal(seuilFranchi(), false)
 })
